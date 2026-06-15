@@ -12,6 +12,9 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
+<!-- SCANNER -->
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
 <!-- PDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
@@ -28,7 +31,7 @@
   --warning: #F59E0B;
   --warning-light: #FEF3C7;
   --orange: #EA580C;
-  --orange-light: #FED7AA;
+  --orange-light: #FFEDD5;
   --gray-50: #F9FAFB;
   --gray-100: #F3F4F6;
   --gray-200: #E5E7EB;
@@ -38,7 +41,7 @@
   --gray-800: #1F2937;
   --white: #FFFFFF;
   --radius: 16px;
-  --radius-sm: 10px;
+  --radius-sm: 12px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -80,14 +83,12 @@ body {
 }
 
 .header-back:active { background: rgba(255,255,255,0.3); }
-
 .header-title { font-size: 18px; font-weight: 700; }
 .header-sub { font-size: 12px; opacity: 0.9; }
 
 /* ===== PAGES ===== */
 .page { display: none; padding: 16px; animation: fadeIn 0.2s; }
 .page.active { display: block; }
-
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 /* ===== HOME HERO ===== */
@@ -133,27 +134,10 @@ body {
 }
 
 .quick-btn:active { transform: scale(0.97); }
-
-.quick-btn.primary { 
-  background: var(--primary); 
-  border-color: var(--primary); 
-  color: white; 
-}
-
-.quick-btn.success { 
-  background: var(--success-light); 
-  border-color: var(--success); 
-}
-
-.quick-btn.warning { 
-  background: var(--warning-light); 
-  border-color: var(--warning); 
-}
-
-.quick-btn.danger { 
-  background: var(--danger-light); 
-  border-color: var(--danger); 
-}
+.quick-btn.primary { background: var(--primary); border-color: var(--primary); color: white; }
+.quick-btn.success { background: var(--success-light); border-color: var(--success); }
+.quick-btn.warning { background: var(--warning-light); border-color: var(--warning); }
+.quick-btn.danger { background: var(--danger-light); border-color: var(--danger); }
 
 .quick-icon { font-size: 32px; margin-bottom: 8px; }
 .quick-text { font-size: 13px; font-weight: 600; }
@@ -202,6 +186,7 @@ body {
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
+/* ===== PRODUCT CARD ===== */
 .prod-card {
   background: white;
   border-radius: var(--radius-sm);
@@ -217,28 +202,40 @@ body {
 .prod-card.medium { border-left: 4px solid var(--warning); }
 .prod-card.low { border-left: 4px solid var(--success); }
 .prod-card.expiring { border-left: 4px solid var(--orange); background: var(--orange-light); }
+.prod-card.clickable { cursor: pointer; }
+.prod-card.clickable:active { background: var(--gray-50); }
 
-.prod-icon {
-  width: 48px;
-  height: 48px;
+.prod-img {
+  width: 56px;
+  height: 56px;
   background: var(--gray-100);
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: 28px;
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.prod-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .prod-info { flex: 1; min-width: 0; }
-.prod-name { font-size: 14px; font-weight: 600; }
+.prod-name { font-size: 14px; font-weight: 600; line-height: 1.3; }
 .prod-meta { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+.prod-code { font-size: 11px; color: var(--gray-400); margin-top: 2px; font-family: monospace; }
+
 .prod-badge { 
   font-size: 11px; 
   font-weight: 700; 
   padding: 4px 10px; 
   border-radius: 20px; 
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .badge-danger { background: var(--danger-light); color: var(--danger); }
@@ -264,37 +261,21 @@ body {
 }
 
 .btn:active { transform: scale(0.98); }
-
 .btn-primary { background: var(--primary); color: white; }
 .btn-success { background: var(--success); color: white; }
 .btn-danger { background: var(--danger); color: white; }
 .btn-warning { background: var(--warning); color: white; }
 .btn-gray { background: var(--gray-200); color: var(--gray-700); }
 .btn-outline { background: white; color: var(--primary); border: 2px solid var(--primary); }
-
 .btn-block { width: 100%; }
 .btn-sm { padding: 10px 14px; font-size: 13px; min-height: 40px; }
 .btn-lg { padding: 18px 24px; font-size: 17px; }
 
-.btn-icon {
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  border-radius: 50%;
-}
-
 /* ===== FORMS ===== */
 .form-group { margin-bottom: 16px; }
+.form-label { display: block; font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 6px; }
 
-.form-label {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--gray-700);
-  margin-bottom: 6px;
-}
-
-.form-input {
+.form-input, .form-select {
   width: 100%;
   padding: 14px 16px;
   border: 2px solid var(--gray-200);
@@ -304,42 +285,13 @@ body {
   transition: border 0.2s;
 }
 
-.form-input:focus {
-  outline: none;
-  border-color: var(--primary);
-}
-
+.form-input:focus, .form-select:focus { outline: none; border-color: var(--primary); }
 .form-input::placeholder { color: var(--gray-400); }
-
-.form-select {
-  width: 100%;
-  padding: 14px 16px;
-  border: 2px solid var(--gray-200);
-  border-radius: var(--radius-sm);
-  font-size: 16px;
-  background: white;
-  cursor: pointer;
-}
-
-textarea.form-input {
-  min-height: 100px;
-  resize: vertical;
-}
+textarea.form-input { min-height: 100px; resize: vertical; }
 
 /* ===== SEARCH ===== */
-.search-box {
-  position: relative;
-  margin-bottom: 16px;
-}
-
-.search-icon {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 18px;
-}
-
+.search-box { position: relative; margin-bottom: 16px; }
+.search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 18px; }
 .search-input {
   width: 100%;
   padding: 14px 16px 14px 48px;
@@ -348,11 +300,7 @@ textarea.form-input {
   font-size: 16px;
   background: white;
 }
-
-.search-input:focus {
-  outline: none;
-  border-color: var(--primary);
-}
+.search-input:focus { outline: none; border-color: var(--primary); }
 
 /* ===== MODAL ===== */
 .modal {
@@ -366,7 +314,6 @@ textarea.form-input {
   align-items: flex-end;
   justify-content: center;
   z-index: 1000;
-  padding: 20px;
 }
 
 .modal.show { display: flex; }
@@ -376,15 +323,12 @@ textarea.form-input {
   border-radius: var(--radius) var(--radius) 0 0;
   width: 100%;
   max-width: 500px;
-  max-height: 85vh;
+  max-height: 90vh;
   overflow-y: auto;
   animation: slideUp 0.3s;
 }
 
-@keyframes slideUp {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
 .modal-header {
   padding: 20px;
@@ -436,10 +380,7 @@ textarea.form-input {
   animation: toastIn 0.3s;
 }
 
-@keyframes toastIn {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
+@keyframes toastIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
 .toast.success { background: var(--success); }
 .toast.error { background: var(--danger); }
@@ -453,7 +394,7 @@ textarea.form-input {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.95);
   display: none;
   align-items: center;
   justify-content: center;
@@ -474,8 +415,7 @@ textarea.form-input {
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
-
-.loading-text { font-size: 14px; color: var(--gray-700); }
+.loading-text { font-size: 14px; color: var(--gray-700); text-align: center; }
 
 /* ===== TAB BAR ===== */
 .tab-bar {
@@ -508,39 +448,66 @@ textarea.form-input {
 .tab-btn.active { color: var(--primary); }
 .tab-icon { font-size: 22px; }
 
-/* ===== SYNC STATUS ===== */
-.sync-status {
-  position: fixed;
-  top: 70px;
-  right: 16px;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 600;
-  z-index: 99;
+/* ===== SCANNER ===== */
+#scannerContainer {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #000;
+}
+
+#scannerContainer video { border-radius: var(--radius); }
+
+/* ===== IMAGE PREVIEW ===== */
+.img-preview {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 16px;
+  border-radius: var(--radius-sm);
+  background: var(--gray-100);
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  font-size: 48px;
+  overflow: hidden;
+  border: 2px dashed var(--gray-300);
 }
 
-.sync-status.online { background: var(--success-light); color: var(--success); }
-.sync-status.offline { background: var(--danger-light); color: var(--danger); }
+.img-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-/* ===== EMPTY STATE ===== */
-.empty-state {
+.img-preview.has-image { border-style: solid; border-color: var(--success); }
+
+/* ===== SCAN BUTTONS ===== */
+.scan-options {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.scan-option {
+  flex: 1;
+  padding: 16px;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  background: white;
   text-align: center;
-  padding: 40px 20px;
-  color: var(--gray-500);
+  cursor: pointer;
+  transition: all 0.15s;
 }
 
-.empty-icon { font-size: 48px; margin-bottom: 12px; }
-.empty-text { font-size: 14px; }
+.scan-option:active { transform: scale(0.98); }
+.scan-option.active { border-color: var(--primary); background: var(--primary-light); }
+.scan-option-icon { font-size: 28px; margin-bottom: 6px; }
+.scan-option-text { font-size: 12px; font-weight: 600; color: var(--gray-700); }
 
 /* ===== PRIORITY SELECTOR ===== */
-.priority-selector {
-  display: flex;
-  gap: 8px;
-}
+.priority-selector { display: flex; gap: 8px; }
 
 .priority-btn {
   flex: 1;
@@ -558,7 +525,6 @@ textarea.form-input {
 .priority-btn.alta { border-color: var(--danger); background: var(--danger-light); color: var(--danger); }
 .priority-btn.media { border-color: var(--warning); background: var(--warning-light); color: var(--warning); }
 .priority-btn.baixa { border-color: var(--success); background: var(--success-light); color: var(--success); }
-
 .priority-btn.selected { transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
 
 /* ===== CHIP FILTERS ===== */
@@ -568,6 +534,7 @@ textarea.form-input {
   overflow-x: auto;
   padding: 4px 0;
   margin-bottom: 12px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .chip-row::-webkit-scrollbar { display: none; }
@@ -585,16 +552,15 @@ textarea.form-input {
   flex-shrink: 0;
 }
 
-.chip.active {
-  background: var(--primary);
-  color: white;
-}
+.chip.active { background: var(--primary); color: white; }
 
-/* ===== ACTION BUTTONS IN CARDS ===== */
+/* ===== CARD ACTIONS ===== */
 .card-actions {
   display: flex;
   gap: 8px;
   margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--gray-100);
 }
 
 .action-btn {
@@ -615,7 +581,41 @@ textarea.form-input {
 .action-btn.delete { background: var(--danger-light); color: var(--danger); }
 .action-btn.add { background: var(--success-light); color: var(--success); }
 
-/* ===== CONNECTION BANNER ===== */
+/* ===== FOUND RESULT ===== */
+.found-card {
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.found-card.success { background: var(--success-light); border: 2px solid var(--success); }
+.found-card.warning { background: var(--warning-light); border: 2px solid var(--warning); }
+
+.found-img {
+  width: 70px;
+  height: 70px;
+  border-radius: var(--radius-sm);
+  background: white;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.found-img img { width: 100%; height: 100%; object-fit: cover; }
+
+.found-info { flex: 1; }
+.found-title { font-size: 14px; font-weight: 700; color: var(--success); margin-bottom: 4px; }
+.found-name { font-size: 13px; font-weight: 600; }
+.found-meta { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
+
+/* ===== EMPTY STATE ===== */
+.empty-state { text-align: center; padding: 40px 20px; color: var(--gray-500); }
+.empty-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-text { font-size: 14px; }
+
+/* ===== CONNECTION STATUS ===== */
 .connection-banner {
   background: var(--warning);
   color: white;
@@ -634,16 +634,14 @@ textarea.form-input {
 <!-- LOADING -->
 <div class="loading" id="loading">
   <div class="spinner"></div>
-  <div class="loading-text">Carregando...</div>
+  <div class="loading-text" id="loadingText">Carregando...</div>
 </div>
 
 <!-- TOAST -->
 <div class="toast-container" id="toastContainer"></div>
 
 <!-- CONNECTION BANNER -->
-<div class="connection-banner" id="connectionBanner">
-  ⚠️ Sem conexão - Dados serão sincronizados quando voltar
-</div>
+<div class="connection-banner" id="connectionBanner">⚠️ Sem conexão - Dados serão sincronizados quando voltar</div>
 
 <!-- MODAL -->
 <div class="modal" id="modal">
@@ -677,7 +675,7 @@ textarea.form-input {
       <div class="quick-icon">➕</div>
       <div class="quick-text">Registrar Falta</div>
     </button>
-    <button class="quick-btn warning" onclick="openVencimentos()">
+    <button class="quick-btn warning" onclick="goToPage('vencimentos')">
       <div class="quick-icon">⏰</div>
       <div class="quick-text">Vencimentos</div>
     </button>
@@ -697,16 +695,16 @@ textarea.form-input {
       <div class="section-title">🔴 Faltas Urgentes</div>
       <div class="section-link" onclick="switchTab(2)">Ver todas →</div>
     </div>
-    <div id="listaUrgentes"></div>
+    <div id="listaUrgentesHome"></div>
   </div>
 
   <!-- VENCENDO -->
   <div class="section" id="sectionVencendo" style="display:none;">
     <div class="section-header">
       <div class="section-title">⏰ Produtos Vencendo</div>
-      <div class="section-link" onclick="openVencimentos()">Ver todos →</div>
+      <div class="section-link" onclick="goToPage('vencimentos')">Ver todos →</div>
     </div>
-    <div id="listaVencendo"></div>
+    <div id="listaVencendoHome"></div>
   </div>
 </div>
 
@@ -754,7 +752,7 @@ textarea.form-input {
 
   <div style="display:flex;gap:10px;margin-top:16px;">
     <button class="btn btn-primary btn-block" onclick="openRealizarFalta()">➕ Nova Falta</button>
-    <button class="btn btn-success" onclick="gerarPDF()">📄 PDF</button>
+    <button class="btn btn-success" onclick="gerarPDF()">📄</button>
     <button class="btn btn-gray" onclick="compartilharWhatsApp()">📤</button>
   </div>
 </div>
@@ -769,15 +767,10 @@ textarea.form-input {
     </div>
   </header>
 
-  <div class="search-box">
-    <span class="search-icon">🔍</span>
-    <input type="text" class="search-input" id="searchVencimentos" placeholder="Buscar produto para adicionar vencimento..." oninput="renderBuscaVencimento()">
-  </div>
+  <button class="btn btn-success btn-block" onclick="openAddVencimento()" style="margin-bottom:16px;">
+    ➕ Adicionar Vencimento
+  </button>
 
-  <div id="buscaVencimentoResults" style="display:none;"></div>
-
-  <div class="section-title" style="margin-bottom:12px;">📅 Produtos com Vencimento</div>
-  
   <div class="chip-row">
     <button class="chip active" data-venc="todos" onclick="setVencFilter(this)">Todos</button>
     <button class="chip" data-venc="vencidos" onclick="setVencFilter(this)">🔴 Vencidos</button>
@@ -854,7 +847,6 @@ textarea.form-input {
 <script>
 // ╔══════════════════════════════════════════════════════════════╗
 // ║  🔥 CONFIGURAÇÃO DO FIREBASE                                  ║
-// ║  Substitua os valores abaixo pelos seus do Firebase Console  ║
 // ╚══════════════════════════════════════════════════════════════╝
 
 const firebaseConfig = {
@@ -888,33 +880,33 @@ let currentTab = 0;
 let currentFaltaFilter = 'todos';
 let currentVencFilter = 'todos';
 let navHistory = ['home'];
+let html5QrCode = null;
+let scannerRunning = false;
+let currentImage = '';
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', async () => {
-  showLoading();
+  showLoading('Carregando dados...');
   await loadAllData();
   loadConfig();
   renderHome();
   hideLoading();
   
-  // Monitorar conexão
   window.addEventListener('online', () => { isOnline = true; updateConnectionStatus(); syncData(); });
   window.addEventListener('offline', () => { isOnline = false; updateConnectionStatus(); });
   updateConnectionStatus();
   
-  // Back button
   window.addEventListener('popstate', () => {
     if (navHistory.length > 1) {
       navHistory.pop();
-      const prev = navHistory[navHistory.length - 1];
-      goToPage(prev, false);
+      goToPage(navHistory[navHistory.length - 1], false);
     }
   });
   
   history.replaceState({ page: 'home' }, '', '');
 });
 
-// ===== DATA LOADING =====
+// ===== DATA =====
 async function loadAllData() {
   if (db && isOnline) {
     try {
@@ -928,13 +920,11 @@ async function loadAllData() {
       faltas = faltaSnap.val() ? Object.values(faltaSnap.val()) : [];
       vencimentos = vencSnap.val() ? Object.values(vencSnap.val()) : [];
       
-      // Salvar no localStorage como backup
       localStorage.setItem('produtos', JSON.stringify(produtos));
       localStorage.setItem('faltas', JSON.stringify(faltas));
       localStorage.setItem('vencimentos', JSON.stringify(vencimentos));
-      
     } catch (e) {
-      console.log('Erro ao carregar do Firebase:', e);
+      console.log('Erro Firebase:', e);
       loadFromLocalStorage();
     }
   } else {
@@ -953,29 +943,26 @@ async function saveData(collection, data) {
   
   if (db && isOnline) {
     try {
-      await db.ref(collection).set(data.reduce((acc, item) => {
-        acc[item.id] = item;
-        return acc;
-      }, {}));
+      const obj = {};
+      data.forEach(item => { obj[item.id] = item; });
+      await db.ref(collection).set(obj);
     } catch (e) {
-      console.log('Erro ao salvar no Firebase:', e);
+      console.log('Erro ao salvar:', e);
     }
   }
 }
 
 async function syncData() {
   if (db && isOnline) {
-    showLoading();
+    showLoading('Sincronizando...');
     await loadAllData();
     renderAll();
     hideLoading();
-    toast('✅ Dados sincronizados!', 'success');
+    toast('✅ Sincronizado!', 'success');
   }
 }
 
-function forceSync() {
-  syncData();
-}
+function forceSync() { syncData(); }
 
 // ===== NAVIGATION =====
 function switchTab(idx) {
@@ -997,6 +984,8 @@ function switchTab(idx) {
 }
 
 function goToPage(page, addHistory = true) {
+  stopScanner();
+  
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   
@@ -1004,6 +993,7 @@ function goToPage(page, addHistory = true) {
     document.getElementById('pageHome').classList.add('active');
     document.querySelectorAll('.tab-btn')[0].classList.add('active');
     currentTab = 0;
+    renderHome();
   } else if (page === 'produtos') {
     document.getElementById('pageProdutos').classList.add('active');
     document.querySelectorAll('.tab-btn')[1].classList.add('active');
@@ -1016,11 +1006,12 @@ function goToPage(page, addHistory = true) {
     renderFaltas();
   } else if (page === 'vencimentos') {
     document.getElementById('pageVencimentos').classList.add('active');
-    renderVencimentosFull();
+    renderVencimentos();
   } else if (page === 'config') {
     document.getElementById('pageConfig').classList.add('active');
     document.querySelectorAll('.tab-btn')[3].classList.add('active');
     currentTab = 3;
+    updateSyncInfo();
   }
   
   if (addHistory) {
@@ -1037,10 +1028,6 @@ function goBack() {
   }
 }
 
-function openVencimentos() {
-  goToPage('vencimentos');
-}
-
 // ===== RENDER =====
 function renderAll() {
   renderHome();
@@ -1049,72 +1036,84 @@ function renderAll() {
 }
 
 function renderHome() {
-  // Stats
   document.getElementById('statFaltas').textContent = faltas.length;
   document.getElementById('statUrgentes').textContent = faltas.filter(f => f.prioridade === 'alta').length;
   
-  const hoje = new Date();
-  hoje.setHours(0, 0, 0, 0);
+  const hoje = new Date(); hoje.setHours(0,0,0,0);
   const vencendoCount = vencimentos.filter(v => {
     const d = new Date(v.validade);
-    const diff = Math.ceil((d - hoje) / 86400000);
-    return diff <= 7 && diff >= 0;
+    return Math.ceil((d - hoje) / 86400000) <= 7;
   }).length;
   document.getElementById('statVencendo').textContent = vencendoCount;
   
   // Urgentes
   const urgentes = faltas.filter(f => f.prioridade === 'alta').slice(0, 3);
-  const secUrgentes = document.getElementById('sectionUrgentes');
-  const listaUrgentes = document.getElementById('listaUrgentes');
+  const secUrg = document.getElementById('sectionUrgentes');
+  const listaUrg = document.getElementById('listaUrgentesHome');
   
   if (urgentes.length > 0) {
-    secUrgentes.style.display = 'block';
-    listaUrgentes.innerHTML = urgentes.map(f => `
-      <div class="prod-card urgent">
-        <div class="prod-icon">📦</div>
-        <div class="prod-info">
-          <div class="prod-name">${f.nome}</div>
-          <div class="prod-meta">${f.quantidade} ${f.unidade} • ${f.sugestao || ''}</div>
-        </div>
-        <span class="prod-badge badge-danger">URGENTE</span>
-      </div>
-    `).join('');
+    secUrg.style.display = 'block';
+    listaUrg.innerHTML = urgentes.map(f => renderProdCardHTML(f, 'urgent')).join('');
   } else {
-    secUrgentes.style.display = 'none';
+    secUrg.style.display = 'none';
   }
   
   // Vencendo
   const vencendo = vencimentos.filter(v => {
     const d = new Date(v.validade);
-    const diff = Math.ceil((d - hoje) / 86400000);
-    return diff <= 7;
+    return Math.ceil((d - hoje) / 86400000) <= 7;
   }).sort((a, b) => new Date(a.validade) - new Date(b.validade)).slice(0, 3);
   
-  const secVencendo = document.getElementById('sectionVencendo');
-  const listaVencendo = document.getElementById('listaVencendo');
+  const secVenc = document.getElementById('sectionVencendo');
+  const listaVenc = document.getElementById('listaVencendoHome');
   
   if (vencendo.length > 0) {
-    secVencendo.style.display = 'block';
-    listaVencendo.innerHTML = vencendo.map(v => {
+    secVenc.style.display = 'block';
+    listaVenc.innerHTML = vencendo.map(v => {
       const d = new Date(v.validade);
       const diff = Math.ceil((d - hoje) / 86400000);
-      const isExpired = diff < 0;
-      return `
-        <div class="prod-card ${isExpired ? 'expiring' : ''}">
-          <div class="prod-icon">📦</div>
-          <div class="prod-info">
-            <div class="prod-name">${v.nome}</div>
-            <div class="prod-meta">${v.quantidade} un • Val: ${formatDate(v.validade)}</div>
-          </div>
-          <span class="prod-badge ${isExpired ? 'badge-danger' : 'badge-orange'}">
-            ${isExpired ? 'VENCIDO' : diff + 'd'}
-          </span>
-        </div>
-      `;
+      return renderVencCardHTML(v, diff);
     }).join('');
   } else {
-    secVencendo.style.display = 'none';
+    secVenc.style.display = 'none';
   }
+}
+
+function renderProdCardHTML(item, prioClass = '', badge = '') {
+  const img = item.imagem ? `<img src="${item.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
+  const badgeHTML = badge ? `<span class="prod-badge ${badge.class}">${badge.text}</span>` : '';
+  
+  return `
+    <div class="prod-card ${prioClass}">
+      <div class="prod-img">${img}</div>
+      <div class="prod-info">
+        <div class="prod-name">${item.nome}</div>
+        <div class="prod-meta">${item.marca || ''} ${item.volume || ''}</div>
+        ${item.codigo ? `<div class="prod-code">${item.codigo}</div>` : ''}
+        ${item.quantidade ? `<div class="prod-meta">📦 ${item.quantidade} ${item.unidade || 'UN'}</div>` : ''}
+      </div>
+      ${badgeHTML}
+    </div>
+  `;
+}
+
+function renderVencCardHTML(v, diff) {
+  const isExpired = diff < 0;
+  const img = v.imagem ? `<img src="${v.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
+  
+  return `
+    <div class="prod-card ${isExpired ? 'expiring' : ''}">
+      <div class="prod-img">${img}</div>
+      <div class="prod-info">
+        <div class="prod-name">${v.nome}</div>
+        <div class="prod-meta">${v.marca || ''} • ${v.quantidade || 1} un</div>
+        <div class="prod-meta">📅 Val: ${formatDate(v.validade)}</div>
+      </div>
+      <span class="prod-badge ${isExpired ? 'badge-danger' : diff <= 7 ? 'badge-orange' : 'badge-success'}">
+        ${isExpired ? 'VENCIDO' : diff === 0 ? 'HOJE' : diff + 'd'}
+      </span>
+    </div>
+  `;
 }
 
 // ===== PRODUTOS =====
@@ -1125,12 +1124,12 @@ function renderProdutos() {
   if (search) {
     list = list.filter(p => 
       p.nome.toLowerCase().includes(search) || 
-      (p.marca || '').toLowerCase().includes(search)
+      (p.marca || '').toLowerCase().includes(search) ||
+      (p.codigo || '').includes(search)
     );
   }
   
   list.sort((a, b) => a.nome.localeCompare(b.nome));
-  
   document.getElementById('produtosCount').textContent = `${produtos.length} produtos`;
   
   const container = document.getElementById('listaProdutos');
@@ -1145,82 +1144,340 @@ function renderProdutos() {
     return;
   }
   
-  container.innerHTML = list.map(p => `
-    <div class="prod-card">
-      <div class="prod-icon">📦</div>
-      <div class="prod-info">
-        <div class="prod-name">${p.nome}</div>
-        <div class="prod-meta">${p.marca || 'Sem marca'} • ${p.volume || ''}</div>
+  container.innerHTML = list.map(p => {
+    const img = p.imagem ? `<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
+    return `
+      <div class="prod-card">
+        <div class="prod-img">${img}</div>
+        <div class="prod-info">
+          <div class="prod-name">${p.nome}</div>
+          <div class="prod-meta">${p.marca || 'Sem marca'} • ${p.volume || ''}</div>
+          ${p.codigo ? `<div class="prod-code">📊 ${p.codigo}</div>` : ''}
+        </div>
       </div>
-    </div>
-    <div class="card-actions" style="margin-top:-8px;margin-bottom:8px;">
-      <button class="action-btn add" onclick="openRealizarFaltaComProduto('${p.id}')">➕ Falta</button>
-      <button class="action-btn edit" onclick="editarProduto('${p.id}')">✏️ Editar</button>
-      <button class="action-btn delete" onclick="excluirProduto('${p.id}')">🗑️</button>
-    </div>
-  `).join('');
+      <div class="card-actions">
+        <button class="action-btn add" onclick="openFaltaComProduto('${p.id}')">➕ Falta</button>
+        <button class="action-btn edit" onclick="editarProduto('${p.id}')">✏️ Editar</button>
+        <button class="action-btn delete" onclick="excluirProduto('${p.id}')">🗑️</button>
+      </div>
+    `;
+  }).join('');
 }
 
+// ===== CADASTRO PRODUTO =====
 function openCadastro(produtoId = null) {
   const produto = produtoId ? produtos.find(p => p.id === produtoId) : null;
+  currentImage = produto?.imagem || '';
   
   const html = `
     <div class="modal-header">
-      <div class="modal-title">${produto ? '✏️ Editar Produto' : '📝 Novo Produto'}</div>
+      <div class="modal-title">${produto ? '✏️ Editar Produto' : '📝 Cadastrar Produto'}</div>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-body">
-      <div class="form-group">
-        <label class="form-label">Nome do Produto *</label>
-        <input type="text" class="form-input" id="cadNome" placeholder="Ex: Arroz, Feijão, Leite..." value="${produto?.nome || ''}">
+      <!-- OPÇÕES DE ENTRADA -->
+      <div class="scan-options" id="scanOptions" ${produto ? 'style="display:none;"' : ''}>
+        <div class="scan-option active" onclick="setScanMode('manual')">
+          <div class="scan-option-icon">✏️</div>
+          <div class="scan-option-text">Manual</div>
+        </div>
+        <div class="scan-option" onclick="setScanMode('scan')">
+          <div class="scan-option-icon">📷</div>
+          <div class="scan-option-text">Escanear</div>
+        </div>
+        <div class="scan-option" onclick="setScanMode('digitar')">
+          <div class="scan-option-icon">🔢</div>
+          <div class="scan-option-text">Digitar Código</div>
+        </div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Marca</label>
-        <input type="text" class="form-input" id="cadMarca" placeholder="Ex: Tio João, Camil..." value="${produto?.marca || ''}">
+      
+      <!-- SCANNER -->
+      <div id="scannerArea" style="display:none;">
+        <div id="scannerContainer"></div>
+        <button class="btn btn-danger btn-block" onclick="stopScanner()" style="margin-top:10px;">⏹️ Parar Scanner</button>
       </div>
-      <div class="form-group">
-        <label class="form-label">Volume / Peso</label>
-        <input type="text" class="form-input" id="cadVolume" placeholder="Ex: 1kg, 500ml, 1L..." value="${produto?.volume || ''}">
+      
+      <!-- DIGITAR CÓDIGO -->
+      <div id="digitarArea" style="display:none;">
+        <div class="form-group">
+          <label class="form-label">Código de Barras</label>
+          <input type="text" class="form-input" id="codigoInput" placeholder="Digite o código..." inputmode="numeric">
+        </div>
+        <button class="btn btn-primary btn-block" onclick="buscarPorCodigo()">🔍 Buscar na Internet</button>
       </div>
-      <button class="btn btn-success btn-block btn-lg" onclick="salvarProduto('${produtoId || ''}')">
-        💾 Salvar Produto
-      </button>
+      
+      <!-- RESULTADO DA BUSCA -->
+      <div id="foundResult" style="display:none;"></div>
+      
+      <!-- IMAGEM -->
+      <div class="img-preview ${currentImage ? 'has-image' : ''}" id="imgPreview">
+        ${currentImage ? `<img src="${currentImage}">` : '📦'}
+      </div>
+      <div style="display:flex;gap:8px;justify-content:center;margin-bottom:16px;">
+        <label class="btn btn-sm btn-outline" style="cursor:pointer;">
+          📷 Foto
+          <input type="file" accept="image/*" capture="environment" style="display:none;" onchange="handlePhoto(event)">
+        </label>
+        <label class="btn btn-sm btn-outline" style="cursor:pointer;">
+          🖼️ Galeria
+          <input type="file" accept="image/*" style="display:none;" onchange="handlePhoto(event)">
+        </label>
+      </div>
+      
+      <!-- FORMULÁRIO -->
+      <div id="formProduto">
+        <div class="form-group">
+          <label class="form-label">Código de Barras</label>
+          <input type="text" class="form-input" id="cadCodigo" placeholder="Código do produto" value="${produto?.codigo || ''}">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nome do Produto *</label>
+          <input type="text" class="form-input" id="cadNome" placeholder="Ex: Arroz Tipo 1" value="${produto?.nome || ''}">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Marca</label>
+          <input type="text" class="form-input" id="cadMarca" placeholder="Ex: Tio João" value="${produto?.marca || ''}">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Volume / Peso</label>
+          <input type="text" class="form-input" id="cadVolume" placeholder="Ex: 1kg, 500ml" value="${produto?.volume || ''}">
+        </div>
+        
+        <button class="btn btn-success btn-block btn-lg" onclick="salvarProduto('${produtoId || ''}')">
+          💾 Salvar Produto
+        </button>
+      </div>
     </div>
   `;
   
   showModal(html);
 }
 
+function setScanMode(mode) {
+  document.querySelectorAll('.scan-option').forEach(o => o.classList.remove('active'));
+  document.getElementById('scannerArea').style.display = 'none';
+  document.getElementById('digitarArea').style.display = 'none';
+  document.getElementById('foundResult').style.display = 'none';
+  stopScanner();
+  
+  if (mode === 'scan') {
+    document.querySelectorAll('.scan-option')[1].classList.add('active');
+    document.getElementById('scannerArea').style.display = 'block';
+    startScanner();
+  } else if (mode === 'digitar') {
+    document.querySelectorAll('.scan-option')[2].classList.add('active');
+    document.getElementById('digitarArea').style.display = 'block';
+    setTimeout(() => document.getElementById('codigoInput')?.focus(), 100);
+  } else {
+    document.querySelectorAll('.scan-option')[0].classList.add('active');
+  }
+}
+
+// ===== SCANNER =====
+function startScanner() {
+  if (scannerRunning) return;
+  
+  const container = document.getElementById('scannerContainer');
+  container.innerHTML = '<div id="qr-reader"></div>';
+  
+  html5QrCode = new Html5Qrcode('qr-reader');
+  html5QrCode.start(
+    { facingMode: 'environment' },
+    { fps: 10, qrbox: { width: 250, height: 150 } },
+    onScanSuccess,
+    () => {}
+  ).then(() => {
+    scannerRunning = true;
+  }).catch(err => {
+    toast('📷 Não foi possível acessar a câmera', 'error');
+    console.log(err);
+  });
+}
+
+function stopScanner() {
+  if (html5QrCode && scannerRunning) {
+    html5QrCode.stop().then(() => {
+      scannerRunning = false;
+      html5QrCode.clear();
+    }).catch(() => {});
+  }
+  scannerRunning = false;
+}
+
+function onScanSuccess(code) {
+  if (navigator.vibrate) navigator.vibrate(200);
+  playBeep();
+  stopScanner();
+  
+  document.getElementById('scannerArea').style.display = 'none';
+  document.getElementById('cadCodigo').value = code;
+  
+  buscarProdutoOnline(code);
+}
+
+function playBeep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.frequency.value = 1200;
+    gain.gain.value = 0.3;
+    osc.start();
+    osc.stop(ctx.currentTime + 0.15);
+  } catch(e) {}
+}
+
+function buscarPorCodigo() {
+  const codigo = document.getElementById('codigoInput').value.trim();
+  if (!codigo) {
+    toast('Digite o código!', 'warning');
+    return;
+  }
+  document.getElementById('cadCodigo').value = codigo;
+  document.getElementById('digitarArea').style.display = 'none';
+  buscarProdutoOnline(codigo);
+}
+
+async function buscarProdutoOnline(codigo) {
+  showLoading('🔍 Buscando produto na internet...');
+  
+  const apis = [
+    { nome: 'Open Food Facts', url: `https://world.openfoodfacts.org/api/v0/product/${codigo}.json` },
+    { nome: 'Open Beauty Facts', url: `https://world.openbeautyfacts.org/api/v0/product/${codigo}.json` },
+    { nome: 'Open Products Facts', url: `https://world.openproductsfacts.org/api/v0/product/${codigo}.json` }
+  ];
+  
+  for (const api of apis) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 8000);
+      const resp = await fetch(api.url, { signal: controller.signal });
+      clearTimeout(timeout);
+      const dados = await resp.json();
+      
+      if (dados.status === 1 && dados.product) {
+        const p = dados.product;
+        const nome = p.product_name_pt || p.product_name || '';
+        const marca = p.brands || '';
+        const imagem = p.image_front_url || p.image_url || '';
+        const volume = p.quantity || '';
+        
+        hideLoading();
+        
+        if (nome) {
+          // Preencher formulário
+          document.getElementById('cadNome').value = nome;
+          document.getElementById('cadMarca').value = marca;
+          document.getElementById('cadVolume').value = volume;
+          
+          if (imagem) {
+            currentImage = imagem;
+            document.getElementById('imgPreview').innerHTML = `<img src="${imagem}">`;
+            document.getElementById('imgPreview').classList.add('has-image');
+          }
+          
+          // Mostrar resultado
+          const foundDiv = document.getElementById('foundResult');
+          foundDiv.style.display = 'block';
+          foundDiv.innerHTML = `
+            <div class="found-card success">
+              ${imagem ? `<div class="found-img"><img src="${imagem}"></div>` : ''}
+              <div class="found-info">
+                <div class="found-title">✅ Produto Encontrado!</div>
+                <div class="found-name">${nome}</div>
+                <div class="found-meta">${marca} ${volume}</div>
+              </div>
+            </div>
+          `;
+          
+          toast('✅ Produto encontrado!', 'success');
+          return;
+        }
+      }
+    } catch (e) {
+      console.log('Erro:', e);
+    }
+  }
+  
+  hideLoading();
+  
+  const foundDiv = document.getElementById('foundResult');
+  foundDiv.style.display = 'block';
+  foundDiv.innerHTML = `
+    <div class="found-card warning">
+      <div class="found-info">
+        <div class="found-title" style="color:var(--warning);">😕 Não encontrado</div>
+        <div class="found-meta">Preencha os dados manualmente</div>
+      </div>
+    </div>
+  `;
+  
+  document.getElementById('cadNome').focus();
+}
+
+function handlePhoto(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      let w = img.width, h = img.height;
+      const max = 400;
+      if (w > max || h > max) {
+        if (w > h) { h = Math.round(h * max / w); w = max; }
+        else { w = Math.round(w * max / h); h = max; }
+      }
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      currentImage = canvas.toDataURL('image/jpeg', 0.7);
+      document.getElementById('imgPreview').innerHTML = `<img src="${currentImage}">`;
+      document.getElementById('imgPreview').classList.add('has-image');
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
 async function salvarProduto(id) {
   const nome = document.getElementById('cadNome').value.trim();
   const marca = document.getElementById('cadMarca').value.trim();
   const volume = document.getElementById('cadVolume').value.trim();
+  const codigo = document.getElementById('cadCodigo').value.trim();
   
   if (!nome) {
     toast('Digite o nome do produto!', 'error');
+    document.getElementById('cadNome').focus();
     return;
   }
   
   if (id) {
-    // Editar
     const idx = produtos.findIndex(p => p.id === id);
     if (idx >= 0) {
-      produtos[idx] = { ...produtos[idx], nome, marca, volume };
+      produtos[idx] = { ...produtos[idx], nome, marca, volume, codigo, imagem: currentImage };
     }
   } else {
-    // Novo
     produtos.push({
       id: Date.now().toString(),
       nome,
       marca,
       volume,
+      codigo,
+      imagem: currentImage,
       createdAt: new Date().toISOString()
     });
   }
   
   await saveData('produtos', produtos);
   closeModal();
+  stopScanner();
   renderProdutos();
+  renderHome();
   toast('✅ Produto salvo!', 'success');
 }
 
@@ -1235,10 +1492,10 @@ async function excluirProduto(id) {
   produtos = produtos.filter(x => x.id !== id);
   await saveData('produtos', produtos);
   renderProdutos();
-  toast('🗑️ Produto excluído!', 'success');
+  toast('🗑️ Excluído!', 'success');
 }
 
-// ===== REALIZAR FALTA =====
+// ===== FALTA =====
 function openRealizarFalta() {
   const html = `
     <div class="modal-header">
@@ -1248,9 +1505,9 @@ function openRealizarFalta() {
     <div class="modal-body">
       <div class="search-box">
         <span class="search-icon">🔍</span>
-        <input type="text" class="search-input" id="buscaFalta" placeholder="Buscar produto cadastrado..." oninput="renderBuscaFalta()">
+        <input type="text" class="search-input" id="buscaFalta" placeholder="Buscar produto..." oninput="renderBuscaFalta()">
       </div>
-      <div id="resultadosBuscaFalta"></div>
+      <div id="resultadosFalta"></div>
     </div>
   `;
   
@@ -1260,16 +1517,17 @@ function openRealizarFalta() {
 
 function renderBuscaFalta() {
   const search = document.getElementById('buscaFalta').value.toLowerCase();
-  const container = document.getElementById('resultadosBuscaFalta');
+  const container = document.getElementById('resultadosFalta');
   
   if (!search) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-text">Digite para buscar um produto</div></div>';
+    container.innerHTML = '<div class="empty-state"><div class="empty-text">Digite para buscar</div></div>';
     return;
   }
   
   const results = produtos.filter(p => 
     p.nome.toLowerCase().includes(search) || 
-    (p.marca || '').toLowerCase().includes(search)
+    (p.marca || '').toLowerCase().includes(search) ||
+    (p.codigo || '').includes(search)
   ).slice(0, 10);
   
   if (results.length === 0) {
@@ -1277,25 +1535,26 @@ function renderBuscaFalta() {
     return;
   }
   
-  container.innerHTML = results.map(p => `
-    <div class="prod-card" onclick="selecionarProdutoFalta('${p.id}')" style="cursor:pointer;">
-      <div class="prod-icon">📦</div>
-      <div class="prod-info">
-        <div class="prod-name">${p.nome}</div>
-        <div class="prod-meta">${p.marca || ''} ${p.volume || ''}</div>
+  container.innerHTML = results.map(p => {
+    const img = p.imagem ? `<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
+    return `
+      <div class="prod-card clickable" onclick="openFaltaComProduto('${p.id}')">
+        <div class="prod-img">${img}</div>
+        <div class="prod-info">
+          <div class="prod-name">${p.nome}</div>
+          <div class="prod-meta">${p.marca || ''} ${p.volume || ''}</div>
+        </div>
+        <span style="color:var(--primary);font-size:20px;">→</span>
       </div>
-      <span style="color:var(--primary);font-size:20px;">→</span>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
-function openRealizarFaltaComProduto(produtoId) {
-  selecionarProdutoFalta(produtoId);
-}
-
-function selecionarProdutoFalta(produtoId) {
+function openFaltaComProduto(produtoId) {
   const p = produtos.find(x => x.id === produtoId);
   if (!p) return;
+  
+  const img = p.imagem ? `<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
   
   const html = `
     <div class="modal-header">
@@ -1304,19 +1563,20 @@ function selecionarProdutoFalta(produtoId) {
     </div>
     <div class="modal-body">
       <div class="prod-card" style="margin-bottom:20px;">
-        <div class="prod-icon">📦</div>
+        <div class="prod-img">${img}</div>
         <div class="prod-info">
           <div class="prod-name">${p.nome}</div>
           <div class="prod-meta">${p.marca || ''} ${p.volume || ''}</div>
+          ${p.codigo ? `<div class="prod-code">${p.codigo}</div>` : ''}
         </div>
       </div>
       
       <div class="form-group">
         <label class="form-label">Prioridade</label>
         <div class="priority-selector">
-          <button class="priority-btn alta selected" onclick="setPrioridade(this, 'alta')">🔴 Urgente</button>
-          <button class="priority-btn media" onclick="setPrioridade(this, 'media')">🟡 Média</button>
-          <button class="priority-btn baixa" onclick="setPrioridade(this, 'baixa')">🟢 Baixa</button>
+          <button class="priority-btn alta selected" onclick="setPrioridade(this,'alta')">🔴 Urgente</button>
+          <button class="priority-btn media" onclick="setPrioridade(this,'media')">🟡 Média</button>
+          <button class="priority-btn baixa" onclick="setPrioridade(this,'baixa')">🟢 Baixa</button>
         </div>
         <input type="hidden" id="faltaPrioridade" value="alta">
       </div>
@@ -1341,7 +1601,7 @@ function selecionarProdutoFalta(produtoId) {
       
       <div class="form-group">
         <label class="form-label">Sugestão de Pedido</label>
-        <textarea class="form-input" id="faltaSugestao" placeholder="Ex: Pedir 5 caixas, cliente perguntou..."></textarea>
+        <textarea class="form-input" id="faltaSugestao" placeholder="Ex: Pedir 5 caixas..."></textarea>
       </div>
       
       <button class="btn btn-success btn-block btn-lg" onclick="salvarFalta('${produtoId}')">
@@ -1369,6 +1629,8 @@ async function salvarFalta(produtoId) {
     nome: p.nome,
     marca: p.marca || '',
     volume: p.volume || '',
+    codigo: p.codigo || '',
+    imagem: p.imagem || '',
     quantidade: parseInt(document.getElementById('faltaQtd').value) || 1,
     unidade: document.getElementById('faltaUnid').value,
     prioridade: document.getElementById('faltaPrioridade').value,
@@ -1382,11 +1644,10 @@ async function salvarFalta(produtoId) {
   closeModal();
   renderAll();
   toast('✅ Falta registrada!', 'success');
-  
   if (navigator.vibrate) navigator.vibrate(200);
 }
 
-// ===== FALTAS =====
+// ===== LISTA FALTAS =====
 function setFaltaFilter(chip) {
   document.querySelectorAll('#pageFaltas .chip').forEach(c => c.classList.remove('active'));
   chip.classList.add('active');
@@ -1404,16 +1665,10 @@ function renderFaltas() {
   }
   
   document.getElementById('faltasCount').textContent = `${faltas.length} itens`;
-  
   const container = document.getElementById('listaFaltas');
   
   if (list.length === 0) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon">📋</div>
-        <div class="empty-text">Nenhuma falta registrada</div>
-      </div>
-    `;
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">Nenhuma falta</div></div>';
     return;
   }
   
@@ -1421,19 +1676,21 @@ function renderFaltas() {
     const prioClass = f.prioridade === 'alta' ? 'urgent' : f.prioridade === 'media' ? 'medium' : 'low';
     const badgeClass = f.prioridade === 'alta' ? 'badge-danger' : f.prioridade === 'media' ? 'badge-warning' : 'badge-success';
     const prioText = f.prioridade === 'alta' ? 'URGENTE' : f.prioridade === 'media' ? 'MÉDIA' : 'BAIXA';
+    const img = f.imagem ? `<img src="${f.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
     
     return `
       <div class="prod-card ${prioClass}">
-        <div class="prod-icon">${f.pedido ? '✅' : '📦'}</div>
+        <div class="prod-img">${f.pedido ? '✅' : img}</div>
         <div class="prod-info">
           <div class="prod-name">${f.nome}</div>
-          <div class="prod-meta">${f.quantidade} ${f.unidade} ${f.marca ? '• ' + f.marca : ''}</div>
+          <div class="prod-meta">${f.marca || ''} ${f.volume || ''}</div>
+          <div class="prod-meta">📦 ${f.quantidade} ${f.unidade}</div>
           ${f.sugestao ? `<div class="prod-meta">💬 ${f.sugestao}</div>` : ''}
         </div>
-        <span class="prod-badge ${f.pedido ? 'badge-info' : badgeClass}">${f.pedido ? '✅ PEDIDO' : prioText}</span>
+        <span class="prod-badge ${f.pedido ? 'badge-info' : badgeClass}">${f.pedido ? '✅' : prioText}</span>
       </div>
-      <div class="card-actions" style="margin-top:-8px;margin-bottom:8px;">
-        ${!f.pedido ? `<button class="action-btn add" onclick="marcarPedido('${f.id}')">✅ Pedido</button>` : ''}
+      <div class="card-actions">
+        ${!f.pedido ? `<button class="action-btn add" onclick="marcarPedido('${f.id}')">✅ Pedido</button>` : `<button class="action-btn edit" onclick="marcarPedido('${f.id}')">↩️ Desfazer</button>`}
         <button class="action-btn edit" onclick="editarFalta('${f.id}')">✏️</button>
         <button class="action-btn delete" onclick="excluirFalta('${f.id}')">🗑️</button>
       </div>
@@ -1445,11 +1702,10 @@ async function marcarPedido(id) {
   const idx = faltas.findIndex(f => f.id === id);
   if (idx >= 0) {
     faltas[idx].pedido = !faltas[idx].pedido;
-    faltas[idx].dataPedido = faltas[idx].pedido ? new Date().toISOString() : null;
     await saveData('faltas', faltas);
     renderFaltas();
     renderHome();
-    toast(faltas[idx].pedido ? '✅ Marcado como pedido!' : '↩️ Desmarcado', 'success');
+    toast(faltas[idx].pedido ? '✅ Pedido!' : '↩️ Desmarcado', 'success');
   }
 }
 
@@ -1466,20 +1722,20 @@ function editarFalta(id) {
       <div class="form-group">
         <label class="form-label">Prioridade</label>
         <div class="priority-selector">
-          <button class="priority-btn alta ${f.prioridade === 'alta' ? 'selected' : ''}" onclick="setPrioridade(this, 'alta')">🔴 Urgente</button>
-          <button class="priority-btn media ${f.prioridade === 'media' ? 'selected' : ''}" onclick="setPrioridade(this, 'media')">🟡 Média</button>
-          <button class="priority-btn baixa ${f.prioridade === 'baixa' ? 'selected' : ''}" onclick="setPrioridade(this, 'baixa')">🟢 Baixa</button>
+          <button class="priority-btn alta ${f.prioridade === 'alta' ? 'selected' : ''}" onclick="setPrioridade(this,'alta')">🔴</button>
+          <button class="priority-btn media ${f.prioridade === 'media' ? 'selected' : ''}" onclick="setPrioridade(this,'media')">🟡</button>
+          <button class="priority-btn baixa ${f.prioridade === 'baixa' ? 'selected' : ''}" onclick="setPrioridade(this,'baixa')">🟢</button>
         </div>
         <input type="hidden" id="faltaPrioridade" value="${f.prioridade}">
       </div>
       
       <div style="display:flex;gap:10px;">
         <div class="form-group" style="flex:1;">
-          <label class="form-label">Quantidade</label>
+          <label class="form-label">Qtd</label>
           <input type="number" class="form-input" id="editQtd" value="${f.quantidade}" min="1">
         </div>
         <div class="form-group" style="flex:1;">
-          <label class="form-label">Unidade</label>
+          <label class="form-label">Unid</label>
           <select class="form-select" id="editUnid">
             ${['UN','CX','PCT','KG','FD','DZ'].map(u => `<option ${f.unidade === u ? 'selected' : ''}>${u}</option>`).join('')}
           </select>
@@ -1487,13 +1743,11 @@ function editarFalta(id) {
       </div>
       
       <div class="form-group">
-        <label class="form-label">Sugestão de Pedido</label>
+        <label class="form-label">Sugestão</label>
         <textarea class="form-input" id="editSugestao">${f.sugestao || ''}</textarea>
       </div>
       
-      <button class="btn btn-success btn-block btn-lg" onclick="salvarEdicaoFalta('${id}')">
-        💾 Salvar
-      </button>
+      <button class="btn btn-success btn-block btn-lg" onclick="salvarEdicaoFalta('${id}')">💾 Salvar</button>
     </div>
   `;
   
@@ -1512,17 +1766,17 @@ async function salvarEdicaoFalta(id) {
     closeModal();
     renderFaltas();
     renderHome();
-    toast('✅ Falta atualizada!', 'success');
+    toast('✅ Atualizado!', 'success');
   }
 }
 
 async function excluirFalta(id) {
-  if (!confirm('Excluir esta falta?')) return;
+  if (!confirm('Excluir falta?')) return;
   faltas = faltas.filter(f => f.id !== id);
   await saveData('faltas', faltas);
   renderFaltas();
   renderHome();
-  toast('🗑️ Falta excluída!', 'success');
+  toast('🗑️ Excluído!', 'success');
 }
 
 // ===== VENCIMENTOS =====
@@ -1530,45 +1784,67 @@ function setVencFilter(chip) {
   document.querySelectorAll('#pageVencimentos .chip').forEach(c => c.classList.remove('active'));
   chip.classList.add('active');
   currentVencFilter = chip.dataset.venc;
-  renderVencimentosFull();
+  renderVencimentos();
 }
 
-function renderBuscaVencimento() {
-  const search = document.getElementById('searchVencimentos').value.toLowerCase();
-  const container = document.getElementById('buscaVencimentoResults');
+function openAddVencimento() {
+  const html = `
+    <div class="modal-header">
+      <div class="modal-title">📅 Adicionar Vencimento</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="buscaVenc" placeholder="Buscar produto..." oninput="renderBuscaVenc()">
+      </div>
+      <div id="resultadosVenc"></div>
+    </div>
+  `;
+  
+  showModal(html);
+  setTimeout(() => document.getElementById('buscaVenc')?.focus(), 100);
+}
+
+function renderBuscaVenc() {
+  const search = document.getElementById('buscaVenc').value.toLowerCase();
+  const container = document.getElementById('resultadosVenc');
   
   if (!search) {
-    container.style.display = 'none';
+    container.innerHTML = '<div class="empty-state"><div class="empty-text">Digite para buscar</div></div>';
     return;
   }
-  
-  container.style.display = 'block';
   
   const results = produtos.filter(p => 
     p.nome.toLowerCase().includes(search) || 
     (p.marca || '').toLowerCase().includes(search)
-  ).slice(0, 5);
+  ).slice(0, 10);
   
   if (results.length === 0) {
-    container.innerHTML = '<div style="padding:10px;text-align:center;color:var(--gray-500);">Nenhum produto encontrado</div>';
+    container.innerHTML = '<div class="empty-state"><div class="empty-text">Nenhum produto</div></div>';
     return;
   }
   
-  container.innerHTML = `<div class="card">${results.map(p => `
-    <div class="prod-card" onclick="abrirAddVencimento('${p.id}')" style="cursor:pointer;">
-      <div class="prod-icon">📦</div>
-      <div class="prod-info">
-        <div class="prod-name">${p.nome}</div>
-        <div class="prod-meta">${p.marca || ''} ${p.volume || ''}</div>
+  container.innerHTML = results.map(p => {
+    const img = p.imagem ? `<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
+    return `
+      <div class="prod-card clickable" onclick="abrirFormVenc('${p.id}')">
+        <div class="prod-img">${img}</div>
+        <div class="prod-info">
+          <div class="prod-name">${p.nome}</div>
+          <div class="prod-meta">${p.marca || ''} ${p.volume || ''}</div>
+        </div>
+        <span style="color:var(--success);">+ Venc</span>
       </div>
-      <span style="color:var(--success);font-size:14px;font-weight:600;">+ Vencimento</span>
-    </div>
-  `).join('')}</div>`;
+    `;
+  }).join('');
 }
 
-function abrirAddVencimento(produtoId) {
+function abrirFormVenc(produtoId) {
   const p = produtos.find(x => x.id === produtoId);
   if (!p) return;
+  
+  const img = p.imagem ? `<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
   
   const html = `
     <div class="modal-header">
@@ -1577,7 +1853,7 @@ function abrirAddVencimento(produtoId) {
     </div>
     <div class="modal-body">
       <div class="prod-card" style="margin-bottom:20px;">
-        <div class="prod-icon">📦</div>
+        <div class="prod-img">${img}</div>
         <div class="prod-info">
           <div class="prod-name">${p.nome}</div>
           <div class="prod-meta">${p.marca || ''} ${p.volume || ''}</div>
@@ -1591,18 +1867,16 @@ function abrirAddVencimento(produtoId) {
       
       <div class="form-group">
         <label class="form-label">Quantidade</label>
-        <input type="number" class="form-input" id="vencQtd" value="1" min="1" placeholder="Quantidade em estoque">
+        <input type="number" class="form-input" id="vencQtd" value="1" min="1">
       </div>
       
       <button class="btn btn-success btn-block btn-lg" onclick="salvarVencimento('${produtoId}')">
-        ✅ Salvar Vencimento
+        ✅ Salvar
       </button>
     </div>
   `;
   
   showModal(html);
-  document.getElementById('searchVencimentos').value = '';
-  document.getElementById('buscaVencimentoResults').style.display = 'none';
 }
 
 async function salvarVencimento(produtoId) {
@@ -1611,7 +1885,7 @@ async function salvarVencimento(produtoId) {
   const qtd = parseInt(document.getElementById('vencQtd').value) || 1;
   
   if (!data) {
-    toast('Selecione a data de validade!', 'error');
+    toast('Selecione a data!', 'error');
     return;
   }
   
@@ -1621,6 +1895,7 @@ async function salvarVencimento(produtoId) {
     nome: p.nome,
     marca: p.marca || '',
     volume: p.volume || '',
+    imagem: p.imagem || '',
     validade: data,
     quantidade: qtd,
     createdAt: new Date().toISOString()
@@ -1628,98 +1903,88 @@ async function salvarVencimento(produtoId) {
   
   await saveData('vencimentos', vencimentos);
   closeModal();
-  renderVencimentosFull();
+  renderVencimentos();
   renderHome();
-  toast('✅ Vencimento registrado!', 'success');
+  toast('✅ Salvo!', 'success');
 }
 
-function renderVencimentosFull() {
-  const hoje = new Date();
-  hoje.setHours(0, 0, 0, 0);
+function renderVencimentos() {
+  const hoje = new Date(); hoje.setHours(0,0,0,0);
   
   let list = vencimentos.map(v => {
     const d = new Date(v.validade);
-    const diff = Math.ceil((d - hoje) / 86400000);
-    return { ...v, dias: diff };
+    return { ...v, dias: Math.ceil((d - hoje) / 86400000) };
   });
   
-  // Filter
-  if (currentVencFilter === 'vencidos') {
-    list = list.filter(v => v.dias < 0);
-  } else if (currentVencFilter === '7dias') {
-    list = list.filter(v => v.dias >= 0 && v.dias <= 7);
-  } else if (currentVencFilter === '30dias') {
-    list = list.filter(v => v.dias >= 0 && v.dias <= 30);
-  }
+  if (currentVencFilter === 'vencidos') list = list.filter(v => v.dias < 0);
+  else if (currentVencFilter === '7dias') list = list.filter(v => v.dias >= 0 && v.dias <= 7);
+  else if (currentVencFilter === '30dias') list = list.filter(v => v.dias >= 0 && v.dias <= 30);
   
   list.sort((a, b) => a.dias - b.dias);
   
   const container = document.getElementById('listaVencimentos');
   
   if (list.length === 0) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon">📅</div>
-        <div class="empty-text">Nenhum vencimento registrado</div>
-      </div>
-    `;
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📅</div><div class="empty-text">Nenhum vencimento</div></div>';
     return;
   }
   
   container.innerHTML = list.map(v => {
     const isExpired = v.dias < 0;
     const isClose = v.dias >= 0 && v.dias <= 7;
-    const badgeClass = isExpired ? 'badge-danger' : isClose ? 'badge-orange' : 'badge-success';
-    const badgeText = isExpired ? 'VENCIDO' : v.dias === 0 ? 'HOJE' : v.dias + ' dias';
+    const img = v.imagem ? `<img src="${v.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
     
     return `
       <div class="prod-card ${isExpired ? 'expiring' : ''}">
-        <div class="prod-icon">📦</div>
+        <div class="prod-img">${img}</div>
         <div class="prod-info">
           <div class="prod-name">${v.nome}</div>
-          <div class="prod-meta">${v.quantidade} un • Val: ${formatDate(v.validade)}</div>
+          <div class="prod-meta">${v.marca || ''} • ${v.quantidade} un</div>
+          <div class="prod-meta">📅 ${formatDate(v.validade)}</div>
         </div>
-        <span class="prod-badge ${badgeClass}">${badgeText}</span>
+        <span class="prod-badge ${isExpired ? 'badge-danger' : isClose ? 'badge-orange' : 'badge-success'}">
+          ${isExpired ? 'VENCIDO' : v.dias === 0 ? 'HOJE' : v.dias + 'd'}
+        </span>
       </div>
-      <div class="card-actions" style="margin-top:-8px;margin-bottom:8px;">
-        <button class="action-btn add" onclick="criarFaltaDeVencimento('${v.id}')">➕ Criar Falta</button>
-        <button class="action-btn delete" onclick="excluirVencimento('${v.id}')">🗑️</button>
+      <div class="card-actions">
+        <button class="action-btn add" onclick="criarFaltaDeVenc('${v.id}')">➕ Falta</button>
+        <button class="action-btn delete" onclick="excluirVenc('${v.id}')">🗑️</button>
       </div>
     `;
   }).join('');
 }
 
-async function criarFaltaDeVencimento(vencId) {
+async function criarFaltaDeVenc(vencId) {
   const v = vencimentos.find(x => x.id === vencId);
   if (!v) return;
   
-  const falta = {
+  faltas.unshift({
     id: Date.now().toString(),
     produtoId: v.produtoId,
     nome: v.nome,
     marca: v.marca,
     volume: v.volume,
+    imagem: v.imagem,
     quantidade: v.quantidade,
     unidade: 'UN',
     prioridade: 'alta',
     sugestao: 'Produto vencido/vencendo',
     pedido: false,
     createdAt: new Date().toISOString()
-  };
+  });
   
-  faltas.unshift(falta);
   await saveData('faltas', faltas);
   renderAll();
   toast('✅ Falta criada!', 'success');
 }
 
-async function excluirVencimento(id) {
-  if (!confirm('Excluir este vencimento?')) return;
+async function excluirVenc(id) {
+  if (!confirm('Excluir?')) return;
   vencimentos = vencimentos.filter(v => v.id !== id);
   await saveData('vencimentos', vencimentos);
-  renderVencimentosFull();
+  renderVencimentos();
   renderHome();
-  toast('🗑️ Vencimento excluído!', 'success');
+  toast('🗑️ Excluído!', 'success');
 }
 
 // ===== CONFIG =====
@@ -1727,7 +1992,6 @@ function loadConfig() {
   config = JSON.parse(localStorage.getItem('config') || '{}');
   document.getElementById('configLoja').value = config.loja || '';
   document.getElementById('configResp').value = config.responsavel || '';
-  updateSyncInfo();
 }
 
 function saveConfig() {
@@ -1739,35 +2003,24 @@ function saveConfig() {
 function updateSyncInfo() {
   const info = document.getElementById('syncInfo');
   if (db) {
-    info.innerHTML = `<span style="color:var(--success);">✅ Conectado ao Firebase</span><br>Seus dados são sincronizados automaticamente na nuvem.`;
+    info.innerHTML = `<span style="color:var(--success);">✅ Conectado ao Firebase</span><br>Dados sincronizados na nuvem`;
   } else {
-    info.innerHTML = `<span style="color:var(--warning);">⚠️ Modo Offline</span><br>Dados salvos apenas neste dispositivo.`;
+    info.innerHTML = `<span style="color:var(--warning);">⚠️ Modo Offline</span>`;
   }
 }
 
 function updateConnectionStatus() {
-  const banner = document.getElementById('connectionBanner');
-  banner.classList.toggle('show', !isOnline);
+  document.getElementById('connectionBanner').classList.toggle('show', !isOnline);
 }
 
 function exportarBackup() {
-  const backup = {
-    versao: '2.0',
-    data: new Date().toISOString(),
-    produtos,
-    faltas,
-    vencimentos,
-    config
-  };
-  
+  const backup = { versao: '2.0', data: new Date().toISOString(), produtos, faltas, vencimentos, config };
   const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = `backup_faltas_${new Date().toISOString().split('T')[0]}.json`;
+  a.href = URL.createObjectURL(blob);
+  a.download = `backup_${new Date().toISOString().split('T')[0]}.json`;
   a.click();
-  URL.revokeObjectURL(url);
-  toast('📤 Backup exportado!', 'success');
+  toast('📤 Exportado!', 'success');
 }
 
 function importarBackup(e) {
@@ -1778,122 +2031,86 @@ function importarBackup(e) {
   reader.onload = async function(ev) {
     try {
       const data = JSON.parse(ev.target.result);
-      if (!confirm('Isso substituirá todos os dados atuais. Continuar?')) return;
+      if (!confirm('Substituir dados?')) return;
       
       if (data.produtos) { produtos = data.produtos; await saveData('produtos', produtos); }
       if (data.faltas) { faltas = data.faltas; await saveData('faltas', faltas); }
       if (data.vencimentos) { vencimentos = data.vencimentos; await saveData('vencimentos', vencimentos); }
-      if (data.config) { config = data.config; localStorage.setItem('config', JSON.stringify(config)); }
       
       loadConfig();
       renderAll();
-      toast('📥 Backup importado!', 'success');
-    } catch (err) {
+      toast('📥 Importado!', 'success');
+    } catch {
       toast('❌ Arquivo inválido!', 'error');
     }
   };
   reader.readAsText(file);
-  e.target.value = '';
 }
 
 async function limparTudo() {
-  if (!confirm('⚠️ Tem certeza? Isso apagará TODOS os dados!')) return;
-  if (!confirm('⚠️ CONFIRMAR: Apagar tudo?')) return;
+  if (!confirm('⚠️ Apagar TUDO?')) return;
+  if (!confirm('⚠️ CONFIRMAR?')) return;
   
-  produtos = [];
-  faltas = [];
-  vencimentos = [];
-  
+  produtos = []; faltas = []; vencimentos = [];
   await saveData('produtos', produtos);
   await saveData('faltas', faltas);
   await saveData('vencimentos', vencimentos);
-  
   renderAll();
-  toast('🗑️ Dados apagados!', 'success');
+  toast('🗑️ Apagado!', 'success');
 }
 
 // ===== PDF =====
 function gerarPDF() {
-  if (faltas.length === 0) {
-    toast('Nenhuma falta para gerar PDF', 'warning');
-    return;
-  }
+  if (faltas.length === 0) { toast('Lista vazia', 'warning'); return; }
   
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
   
   const loja = config.loja || 'Minha Loja';
-  const resp = config.responsavel || '';
   const data = formatDate(new Date().toISOString().split('T')[0]);
   
-  // Header
   doc.setFillColor(37, 99, 235);
-  doc.rect(0, 0, 210, 30, 'F');
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(18);
-  doc.setFont(undefined, 'bold');
-  doc.text('LISTA DE FALTAS', 105, 15, { align: 'center' });
+  doc.rect(0, 0, 210, 25, 'F');
+  doc.setTextColor(255);
+  doc.setFontSize(16);
+  doc.text('LISTA DE FALTAS', 105, 12, { align: 'center' });
   doc.setFontSize(10);
-  doc.setFont(undefined, 'normal');
-  doc.text(`${loja} | ${data} | ${resp}`, 105, 24, { align: 'center' });
-  
-  // Table
-  const rows = faltas.map((f, i) => [
-    i + 1,
-    f.nome,
-    f.marca || '-',
-    f.quantidade + ' ' + f.unidade,
-    f.prioridade === 'alta' ? 'URGENTE' : f.prioridade === 'media' ? 'MÉDIA' : 'BAIXA',
-    f.sugestao || '-'
-  ]);
+  doc.text(`${loja} | ${data}`, 105, 20, { align: 'center' });
   
   doc.autoTable({
-    startY: 35,
-    head: [['#', 'Produto', 'Marca', 'Qtd', 'Prioridade', 'Sugestão']],
-    body: rows,
+    startY: 30,
+    head: [['#', 'Produto', 'Marca', 'Qtd', 'Prior.', 'Sugestão']],
+    body: faltas.map((f, i) => [
+      i + 1, f.nome, f.marca || '-', `${f.quantidade} ${f.unidade}`,
+      f.prioridade === 'alta' ? 'URGENTE' : f.prioridade === 'media' ? 'MÉDIA' : 'BAIXA',
+      f.sugestao || '-'
+    ]),
     headStyles: { fillColor: [37, 99, 235] },
     alternateRowStyles: { fillColor: [249, 250, 251] },
     styles: { fontSize: 9 }
   });
   
-  doc.save(`faltas_${loja.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`);
+  doc.save(`faltas_${data.replace(/\//g, '-')}.pdf`);
   toast('📄 PDF gerado!', 'success');
 }
 
 function compartilharWhatsApp() {
-  if (faltas.length === 0) {
-    toast('Lista vazia', 'warning');
-    return;
-  }
+  if (faltas.length === 0) { toast('Lista vazia', 'warning'); return; }
   
   const loja = config.loja || 'Minha Loja';
-  const data = formatDate(new Date().toISOString().split('T')[0]);
+  let text = `📦 *LISTA DE FALTAS - ${loja}*\n📅 ${formatDate(new Date().toISOString().split('T')[0])}\n\n`;
   
-  let text = `📦 *LISTA DE FALTAS*\n🏪 ${loja}\n📅 ${data}\n\n`;
+  ['alta', 'media', 'baixa'].forEach(p => {
+    const items = faltas.filter(f => f.prioridade === p);
+    if (items.length) {
+      const emoji = p === 'alta' ? '🔴 *URGENTES*' : p === 'media' ? '🟡 *MÉDIOS*' : '🟢 *BAIXOS*';
+      text += `${emoji}\n`;
+      items.forEach((f, i) => text += `${i+1}. ${f.nome} - ${f.quantidade} ${f.unidade}\n`);
+      text += '\n';
+    }
+  });
   
-  const urgentes = faltas.filter(f => f.prioridade === 'alta');
-  const medios = faltas.filter(f => f.prioridade === 'media');
-  const baixos = faltas.filter(f => f.prioridade === 'baixa');
-  
-  if (urgentes.length) {
-    text += '🔴 *URGENTES:*\n';
-    urgentes.forEach((f, i) => text += `${i + 1}. ${f.nome} - ${f.quantidade} ${f.unidade}\n`);
-    text += '\n';
-  }
-  
-  if (medios.length) {
-    text += '🟡 *MÉDIOS:*\n';
-    medios.forEach((f, i) => text += `${i + 1}. ${f.nome} - ${f.quantidade} ${f.unidade}\n`);
-    text += '\n';
-  }
-  
-  if (baixos.length) {
-    text += '🟢 *BAIXOS:*\n';
-    baixos.forEach((f, i) => text += `${i + 1}. ${f.nome} - ${f.quantidade} ${f.unidade}\n`);
-  }
-  
-  text += `\n📊 Total: ${faltas.length} itens`;
-  
+  text += `📊 Total: ${faltas.length} itens`;
   window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
 }
 
@@ -1911,13 +2128,15 @@ function showModal(html) {
 
 function closeModal() {
   document.getElementById('modal').classList.remove('show');
+  stopScanner();
 }
 
 document.getElementById('modal').addEventListener('click', (e) => {
   if (e.target === e.currentTarget) closeModal();
 });
 
-function showLoading() {
+function showLoading(text = 'Carregando...') {
+  document.getElementById('loadingText').textContent = text;
   document.getElementById('loading').classList.add('show');
 }
 
@@ -1926,11 +2145,10 @@ function hideLoading() {
 }
 
 function toast(msg, type = 'success') {
-  const container = document.getElementById('toastContainer');
   const t = document.createElement('div');
   t.className = `toast ${type}`;
   t.textContent = msg;
-  container.appendChild(t);
+  document.getElementById('toastContainer').appendChild(t);
   setTimeout(() => t.remove(), 3000);
 }
 </script>
