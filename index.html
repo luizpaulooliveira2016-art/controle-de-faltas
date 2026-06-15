@@ -24,7 +24,7 @@
 --shadow-lg:0 10px 15px rgba(0,0,0,.1);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--gray-50);color:var(--gray-800);padding-bottom:70px;padding-top:0;-webkit-tap-highlight-color:transparent;overflow-x:hidden;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--gray-50);color:var(--gray-800);padding-bottom:70px;-webkit-tap-highlight-color:transparent;overflow-x:hidden;}
 input,select,textarea,button{font-family:inherit;font-size:14px;}
 input,select,textarea{width:100%;padding:10px 12px;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);color:var(--gray-800);outline:none;transition:border .2s;}
 input:focus,select:focus,textarea:focus{border-color:var(--primary);}
@@ -32,15 +32,18 @@ textarea{resize:vertical;min-height:60px;}
 button{cursor:pointer;border:none;outline:none;}
 
 /* HEADER */
-.app-header{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;padding:14px 16px 10px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-md);}
-.app-header h1{font-size:18px;font-weight:700;}
-.app-header .sub{font-size:11px;opacity:.85;margin-top:2px;}
-.header-stats{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;}
-.header-stats .stat{background:rgba(255,255,255,.18);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;}
+.app-header{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;padding:12px 16px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-md);display:flex;align-items:center;gap:10px;}
+.app-header .back-btn{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.app-header .back-btn:active{background:rgba(255,255,255,.3);}
+.app-header-content{flex:1;}
+.app-header h1{font-size:16px;font-weight:700;}
+.app-header .sub{font-size:11px;opacity:.85;}
+.header-stats{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;}
+.header-stats .stat{background:rgba(255,255,255,.18);padding:3px 8px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap;}
 
 /* TABS */
 .tab-bar{position:fixed;bottom:0;left:0;right:0;background:var(--white);display:flex;border-top:1px solid var(--gray-200);z-index:200;box-shadow:0 -2px 10px rgba(0,0,0,.06);}
-.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:6px 0 8px;font-size:10px;color:var(--gray-500);background:none;transition:all .2s;gap:2px;min-height:54px;justify-content:center;}
+.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:6px 0 8px;font-size:9px;color:var(--gray-500);background:none;transition:all .2s;gap:2px;min-height:54px;justify-content:center;}
 .tab-btn .ico{font-size:20px;}
 .tab-btn.active{color:var(--primary);background:var(--primary-light);font-weight:700;border-top:2.5px solid var(--primary);}
 
@@ -51,7 +54,8 @@ button{cursor:pointer;border:none;outline:none;}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes slideUp{from{transform:translateY(80px);opacity:0}to{transform:translateY(0);opacity:1}}
 @keyframes slideDown{from{transform:translateY(0);opacity:1}to{transform:translateY(80px);opacity:0}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 
 /* CARDS */
 .card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--gray-200);padding:14px;margin-bottom:12px;}
@@ -94,6 +98,8 @@ button{cursor:pointer;border:none;outline:none;}
 /* PRODUCT CARD */
 .prod-card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--gray-200);padding:12px;margin-bottom:10px;animation:fadeIn .3s;position:relative;}
 .prod-card.selected{border-color:var(--primary);background:var(--primary-light);}
+.prod-card.urgent{border-left:4px solid var(--danger);}
+.prod-card.expiring{border-left:4px solid var(--warning);}
 .prod-top{display:flex;gap:10px;align-items:flex-start;}
 .prod-img{width:56px;height:56px;border-radius:var(--radius-sm);object-fit:cover;background:var(--gray-100);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;overflow:hidden;}
 .prod-img img{width:100%;height:100%;object-fit:cover;}
@@ -147,7 +153,7 @@ button{cursor:pointer;border:none;outline:none;}
 .select-bar.show{display:flex;}
 
 /* FAB */
-.fab{position:fixed;bottom:72px;right:14px;width:52px;height:52px;border-radius:50%;background:var(--primary);color:#fff;font-size:26px;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-lg);z-index:100;transition:transform .2s;}
+.fab{position:fixed;bottom:72px;right:14px;width:52px;height:52px;border-radius:50%;background:var(--primary);color:#fff;font-size:26px;display:none;align-items:center;justify-content:center;box-shadow:var(--shadow-lg);z-index:100;transition:transform .2s;}
 .fab:active{transform:scale(.9);}
 .fab-menu{position:fixed;bottom:130px;right:14px;z-index:100;display:none;flex-direction:column;gap:8px;align-items:flex-end;}
 .fab-menu.show{display:flex;animation:fadeIn .2s;}
@@ -161,7 +167,7 @@ button{cursor:pointer;border:none;outline:none;}
 /* VALIDADE BADGE */
 .val-badge{padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;display:inline-block;margin-top:4px;}
 
-/* RECENTES */
+/* RECENT */
 .recent-item{display:flex;align-items:center;gap:8px;padding:8px;border-radius:var(--radius-sm);background:var(--gray-50);border:1px solid var(--gray-200);font-size:12px;cursor:pointer;}
 .recent-item:active{background:var(--primary-light);}
 .recent-item .ri-img{width:36px;height:36px;border-radius:6px;background:var(--gray-200);display:flex;align-items:center;justify-content:center;font-size:18px;overflow:hidden;flex-shrink:0;}
@@ -185,28 +191,47 @@ button{cursor:pointer;border:none;outline:none;}
 /* WHATSAPP BTN */
 .wa-btn{background:#25D366;color:#fff;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;display:inline-flex;align-items:center;gap:4px;text-decoration:none;}
 
+/* HOME SCREEN */
+.home-hero{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;padding:24px 16px;margin:-12px -12px 16px -12px;text-align:center;}
+.home-hero .logo{font-size:48px;margin-bottom:8px;}
+.home-hero h2{font-size:20px;font-weight:800;}
+.home-hero p{font-size:12px;opacity:.9;margin-top:4px;}
+.home-stats{display:flex;justify-content:center;gap:16px;margin-top:14px;}
+.home-stats .hs{text-align:center;}
+.home-stats .hs .n{font-size:24px;font-weight:800;}
+.home-stats .hs .l{font-size:10px;opacity:.8;}
+
+.quick-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.quick-btn{background:var(--white);border-radius:var(--radius);padding:16px 10px;text-align:center;box-shadow:var(--shadow);border:1px solid var(--gray-200);transition:transform .15s;}
+.quick-btn:active{transform:scale(.97);}
+.quick-btn .qico{font-size:28px;margin-bottom:6px;}
+.quick-btn .qtxt{font-size:12px;font-weight:600;color:var(--gray-700);}
+.quick-btn.primary{background:var(--primary);border-color:var(--primary);}.quick-btn.primary .qtxt{color:#fff;}
+.quick-btn.danger{background:var(--danger-light);border-color:var(--danger);}.quick-btn.danger .qtxt{color:var(--danger);}
+.quick-btn.warning{background:var(--warning-light);border-color:var(--warning);}.quick-btn.warning .qtxt{color:var(--warning);}
+
+.section-title{font-size:14px;font-weight:700;color:var(--gray-800);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;}
+.section-title .see-all{font-size:12px;color:var(--primary);font-weight:600;}
+
+.expiring-card{background:var(--white);border-radius:var(--radius-sm);padding:10px;display:flex;align-items:center;gap:10px;margin-bottom:8px;border-left:4px solid var(--warning);}
+.expiring-card.expired{border-left-color:var(--danger);background:var(--danger-light);}
+.expiring-card .ec-info{flex:1;}
+.expiring-card .ec-name{font-size:13px;font-weight:600;}
+.expiring-card .ec-meta{font-size:11px;color:var(--gray-500);}
+.expiring-card .ec-days{font-size:12px;font-weight:700;padding:4px 8px;border-radius:6px;background:var(--warning-light);color:var(--warning);}
+.expiring-card.expired .ec-days{background:var(--danger-light);color:var(--danger);}
+
+/* SUB PAGE */
+.sub-page{display:none;}
+.sub-page.active{display:block;}
+
 @media(min-width:500px){
   .page{max-width:500px;margin:0 auto;}
-  .app-header{text-align:center;}
-  .header-stats{justify-content:center;}
 }
-
-/* Print hide */
 @media print{.tab-bar,.fab,.fab-menu,.toast-container{display:none!important;}}
 </style>
 </head>
 <body>
-
-<!-- HEADER -->
-<header class="app-header">
-  <h1>📦 Controle de Faltas</h1>
-  <div class="sub">Gestão de mercadorias em falta</div>
-  <div class="header-stats" id="headerStats">
-    <span class="stat">📋 <span id="hTotal">0</span> itens</span>
-    <span class="stat">🔴 <span id="hUrgent">0</span> urgentes</span>
-    <span class="stat">💰 R$ <span id="hValue">0,00</span></span>
-  </div>
-</header>
 
 <!-- LOADING -->
 <div class="loading-overlay" id="loadingOverlay">
@@ -222,10 +247,78 @@ button{cursor:pointer;border:none;outline:none;}
   <div class="modal-content" id="modalContent"></div>
 </div>
 
+<!-- ========== PAGE 0: HOME ========== -->
+<div class="page active" id="pageHome">
+  <div class="home-hero">
+    <div class="logo">📦</div>
+    <h2>Controle de Faltas</h2>
+    <p>Gestão de mercadorias em falta</p>
+    <div class="home-stats">
+      <div class="hs"><div class="n" id="homeTotal">0</div><div class="l">Na Lista</div></div>
+      <div class="hs"><div class="n" id="homeUrgent">0</div><div class="l">Urgentes</div></div>
+      <div class="hs"><div class="n" id="homeExpiring">0</div><div class="l">Vencendo</div></div>
+    </div>
+  </div>
+
+  <div class="quick-actions">
+    <button class="quick-btn primary" onclick="goToScanner('scan')">
+      <div class="qico">📷</div>
+      <div class="qtxt">Escanear Código</div>
+    </button>
+    <button class="quick-btn" onclick="goToScanner('type')">
+      <div class="qico">🔢</div>
+      <div class="qtxt">Digitar Código</div>
+    </button>
+    <button class="quick-btn" onclick="goToScanner('manual')">
+      <div class="qico">✏️</div>
+      <div class="qtxt">Cadastro Manual</div>
+    </button>
+    <button class="quick-btn" onclick="openCatalogSearch()">
+      <div class="qico">📚</div>
+      <div class="qtxt">Buscar Cadastrados</div>
+    </button>
+  </div>
+
+  <!-- PRODUTOS A VENCER -->
+  <div id="expiringSection" style="display:none;">
+    <div class="section-title">
+      <span>⏰ Produtos a Vencer</span>
+      <span class="see-all" onclick="openExpiringList()">Ver todos →</span>
+    </div>
+    <div id="expiringHomeList"></div>
+  </div>
+
+  <!-- URGENTES -->
+  <div id="urgentSection" style="display:none;">
+    <div class="section-title">
+      <span>🔴 Urgentes na Lista</span>
+      <span class="see-all" onclick="switchTab(1);setFilter('alta')">Ver todos →</span>
+    </div>
+    <div id="urgentHomeList"></div>
+  </div>
+
+  <!-- ÚLTIMOS CADASTROS -->
+  <div id="recentSection" style="display:none;">
+    <div class="section-title">
+      <span>🕐 Últimos Cadastros</span>
+    </div>
+    <div id="recentHomeList"></div>
+  </div>
+</div>
+
 <!-- ========== PAGE 1: SCANNER ========== -->
-<div class="page active" id="pageScanner">
-  <div class="card">
-    <div class="card-title">📷 Como deseja cadastrar?</div>
+<div class="page" id="pageScanner">
+  <!-- HEADER com voltar -->
+  <header class="app-header" style="margin:-12px -12px 12px -12px;">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <div class="app-header-content">
+      <h1>📷 Cadastrar Produto</h1>
+      <div class="sub">Escaneie, digite ou cadastre manualmente</div>
+    </div>
+  </header>
+
+  <div class="card" id="scanModeSelector">
+    <div class="card-title">Como deseja cadastrar?</div>
     <div style="display:flex;flex-direction:column;gap:8px;">
       <button class="btn btn-primary btn-block" onclick="showScanMode('scan')">📷 Escanear Código de Barras</button>
       <button class="btn btn-outline btn-block" onclick="showScanMode('type')">🔢 Digitar Código de Barras</button>
@@ -251,12 +344,6 @@ button{cursor:pointer;border:none;outline:none;}
 
   <!-- FOUND RESULT -->
   <div id="foundResult" style="display:none;"></div>
-
-  <!-- RECENT -->
-  <div class="card" id="recentCard" style="display:none;">
-    <div class="card-title">🕐 Últimos cadastrados</div>
-    <div id="recentList" style="display:flex;flex-direction:column;gap:6px;"></div>
-  </div>
 
   <!-- FORM -->
   <div id="formArea" style="display:none;">
@@ -456,26 +543,33 @@ button{cursor:pointer;border:none;outline:none;}
 
 <!-- ========== PAGE 2: LISTA ========== -->
 <div class="page" id="pageLista">
+  <header class="app-header" style="margin:-12px -12px 12px -12px;">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <div class="app-header-content">
+      <h1>📋 Lista de Faltas</h1>
+      <div class="sub" id="listaSubtitle">0 itens</div>
+    </div>
+  </header>
+
   <div class="toggle-group">
     <button class="toggle-btn active" onclick="toggleListView('faltas')">📋 Lista de Faltas</button>
-    <button class="toggle-btn" onclick="toggleListView('biblioteca')">📚 Biblioteca</button>
+    <button class="toggle-btn" onclick="toggleListView('biblioteca')">📚 Catálogo</button>
   </div>
 
   <!-- FALTAS VIEW -->
   <div id="faltasView">
-    <div style="font-size:13px;color:var(--gray-500);margin-bottom:8px;" id="listaResumo"></div>
     <div class="search-bar">
       <span class="si">🔍</span>
       <input type="text" id="searchFaltas" placeholder="Buscar por nome, marca ou código..." oninput="renderFaltas()">
     </div>
     <div class="chip-row" id="filterChips">
-      <span class="chip active" data-filter="todos" onclick="setFilter(this)">Todos</span>
-      <span class="chip" data-filter="alta" onclick="setFilter(this)">🔴 Urgentes</span>
-      <span class="chip" data-filter="media" onclick="setFilter(this)">🟡 Médios</span>
-      <span class="chip" data-filter="baixa" onclick="setFilter(this)">🟢 Baixos</span>
-      <span class="chip" data-filter="pedidos" onclick="setFilter(this)">✅ Pedidos</span>
-      <span class="chip" data-filter="naopedidos" onclick="setFilter(this)">⏳ Não Pedidos</span>
-      <span class="chip" data-filter="vencendo" onclick="setFilter(this)">⏰ Vencendo</span>
+      <span class="chip active" data-filter="todos" onclick="setFilter(this,'todos')">Todos</span>
+      <span class="chip" data-filter="alta" onclick="setFilter(this,'alta')">🔴 Urgentes</span>
+      <span class="chip" data-filter="media" onclick="setFilter(this,'media')">🟡 Médios</span>
+      <span class="chip" data-filter="baixa" onclick="setFilter(this,'baixa')">🟢 Baixos</span>
+      <span class="chip" data-filter="pedidos" onclick="setFilter(this,'pedidos')">✅ Pedidos</span>
+      <span class="chip" data-filter="naopedidos" onclick="setFilter(this,'naopedidos')">⏳ Não Pedidos</span>
+      <span class="chip" data-filter="vencendo" onclick="setFilter(this,'vencendo')">⏰ Vencendo</span>
     </div>
     <div style="margin-bottom:10px;">
       <select id="sortFaltas" onchange="renderFaltas()" style="font-size:12px;padding:6px 8px;">
@@ -488,7 +582,7 @@ button{cursor:pointer;border:none;outline:none;}
     <div id="faltasList"></div>
     <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
       <button class="btn btn-sm btn-danger" onclick="limparTodasFaltas()">🗑️ Limpar Tudo</button>
-      <button class="btn btn-sm btn-primary" onclick="switchTab(2)">📄 Gerar PDF</button>
+      <button class="btn btn-sm btn-primary" onclick="switchTab(3)">📄 Gerar PDF</button>
     </div>
   </div>
 
@@ -520,18 +614,79 @@ button{cursor:pointer;border:none;outline:none;}
   </div>
 </div>
 
-<!-- FAB on lista page -->
-<div class="fab" id="fabBtn" style="display:none;" onclick="toggleFabMenu()">+</div>
+<!-- FAB -->
+<div class="fab" id="fabBtn" onclick="toggleFabMenu()">+</div>
 <div class="fab-menu" id="fabMenu">
   <button class="fab-item" onclick="fabAction('scan')">📷 Escanear</button>
   <button class="fab-item" onclick="fabAction('type')">🔢 Digitar código</button>
   <button class="fab-item" onclick="fabAction('manual')">✏️ Cadastro manual</button>
+  <button class="fab-item" onclick="fabAction('catalog')">📚 Do Catálogo</button>
 </div>
 
-<!-- ========== PAGE 3: RELATÓRIO ========== -->
+<!-- ========== PAGE 3: PRODUTOS A VENCER ========== -->
+<div class="page" id="pageExpiring">
+  <header class="app-header" style="margin:-12px -12px 12px -12px;">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <div class="app-header-content">
+      <h1>⏰ Produtos a Vencer</h1>
+      <div class="sub">Controle de validades</div>
+    </div>
+  </header>
+
+  <div class="chip-row">
+    <span class="chip active" data-exp="todos" onclick="setExpFilter(this,'todos')">Todos</span>
+    <span class="chip" data-exp="vencidos" onclick="setExpFilter(this,'vencidos')">🔴 Vencidos</span>
+    <span class="chip" data-exp="7dias" onclick="setExpFilter(this,'7dias')">🟡 7 dias</span>
+    <span class="chip" data-exp="15dias" onclick="setExpFilter(this,'15dias')">🟠 15 dias</span>
+    <span class="chip" data-exp="30dias" onclick="setExpFilter(this,'30dias')">🟢 30 dias</span>
+  </div>
+
+  <div class="search-bar">
+    <span class="si">🔍</span>
+    <input type="text" id="searchExpiring" placeholder="Buscar produto..." oninput="renderExpiringFull()">
+  </div>
+
+  <div id="expiringFullList"></div>
+</div>
+
+<!-- ========== PAGE 4: BUSCA CATÁLOGO ========== -->
+<div class="page" id="pageCatalogSearch">
+  <header class="app-header" style="margin:-12px -12px 12px -12px;">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <div class="app-header-content">
+      <h1>📚 Buscar Produto Cadastrado</h1>
+      <div class="sub">Adicione à lista de faltas</div>
+    </div>
+  </header>
+
+  <div class="card" style="background:var(--primary-light);border-color:var(--primary);">
+    <div style="font-size:13px;color:var(--primary);">
+      💡 <strong>Dica:</strong> Busque produtos que você já cadastrou anteriormente e adicione-os rapidamente à lista de faltas.
+    </div>
+  </div>
+
+  <div class="search-bar">
+    <span class="si">🔍</span>
+    <input type="text" id="searchCatalog" placeholder="Digite o nome, marca ou código..." oninput="renderCatalogSearch()" autofocus>
+  </div>
+
+  <div class="chip-row" id="catalogCatChips"></div>
+
+  <div id="catalogSearchResults"></div>
+</div>
+
+<!-- ========== PAGE 5: RELATÓRIO ========== -->
 <div class="page" id="pageRelatorio">
+  <header class="app-header" style="margin:-12px -12px 12px -12px;">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <div class="app-header-content">
+      <h1>📄 Relatório PDF</h1>
+      <div class="sub">Gerar e exportar</div>
+    </div>
+  </header>
+
   <div class="card">
-    <div class="card-title">📄 Configuração do Relatório</div>
+    <div class="card-title">📝 Configuração do Relatório</div>
     <div class="form-group">
       <label class="form-label">Nome da loja / empresa</label>
       <input type="text" id="rLoja" placeholder="Minha Loja">
@@ -552,7 +707,6 @@ button{cursor:pointer;border:none;outline:none;}
 
   <div class="card">
     <div class="card-title">⚙️ Opções do PDF</div>
-    <div class="chk-row"><input type="checkbox" id="pdfFotos"><label for="pdfFotos">📷 Incluir fotos dos produtos</label></div>
     <div class="chk-row"><input type="checkbox" id="pdfFornecedor" checked><label for="pdfFornecedor">🏭 Informações de fornecedor</label></div>
     <div class="chk-row"><input type="checkbox" id="pdfPrecos" checked><label for="pdfPrecos">💰 Preços estimados</label></div>
     <div class="chk-row"><input type="checkbox" id="pdfObs" checked><label for="pdfObs">💬 Observações detalhadas</label></div>
@@ -582,8 +736,16 @@ button{cursor:pointer;border:none;outline:none;}
   </div>
 </div>
 
-<!-- ========== PAGE 4: CONFIG ========== -->
+<!-- ========== PAGE 6: CONFIG ========== -->
 <div class="page" id="pageConfig">
+  <header class="app-header" style="margin:-12px -12px 12px -12px;">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <div class="app-header-content">
+      <h1>⚙️ Configurações</h1>
+      <div class="sub">Ajustes do aplicativo</div>
+    </div>
+  </header>
+
   <div class="card">
     <div class="card-title">🏪 Minha Loja</div>
     <div class="form-group"><label class="form-label">Nome da loja</label><input type="text" id="cLoja" placeholder="Nome da loja" oninput="saveConfig()"></div>
@@ -625,10 +787,11 @@ button{cursor:pointer;border:none;outline:none;}
 
 <!-- TAB BAR -->
 <nav class="tab-bar">
-  <button class="tab-btn active" onclick="switchTab(0)"><span class="ico">📷</span>Scanner</button>
-  <button class="tab-btn" onclick="switchTab(1)"><span class="ico">📋</span>Lista</button>
-  <button class="tab-btn" onclick="switchTab(2)"><span class="ico">📄</span>Relatório</button>
-  <button class="tab-btn" onclick="switchTab(3)"><span class="ico">⚙️</span>Config</button>
+  <button class="tab-btn active" onclick="switchTab(0)"><span class="ico">🏠</span>Início</button>
+  <button class="tab-btn" onclick="switchTab(1)"><span class="ico">📷</span>Scanner</button>
+  <button class="tab-btn" onclick="switchTab(2)"><span class="ico">📋</span>Lista</button>
+  <button class="tab-btn" onclick="switchTab(3)"><span class="ico">📄</span>Relatório</button>
+  <button class="tab-btn" onclick="switchTab(4)"><span class="ico">⚙️</span>Config</button>
 </nav>
 
 <script>
@@ -638,6 +801,8 @@ let catalogo = JSON.parse(localStorage.getItem('faltas_catalogo') || '[]');
 let config = JSON.parse(localStorage.getItem('faltas_config') || '{}');
 let contador = parseInt(localStorage.getItem('faltas_contador') || '1');
 let currentFilter = 'todos';
+let currentExpFilter = 'todos';
+let currentCatSearchFilter = 'todos';
 let selectedIds = new Set();
 let selectionMode = false;
 let html5QrCode = null;
@@ -646,27 +811,283 @@ let currentImageData = '';
 let currentImageUrl = '';
 let editingId = null;
 let currentBibCat = 'todos';
+let navHistory = ['home'];
+let currentTab = 0;
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', () => {
   loadConfig();
-  updateHeader();
-  showRecent();
+  updateHomeStats();
+  renderHomeSections();
   updatePrefixPreview();
+  
+  // Handle back button
+  window.addEventListener('popstate', (e) => {
+    if (navHistory.length > 1) {
+      navHistory.pop();
+      const prev = navHistory[navHistory.length - 1];
+      navigateToState(prev, false);
+    }
+  });
+  
+  // Push initial state
+  history.pushState({ page: 'home' }, '', '');
 });
 
-// ===== TABS =====
-function switchTab(idx) {
-  const pages = [document.getElementById('pageScanner'), document.getElementById('pageLista'), document.getElementById('pageRelatorio'), document.getElementById('pageConfig')];
-  const btns = document.querySelectorAll('.tab-btn');
-  pages.forEach((p, i) => { p.classList.toggle('active', i === idx); });
-  btns.forEach((b, i) => { b.classList.toggle('active', i === idx); });
-  document.getElementById('fabBtn').style.display = idx === 1 ? 'flex' : 'none';
+// ===== NAVIGATION =====
+function pushNav(state) {
+  navHistory.push(state);
+  history.pushState({ page: state }, '', '');
+}
+
+function goBack() {
+  if (navHistory.length > 1) {
+    history.back();
+  } else {
+    switchTab(0);
+  }
+}
+
+function navigateToState(state, push = true) {
+  if (push) pushNav(state);
+  
+  // Hide all pages
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  
+  if (state === 'home') {
+    document.getElementById('pageHome').classList.add('active');
+    document.querySelectorAll('.tab-btn')[0].classList.add('active');
+    document.getElementById('fabBtn').style.display = 'none';
+    currentTab = 0;
+    updateHomeStats();
+    renderHomeSections();
+  } else if (state === 'scanner') {
+    document.getElementById('pageScanner').classList.add('active');
+    document.querySelectorAll('.tab-btn')[1].classList.add('active');
+    document.getElementById('fabBtn').style.display = 'none';
+    currentTab = 1;
+  } else if (state === 'lista') {
+    document.getElementById('pageLista').classList.add('active');
+    document.querySelectorAll('.tab-btn')[2].classList.add('active');
+    document.getElementById('fabBtn').style.display = 'flex';
+    currentTab = 2;
+    renderFaltas();
+  } else if (state === 'relatorio') {
+    document.getElementById('pageRelatorio').classList.add('active');
+    document.querySelectorAll('.tab-btn')[3].classList.add('active');
+    document.getElementById('fabBtn').style.display = 'none';
+    currentTab = 3;
+    loadReportConfig();
+    renderPreview();
+  } else if (state === 'config') {
+    document.getElementById('pageConfig').classList.add('active');
+    document.querySelectorAll('.tab-btn')[4].classList.add('active');
+    document.getElementById('fabBtn').style.display = 'none';
+    currentTab = 4;
+    loadConfig();
+    renderStats();
+  } else if (state === 'expiring') {
+    document.getElementById('pageExpiring').classList.add('active');
+    document.getElementById('fabBtn').style.display = 'none';
+    renderExpiringFull();
+  } else if (state === 'catalogSearch') {
+    document.getElementById('pageCatalogSearch').classList.add('active');
+    document.getElementById('fabBtn').style.display = 'none';
+    renderCatalogSearch();
+    setTimeout(() => document.getElementById('searchCatalog').focus(), 100);
+  }
+  
   document.getElementById('fabMenu').classList.remove('show');
-  if (idx === 1) { renderFaltas(); }
-  if (idx === 2) { loadReportConfig(); renderPreview(); }
-  if (idx === 3) { loadConfig(); renderStats(); }
-  if (scannerRunning && idx !== 0) stopScanner();
+  if (scannerRunning && state !== 'scanner') stopScanner();
+}
+
+function switchTab(idx) {
+  const states = ['home', 'scanner', 'lista', 'relatorio', 'config'];
+  navHistory = ['home'];
+  if (idx > 0) {
+    navigateToState(states[idx], true);
+  } else {
+    navigateToState('home', false);
+    history.pushState({ page: 'home' }, '', '');
+  }
+}
+
+function goToScanner(mode) {
+  navigateToState('scanner');
+  setTimeout(() => showScanMode(mode), 100);
+}
+
+function openCatalogSearch() {
+  navigateToState('catalogSearch');
+}
+
+function openExpiringList() {
+  navigateToState('expiring');
+}
+
+// ===== HOME =====
+function updateHomeStats() {
+  document.getElementById('homeTotal').textContent = faltasLista.length;
+  document.getElementById('homeUrgent').textContent = faltasLista.filter(f => f.prioridade === 'alta').length;
+  // Products expiring (from catalog with validade)
+  const now = new Date(); now.setHours(0,0,0,0);
+  const expiring = catalogo.filter(p => {
+    if (!p.validade) return false;
+    const d = new Date(p.validade + 'T00:00:00');
+    const diff = Math.ceil((d - now) / 86400000);
+    return diff <= 7;
+  }).length;
+  document.getElementById('homeExpiring').textContent = expiring;
+}
+
+function renderHomeSections() {
+  const now = new Date(); now.setHours(0,0,0,0);
+  
+  // Expiring products
+  const expiring = catalogo.filter(p => {
+    if (!p.validade) return false;
+    const d = new Date(p.validade + 'T00:00:00');
+    const diff = Math.ceil((d - now) / 86400000);
+    return diff <= 15;
+  }).sort((a, b) => {
+    const da = new Date(a.validade);
+    const db = new Date(b.validade);
+    return da - db;
+  }).slice(0, 3);
+  
+  const expSec = document.getElementById('expiringSection');
+  const expList = document.getElementById('expiringHomeList');
+  if (expiring.length > 0) {
+    expSec.style.display = 'block';
+    expList.innerHTML = expiring.map(p => {
+      const d = new Date(p.validade + 'T00:00:00');
+      const diff = Math.ceil((d - now) / 86400000);
+      const isExpired = diff < 0;
+      return `<div class="expiring-card ${isExpired ? 'expired' : ''}" onclick="addExpiringToFalta('${p.barcode || p.codigo_interno}')">
+        <div class="ec-info">
+          <div class="ec-name">${p.nome}</div>
+          <div class="ec-meta">${p.marca || ''} • Val: ${fmtDate(p.validade)}</div>
+        </div>
+        <div class="ec-days">${isExpired ? 'VENCIDO' : diff + 'd'}</div>
+      </div>`;
+    }).join('');
+  } else {
+    expSec.style.display = 'none';
+  }
+  
+  // Urgent items
+  const urgents = faltasLista.filter(f => f.prioridade === 'alta').slice(0, 3);
+  const urgSec = document.getElementById('urgentSection');
+  const urgList = document.getElementById('urgentHomeList');
+  if (urgents.length > 0) {
+    urgSec.style.display = 'block';
+    urgList.innerHTML = urgents.map(p => `
+      <div class="expiring-card urgent" style="border-left-color:var(--danger);">
+        <div class="ec-info">
+          <div class="ec-name">${p.nome}</div>
+          <div class="ec-meta">${p.marca || ''} • ${p.quantidade} ${p.unidade}</div>
+        </div>
+        <span class="badge badge-alta">URGENTE</span>
+      </div>
+    `).join('');
+  } else {
+    urgSec.style.display = 'none';
+  }
+  
+  // Recent
+  const recent = faltasLista.slice(0, 3);
+  const recSec = document.getElementById('recentSection');
+  const recList = document.getElementById('recentHomeList');
+  if (recent.length > 0) {
+    recSec.style.display = 'block';
+    recList.innerHTML = recent.map(p => {
+      const img = p.imagem_local || p.imagem_url;
+      const imgH = img ? `<img src="${img}" style="width:100%;height:100%;object-fit:cover;">` : '📦';
+      return `<div class="recent-item" onclick="switchTab(2)">
+        <div class="ri-img">${imgH}</div>
+        <div style="flex:1;">
+          <b>${p.nome}</b><br>
+          <span style="color:var(--gray-500);">${fmtDateTime(p.data_registro)}</span>
+        </div>
+      </div>`;
+    }).join('');
+  } else {
+    recSec.style.display = 'none';
+  }
+}
+
+function addExpiringToFalta(key) {
+  const p = catalogo.find(c => (c.barcode || c.codigo_interno) === key);
+  if (!p) return;
+  
+  showModal(`
+    <div class="modal-header">
+      <h3>📝 Adicionar à Lista de Faltas</h3>
+      <button class="modal-close" onclick="hideModal()">✕</button>
+    </div>
+    <p style="margin-bottom:12px;font-size:13px;">Deseja adicionar <strong>${p.nome}</strong> à lista de faltas?</p>
+    <div class="form-group">
+      <label class="form-label">Quantidade</label>
+      <input type="number" id="modalQtd" value="1" min="1">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Prioridade</label>
+      <select id="modalPri">
+        <option value="alta">🔴 Alta</option>
+        <option value="media" selected>🟡 Média</option>
+        <option value="baixa">🟢 Baixa</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Motivo</label>
+      <select id="modalMotivo">
+        <option value="Produto venceu">Produto venceu</option>
+        <option value="Estoque baixo">Estoque baixo</option>
+        <option value="Não foi pedido">Não foi pedido</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-success btn-block" onclick="confirmarAddFalta('${key}')">✅ Adicionar</button>
+      <button class="btn btn-gray btn-block" onclick="hideModal()">Cancelar</button>
+    </div>
+  `);
+}
+
+function confirmarAddFalta(key) {
+  const p = catalogo.find(c => (c.barcode || c.codigo_interno) === key);
+  if (!p) return;
+  
+  const qtd = parseInt(document.getElementById('modalQtd').value) || 1;
+  const pri = document.getElementById('modalPri').value;
+  const motivo = document.getElementById('modalMotivo').value;
+  
+  const newFalta = {
+    ...p,
+    id: Date.now(),
+    quantidade: qtd,
+    prioridade: pri,
+    motivo_categoria: motivo,
+    ja_pedido: false,
+    data_pedido_realizado: null,
+    data_registro: new Date().toISOString()
+  };
+  
+  faltasLista.unshift(newFalta);
+  saveFaltas();
+  updateCatalogRegistros(key);
+  hideModal();
+  toast(`✅ ${p.nome} adicionado à lista!`);
+  updateHomeStats();
+  renderHomeSections();
+}
+
+function updateCatalogRegistros(key) {
+  const idx = catalogo.findIndex(c => (c.barcode || c.codigo_interno) === key);
+  if (idx >= 0) {
+    catalogo[idx].registros = (catalogo[idx].registros || 0) + 1;
+    saveCatalogo();
+  }
 }
 
 // ===== TOAST =====
@@ -690,6 +1111,7 @@ document.getElementById('modalOverlay').addEventListener('click', e => { if (e.t
 
 // ===== SCAN MODES =====
 function showScanMode(mode) {
+  document.getElementById('scanModeSelector').style.display = 'none';
   document.getElementById('scanModeArea').style.display = 'block';
   document.getElementById('scannerCard').style.display = 'none';
   document.getElementById('typeCard').style.display = 'none';
@@ -706,6 +1128,7 @@ function showScanMode(mode) {
     document.getElementById('foundResult').innerHTML = '<div class="found-card info"><div class="found-info"><strong>✏️ Cadastro Manual</strong><br>Preencha os dados do produto abaixo.</div></div>';
     document.getElementById('foundResult').style.display = 'block';
     showForm();
+    limparFormulario(false);
     document.getElementById('fBarcode').value = '';
     document.getElementById('fNome').focus();
   }
@@ -929,6 +1352,7 @@ function parseMoney(str) { if (!str) return 0; return parseFloat(str.replace(/\.
 function fmtMoney(n) { return n.toFixed(2).replace('.', ','); }
 function fmtDate(d) { if (!d) return ''; const p = d.split('-'); return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : d; }
 function fmtDateTime(iso) { if (!iso) return ''; const d = new Date(iso); return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; }
+function maskPhoneStr(v) { v = v.replace(/\D/g, ''); if (v.length > 6) return `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`; if (v.length > 2) return `(${v.slice(0,2)}) ${v.slice(2)}`; return v; }
 
 // ===== TOGGLE =====
 function toggleDataPedido() {
@@ -1021,11 +1445,10 @@ function salvarProduto(continuar) {
 
   if (config.cVibra !== false) try { navigator.vibrate(200); } catch(e) {}
   toast(`✅ ${prod.nome} salvo!`);
-  updateHeader();
-  showRecent();
+  updateHomeStats();
+  renderHomeSections();
 
   if (continuar) {
-    // Keep some fields, clear others
     document.getElementById('fNome').value = '';
     document.getElementById('fMarca').value = '';
     document.getElementById('fBarcode').value = '';
@@ -1042,6 +1465,7 @@ function salvarProduto(continuar) {
     document.getElementById('formArea').style.display = 'none';
     document.getElementById('foundResult').style.display = 'none';
     document.getElementById('scanModeArea').style.display = 'none';
+    document.getElementById('scanModeSelector').style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
@@ -1088,67 +1512,22 @@ function limparFormulario(resetForm = true) {
   }
 }
 
-// ===== HEADER =====
-function updateHeader() {
-  document.getElementById('hTotal').textContent = faltasLista.length;
-  document.getElementById('hUrgent').textContent = faltasLista.filter(f => f.prioridade === 'alta').length;
-  const total = faltasLista.reduce((s, f) => s + (f.preco_custo || 0) * (f.quantidade || 1), 0);
-  document.getElementById('hValue').textContent = fmtMoney(total);
-}
-
-// ===== RECENT =====
-function showRecent() {
-  const rc = document.getElementById('recentCard');
-  const rl = document.getElementById('recentList');
-  if (faltasLista.length === 0) { rc.style.display = 'none'; return; }
-  rc.style.display = 'block';
-  const recent = faltasLista.slice(0, 3);
-  rl.innerHTML = recent.map(p => {
-    const img = p.imagem_local || p.imagem_url;
-    const imgH = img ? `<img src="${img}" style="width:100%;height:100%;object-fit:cover;">` : '📦';
-    return `<div class="recent-item" onclick="usarComoBase(${p.id})"><div class="ri-img">${imgH}</div><div style="flex:1;min-width:0;"><b style="font-size:12px;">${p.nome}</b><br><span style="color:var(--gray-500);font-size:11px;">${p.marca || ''} • ${p.barcode || p.codigo_interno}</span></div><span style="font-size:11px;color:var(--primary);font-weight:600;">Usar</span></div>`;
-  }).join('');
-}
-
-function usarComoBase(id) {
-  const p = faltasLista.find(f => f.id === id) || catalogo.find(c => c.id === id);
-  if (!p) return;
-  showForm();
-  document.getElementById('fNome').value = p.nome || '';
-  document.getElementById('fMarca').value = p.marca || '';
-  document.getElementById('fBarcode').value = p.barcode || '';
-  document.getElementById('fCategoria').value = p.categoria || 'Alimentos';
-  document.getElementById('fFornecedor').value = p.fornecedor_nome || '';
-  document.getElementById('fFornecedorWa').value = p.fornecedor_whatsapp ? maskPhoneStr(p.fornecedor_whatsapp) : '';
-  document.getElementById('fCorredor').value = p.corredor || '';
-  document.getElementById('fPrateleira').value = p.prateleira || '';
-  document.getElementById('fSetor').value = p.setor || '';
-  currentImageUrl = p.imagem_url || '';
-  currentImageData = p.imagem_local || '';
-  const prev = document.getElementById('imgPreview');
-  const src = currentImageData || currentImageUrl;
-  prev.innerHTML = src ? `<img src="${src}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
-  document.getElementById('fQtd').focus();
-  toast('📋 Dados preenchidos! Ajuste a quantidade.', 'info');
-  document.getElementById('foundResult').style.display = 'none';
-}
-
-function maskPhoneStr(v) {
-  v = v.replace(/\D/g, '');
-  if (v.length > 6) return `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
-  if (v.length > 2) return `(${v.slice(0,2)}) ${v.slice(2)}`;
-  return v;
-}
-
 // ===== FAB =====
 function toggleFabMenu() { document.getElementById('fabMenu').classList.toggle('show'); }
-function fabAction(mode) { document.getElementById('fabMenu').classList.remove('show'); switchTab(0); setTimeout(() => showScanMode(mode), 100); }
+function fabAction(mode) {
+  document.getElementById('fabMenu').classList.remove('show');
+  if (mode === 'catalog') {
+    openCatalogSearch();
+  } else {
+    goToScanner(mode);
+  }
+}
 
 // ===== LISTA DE FALTAS =====
-function setFilter(chip) {
+function setFilter(chip, filter) {
   document.querySelectorAll('#filterChips .chip').forEach(c => c.classList.remove('active'));
   chip.classList.add('active');
-  currentFilter = chip.dataset.filter;
+  currentFilter = filter;
   renderFaltas();
 }
 
@@ -1172,11 +1551,10 @@ function renderFaltas() {
     list.sort((a, b) => (ord[a.prioridade] || 1) - (ord[b.prioridade] || 1));
   } else if (sort === 'nome') list.sort((a, b) => a.nome.localeCompare(b.nome));
   else if (sort === 'validade') list.sort((a, b) => (a.dias_validade ?? 9999) - (b.dias_validade ?? 9999));
-  // else recente: already in order
 
   const urgentes = faltasLista.filter(f => f.prioridade === 'alta').length;
   const total = faltasLista.reduce((s, f) => s + (f.preco_custo || 0) * (f.quantidade || 1), 0);
-  document.getElementById('listaResumo').innerHTML = `📋 Lista de Faltas — ${fmtDate(new Date().toISOString().split('T')[0])}<br>${faltasLista.length} itens | ${urgentes} urgentes | R$ ${fmtMoney(total)} total`;
+  document.getElementById('listaSubtitle').innerHTML = `${faltasLista.length} itens | ${urgentes} urgentes | R$ ${fmtMoney(total)}`;
 
   const container = document.getElementById('faltasList');
   if (list.length === 0) {
@@ -1202,7 +1580,7 @@ function renderProdCard(p) {
 
   const waBtn = p.fornecedor_whatsapp ? `<a class="wa-btn" href="https://wa.me/55${p.fornecedor_whatsapp}" target="_blank">📞 WhatsApp</a>` : '';
 
-  return `<div class="prod-card ${sel ? 'selected' : ''}" ontouchstart="startLongPress(${p.id})" ontouchend="endLongPress()" onmousedown="startLongPress(${p.id})" onmouseup="endLongPress()" onclick="handleCardClick(${p.id})">
+  return `<div class="prod-card ${sel ? 'selected' : ''} ${p.prioridade === 'alta' ? 'urgent' : ''}" ontouchstart="startLongPress(${p.id})" ontouchend="endLongPress()" onmousedown="startLongPress(${p.id})" onmouseup="endLongPress()" onclick="handleCardClick(${p.id})">
     ${selectionMode ? `<input type="checkbox" ${sel ? 'checked' : ''} style="position:absolute;top:10px;right:10px;width:20px;height:20px;accent-color:var(--primary);" onclick="toggleSelect(event,${p.id})">` : ''}
     <div class="prod-top">
       <div class="prod-img">${imgH}</div>
@@ -1277,7 +1655,7 @@ function deletarSelecionados() {
   if (!confirm(`Remover ${selectedIds.size} itens da lista?`)) return;
   faltasLista = faltasLista.filter(f => !selectedIds.has(f.id));
   saveFaltas();
-  updateHeader();
+  updateHomeStats();
   toast(`🗑️ ${selectedIds.size} itens removidos`);
   cancelarSelecao();
 }
@@ -1297,7 +1675,7 @@ function marcarPedido(id) {
   }
   saveFaltas();
   renderFaltas();
-  updateHeader();
+  updateHomeStats();
 }
 
 function deletarFalta(id) {
@@ -1306,8 +1684,8 @@ function deletarFalta(id) {
   if (!confirm(`Remover "${f.nome}" da lista?`)) return;
   faltasLista = faltasLista.filter(x => x.id !== id);
   saveFaltas();
-  updateHeader();
-  showRecent();
+  updateHomeStats();
+  renderHomeSections();
   renderFaltas();
   toast(`🗑️ ${f.nome} removido`);
 }
@@ -1367,7 +1745,7 @@ function salvarEdicao(id) {
     f.dias_validade = Math.ceil((dv - now) / 86400000);
   }
   saveFaltas();
-  updateHeader();
+  updateHomeStats();
   hideModal();
   renderFaltas();
   toast(`✅ ${f.nome} atualizado!`);
@@ -1392,8 +1770,8 @@ function limparTodasFaltas() {
   if (!confirm('Remover TODOS os itens da lista de faltas?')) return;
   faltasLista = [];
   saveFaltas();
-  updateHeader();
-  showRecent();
+  updateHomeStats();
+  renderHomeSections();
   renderFaltas();
   toast('🗑️ Lista limpa!');
 }
@@ -1419,7 +1797,6 @@ function renderBiblioteca() {
   const sort = document.getElementById('sortBib').value;
   let list = [...catalogo];
 
-  // Category chips
   const cats = [...new Set(list.map(c => c.categoria))].sort();
   const chipC = document.getElementById('catChips');
   chipC.innerHTML = `<span class="chip ${currentBibCat === 'todos' ? 'active' : ''}" onclick="currentBibCat='todos';renderBiblioteca()">Todos</span>` +
@@ -1452,7 +1829,7 @@ function renderBiblioteca() {
       </div>
       <div class="prod-actions">
         <button class="btn btn-sm ${p.favorito ? 'btn-warning' : 'btn-gray'}" onclick="toggleFavorito('${p.barcode || p.codigo_interno}')">${p.favorito ? '⭐' : '☆'}</button>
-        <button class="btn btn-sm btn-primary" onclick="registrarFaltaBib('${p.barcode || p.codigo_interno}')">📝 Registrar Falta</button>
+        <button class="btn btn-sm btn-success" onclick="addCatalogoToFalta('${p.barcode || p.codigo_interno}')">📝 Add à Lista</button>
       </div>
     </div>`;
   }).join('');
@@ -1463,14 +1840,122 @@ function toggleFavorito(key) {
   if (c) { c.favorito = !c.favorito; saveCatalogo(); renderBiblioteca(); }
 }
 
-function registrarFaltaBib(key) {
-  const p = catalogo.find(x => (x.barcode || x.codigo_interno) === key);
-  if (!p) return;
-  switchTab(0);
-  setTimeout(() => {
-    showScanMode('manual');
-    usarComoBase(p.id);
-  }, 150);
+function addCatalogoToFalta(key) {
+  addExpiringToFalta(key);
+}
+
+// ===== EXPIRING LIST =====
+function setExpFilter(chip, filter) {
+  document.querySelectorAll('#pageExpiring .chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  currentExpFilter = filter;
+  renderExpiringFull();
+}
+
+function renderExpiringFull() {
+  const search = (document.getElementById('searchExpiring')?.value || '').toLowerCase();
+  const now = new Date(); now.setHours(0,0,0,0);
+  
+  let list = catalogo.filter(p => p.validade).map(p => {
+    const d = new Date(p.validade + 'T00:00:00');
+    const diff = Math.ceil((d - now) / 86400000);
+    return { ...p, diasRestantes: diff };
+  });
+
+  // Filter
+  if (currentExpFilter === 'vencidos') list = list.filter(p => p.diasRestantes < 0);
+  else if (currentExpFilter === '7dias') list = list.filter(p => p.diasRestantes >= 0 && p.diasRestantes <= 7);
+  else if (currentExpFilter === '15dias') list = list.filter(p => p.diasRestantes >= 0 && p.diasRestantes <= 15);
+  else if (currentExpFilter === '30dias') list = list.filter(p => p.diasRestantes >= 0 && p.diasRestantes <= 30);
+
+  // Search
+  if (search) list = list.filter(p => `${p.nome} ${p.marca}`.toLowerCase().includes(search));
+
+  // Sort by days
+  list.sort((a, b) => a.diasRestantes - b.diasRestantes);
+
+  const container = document.getElementById('expiringFullList');
+  if (list.length === 0) {
+    container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--gray-500);">📅 Nenhum produto com validade cadastrada.</div>';
+    return;
+  }
+
+  container.innerHTML = list.map(p => {
+    const isExpired = p.diasRestantes < 0;
+    const isClose = p.diasRestantes >= 0 && p.diasRestantes <= 7;
+    return `<div class="prod-card ${isExpired ? 'urgent' : isClose ? 'expiring' : ''}">
+      <div class="prod-top">
+        <div class="prod-img">${p.imagem_local || p.imagem_url ? `<img src="${p.imagem_local || p.imagem_url}">` : '📦'}</div>
+        <div class="prod-info">
+          <div class="prod-name">${p.nome}</div>
+          <div class="prod-meta">${p.marca || ''} • Val: ${fmtDate(p.validade)}</div>
+          <span class="badge ${isExpired ? 'badge-alta' : isClose ? 'badge-media' : 'badge-baixa'}">
+            ${isExpired ? '🔴 VENCIDO' : p.diasRestantes === 0 ? '⚠️ VENCE HOJE' : `${p.diasRestantes} dias restantes`}
+          </span>
+        </div>
+      </div>
+      <div class="prod-actions">
+        <button class="btn btn-sm btn-success" onclick="addExpiringToFalta('${p.barcode || p.codigo_interno}')">📝 Adicionar à Lista</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ===== CATALOG SEARCH =====
+function renderCatalogSearch() {
+  const search = (document.getElementById('searchCatalog')?.value || '').toLowerCase();
+  let list = [...catalogo];
+
+  // Category chips
+  const cats = [...new Set(list.map(c => c.categoria))].sort();
+  const chipC = document.getElementById('catalogCatChips');
+  chipC.innerHTML = `<span class="chip ${currentCatSearchFilter === 'todos' ? 'active' : ''}" onclick="currentCatSearchFilter='todos';renderCatalogSearch()">Todos</span>` +
+    cats.map(c => `<span class="chip ${currentCatSearchFilter === c ? 'active' : ''}" onclick="currentCatSearchFilter='${c}';renderCatalogSearch()">${c}</span>`).join('');
+
+  // Filter by category
+  if (currentCatSearchFilter !== 'todos') list = list.filter(c => c.categoria === currentCatSearchFilter);
+
+  // Search
+  if (search) list = list.filter(c => `${c.nome} ${c.marca} ${c.barcode} ${c.codigo_interno}`.toLowerCase().includes(search));
+
+  // Sort favorites first, then by name
+  list.sort((a, b) => {
+    if (a.favorito && !b.favorito) return -1;
+    if (!a.favorito && b.favorito) return 1;
+    return a.nome.localeCompare(b.nome);
+  });
+
+  const container = document.getElementById('catalogSearchResults');
+  
+  if (catalogo.length === 0) {
+    container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--gray-500);">📚 Nenhum produto cadastrado ainda.<br><br>Cadastre produtos escaneando ou manualmente!</div>';
+    return;
+  }
+
+  if (list.length === 0) {
+    container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--gray-500);">🔍 Nenhum produto encontrado.<br>Tente outra busca.</div>';
+    return;
+  }
+
+  container.innerHTML = list.map(p => {
+    const img = p.imagem_local || p.imagem_url;
+    const imgH = img ? `<img src="${img}" onerror="this.parentElement.innerHTML='📦'" style="width:100%;height:100%;object-fit:cover;">` : '📦';
+    return `<div class="prod-card">
+      <div class="prod-top">
+        <div class="prod-img">${imgH}</div>
+        <div class="prod-info">
+          <div class="prod-name">${p.favorito ? '⭐ ' : ''}${p.nome}</div>
+          <div class="prod-meta">${p.marca || ''} • ${p.barcode || p.codigo_interno || ''}</div>
+          <span class="badge badge-info">${p.categoria}</span>
+        </div>
+      </div>
+      <div class="prod-actions">
+        <button class="btn btn-sm btn-success btn-block" onclick="addExpiringToFalta('${p.barcode || p.codigo_interno}')">
+          ➕ Adicionar à Lista de Faltas
+        </button>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 // ===== RELATÓRIO / PDF =====
@@ -1589,11 +2074,6 @@ function gerarPDF() {
         else if (val === 'MÉDIA') data.cell.styles.textColor = [245, 158, 11];
         else data.cell.styles.textColor = [22, 163, 74];
       }
-    },
-    didDrawPage: function(data) {
-      doc.setFontSize(7);
-      doc.setTextColor(150);
-      doc.text(`${loja} | Gerado em ${dataHora} | Página ${doc.internal.getNumberOfPages()}`, pageW / 2, pageH - 5, { align: 'center' });
     }
   });
 
@@ -1616,87 +2096,6 @@ function gerarPDF() {
       if (finalY > pageH - 15) { doc.addPage(); finalY = 15; }
       doc.text(`• ${p.nome} — ${p.quantidade} ${p.unidade} — ${p.fornecedor_nome || 'Sem fornecedor'} ${p.corredor ? '— ' + p.corredor : ''}`, 14, finalY);
       finalY += 5;
-    });
-    finalY += 5;
-  }
-
-  // Sugestões
-  if (incluirObs) {
-    const comSugestao = list.filter(f => f.sugestao_pedido);
-    if (comSugestao.length > 0) {
-      if (finalY > pageH - 30) { doc.addPage(); finalY = 15; }
-      doc.setFontSize(10);
-      doc.setFont(undefined, 'bold');
-      doc.setTextColor(37, 99, 235);
-      doc.text('💬 SUGESTÕES DE PEDIDO', 14, finalY);
-      finalY += 7;
-      doc.setFont(undefined, 'normal');
-      doc.setFontSize(8);
-      doc.setTextColor(55, 65, 81);
-      comSugestao.forEach(p => {
-        if (finalY > pageH - 15) { doc.addPage(); finalY = 15; }
-        doc.text(`• ${p.nome}: ${p.sugestao_pedido}`, 14, finalY);
-        finalY += 5;
-      });
-      finalY += 5;
-    }
-  }
-
-  // Agrupado por fornecedor
-  if (grupoForn) {
-    const grupos = {};
-    list.forEach(p => { const k = p.fornecedor_nome || 'Sem fornecedor'; if (!grupos[k]) grupos[k] = []; grupos[k].push(p); });
-    if (finalY > pageH - 30) { doc.addPage(); finalY = 15; }
-    doc.setFontSize(10);
-    doc.setFont(undefined, 'bold');
-    doc.setTextColor(37, 99, 235);
-    doc.text('🏭 AGRUPADO POR FORNECEDOR', 14, finalY);
-    finalY += 7;
-    Object.keys(grupos).forEach(forn => {
-      if (finalY > pageH - 20) { doc.addPage(); finalY = 15; }
-      doc.setFont(undefined, 'bold');
-      doc.setFontSize(9);
-      doc.setTextColor(55, 65, 81);
-      const wa = grupos[forn][0]?.fornecedor_whatsapp;
-      doc.text(`${forn} (${grupos[forn].length} itens)${wa ? ' — WhatsApp: ' + maskPhoneStr(wa) : ''}`, 14, finalY);
-      finalY += 5;
-      doc.setFont(undefined, 'normal');
-      doc.setFontSize(8);
-      grupos[forn].forEach(p => {
-        if (finalY > pageH - 15) { doc.addPage(); finalY = 15; }
-        doc.text(`   • ${p.nome} — ${p.quantidade} ${p.unidade}`, 14, finalY);
-        finalY += 4;
-      });
-      finalY += 3;
-    });
-    finalY += 5;
-  }
-
-  // Agrupado por corredor
-  if (grupoCor) {
-    const grupos = {};
-    list.forEach(p => { const k = p.corredor || 'Sem localização'; if (!grupos[k]) grupos[k] = []; grupos[k].push(p); });
-    if (finalY > pageH - 30) { doc.addPage(); finalY = 15; }
-    doc.setFontSize(10);
-    doc.setFont(undefined, 'bold');
-    doc.setTextColor(37, 99, 235);
-    doc.text('🏪 AGRUPADO POR CORREDOR/SEÇÃO', 14, finalY);
-    finalY += 7;
-    Object.keys(grupos).forEach(cor => {
-      if (finalY > pageH - 20) { doc.addPage(); finalY = 15; }
-      doc.setFont(undefined, 'bold');
-      doc.setFontSize(9);
-      doc.setTextColor(55, 65, 81);
-      doc.text(`${cor} (${grupos[cor].length} itens)`, 14, finalY);
-      finalY += 5;
-      doc.setFont(undefined, 'normal');
-      doc.setFontSize(8);
-      grupos[cor].forEach(p => {
-        if (finalY > pageH - 15) { doc.addPage(); finalY = 15; }
-        doc.text(`   • ${p.nome} — ${p.quantidade} ${p.unidade}`, 14, finalY);
-        finalY += 4;
-      });
-      finalY += 3;
     });
     finalY += 5;
   }
@@ -1831,7 +2230,8 @@ function saveConfig() {
 function updatePrefixPreview() {
   const prefix = (config.cPrefixo || document.getElementById('cPrefixo')?.value || 'INT');
   const num = contador;
-  document.getElementById('prefixPreview').textContent = `Próximo código: ${prefix}-${String(num).padStart(5, '0')}`;
+  const prev = document.getElementById('prefixPreview');
+  if (prev) prev.textContent = `Próximo código: ${prefix}-${String(num).padStart(5, '0')}`;
   const fi = document.getElementById('fCodigoInterno');
   if (fi) fi.textContent = `Código interno (se sem barcode): ${prefix}-${String(num).padStart(5, '0')}`;
 }
@@ -1870,8 +2270,8 @@ function importarBackup(e) {
       if (data.faltas_config) { config = data.faltas_config; localStorage.setItem('faltas_config', JSON.stringify(config)); }
       if (data.faltas_contador) { contador = data.faltas_contador; localStorage.setItem('faltas_contador', contador); }
       loadConfig();
-      updateHeader();
-      showRecent();
+      updateHomeStats();
+      renderHomeSections();
       toast('📥 Backup importado com sucesso!');
     } catch (err) {
       toast('❌ Arquivo de backup inválido', 'error');
@@ -1895,8 +2295,8 @@ function limparTudo() {
   faltasLista = []; catalogo = []; config = {}; contador = 1;
   localStorage.clear();
   loadConfig();
-  updateHeader();
-  showRecent();
+  updateHomeStats();
+  renderHomeSections();
   toast('🗑️ Todos os dados foram apagados!');
 }
 
@@ -1906,14 +2306,12 @@ function renderStats() {
   const totalCatalogo = catalogo.length;
   const totalValor = faltasLista.reduce((s, f) => s + (f.preco_custo || 0) * (f.quantidade || 1), 0);
 
-  // Most registered
   let maisRegistrado = '-';
   if (catalogo.length > 0) {
     const sorted = [...catalogo].sort((a, b) => (b.registros || 0) - (a.registros || 0));
     if (sorted[0]) maisRegistrado = sorted[0].nome;
   }
 
-  // Fornecedor with most
   let fornMais = '-';
   const fornCount = {};
   faltasLista.forEach(f => { if (f.fornecedor_nome) { fornCount[f.fornecedor_nome] = (fornCount[f.fornecedor_nome] || 0) + 1; } });
@@ -1926,8 +2324,8 @@ function renderStats() {
   grid.innerHTML = `
     <div class="stat-card"><div class="sv">${totalCatalogo}</div><div class="sl">Produtos no catálogo</div></div>
     <div class="stat-card"><div class="sv">${totalFaltas}</div><div class="sl">Faltas registradas</div></div>
-    <div class="stat-card"><div class="sv" style="font-size:14px;">${maisRegistrado}</div><div class="sl">Mais registrado</div></div>
-    <div class="stat-card"><div class="sv" style="font-size:14px;">${fornMais}</div><div class="sl">Fornecedor + faltas</div></div>
+    <div class="stat-card"><div class="sv" style="font-size:14px;">${maisRegistrado.substring(0,15)}${maisRegistrado.length > 15 ? '...' : ''}</div><div class="sl">Mais registrado</div></div>
+    <div class="stat-card"><div class="sv" style="font-size:14px;">${fornMais.substring(0,15)}${fornMais.length > 15 ? '...' : ''}</div><div class="sl">Fornecedor + faltas</div></div>
     <div class="stat-card"><div class="sv">R$ ${fmtMoney(totalValor)}</div><div class="sl">Valor total estimado</div></div>
     <div class="stat-card"><div class="sv" style="font-size:11px;">${config.ultimoRelatorio ? fmtDateTime(config.ultimoRelatorio) : '-'}</div><div class="sl">Último relatório</div></div>
   `;
