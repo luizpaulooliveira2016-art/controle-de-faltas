@@ -1,15 +1,2477 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Controle de Faltas</title>
-    <meta name="theme-color" content="#2563EB">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#2563EB">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Controle de Faltas</title>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<!-- SCANNER -->
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+<!-- PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+<style>
+:root {
+  --primary: #2563EB;
+  --primary-dark: #1D4ED8;
+  --primary-light: #DBEAFE;
+  --success: #16A34A;
+  --success-light: #DCFCE7;
+  --danger: #DC2626;
+  --danger-light: #FEE2E2;
+  --warning: #F59E0B;
+  --warning-light: #FEF3C7;
+  --orange: #EA580C;
+  --orange-light: #FFEDD5;
+  --gray-50: #F9FAFB;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-400: #9CA3AF;
+  --gray-500: #6B7280;
+  --gray-700: #374151;
+  --gray-800: #1F2937;
+  --white: #FFFFFF;
+  --radius: 16px;
+  --radius-sm: 12px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--gray-100);
+  color: var(--gray-800);
+  min-height: 100vh;
+  padding-bottom: 80px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ===== HEADER ===== */
+.header {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  padding: 16px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-back {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.header-back:active { background: rgba(255,255,255,0.3); }
+.header-title { font-size: 18px; font-weight: 700; }
+.header-sub { font-size: 12px; opacity: 0.9; }
+
+/* ===== PAGES ===== */
+.page { display: none; padding: 16px; animation: fadeIn 0.2s; }
+.page.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* ===== HOME HERO ===== */
+.home-hero {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  padding: 24px 20px 28px;
+  margin: -16px -16px 20px -16px;
+  text-align: center;
+}
+
+.home-logo { font-size: 56px; margin-bottom: 8px; }
+.home-title { font-size: 22px; font-weight: 800; }
+.home-sub { font-size: 13px; opacity: 0.9; margin-top: 4px; }
+
+.home-stats {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.home-stat { text-align: center; }
+.home-stat-num { font-size: 28px; font-weight: 800; }
+.home-stat-label { font-size: 11px; opacity: 0.85; }
+
+/* ===== QUICK ACTIONS ===== */
+.quick-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.quick-btn {
+  background: white;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 20px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.quick-btn:active { transform: scale(0.97); }
+.quick-btn.primary { background: var(--primary); border-color: var(--primary); color: white; }
+.quick-btn.success { background: var(--success-light); border-color: var(--success); }
+.quick-btn.warning { background: var(--warning-light); border-color: var(--warning); }
+.quick-btn.danger { background: var(--danger-light); border-color: var(--danger); }
+
+.quick-icon { font-size: 32px; margin-bottom: 8px; }
+.quick-text { font-size: 13px; font-weight: 600; }
+.quick-btn.primary .quick-text { color: white; }
+.quick-btn.success .quick-text { color: var(--success); }
+.quick-btn.warning .quick-text { color: var(--warning); }
+.quick-btn.danger .quick-text { color: var(--danger); }
+
+/* ===== SECTIONS ===== */
+.section {
+  background: white;
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-link {
+  font-size: 13px;
+  color: var(--primary);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ===== CARDS ===== */
+.card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* ===== PRODUCT CARD ===== */
+.prod-card {
+  background: white;
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.prod-card.urgent { border-left: 4px solid var(--danger); }
+.prod-card.medium { border-left: 4px solid var(--warning); }
+.prod-card.low { border-left: 4px solid var(--success); }
+.prod-card.expiring { border-left: 4px solid var(--orange); background: var(--orange-light); }
+.prod-card.clickable { cursor: pointer; }
+.prod-card.clickable:active { background: var(--gray-50); }
+
+.prod-img {
+  width: 60px;
+  height: 60px;
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border: 1px solid var(--gray-200);
+  padding: 4px;
+}
+
+.prod-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+.prod-info { flex: 1; min-width: 0; }
+.prod-name { font-size: 14px; font-weight: 600; line-height: 1.3; }
+.prod-meta { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+.prod-code { font-size: 11px; color: var(--gray-400); margin-top: 2px; font-family: monospace; }
+
+.prod-badge { 
+  font-size: 11px; 
+  font-weight: 700; 
+  padding: 4px 10px; 
+  border-radius: 20px; 
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.badge-danger { background: var(--danger-light); color: var(--danger); }
+.badge-warning { background: var(--warning-light); color: var(--warning); }
+.badge-success { background: var(--success-light); color: var(--success); }
+.badge-info { background: var(--primary-light); color: var(--primary); }
+.badge-orange { background: var(--orange-light); color: var(--orange); }
+
+/* ===== BUTTONS ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+  min-height: 48px;
+}
+
+.btn:active { transform: scale(0.98); }
+.btn-primary { background: var(--primary); color: white; }
+.btn-success { background: var(--success); color: white; }
+.btn-danger { background: var(--danger); color: white; }
+.btn-warning { background: var(--warning); color: white; }
+.btn-gray { background: var(--gray-200); color: var(--gray-700); }
+.btn-outline { background: white; color: var(--primary); border: 2px solid var(--primary); }
+.btn-block { width: 100%; }
+.btn-sm { padding: 10px 14px; font-size: 13px; min-height: 40px; }
+.btn-lg { padding: 18px 24px; font-size: 17px; }
+
+/* ===== FORMS ===== */
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 6px; }
+
+.form-input, .form-select {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  font-size: 16px;
+  background: white;
+  transition: border 0.2s;
+}
+
+.form-input:focus, .form-select:focus { outline: none; border-color: var(--primary); }
+.form-input::placeholder { color: var(--gray-400); }
+textarea.form-input { min-height: 100px; resize: vertical; }
+
+/* ===== SEARCH ===== */
+.search-box { position: relative; margin-bottom: 16px; }
+.search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 18px; }
+.search-input {
+  width: 100%;
+  padding: 14px 16px 14px 48px;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius);
+  font-size: 16px;
+  background: white;
+}
+.search-input:focus { outline: none; border-color: var(--primary); }
+
+/* ===== MODAL ===== */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal.show { display: flex; }
+
+.modal-content {
+  background: white;
+  border-radius: var(--radius) var(--radius) 0 0;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s;
+}
+
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+.modal-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+}
+
+.modal-title { font-size: 18px; font-weight: 700; }
+
+.modal-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gray-100);
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-body { padding: 20px; }
+
+/* ===== TOAST ===== */
+.toast-container {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+  width: 90%;
+  max-width: 400px;
+}
+
+.toast {
+  padding: 14px 20px;
+  border-radius: var(--radius-sm);
+  color: white;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 8px;
+  animation: toastIn 0.3s;
+}
+
+@keyframes toastIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.toast.success { background: var(--success); }
+.toast.error { background: var(--danger); }
+.toast.warning { background: var(--warning); }
+.toast.info { background: var(--primary); }
+
+/* ===== LOADING ===== */
+.loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255,255,255,0.95);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 3000;
+}
+
+.loading.show { display: flex; }
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--gray-200);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { font-size: 14px; color: var(--gray-700); text-align: center; }
+
+/* ===== TAB BAR ===== */
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  display: flex;
+  border-top: 1px solid var(--gray-200);
+  z-index: 100;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.tab-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0 8px;
+  background: none;
+  border: none;
+  color: var(--gray-400);
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  gap: 4px;
+}
+
+.tab-btn.active { color: var(--primary); }
+.tab-icon { font-size: 22px; }
+
+/* ===== SCANNER ===== */
+#scannerContainer {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #000;
+}
+
+#scannerContainer video { border-radius: var(--radius); }
+
+/* ===== IMAGE PREVIEW ===== */
+.img-preview {
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 16px;
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  overflow: hidden;
+  border: 2px dashed var(--gray-300);
+  padding: 8px;
+}
+
+.img-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.img-preview.has-image { border-style: solid; border-color: var(--success); }
+
+/* ===== SCAN BUTTONS ===== */
+.scan-options {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.scan-option {
+  flex: 1;
+  padding: 16px;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  background: white;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.scan-option:active { transform: scale(0.98); }
+.scan-option.active { border-color: var(--primary); background: var(--primary-light); }
+.scan-option-icon { font-size: 28px; margin-bottom: 6px; }
+.scan-option-text { font-size: 12px; font-weight: 600; color: var(--gray-700); }
+
+/* ===== PRIORITY SELECTOR ===== */
+.priority-selector { display: flex; gap: 8px; }
+
+.priority-btn {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  background: white;
+  cursor: pointer;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+
+.priority-btn.alta { border-color: var(--danger); background: var(--danger-light); color: var(--danger); }
+.priority-btn.media { border-color: var(--warning); background: var(--warning-light); color: var(--warning); }
+.priority-btn.baixa { border-color: var(--success); background: var(--success-light); color: var(--success); }
+.priority-btn.selected { transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+
+/* ===== CHIP FILTERS ===== */
+.chip-row {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 0;
+  margin-bottom: 12px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chip-row::-webkit-scrollbar { display: none; }
+
+.chip {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--gray-100);
+  color: var(--gray-600);
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.chip.active { background: var(--primary); color: white; }
+
+/* ===== CARD ACTIONS ===== */
+.card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--gray-100);
+}
+
+.action-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.action-btn.edit { background: var(--primary-light); color: var(--primary); }
+.action-btn.delete { background: var(--danger-light); color: var(--danger); }
+.action-btn.add { background: var(--success-light); color: var(--success); }
+
+/* ===== FOUND RESULT ===== */
+.found-card {
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.found-card.success { background: var(--success-light); border: 2px solid var(--success); }
+.found-card.warning { background: var(--warning-light); border: 2px solid var(--warning); }
+
+.found-img {
+  width: 70px;
+  height: 70px;
+  border-radius: var(--radius-sm);
+  background: white;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.found-img img { width: 100%; height: 100%; object-fit: cover; }
+
+.found-info { flex: 1; }
+.found-title { font-size: 14px; font-weight: 700; color: var(--success); margin-bottom: 4px; }
+.found-name { font-size: 13px; font-weight: 600; }
+.found-meta { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
+
+/* ===== EMPTY STATE ===== */
+.empty-state { text-align: center; padding: 40px 20px; color: var(--gray-500); }
+.empty-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-text { font-size: 14px; }
+
+/* ===== CONNECTION STATUS ===== */
+.connection-banner {
+  background: var(--warning);
+  color: white;
+  padding: 10px 16px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  display: none;
+}
+
+.connection-banner.show { display: block; }
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="loading" id="loading">
+  <div class="spinner"></div>
+  <div class="loading-text" id="loadingText">Carregando...</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- CONNECTION BANNER -->
+<div class="connection-banner" id="connectionBanner">⚠️ Sem conexão - Dados serão sincronizados quando voltar</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-content" id="modalContent"></div>
+</div>
+
+<!-- ========== PAGE: HOME ========== -->
+<div class="page active" id="pageHome">
+  <div class="home-hero">
+    <div class="home-logo">📦</div>
+    <div class="home-title">Controle de Faltas</div>
+    <div class="home-sub">Gestão inteligente de estoque</div>
+    <div class="home-stats">
+      <div class="home-stat">
+        <div class="home-stat-num" id="statFaltas">0</div>
+        <div class="home-stat-label">Faltas</div>
+      </div>
+      <div class="home-stat">
+        <div class="home-stat-num" id="statUrgentes">0</div>
+        <div class="home-stat-label">Urgentes</div>
+      </div>
+      <div class="home-stat">
+        <div class="home-stat-num" id="statVencendo">0</div>
+        <div class="home-stat-label">Vencendo</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quick-grid">
+    <button class="quick-btn primary" onclick="openRealizarFalta()">
+      <div class="quick-icon">➕</div>
+      <div class="quick-text">Registrar Falta</div>
+    </button>
+    <button class="quick-btn warning" onclick="goToPage('vencimentos')">
+      <div class="quick-icon">⏰</div>
+      <div class="quick-text">Vencimentos</div>
+    </button>
+    <button class="quick-btn success" onclick="openCadastro()">
+      <div class="quick-icon">📝</div>
+      <div class="quick-text">Cadastrar Produto</div>
+    </button>
+    <button class="quick-btn" onclick="switchTab(1)">
+      <div class="quick-icon">📚</div>
+      <div class="quick-text">Ver Produtos</div>
+    </button>
+  </div>
+
+  <!-- URGENTES -->
+  <div class="section" id="sectionUrgentes" style="display:none;">
+    <div class="section-header">
+      <div class="section-title">🔴 Faltas Urgentes</div>
+      <div class="section-link" onclick="switchTab(2)">Ver todas →</div>
+    </div>
+    <div id="listaUrgentesHome"></div>
+  </div>
+
+  <!-- VENCENDO -->
+  <div class="section" id="sectionVencendo" style="display:none;">
+    <div class="section-header">
+      <div class="section-title">⏰ Produtos Vencendo</div>
+      <div class="section-link" onclick="goToPage('vencimentos')">Ver todos →</div>
+    </div>
+    <div id="listaVencendoHome"></div>
+  </div>
+</div>
+
+<!-- ========== PAGE: PRODUTOS ========== -->
+<div class="page" id="pageProdutos">
+  <header class="header">
+    <button class="header-back" onclick="goBack()">←</button>
+    <div>
+      <div class="header-title">📚 Produtos Cadastrados</div>
+      <div class="header-sub" id="produtosCount">0 produtos</div>
+    </div>
+  </header>
+
+  <div class="search-box">
+    <span class="search-icon">🔍</span>
+    <input type="text" class="search-input" id="searchProdutos" placeholder="Buscar produto..." oninput="renderProdutos()">
+  </div>
+
+  <div id="listaProdutos"></div>
+
+  <button class="btn btn-primary btn-block btn-lg" onclick="openCadastro()" style="margin-top:16px;">
+    ➕ Cadastrar Novo Produto
+  </button>
+</div>
+
+<!-- ========== PAGE: LISTA DE FALTAS ========== -->
+<div class="page" id="pageFaltas">
+  <header class="header">
+    <button class="header-back" onclick="goBack()">←</button>
+    <div>
+      <div class="header-title">📋 Lista de Faltas</div>
+      <div class="header-sub" id="faltasCount">0 itens</div>
+    </div>
+  </header>
+
+  <div class="chip-row">
+    <button class="chip active" data-filter="todos" onclick="setFaltaFilter(this)">Todos</button>
+    <button class="chip" data-filter="alta" onclick="setFaltaFilter(this)">🔴 Urgentes</button>
+    <button class="chip" data-filter="media" onclick="setFaltaFilter(this)">🟡 Médio</button>
+    <button class="chip" data-filter="baixa" onclick="setFaltaFilter(this)">🟢 Baixo</button>
+    <button class="chip" data-filter="pedido" onclick="setFaltaFilter(this)">✅ Pedidos</button>
+  </div>
+
+  <div id="listaFaltas"></div>
+
+  <div style="display:flex;gap:10px;margin-top:16px;">
+    <button class="btn btn-primary btn-block" onclick="openRealizarFalta()">➕ Nova Falta</button>
+    <button class="btn btn-success" onclick="gerarPDF()">📄</button>
+    <button class="btn btn-gray" onclick="compartilharWhatsApp()">📤</button>
+  </div>
+</div>
+
+<!-- ========== PAGE: VENCIMENTOS ========== -->
+<div class="page" id="pageVencimentos">
+  <header class="header">
+    <button class="header-back" onclick="goBack()">←</button>
+    <div>
+      <div class="header-title">⏰ Controle de Vencimentos</div>
+      <div class="header-sub">Produtos próximos do vencimento</div>
+    </div>
+  </header>
+
+  <button class="btn btn-success btn-block" onclick="openAddVencimento()" style="margin-bottom:16px;">
+    ➕ Adicionar Vencimento
+  </button>
+
+  <div class="chip-row">
+    <button class="chip active" data-venc="todos" onclick="setVencFilter(this)">Todos</button>
+    <button class="chip" data-venc="vencidos" onclick="setVencFilter(this)">🔴 Vencidos</button>
+    <button class="chip" data-venc="7dias" onclick="setVencFilter(this)">🟡 7 dias</button>
+    <button class="chip" data-venc="30dias" onclick="setVencFilter(this)">🟢 30 dias</button>
+  </div>
+
+  <div id="listaVencimentos"></div>
+</div>
+
+<!-- ========== PAGE: CONFIG ========== -->
+<div class="page" id="pageConfig">
+  <header class="header">
+    <button class="header-back" onclick="goBack()">←</button>
+    <div>
+      <div class="header-title">⚙️ Configurações</div>
+      <div class="header-sub">Ajustes do aplicativo</div>
+    </div>
+  </header>
+
+  <div class="card">
+    <div class="section-title" style="margin-bottom:12px;">🏪 Dados da Loja</div>
+    <div class="form-group">
+      <label class="form-label">Nome da Loja</label>
+      <input type="text" class="form-input" id="configLoja" placeholder="Minha Loja" onchange="saveConfig()">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Responsável</label>
+      <input type="text" class="form-input" id="configResp" placeholder="Seu nome" onchange="saveConfig()">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title" style="margin-bottom:12px;">⏰ Alertas de Vencimento</div>
+    <p style="font-size:12px;color:var(--gray-500);margin-bottom:12px;">Produtos aparecerão como "vencendo" a partir de:</p>
+    <div class="form-group">
+      <label class="form-label">Dias de Antecedência</label>
+      <select class="form-select" id="configDiasVenc" onchange="saveConfig()">
+        <option value="3">3 dias antes</option>
+        <option value="5">5 dias antes</option>
+        <option value="7" selected>7 dias antes</option>
+        <option value="10">10 dias antes</option>
+        <option value="15">15 dias antes</option>
+        <option value="30">30 dias (1 mês)</option>
+        <option value="60">60 dias (2 meses)</option>
+        <option value="90">90 dias (3 meses)</option>
+      </select>
+    </div>
+    <div style="background:var(--warning-light);padding:12px;border-radius:var(--radius-sm);font-size:13px;color:var(--warning);">
+      💡 <strong>Atualmente:</strong> <span id="configVencInfo">7 dias</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title" style="margin-bottom:12px;">☁️ Sincronização</div>
+    <div id="syncInfo" style="font-size:13px;color:var(--gray-500);margin-bottom:12px;"></div>
+    <button class="btn btn-primary btn-block" onclick="forceSync()">🔄 Sincronizar Agora</button>
+  </div>
+
+  <div class="card">
+    <div class="section-title" style="margin-bottom:12px;">💾 Backup</div>
+    <button class="btn btn-outline btn-block" onclick="exportarBackup()" style="margin-bottom:10px;">📤 Exportar Backup</button>
+    <label class="btn btn-outline btn-block" style="cursor:pointer;">
+      📥 Importar Backup
+      <input type="file" accept=".json" style="display:none;" onchange="importarBackup(event)">
+    </label>
+  </div>
+
+  <div class="card">
+    <div class="section-title" style="margin-bottom:12px;">🗑️ Limpar Dados</div>
+    <button class="btn btn-danger btn-block" onclick="limparTudo()">⚠️ Apagar Todos os Dados</button>
+  </div>
+</div>
+
+<!-- TAB BAR -->
+<nav class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab(0)">
+    <span class="tab-icon">🏠</span>
+    Início
+  </button>
+  <button class="tab-btn" onclick="switchTab(1)">
+    <span class="tab-icon">📚</span>
+    Produtos
+  </button>
+  <button class="tab-btn" onclick="switchTab(2)">
+    <span class="tab-icon">📋</span>
+    Faltas
+  </button>
+  <button class="tab-btn" onclick="switchTab(3)">
+    <span class="tab-icon">⚙️</span>
+    Config
+  </button>
+</nav>
+
+<script>
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  🔥 CONFIGURAÇÃO DO FIREBASE                                  ║
+// ╚══════════════════════════════════════════════════════════════╝
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAFYDsRg1jgr2mP6UvEQofwoWH0Mi2iTps",
+  authDomain: "controle-faltas-d6709.firebaseapp.com",
+  databaseURL: "https://controle-faltas-d6709-default-rtdb.firebaseio.com",
+  projectId: "controle-faltas-d6709",
+  storageBucket: "controle-faltas-d6709.firebasestorage.app",
+  messagingSenderId: "1063821814181",
+  appId: "1:1063821814181:web:4aa8451fd799590d93e04c"
+};
+
+// Inicializar Firebase
+let db = null;
+let isOnline = navigator.onLine;
+
+try {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.database();
+  console.log('✅ Firebase conectado!');
+} catch (e) {
+  console.log('⚠️ Firebase não configurado, usando localStorage');
+}
+
+// ===== STATE =====
+let produtos = [];
+let faltas = [];
+let vencimentos = [];
+let config = {};
+let currentTab = 0;
+let currentFaltaFilter = 'todos';
+let currentVencFilter = 'todos';
+let navHistory = ['home'];
+let html5QrCode = null;
+let scannerRunning = false;
+let currentImage = '';
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', async () => {
+  showLoading('Carregando dados...');
+  await loadAllData();
+  loadConfig();
+  renderHome();
+  hideLoading();
+  
+  window.addEventListener('online', () => { isOnline = true; updateConnectionStatus(); syncData(); });
+  window.addEventListener('offline', () => { isOnline = false; updateConnectionStatus(); });
+  updateConnectionStatus();
+  
+  window.addEventListener('popstate', () => {
+    if (navHistory.length > 1) {
+      navHistory.pop();
+      goToPage(navHistory[navHistory.length - 1], false);
+    }
+  });
+  
+  history.replaceState({ page: 'home' }, '', '');
+});
+
+// ===== DATA =====
+async function loadAllData() {
+  if (db && isOnline) {
+    try {
+      const [prodSnap, faltaSnap, vencSnap] = await Promise.all([
+        db.ref('produtos').once('value'),
+        db.ref('faltas').once('value'),
+        db.ref('vencimentos').once('value')
+      ]);
+      
+      produtos = prodSnap.val() ? Object.values(prodSnap.val()) : [];
+      faltas = faltaSnap.val() ? Object.values(faltaSnap.val()) : [];
+      vencimentos = vencSnap.val() ? Object.values(vencSnap.val()) : [];
+      
+      localStorage.setItem('produtos', JSON.stringify(produtos));
+      localStorage.setItem('faltas', JSON.stringify(faltas));
+      localStorage.setItem('vencimentos', JSON.stringify(vencimentos));
+    } catch (e) {
+      console.log('Erro Firebase:', e);
+      loadFromLocalStorage();
+    }
+  } else {
+    loadFromLocalStorage();
+  }
+}
+
+function loadFromLocalStorage() {
+  produtos = JSON.parse(localStorage.getItem('produtos') || '[]');
+  faltas = JSON.parse(localStorage.getItem('faltas') || '[]');
+  vencimentos = JSON.parse(localStorage.getItem('vencimentos') || '[]');
+}
+
+async function saveData(collection, data) {
+  localStorage.setItem(collection, JSON.stringify(data));
+  
+  if (db && isOnline) {
+    try {
+      const obj = {};
+      data.forEach(item => { obj[item.id] = item; });
+      await db.ref(collection).set(obj);
+    } catch (e) {
+      console.log('Erro ao salvar:', e);
+    }
+  }
+}
+
+async function syncData() {
+  if (db && isOnline) {
+    showLoading('Sincronizando...');
+    await loadAllData();
+    renderAll();
+    hideLoading();
+    toast('✅ Sincronizado!', 'success');
+  }
+}
+
+function forceSync() { syncData(); }
+
+// ===== NAVIGATION =====
+function switchTab(idx) {
+  currentTab = idx;
+  const pages = ['pageHome', 'pageProdutos', 'pageFaltas', 'pageConfig'];
+  const names = ['home', 'produtos', 'faltas', 'config'];
+  
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  
+  document.getElementById(pages[idx]).classList.add('active');
+  document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+  
+  navHistory = ['home'];
+  if (idx > 0) navHistory.push(names[idx]);
+  history.pushState({ page: names[idx] }, '', '');
+  
+  renderAll();
+}
+
+function goToPage(page, addHistory = true) {
+  stopScanner();
+  
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  
+  if (page === 'home') {
+    document.getElementById('pageHome').classList.add('active');
+    document.querySelectorAll('.tab-btn')[0].classList.add('active');
+    currentTab = 0;
+    renderHome();
+  } else if (page === 'produtos') {
+    document.getElementById('pageProdutos').classList.add('active');
+    document.querySelectorAll('.tab-btn')[1].classList.add('active');
+    currentTab = 1;
+    renderProdutos();
+  } else if (page === 'faltas') {
+    document.getElementById('pageFaltas').classList.add('active');
+    document.querySelectorAll('.tab-btn')[2].classList.add('active');
+    currentTab = 2;
+    renderFaltas();
+  } else if (page === 'vencimentos') {
+    document.getElementById('pageVencimentos').classList.add('active');
+    renderVencimentos();
+  } else if (page === 'config') {
+    document.getElementById('pageConfig').classList.add('active');
+    document.querySelectorAll('.tab-btn')[3].classList.add('active');
+    currentTab = 3;
+    updateSyncInfo();
+  }
+  
+  if (addHistory) {
+    navHistory.push(page);
+    history.pushState({ page }, '', '');
+  }
+}
+
+function goBack() {
+  if (navHistory.length > 1) {
+    history.back();
+  } else {
+    switchTab(0);
+  }
+}
+
+// ===== RENDER =====
+function renderAll() {
+  renderHome();
+  if (currentTab === 1) renderProdutos();
+  if (currentTab === 2) renderFaltas();
+}
+
+function renderHome() {
+  document.getElementById('statFaltas').textContent = faltas.length;
+  document.getElementById('statUrgentes').textContent = faltas.filter(f => f.prioridade === 'alta').length;
+  
+  const hoje = new Date(); hoje.setHours(0,0,0,0);
+  const diasAlerta = parseInt(config.diasVencimento || 7);
+  const vencendoCount = vencimentos.filter(v => {
+    const d = new Date(v.validade);
+    return Math.ceil((d - hoje) / 86400000) <= diasAlerta;
+  }).length;
+  document.getElementById('statVencendo').textContent = vencendoCount;
+  
+  // Urgentes
+  const urgentes = faltas.filter(f => f.prioridade === 'alta').slice(0, 3);
+  const secUrg = document.getElementById('sectionUrgentes');
+  const listaUrg = document.getElementById('listaUrgentesHome');
+  
+  if (urgentes.length > 0) {
+    secUrg.style.display = 'block';
+    listaUrg.innerHTML = urgentes.map(f => renderProdCardHTML(f, 'urgent')).join('');
+  } else {
+    secUrg.style.display = 'none';
+  }
+  
+  // Vencendo
+  const vencendo = vencimentos.filter(v => {
+    const d = new Date(v.validade);
+    return Math.ceil((d - hoje) / 86400000) <= diasAlerta;
+  }).sort((a, b) => new Date(a.validade) - new Date(b.validade)).slice(0, 3);
+  
+  const secVenc = document.getElementById('sectionVencendo');
+  const listaVenc = document.getElementById('listaVencendoHome');
+  
+  if (vencendo.length > 0) {
+    secVenc.style.display = 'block';
+    listaVenc.innerHTML = vencendo.map(v => {
+      const d = new Date(v.validade);
+      const diff = Math.ceil((d - hoje) / 86400000);
+      return renderVencCardHTML(v, diff);
+    }).join('');
+  } else {
+    secVenc.style.display = 'none';
+  }
+}
+
+function renderProdCardHTML(item, prioClass = '', badge = '') {
+  const img = item.imagem ? `<img src="${item.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
+  const badgeHTML = badge ? `<span class="prod-badge ${badge.class}">${badge.text}</span>` : '';
+  // Nome completo: Tipo + Marca + Volume + Variação
+  const nomeExibir = item.nomeCompleto || [item.tipo, item.marca, item.volume, item.variacao].filter(Boolean).join(' ') || item.nome;
+  
+  return `
+    <div class="prod-card ${prioClass}">
+      <div class="prod-img">${img}</div>
+      <div class="prod-info">
+        <div class="prod-name">${nomeExibir}</div>
+        ${item.codigo ? `<div class="prod-code">📊 ${item.codigo}</div>` : ''}
+        ${item.quantidade ? `<div class="prod-meta">📦 ${item.quantidade} ${item.unidade || 'UN'}</div>` : ''}
+      </div>
+      ${badgeHTML}
+    </div>
+  `;
+}
+
+function renderVencCardHTML(v, diff) {
+  const isExpired = diff < 0;
+  const diasAlerta = parseInt(config.diasVencimento || 7);
+  const img = v.imagem ? `<img src="${v.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
+  // Nome completo
+  const nomeExibir = v.nomeCompleto || [v.tipo, v.marca, v.volume, v.variacao].filter(Boolean).join(' ') || v.nome;
+  
+  return `
+    <div class="prod-card ${isExpired ? 'expiring' : ''}">
+      <div class="prod-img">${img}</div>
+      <div class="prod-info">
+        <div class="prod-name">${nomeExibir}</div>
+        <div class="prod-meta">📦 ${v.quantidade || 1} un • 📅 ${formatDate(v.validade)}</div>
+      </div>
+      <span class="prod-badge ${isExpired ? 'badge-danger' : diff <= diasAlerta ? 'badge-orange' : 'badge-success'}">
+        ${isExpired ? 'VENCIDO' : diff === 0 ? 'HOJE' : diff + 'd'}
+      </span>
+    </div>
+  `;
+}
+
+// ===== PRODUTOS =====
+function renderProdutos() {
+  const search = (document.getElementById('searchProdutos')?.value || '').toLowerCase();
+  let list = [...produtos];
+  
+  if (search) {
+    list = list.filter(p => 
+      p.nome.toLowerCase().includes(search) || 
+      (p.marca || '').toLowerCase().includes(search) ||
+      (p.codigo || '').includes(search)
+    );
+  }
+  
+  list.sort((a, b) => a.nome.localeCompare(b.nome));
+  document.getElementById('produtosCount').textContent = `${produtos.length} produtos`;
+  
+  const container = document.getElementById('listaProdutos');
+  
+  if (list.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">📦</div>
+        <div class="empty-text">${search ? 'Nenhum produto encontrado' : 'Nenhum produto cadastrado'}</div>
+      </div>
+    `;
+    return;
+  }
+  
+  container.innerHTML = list.map(p => {
+    const img = p.imagem ? `<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
+    // Nome completo: Tipo + Marca + Volume + Variação
+    const nomeExibir = p.nomeCompleto || [p.tipo, p.marca, p.volume, p.variacao].filter(Boolean).join(' ') || p.nome;
+    return `
+      <div class="prod-card">
+        <div class="prod-img">${img}</div>
+        <div class="prod-info">
+          <div class="prod-name">${nomeExibir}</div>
+          ${p.codigo ? `<div class="prod-code">📊 ${p.codigo}</div>` : ''}
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="action-btn add" onclick="openFaltaComProduto('${p.id}')">➕ Falta</button>
+        <button class="action-btn edit" onclick="editarProduto('${p.id}')">✏️ Editar</button>
+        <button class="action-btn delete" onclick="excluirProduto('${p.id}')">🗑️</button>
+      </div>
+    `;
+  }).join('');
+}
+
+// ===== CADASTRO PRODUTO =====
+function openCadastro(produtoId = null) {
+  const produto = produtoId ? produtos.find(p => p.id === produtoId) : null;
+  currentImage = produto?.imagem || '';
+  
+  const html = `
+    <div class="modal-header">
+      <div class="modal-title">${produto ? '✏️ Editar Produto' : '📝 Cadastrar Produto'}</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- OPÇÕES DE ENTRADA -->
+      <div class="scan-options" id="scanOptions" ${produto ? 'style="display:none;"' : ''}>
+        <div class="scan-option active" onclick="setScanMode('manual')">
+          <div class="scan-option-icon">✏️</div>
+          <div class="scan-option-text">Manual</div>
+        </div>
+        <div class="scan-option" onclick="setScanMode('scan')">
+          <div class="scan-option-icon">📷</div>
+          <div class="scan-option-text">Escanear</div>
+        </div>
+        <div class="scan-option" onclick="setScanMode('digitar')">
+          <div class="scan-option-icon">🔢</div>
+          <div class="scan-option-text">Digitar Código</div>
+        </div>
+      </div>
+      
+      <!-- SCANNER -->
+      <div id="scannerArea" style="display:none;">
+        <div id="scannerContainer"></div>
+        <button class="btn btn-danger btn-block" onclick="stopScanner()" style="margin-top:10px;">⏹️ Parar Scanner</button>
+      </div>
+      
+      <!-- DIGITAR CÓDIGO -->
+      <div id="digitarArea" style="display:none;">
+        <div class="form-group">
+          <label class="form-label">Código de Barras</label>
+          <input type="text" class="form-input" id="codigoInput" placeholder="Digite o código..." inputmode="numeric">
+        </div>
+        <button class="btn btn-primary btn-block" onclick="buscarPorCodigo()">🔍 Buscar na Internet</button>
+      </div>
+      
+      <!-- RESULTADO DA BUSCA -->
+      <div id="foundResult" style="display:none;"></div>
+      
+      <!-- IMAGEM -->
+      <div class="img-preview ${currentImage ? 'has-image' : ''}" id="imgPreview">
+        ${currentImage ? `<img src="${currentImage}">` : '📦'}
+      </div>
+      <div style="display:flex;gap:8px;justify-content:center;margin-bottom:16px;">
+        <label class="btn btn-sm btn-outline" style="cursor:pointer;">
+          📷 Foto
+          <input type="file" accept="image/*" capture="environment" style="display:none;" onchange="handlePhoto(event)">
+        </label>
+        <label class="btn btn-sm btn-outline" style="cursor:pointer;">
+          🖼️ Galeria
+          <input type="file" accept="image/*" style="display:none;" onchange="handlePhoto(event)">
+        </label>
+      </div>
+      
+      <!-- FORMULÁRIO -->
+      <div id="formProduto">
+        <div class="form-group">
+          <label class="form-label">Código de Barras</label>
+          <input type="text" class="form-input" id="cadCodigo" placeholder="Código do produto" value="${produto?.codigo || ''}">
+        </div>
+        
+        <div style="background:var(--primary-light);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px;">
+          <div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:12px;">📝 Dados do Produto (formam o nome completo)</div>
+          
+          <div class="form-group">
+            <label class="form-label">1️⃣ Tipo / Categoria *</label>
+            <input type="text" class="form-input" id="cadTipo" placeholder="Ex: Desodorante, Arroz, Detergente, Shampoo..." value="${produto?.tipo || ''}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">2️⃣ Marca *</label>
+            <input type="text" class="form-input" id="cadMarca" placeholder="Ex: Rexona, Tio João, Ypê..." value="${produto?.marca || ''}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">3️⃣ Volume / Peso</label>
+            <input type="text" class="form-input" id="cadVolume" placeholder="Ex: 1kg, 500ml, 2L, 200g..." value="${produto?.volume || ''}">
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label">4️⃣ Fragrância / Cor / Variação</label>
+            <input type="text" class="form-input" id="cadVariacao" placeholder="Ex: Powder, Lavanda, Tradicional, Azul..." value="${produto?.variacao || ''}">
+          </div>
+        </div>
+        
+        <!-- Preview do nome completo -->
+        <div style="background:var(--gray-100);border-radius:var(--radius-sm);padding:12px;margin-bottom:16px;">
+          <div style="font-size:11px;color:var(--gray-500);margin-bottom:4px;">📋 Nome completo do produto:</div>
+          <div id="previewNome" style="font-size:15px;font-weight:700;color:var(--gray-800);min-height:22px;">-</div>
+        </div>
+        
+        <input type="hidden" id="cadNome" value="${produto?.nome || ''}">
+        
+        <button class="btn btn-success btn-block btn-lg" onclick="salvarProduto('${produtoId || ''}')"
+          💾 Salvar Produto
+        </button>
+      </div>
+    </div>
+  `;
+  
+  showModal(html);
+  
+  // Adicionar listeners após renderizar
+  setTimeout(() => {
+    addCadastroListeners();
+  }, 100);
+}
+
+// Atualizar preview do nome completo
+function atualizarPreviewNome() {
+  const tipo = document.getElementById('cadTipo')?.value.trim() || '';
+  const marca = document.getElementById('cadMarca')?.value.trim() || '';
+  const volume = document.getElementById('cadVolume')?.value.trim() || '';
+  const variacao = document.getElementById('cadVariacao')?.value.trim() || '';
+  
+  const partes = [tipo, marca, volume, variacao].filter(Boolean);
+  const nomeCompleto = partes.join(' ') || '-';
+  
+  const preview = document.getElementById('previewNome');
+  if (preview) {
+    preview.textContent = nomeCompleto;
+  }
+}
+
+// Adicionar listeners ao abrir modal de cadastro
+function addCadastroListeners() {
+  ['cadTipo', 'cadMarca', 'cadVolume', 'cadVariacao'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', atualizarPreviewNome);
+    }
+  });
+  atualizarPreviewNome();
+}
+
+function setScanMode(mode) {
+  document.querySelectorAll('.scan-option').forEach(o => o.classList.remove('active'));
+  document.getElementById('scannerArea').style.display = 'none';
+  document.getElementById('digitarArea').style.display = 'none';
+  document.getElementById('foundResult').style.display = 'none';
+  stopScanner();
+  
+  if (mode === 'scan') {
+    document.querySelectorAll('.scan-option')[1].classList.add('active');
+    document.getElementById('scannerArea').style.display = 'block';
+    startScanner();
+  } else if (mode === 'digitar') {
+    document.querySelectorAll('.scan-option')[2].classList.add('active');
+    document.getElementById('digitarArea').style.display = 'block';
+    setTimeout(() => document.getElementById('codigoInput')?.focus(), 100);
+  } else {
+    document.querySelectorAll('.scan-option')[0].classList.add('active');
+  }
+}
+
+// ===== SCANNER =====
+function startScanner() {
+  if (scannerRunning) return;
+  
+  const container = document.getElementById('scannerContainer');
+  container.innerHTML = '<div id="qr-reader"></div>';
+  
+  html5QrCode = new Html5Qrcode('qr-reader');
+  html5QrCode.start(
+    { facingMode: 'environment' },
+    { fps: 10, qrbox: { width: 250, height: 150 } },
+    onScanSuccess,
+    () => {}
+  ).then(() => {
+    scannerRunning = true;
+  }).catch(err => {
+    toast('📷 Não foi possível acessar a câmera', 'error');
+    console.log(err);
+  });
+}
+
+function stopScanner() {
+  if (html5QrCode && scannerRunning) {
+    html5QrCode.stop().then(() => {
+      scannerRunning = false;
+      html5QrCode.clear();
+    }).catch(() => {});
+  }
+  scannerRunning = false;
+}
+
+function onScanSuccess(code) {
+  if (navigator.vibrate) navigator.vibrate(200);
+  playBeep();
+  stopScanner();
+  
+  document.getElementById('scannerArea').style.display = 'none';
+  document.getElementById('cadCodigo').value = code;
+  
+  buscarProdutoOnline(code);
+}
+
+function playBeep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.frequency.value = 1200;
+    gain.gain.value = 0.3;
+    osc.start();
+    osc.stop(ctx.currentTime + 0.15);
+  } catch(e) {}
+}
+
+function detectarTipoProduto(nome, categorias, marca) {
+  const texto = `${nome} ${categorias} ${marca}`.toLowerCase();
+  
+  // Higiene e Beleza
+  if (/desodorante|antitranspirante|deo/.test(texto)) return 'Desodorante';
+  if (/shampoo|xampu|condicionador/.test(texto)) return 'Shampoo';
+  if (/sabonete|soap/.test(texto)) return 'Sabonete';
+  if (/creme dental|pasta de dente|toothpaste/.test(texto)) return 'Creme Dental';
+  if (/escova de dente|toothbrush/.test(texto)) return 'Escova de Dente';
+  if (/papel higien|toilet paper/.test(texto)) return 'Papel Higiênico';
+  if (/absorvente|protetor diário/.test(texto)) return 'Absorvente';
+  if (/fralda|diaper/.test(texto)) return 'Fralda';
+  if (/hidratante|loção|moistur/.test(texto)) return 'Hidratante';
+  if (/perfume|colônia|fragrance/.test(texto)) return 'Perfume';
+  
+  // Limpeza
+  if (/desinfetante|disinfect/.test(texto)) return 'Desinfetante';
+  if (/água sanitária|bleach/.test(texto)) return 'Água Sanitária';
+  if (/detergente|dish.*soap/.test(texto)) return 'Detergente';
+  if (/sabão em pó|laundry|lava.?roupa/.test(texto)) return 'Sabão em Pó';
+  if (/amaciante|fabric.*soft/.test(texto)) return 'Amaciante';
+  if (/limpador|multiuso|cleaner/.test(texto)) return 'Limpador';
+  if (/esponja|sponge/.test(texto)) return 'Esponja';
+  if (/lustra.*móve|polish/.test(texto)) return 'Lustra Móveis';
+  
+  // Alimentos
+  if (/arroz|rice/.test(texto)) return 'Arroz';
+  if (/feijão|beans/.test(texto)) return 'Feijão';
+  if (/macarrão|pasta|spaghet/.test(texto)) return 'Macarrão';
+  if (/açúcar|sugar/.test(texto)) return 'Açúcar';
+  if (/café|coffee/.test(texto)) return 'Café';
+  if (/óleo|oil/.test(texto)) return 'Óleo';
+  if (/farinha|flour/.test(texto)) return 'Farinha';
+  if (/leite|milk/.test(texto)) return 'Leite';
+  if (/biscoito|cookie|bolacha/.test(texto)) return 'Biscoito';
+  if (/chocolate/.test(texto)) return 'Chocolate';
+  if (/suco|juice/.test(texto)) return 'Suco';
+  if (/refrigerante|soda|cola/.test(texto)) return 'Refrigerante';
+  if (/água mineral|water/.test(texto)) return 'Água Mineral';
+  if (/cerveja|beer/.test(texto)) return 'Cerveja';
+  if (/vinho|wine/.test(texto)) return 'Vinho';
+  if (/iogurte|yogurt/.test(texto)) return 'Iogurte';
+  if (/queijo|cheese/.test(texto)) return 'Queijo';
+  if (/presunto|ham/.test(texto)) return 'Presunto';
+  if (/salsicha|sausage/.test(texto)) return 'Salsicha';
+  if (/margarina|manteiga|butter/.test(texto)) return 'Margarina/Manteiga';
+  if (/molho|sauce|ketchup|maionese|mostarda/.test(texto)) return 'Molho/Condimento';
+  if (/tempero|spice|seasoning/.test(texto)) return 'Tempero';
+  if (/sal(?!\w)|salt/.test(texto)) return 'Sal';
+  if (/cereal|corn.*flakes|granola/.test(texto)) return 'Cereal';
+  if (/pão|bread/.test(texto)) return 'Pão';
+  
+  // Pet
+  if (/ração|pet.*food|dog.*food|cat.*food/.test(texto)) return 'Ração Pet';
+  
+  // Outros
+  if (/pilha|battery/.test(texto)) return 'Pilha';
+  if (/lâmpada|lamp|bulb/.test(texto)) return 'Lâmpada';
+  
+  return '';
+}
+
+function buscarPorCodigo() {
+  const codigo = document.getElementById('codigoInput').value.trim();
+  if (!codigo) {
+    toast('Digite o código!', 'warning');
+    return;
+  }
+  document.getElementById('cadCodigo').value = codigo;
+  document.getElementById('digitarArea').style.display = 'none';
+  buscarProdutoOnline(codigo);
+}
+
+async function buscarProdutoOnline(codigo) {
+  showLoading('🔍 Buscando produto na internet...');
+  
+  const apis = [
+    { nome: 'Open Food Facts', url: `https://world.openfoodfacts.org/api/v0/product/${codigo}.json` },
+    { nome: 'Open Beauty Facts', url: `https://world.openbeautyfacts.org/api/v0/product/${codigo}.json` },
+    { nome: 'Open Products Facts', url: `https://world.openproductsfacts.org/api/v0/product/${codigo}.json` }
+  ];
+  
+  for (const api of apis) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 8000);
+      const resp = await fetch(api.url, { signal: controller.signal });
+      clearTimeout(timeout);
+      const dados = await resp.json();
+      
+      if (dados.status === 1 && dados.product) {
+        const p = dados.product;
+        const nome = p.product_name_pt || p.product_name || '';
+        const marca = p.brands || '';
+        const imagem = p.image_front_url || p.image_url || '';
+        const volume = p.quantity || '';
+        
+        hideLoading();
+        
+        if (nome) {
+          // Detectar tipo/categoria do produto
+          const categorias = p.categories || p.categories_tags?.join(', ') || '';
+          const tipo = detectarTipoProduto(nome, categorias, marca);
+          
+          // Preencher formulário
+          document.getElementById('cadTipo').value = tipo;
+          document.getElementById('cadMarca').value = marca;
+          document.getElementById('cadVolume').value = volume;
+          document.getElementById('cadVariacao').value = '';
+          
+          // Atualizar preview
+          atualizarPreviewNome();
+          
+          if (imagem) {
+            currentImage = imagem;
+            document.getElementById('imgPreview').innerHTML = `<img src="${imagem}">`;
+            document.getElementById('imgPreview').classList.add('has-image');
+          }
+          
+          // Mostrar resultado
+          const foundDiv = document.getElementById('foundResult');
+          foundDiv.style.display = 'block';
+          foundDiv.innerHTML = `
+            <div class="found-card success">
+              ${imagem ? `<div class="found-img"><img src="${imagem}"></div>` : ''}
+              <div class="found-info">
+                <div class="found-title">✅ Produto Encontrado!</div>
+                <div class="found-name">${nome}</div>
+                <div class="found-meta">${marca} ${volume}</div>
+              </div>
+            </div>
+          `;
+          
+          toast('✅ Produto encontrado!', 'success');
+          return;
+        }
+      }
+    } catch (e) {
+      console.log('Erro:', e);
+    }
+  }
+  
+  hideLoading();
+  
+  const foundDiv = document.getElementById('foundResult');
+  foundDiv.style.display = 'block';
+  foundDiv.innerHTML = `
+    <div class="found-card warning">
+      <div class="found-info">
+        <div class="found-title" style="color:var(--warning);">😕 Não encontrado</div>
+        <div class="found-meta">Preencha os dados manualmente</div>
+      </div>
+    </div>
+  `;
+  
+  document.getElementById('cadNome').focus();
+}
+
+function handlePhoto(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      let w = img.width, h = img.height;
+      const max = 400;
+      if (w > max || h > max) {
+        if (w > h) { h = Math.round(h * max / w); w = max; }
+        else { w = Math.round(w * max / h); h = max; }
+      }
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      currentImage = canvas.toDataURL('image/jpeg', 0.7);
+      document.getElementById('imgPreview').innerHTML = `<img src="${currentImage}">`;
+      document.getElementById('imgPreview').classList.add('has-image');
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function salvarProduto(id) {
+  const tipo = document.getElementById('cadTipo').value.trim();
+  const marca = document.getElementById('cadMarca').value.trim();
+  const volume = document.getElementById('cadVolume').value.trim();
+  const variacao = document.getElementById('cadVariacao').value.trim();
+  const codigo = document.getElementById('cadCodigo').value.trim();
+  
+  if (!tipo) {
+    toast('Digite o tipo do produto!', 'error');
+    document.getElementById('cadTipo').focus();
+    return;
+  }
+  
+  if (!marca) {
+    toast('Digite a marca do produto!', 'error');
+    document.getElementById('cadMarca').focus();
+    return;
+  }
+  
+  // Criar nome completo na ordem: Tipo + Marca + Volume + Variação
+  const partes = [tipo, marca, volume, variacao].filter(Boolean);
+  const nomeCompleto = partes.join(' ');
+  const nome = nomeCompleto; // Nome é o nome completo
+  
+  if (id) {
+    const idx = produtos.findIndex(p => p.id === id);
+    if (idx >= 0) {
+      produtos[idx] = { 
+        ...produtos[idx], 
+        nome, 
+        tipo,
+        marca, 
+        volume, 
+        variacao,
+        codigo, 
+        imagem: currentImage, 
+        nomeCompleto 
+      };
+    }
+  } else {
+    produtos.push({
+      id: Date.now().toString(),
+      nome,
+      tipo,
+      marca,
+      volume,
+      variacao,
+      codigo,
+      imagem: currentImage,
+      nomeCompleto,
+      createdAt: new Date().toISOString()
+    });
+  }
+  
+  await saveData('produtos', produtos);
+  closeModal();
+  stopScanner();
+  renderProdutos();
+  renderHome();
+  toast('✅ Produto salvo!', 'success');
+}
+
+function editarProduto(id) {
+  openCadastro(id);
+}
+
+async function excluirProduto(id) {
+  const p = produtos.find(x => x.id === id);
+  if (!confirm(`Excluir "${p?.nome}"?`)) return;
+  
+  produtos = produtos.filter(x => x.id !== id);
+  await saveData('produtos', produtos);
+  renderProdutos();
+  toast('🗑️ Excluído!', 'success');
+}
+
+// ===== FALTA =====
+function openRealizarFalta() {
+  const html = `
+    <div class="modal-header">
+      <div class="modal-title">➕ Registrar Falta</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="buscaFalta" placeholder="Buscar produto..." oninput="renderBuscaFalta()">
+      </div>
+      <div id="resultadosFalta"></div>
+    </div>
+  `;
+  
+  showModal(html);
+  setTimeout(() => document.getElementById('buscaFalta')?.focus(), 100);
+}
+
+function renderBuscaFalta() {
+  const search = document.getElementById('buscaFalta').value.toLowerCase();
+  const container = document.getElementById('resultadosFalta');
+  
+  if (!search) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-text">Digite para buscar</div></div>';
+    return;
+  }
+  
+  const results = produtos.filter(p => 
+    p.nome.toLowerCase().includes(search) || 
+    (p.marca || '').toLowerCase().includes(search) ||
+    (p.codigo || '').includes(search)
+  ).slice(0, 10);
+  
+  if (results.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-text">Nenhum produto encontrado</div></div>';
+    return;
+  }
+  
+  container.innerHTML = results.map(p => {
+    const img = p.imagem ? `<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
+    // Nome completo
+    const nomeExibir = p.nomeCompleto || [p.tipo, p.marca, p.volume, p.variacao].filter(Boolean).join(' ') || p.nome;
+    return `
+      <div class="prod-card clickable" onclick="openFaltaComProduto('${p.id}')">
+        <div class="prod-img">${img}</div>
+        <div class="prod-info">
+          <div class="prod-name">${nomeExibir}</div>
+          ${p.codigo ? `<div class="prod-code">📊 ${p.codigo}</div>` : ''}
+        </div>
+        <span style="color:var(--primary);font-size:20px;">→</span>
+      </div>
+    `;
+  }).join('');
+}
+
+function openFaltaComProduto(produtoId) {
+  const p = produtos.find(x => x.id === produtoId);
+  if (!p) return;
+  
+  const img = p.imagem ? `<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
+  // Nome completo: Tipo + Marca + Volume + Variação
+  const nomeExibir = p.nomeCompleto || [p.tipo, p.marca, p.volume, p.variacao].filter(Boolean).join(' ') || p.nome;
+  
+  const html = `
+    <div class="modal-header">
+      <div class="modal-title">➕ Registrar Falta</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- PRODUTO SELECIONADO -->
+      <div style="background:var(--primary-light);border:2px solid var(--primary);border-radius:var(--radius);padding:16px;margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div class="prod-img" style="width:80px;height:80px;font-size:36px;">${img}</div>
+          <div style="flex:1;">
+            <div style="font-size:16px;font-weight:700;color:var(--gray-800);line-height:1.3;">${nomeExibir}</div>
+            ${p.codigo ? `<div style="font-size:12px;color:var(--primary);margin-top:4px;font-family:monospace;">📊 ${p.codigo}</div>` : ''}
+          </div>
+        </div>
+      </div>
+      
+      <!-- PRIORIDADE -->
+      <div class="form-group">
+        <label class="form-label">🚨 Prioridade da Falta</label>
+        <div class="priority-selector">
+          <button class="priority-btn alta selected" onclick="setPrioridade(this,'alta')">🔴 Urgente</button>
+          <button class="priority-btn media" onclick="setPrioridade(this,'media')">🟡 Média</button>
+          <button class="priority-btn baixa" onclick="setPrioridade(this,'baixa')">🟢 Baixa</button>
+        </div>
+        <input type="hidden" id="faltaPrioridade" value="alta">
+      </div>
+      
+      <!-- ESTOQUE ATUAL -->
+      <div style="background:var(--gray-50);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px;">
+        <label class="form-label" style="margin-bottom:10px;">📦 Estoque Atual</label>
+        <div style="display:flex;gap:10px;">
+          <div class="form-group" style="flex:1;margin-bottom:0;">
+            <input type="number" class="form-input" id="faltaQtd" value="0" min="0" placeholder="Qtd">
+            <div style="font-size:11px;color:var(--gray-500);margin-top:4px;text-align:center;">Quantidade</div>
+          </div>
+          <div class="form-group" style="flex:1;margin-bottom:0;">
+            <select class="form-select" id="faltaUnid">
+              <option value="UN">UN - Unidade</option>
+              <option value="CX">CX - Caixa</option>
+              <option value="PCT">PCT - Pacote</option>
+              <option value="KG">KG - Quilo</option>
+              <option value="FD">FD - Fardo</option>
+              <option value="DZ">DZ - Dúzia</option>
+              <option value="LT">LT - Litro</option>
+            </select>
+            <div style="font-size:11px;color:var(--gray-500);margin-top:4px;text-align:center;">Unidade</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- SUGESTÃO DE PEDIDO -->
+      <div style="background:var(--success-light);border:2px solid var(--success);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px;">
+        <label class="form-label" style="color:var(--success);margin-bottom:10px;">📝 Sugestão de Pedido</label>
+        <div style="display:flex;gap:10px;margin-bottom:12px;">
+          <div class="form-group" style="flex:1;margin-bottom:0;">
+            <input type="number" class="form-input" id="sugestaoQtd" value="1" min="1" placeholder="Qtd" style="border-color:var(--success);">
+            <div style="font-size:11px;color:var(--success);margin-top:4px;text-align:center;">Quantidade</div>
+          </div>
+          <div class="form-group" style="flex:1;margin-bottom:0;">
+            <select class="form-select" id="sugestaoUnid" style="border-color:var(--success);">
+              <option value="UN">UN - Unidade</option>
+              <option value="CX">CX - Caixa</option>
+              <option value="PCT">PCT - Pacote</option>
+              <option value="KG">KG - Quilo</option>
+              <option value="FD">FD - Fardo</option>
+              <option value="DZ">DZ - Dúzia</option>
+              <option value="LT">LT - Litro</option>
+            </select>
+            <div style="font-size:11px;color:var(--success);margin-top:4px;text-align:center;">Unidade</div>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <textarea class="form-input" id="faltaObs" placeholder="Observações adicionais... (opcional)" style="min-height:60px;border-color:var(--success);"></textarea>
+        </div>
+      </div>
+      
+      <button class="btn btn-success btn-block btn-lg" onclick="salvarFalta('${produtoId}')">
+        ✅ Registrar Falta
+      </button>
+    </div>
+  `;
+  
+  showModal(html);
+}
+
+function setPrioridade(btn, valor) {
+  document.querySelectorAll('.priority-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  document.getElementById('faltaPrioridade').value = valor;
+}
+
+async function salvarFalta(produtoId) {
+  const p = produtos.find(x => x.id === produtoId);
+  if (!p) return;
+  
+  // Nome completo: Tipo + Marca + Volume + Variação
+  const nomeCompleto = p.nomeCompleto || [p.tipo, p.marca, p.volume, p.variacao].filter(Boolean).join(' ') || p.nome;
+  
+  // Estoque atual
+  const estoqueQtd = parseInt(document.getElementById('faltaQtd').value) || 0;
+  const estoqueUnid = document.getElementById('faltaUnid').value;
+  
+  // Sugestão de pedido
+  const sugestaoQtd = parseInt(document.getElementById('sugestaoQtd').value) || 1;
+  const sugestaoUnid = document.getElementById('sugestaoUnid').value;
+  const sugestaoObs = document.getElementById('faltaObs').value.trim();
+  
+  // Montar texto da sugestão
+  let sugestaoTexto = `Pedir ${sugestaoQtd} ${sugestaoUnid}`;
+  if (sugestaoObs) sugestaoTexto += ` - ${sugestaoObs}`;
+  
+  const falta = {
+    id: Date.now().toString(),
+    produtoId,
+    nome: p.nome,
+    tipo: p.tipo || '',
+    marca: p.marca || '',
+    volume: p.volume || '',
+    variacao: p.variacao || '',
+    codigo: p.codigo || '',
+    imagem: p.imagem || '',
+    nomeCompleto,
+    // Estoque atual
+    estoqueQtd,
+    estoqueUnid,
+    // Sugestão de pedido
+    sugestaoQtd,
+    sugestaoUnid,
+    sugestaoObs,
+    sugestao: sugestaoTexto,
+    // Outros
+    quantidade: estoqueQtd,
+    unidade: estoqueUnid,
+    prioridade: document.getElementById('faltaPrioridade').value,
+    pedido: false,
+    createdAt: new Date().toISOString()
+  };
+  
+  faltas.unshift(falta);
+  await saveData('faltas', faltas);
+  closeModal();
+  renderAll();
+  toast('✅ Falta registrada!', 'success');
+  if (navigator.vibrate) navigator.vibrate(200);
+}
+
+// ===== LISTA FALTAS =====
+function setFaltaFilter(chip) {
+  document.querySelectorAll('#pageFaltas .chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  currentFaltaFilter = chip.dataset.filter;
+  renderFaltas();
+}
+
+function renderFaltas() {
+  let list = [...faltas];
+  
+  if (currentFaltaFilter === 'alta' || currentFaltaFilter === 'media' || currentFaltaFilter === 'baixa') {
+    list = list.filter(f => f.prioridade === currentFaltaFilter);
+  } else if (currentFaltaFilter === 'pedido') {
+    list = list.filter(f => f.pedido);
+  }
+  
+  document.getElementById('faltasCount').textContent = `${faltas.length} itens`;
+  const container = document.getElementById('listaFaltas');
+  
+  if (list.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">Nenhuma falta</div></div>';
+    return;
+  }
+  
+  container.innerHTML = list.map(f => {
+    const prioClass = f.prioridade === 'alta' ? 'urgent' : f.prioridade === 'media' ? 'medium' : 'low';
+    const badgeClass = f.prioridade === 'alta' ? 'badge-danger' : f.prioridade === 'media' ? 'badge-warning' : 'badge-success';
+    const prioText = f.prioridade === 'alta' ? 'URGENTE' : f.prioridade === 'media' ? 'MÉDIA' : 'BAIXA';
+    const img = f.imagem ? `<img src="${f.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
+    // Nome completo
+    const nomeExibir = f.nomeCompleto || [f.tipo, f.marca, f.volume, f.variacao].filter(Boolean).join(' ') || f.nome;
+    
+    // Estoque e sugestão
+    const estoqueInfo = `📦 Estoque: ${f.estoqueQtd || f.quantidade || 0} ${f.estoqueUnid || f.unidade || 'UN'}`;
+    const sugestaoInfo = f.sugestaoQtd ? `📝 Pedir: ${f.sugestaoQtd} ${f.sugestaoUnid || 'UN'}` : (f.sugestao ? `💬 ${f.sugestao}` : '');
+    
+    return `
+      <div class="prod-card ${prioClass}">
+        <div class="prod-img">${f.pedido ? '✅' : img}</div>
+        <div class="prod-info">
+          <div class="prod-name">${nomeExibir}</div>
+          ${f.codigo ? `<div class="prod-code">📊 ${f.codigo}</div>` : ''}
+          <div class="prod-meta">${estoqueInfo}</div>
+          ${sugestaoInfo ? `<div class="prod-meta" style="color:var(--success);font-weight:600;">${sugestaoInfo}</div>` : ''}
+          ${f.sugestaoObs ? `<div class="prod-meta">💬 ${f.sugestaoObs}</div>` : ''}
+        </div>
+        <span class="prod-badge ${f.pedido ? 'badge-info' : badgeClass}">${f.pedido ? '✅' : prioText}</span>
+      </div>
+      <div class="card-actions">
+        ${!f.pedido ? `<button class="action-btn add" onclick="marcarPedido('${f.id}')">✅ Pedido</button>` : `<button class="action-btn edit" onclick="marcarPedido('${f.id}')">↩️ Desfazer</button>`}
+        <button class="action-btn edit" onclick="editarFalta('${f.id}')">✏️</button>
+        <button class="action-btn delete" onclick="excluirFalta('${f.id}')">🗑️</button>
+      </div>
+    `;
+  }).join('');
+}
+
+async function marcarPedido(id) {
+  const idx = faltas.findIndex(f => f.id === id);
+  if (idx >= 0) {
+    faltas[idx].pedido = !faltas[idx].pedido;
+    await saveData('faltas', faltas);
+    renderFaltas();
+    renderHome();
+    toast(faltas[idx].pedido ? '✅ Pedido!' : '↩️ Desmarcado', 'success');
+  }
+}
+
+function editarFalta(id) {
+  const f = faltas.find(x => x.id === id);
+  if (!f) return;
+  
+  const img = f.imagem ? `<img src="${f.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
+  // Nome completo
+  const nomeExibir = f.nomeCompleto || [f.tipo, f.marca, f.volume, f.variacao].filter(Boolean).join(' ') || f.nome;
+  const unidades = ['UN','CX','PCT','KG','FD','DZ','LT'];
+  
+  const html = `
+    <div class="modal-header">
+      <div class="modal-title">✏️ Editar Falta</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- PRODUTO -->
+      <div style="background:var(--gray-100);border-radius:var(--radius);padding:12px;margin-bottom:16px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="prod-img" style="width:50px;height:50px;">${img}</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;">${nomeExibir}</div>
+            ${f.codigo ? `<div style="font-size:11px;color:var(--gray-500);font-family:monospace;">📊 ${f.codigo}</div>` : ''}
+          </div>
+        </div>
+      </div>
+      
+      <!-- PRIORIDADE -->
+      <div class="form-group">
+        <label class="form-label">🚨 Prioridade</label>
+        <div class="priority-selector">
+          <button class="priority-btn alta ${f.prioridade === 'alta' ? 'selected' : ''}" onclick="setPrioridade(this,'alta')">🔴 Urgente</button>
+          <button class="priority-btn media ${f.prioridade === 'media' ? 'selected' : ''}" onclick="setPrioridade(this,'media')">🟡 Média</button>
+          <button class="priority-btn baixa ${f.prioridade === 'baixa' ? 'selected' : ''}" onclick="setPrioridade(this,'baixa')">🟢 Baixa</button>
+        </div>
+        <input type="hidden" id="faltaPrioridade" value="${f.prioridade}">
+      </div>
+      
+      <!-- ESTOQUE -->
+      <div style="background:var(--gray-50);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px;">
+        <label class="form-label" style="margin-bottom:10px;">📦 Estoque Atual</label>
+        <div style="display:flex;gap:10px;">
+          <div class="form-group" style="flex:1;margin-bottom:0;">
+            <input type="number" class="form-input" id="editEstoqueQtd" value="${f.estoqueQtd || f.quantidade || 0}" min="0">
+          </div>
+          <div class="form-group" style="flex:1;margin-bottom:0;">
+            <select class="form-select" id="editEstoqueUnid">
+              ${unidades.map(u => `<option value="${u}" ${(f.estoqueUnid || f.unidade) === u ? 'selected' : ''}>${u}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <!-- SUGESTÃO DE PEDIDO -->
+      <div style="background:var(--success-light);border:2px solid var(--success);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px;">
+        <label class="form-label" style="color:var(--success);margin-bottom:10px;">📝 Sugestão de Pedido</label>
+        <div style="display:flex;gap:10px;margin-bottom:12px;">
+          <div class="form-group" style="flex:1;margin-bottom:0;">
+            <input type="number" class="form-input" id="editSugestaoQtd" value="${f.sugestaoQtd || 1}" min="1" style="border-color:var(--success);">
+          </div>
+          <div class="form-group" style="flex:1;margin-bottom:0;">
+            <select class="form-select" id="editSugestaoUnid" style="border-color:var(--success);">
+              ${unidades.map(u => `<option value="${u}" ${(f.sugestaoUnid || 'UN') === u ? 'selected' : ''}>${u}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <textarea class="form-input" id="editSugestaoObs" style="min-height:60px;border-color:var(--success);" placeholder="Observações...">${f.sugestaoObs || ''}</textarea>
+        </div>
+      </div>
+      
+      <button class="btn btn-success btn-block btn-lg" onclick="salvarEdicaoFalta('${id}')">💾 Salvar</button>
+    </div>
+  `;
+  
+  showModal(html);
+}
+
+async function salvarEdicaoFalta(id) {
+  const idx = faltas.findIndex(f => f.id === id);
+  if (idx >= 0) {
+    // Prioridade
+    faltas[idx].prioridade = document.getElementById('faltaPrioridade').value;
+    
+    // Estoque atual
+    faltas[idx].estoqueQtd = parseInt(document.getElementById('editEstoqueQtd').value) || 0;
+    faltas[idx].estoqueUnid = document.getElementById('editEstoqueUnid').value;
+    faltas[idx].quantidade = faltas[idx].estoqueQtd;
+    faltas[idx].unidade = faltas[idx].estoqueUnid;
+    
+    // Sugestão de pedido
+    faltas[idx].sugestaoQtd = parseInt(document.getElementById('editSugestaoQtd').value) || 1;
+    faltas[idx].sugestaoUnid = document.getElementById('editSugestaoUnid').value;
+    faltas[idx].sugestaoObs = document.getElementById('editSugestaoObs').value.trim();
+    
+    // Montar texto da sugestão
+    let sugestaoTexto = `Pedir ${faltas[idx].sugestaoQtd} ${faltas[idx].sugestaoUnid}`;
+    if (faltas[idx].sugestaoObs) sugestaoTexto += ` - ${faltas[idx].sugestaoObs}`;
+    faltas[idx].sugestao = sugestaoTexto;
+    
+    await saveData('faltas', faltas);
+    closeModal();
+    renderFaltas();
+    renderHome();
+    toast('✅ Atualizado!', 'success');
+  }
+}
+
+async function excluirFalta(id) {
+  if (!confirm('Excluir falta?')) return;
+  faltas = faltas.filter(f => f.id !== id);
+  await saveData('faltas', faltas);
+  renderFaltas();
+  renderHome();
+  toast('🗑️ Excluído!', 'success');
+}
+
+// ===== VENCIMENTOS =====
+function setVencFilter(chip) {
+  document.querySelectorAll('#pageVencimentos .chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  currentVencFilter = chip.dataset.venc;
+  renderVencimentos();
+}
+
+function openAddVencimento() {
+  const html = `
+    <div class="modal-header">
+      <div class="modal-title">📅 Adicionar Vencimento</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="buscaVenc" placeholder="Buscar produto..." oninput="renderBuscaVenc()">
+      </div>
+      <div id="resultadosVenc"></div>
+    </div>
+  `;
+  
+  showModal(html);
+  setTimeout(() => document.getElementById('buscaVenc')?.focus(), 100);
+}
+
+function renderBuscaVenc() {
+  const search = document.getElementById('buscaVenc').value.toLowerCase();
+  const container = document.getElementById('resultadosVenc');
+  
+  if (!search) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-text">Digite para buscar</div></div>';
+    return;
+  }
+  
+  const results = produtos.filter(p => 
+    p.nome.toLowerCase().includes(search) || 
+    (p.marca || '').toLowerCase().includes(search)
+  ).slice(0, 10);
+  
+  if (results.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-text">Nenhum produto</div></div>';
+    return;
+  }
+  
+  container.innerHTML = results.map(p => {
+    const img = p.imagem ? `<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
+    // Nome completo
+    const nomeExibir = p.nomeCompleto || [p.tipo, p.marca, p.volume, p.variacao].filter(Boolean).join(' ') || p.nome;
+    return `
+      <div class="prod-card clickable" onclick="abrirFormVenc('${p.id}')">
+        <div class="prod-img">${img}</div>
+        <div class="prod-info">
+          <div class="prod-name">${nomeExibir}</div>
+          ${p.codigo ? `<div class="prod-code">📊 ${p.codigo}</div>` : ''}
+        </div>
+        <span style="color:var(--success);">+ Venc</span>
+      </div>
+    `;
+  }).join('');
+}
+
+function abrirFormVenc(produtoId) {
+  const p = produtos.find(x => x.id === produtoId);
+  if (!p) return;
+  
+  const img = p.imagem ? `<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
+  // Nome completo
+  const nomeExibir = p.nomeCompleto || [p.tipo, p.marca, p.volume, p.variacao].filter(Boolean).join(' ') || p.nome;
+  
+  const html = `
+    <div class="modal-header">
+      <div class="modal-title">📅 Adicionar Vencimento</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="prod-card" style="margin-bottom:20px;">
+        <div class="prod-img">${img}</div>
+        <div class="prod-info">
+          <div class="prod-name">${nomeExibir}</div>
+          ${p.codigo ? `<div class="prod-code">📊 ${p.codigo}</div>` : ''}
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">Data de Validade *</label>
+        <input type="date" class="form-input" id="vencData">
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">Quantidade</label>
+        <input type="number" class="form-input" id="vencQtd" value="1" min="1">
+      </div>
+      
+      <button class="btn btn-success btn-block btn-lg" onclick="salvarVencimento('${produtoId}')">
+        ✅ Salvar
+      </button>
+    </div>
+  `;
+  
+  showModal(html);
+}
+
+async function salvarVencimento(produtoId) {
+  const p = produtos.find(x => x.id === produtoId);
+  const data = document.getElementById('vencData').value;
+  const qtd = parseInt(document.getElementById('vencQtd').value) || 1;
+  
+  if (!data) {
+    toast('Selecione a data!', 'error');
+    return;
+  }
+  
+  // Nome completo: Tipo + Marca + Volume + Variação
+  const nomeCompleto = p.nomeCompleto || [p.tipo, p.marca, p.volume, p.variacao].filter(Boolean).join(' ') || p.nome;
+  
+  vencimentos.push({
+    id: Date.now().toString(),
+    produtoId,
+    nome: p.nome,
+    tipo: p.tipo || '',
+    marca: p.marca || '',
+    volume: p.volume || '',
+    variacao: p.variacao || '',
+    imagem: p.imagem || '',
+    codigo: p.codigo || '',
+    nomeCompleto,
+    validade: data,
+    quantidade: qtd,
+    createdAt: new Date().toISOString()
+  });
+  
+  await saveData('vencimentos', vencimentos);
+  closeModal();
+  renderVencimentos();
+  renderHome();
+  toast('✅ Salvo!', 'success');
+}
+
+function renderVencimentos() {
+  const hoje = new Date(); hoje.setHours(0,0,0,0);
+  
+  let list = vencimentos.map(v => {
+    const d = new Date(v.validade);
+    return { ...v, dias: Math.ceil((d - hoje) / 86400000) };
+  });
+  
+  if (currentVencFilter === 'vencidos') list = list.filter(v => v.dias < 0);
+  else if (currentVencFilter === '7dias') list = list.filter(v => v.dias >= 0 && v.dias <= 7);
+  else if (currentVencFilter === '30dias') list = list.filter(v => v.dias >= 0 && v.dias <= 30);
+  
+  list.sort((a, b) => a.dias - b.dias);
+  
+  const container = document.getElementById('listaVencimentos');
+  
+  if (list.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📅</div><div class="empty-text">Nenhum vencimento</div></div>';
+    return;
+  }
+  
+  const diasAlerta = parseInt(config.diasVencimento || 7);
+  
+  container.innerHTML = list.map(v => {
+    const isExpired = v.dias < 0;
+    const isClose = v.dias >= 0 && v.dias <= diasAlerta;
+    const img = v.imagem ? `<img src="${v.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
+    // Nome completo
+    const nomeExibir = v.nomeCompleto || [v.tipo, v.marca, v.volume, v.variacao].filter(Boolean).join(' ') || v.nome;
+    
+    return `
+      <div class="prod-card ${isExpired ? 'expiring' : ''}">
+        <div class="prod-img">${img}</div>
+        <div class="prod-info">
+          <div class="prod-name">${nomeExibir}</div>
+          ${v.codigo ? `<div class="prod-code">📊 ${v.codigo}</div>` : ''}
+          <div class="prod-meta">📦 ${v.quantidade} un • 📅 ${formatDate(v.validade)}</div>
+        </div>
+        <span class="prod-badge ${isExpired ? 'badge-danger' : isClose ? 'badge-orange' : 'badge-success'}">
+          ${isExpired ? 'VENCIDO' : v.dias === 0 ? 'HOJE' : v.dias + 'd'}
+        </span>
+      </div>
+      <div class="card-actions">
+        <button class="action-btn add" onclick="criarFaltaDeVenc('${v.id}')">➕ Falta</button>
+        <button class="action-btn delete" onclick="excluirVenc('${v.id}')">🗑️</button>
+      </div>
+    `;
+  }).join('');
+}
+
+async function criarFaltaDeVenc(vencId) {
+  const v = vencimentos.find(x => x.id === vencId);
+  if (!v) return;
+  
+  faltas.unshift({
+    id: Date.now().toString(),
+    produtoId: v.produtoId,
+    nome: v.nome,
+    marca: v.marca,
+    volume: v.volume,
+    imagem: v.imagem,
+    quantidade: v.quantidade,
+    unidade: 'UN',
+    prioridade: 'alta',
+    sugestao: 'Produto vencido/vencendo',
+    pedido: false,
+    createdAt: new Date().toISOString()
+  });
+  
+  await saveData('faltas', faltas);
+  renderAll();
+  toast('✅ Falta criada!', 'success');
+}
+
+async function excluirVenc(id) {
+  if (!confirm('Excluir?')) return;
+  vencimentos = vencimentos.filter(v => v.id !== id);
+  await saveData('vencimentos', vencimentos);
+  renderVencimentos();
+  renderHome();
+  toast('🗑️ Excluído!', 'success');
+}
+
+// ===== CONFIG =====
+function loadConfig() {
+  config = JSON.parse(localStorage.getItem('config') || '{}');
+  document.getElementById('configLoja').value = config.loja || '';
+  document.getElementById('configResp').value = config.responsavel || '';
+  document.getElementById('configDiasVenc').value = config.diasVencimento || '7';
+  updateVencInfo();
+}
+
+function updateVencInfo() {
+  const dias = parseInt(config.diasVencimento || 7);
+  let texto = '';
+  if (dias >= 30) {
+    const meses = Math.floor(dias / 30);
+    texto = `${meses} ${meses === 1 ? 'mês' : 'meses'} antes`;
+  } else {
+    texto = `${dias} dias antes`;
+  }
+  const info = document.getElementById('configVencInfo');
+  if (info) info.textContent = texto;
+}
+
+function saveConfig() {
+  config.loja = document.getElementById('configLoja').value;
+  config.responsavel = document.getElementById('configResp').value;
+  config.diasVencimento = document.getElementById('configDiasVenc').value;
+  localStorage.setItem('config', JSON.stringify(config));
+  updateVencInfo();
+  renderHome();
+}
+
+function updateSyncInfo() {
+  const info = document.getElementById('syncInfo');
+  if (db) {
+    info.innerHTML = `<span style="color:var(--success);">✅ Conectado ao Firebase</span><br>Dados sincronizados na nuvem`;
+  } else {
+    info.innerHTML = `<span style="color:var(--warning);">⚠️ Modo Offline</span>`;
+  }
+}
+
+function updateConnectionStatus() {
+  document.getElementById('connectionBanner').classList.toggle('show', !isOnline);
+}
+
+function exportarBackup() {
+  const backup = { versao: '2.0', data: new Date().toISOString(), produtos, faltas, vencimentos, config };
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `backup_${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  toast('📤 Exportado!', 'success');
+}
+
+function importarBackup(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = async function(ev) {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!confirm('Substituir dados?')) return;
+      
+      if (data.produtos) { produtos = data.produtos; await saveData('produtos', produtos); }
+      if (data.faltas) { faltas = data.faltas; await saveData('faltas', faltas); }
+      if (data.vencimentos) { vencimentos = data.vencimentos; await saveData('vencimentos', vencimentos); }
+      
+      loadConfig();
+      renderAll();
+      toast('📥 Importado!', 'success');
+    } catch {
+      toast('❌ Arquivo inválido!', 'error');
+    }
+  };
+  reader.readAsText(file);
+}
+
+async function limparTudo() {
+  if (!confirm('⚠️ Apagar TUDO?')) return;
+  if (!confirm('⚠️ CONFIRMAR?')) return;
+  
+  produtos = []; faltas = []; vencimentos = [];
+  await saveData('produtos', produtos);
+  await saveData('faltas', faltas);
+  await saveData('vencimentos', vencimentos);
+  renderAll();
+  toast('🗑️ Apagado!', 'success');
+}
+
+// ===== PDF =====
+function gerarPDF() {
+  if (faltas.length === 0) { toast('Lista vazia', 'warning'); return; }
+  
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  const loja = config.loja || 'Minha Loja';
+  const data = formatDate(new Date().toISOString().split('T')[0]);
+  
+  doc.setFillColor(37, 99, 235);
+  doc.rect(0, 0, 210, 25, 'F');
+  doc.setTextColor(255);
+  doc.setFontSize(16);
+  doc.text('LISTA DE FALTAS', 105, 12, { align: 'center' });
+  doc.setFontSize(10);
+  doc.text(`${loja} | ${data}`, 105, 20, { align: 'center' });
+  
+  doc.autoTable({
+    startY: 30,
+    head: [['#', 'Produto', 'Marca', 'Qtd', 'Prior.', 'Sugestão']],
+    body: faltas.map((f, i) => [
+      i + 1, f.nome, f.marca || '-', `${f.quantidade} ${f.unidade}`,
+      f.prioridade === 'alta' ? 'URGENTE' : f.prioridade === 'media' ? 'MÉDIA' : 'BAIXA',
+      f.sugestao || '-'
+    ]),
+    headStyles: { fillColor: [37, 99, 235] },
+    alternateRowStyles: { fillColor: [249, 250, 251] },
+    styles: { fontSize: 9 }
+  });
+  
+  doc.save(`faltas_${data.replace(/\//g, '-')}.pdf`);
+  toast('📄 PDF gerado!', 'success');
+}
+
+function compartilharWhatsApp() {
+  if (faltas.length === 0) { toast('Lista vazia', 'warning'); return; }
+  
+  const loja = config.loja || 'Minha Loja';
+  let text = `📦 *LISTA DE FALTAS - ${loja}*\n📅 ${formatDate(new Date().toISOString().split('T')[0])}\n\n`;
+  
+  ['alta', 'media', 'baixa'].forEach(p => {
+    const items = faltas.filter(f => f.prioridade === p);
+    if (items.length) {
+      const emoji = p === 'alta' ? '🔴 *URGENTES*' : p === 'media' ? '🟡 *MÉDIOS*' : '🟢 *BAIXOS*';
+      text += `${emoji}\n`;
+      items.forEach((f, i) => text += `${i+1}. ${f.nome} - ${f.quantidade} ${f.unidade}\n`);
+      text += '\n';
+    }
+  });
+  
+  text += `📊 Total: ${faltas.length} itens`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+}
+
+// ===== UTILS =====
+function formatDate(d) {
+  if (!d) return '';
+  const [y, m, day] = d.split('-');
+  return `${day}/${m}/${y}`;
+}
+
+function showModal(html) {
+  document.getElementById('modalContent').innerHTML = html;
+  document.getElementById('modal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+  stopScanner();
+}
+
+document.getElementById('modal').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+function showLoading(text = 'Carregando...') {
+  document.getElementById('loadingText').textContent = text;
+  document.getElementById('loading').classList.add('show');
+}
+
+function hideLoading() {
+  document.getElementById('loading').classList.remove('show');
+}
+
+function toast(msg, type = 'success') {
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.textContent = msg;
+  document.getElementById('toastContainer').appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+</script>
+</body>
 </html>
