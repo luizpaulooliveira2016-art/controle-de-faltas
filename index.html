@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#2563EB">
+<meta name="theme-color" content="#1e40af">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <title>Controle de Faltas</title>
@@ -13,2682 +13,1227 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <style>
-:root {
-  --primary: #2563EB;
-  --primary-dark: #1D4ED8;
-  --primary-light: #DBEAFE;
-  --success: #16A34A;
-  --success-light: #DCFCE7;
-  --danger: #DC2626;
-  --danger-light: #FEE2E2;
-  --warning: #F59E0B;
-  --warning-light: #FEF3C7;
-  --orange: #EA580C;
-  --orange-light: #FFEDD5;
-  --gray-50: #F9FAFB;
-  --gray-100: #F3F4F6;
-  --gray-200: #E5E7EB;
-  --gray-300: #D1D5DB;
-  --gray-400: #9CA3AF;
-  --gray-500: #6B7280;
-  --gray-600: #4B5563;
-  --gray-700: #374151;
-  --gray-800: #1F2937;
-  --white: #FFFFFF;
-  --radius: 16px;
-  --radius-sm: 12px;
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --pri:#2563eb;--pri-d:#1e40af;--pri-l:#dbeafe;--pri-xl:#eff6ff;
+  --suc:#16a34a;--suc-l:#dcfce7;--suc-xl:#f0fdf4;
+  --dan:#dc2626;--dan-l:#fee2e2;--dan-xl:#fef2f2;
+  --war:#f59e0b;--war-l:#fef3c7;--war-xl:#fffbeb;
+  --ora:#ea580c;--ora-l:#ffedd5;--ora-xl:#fff7ed;
+  --pur:#7c3aed;--pur-l:#ede9fe;
+  --g50:#f9fafb;--g100:#f3f4f6;--g200:#e5e7eb;--g300:#d1d5db;
+  --g400:#9ca3af;--g500:#6b7280;--g600:#4b5563;--g700:#374151;--g800:#1f2937;--g900:#111827;
+  --white:#fff;--shadow:0 4px 20px rgba(0,0,0,.06);--shadow-lg:0 8px 30px rgba(0,0,0,.1);
+  --r:20px;--r-sm:14px;--r-xs:10px;--r-full:9999px;
+  --trans:all .2s cubic-bezier(.4,0,.2,1)
 }
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: var(--gray-100);
-  color: var(--gray-800);
-  min-height: 100vh;
-  padding-bottom: 80px;
-  -webkit-tap-highlight-color: transparent;
+html{scroll-behavior:smooth}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',sans-serif;
+  background:linear-gradient(135deg,#f0f4ff 0%,#f9fafb 50%,#fef7ff 100%);
+  color:var(--g800);min-height:100vh;padding-bottom:90px;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-font-smoothing:antialiased
 }
-.header {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  color: white;
-  padding: 16px 20px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  gap: 12px;
+/* ═══ HEADER ═══ */
+.header{
+  background:linear-gradient(135deg,var(--pri),var(--pri-d));
+  color:#fff;padding:18px 20px;position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;gap:14px;
+  box-shadow:0 4px 20px rgba(37,99,235,.3)
 }
-.header-back {
-  width: 40px; height: 40px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.2);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px; border: none; color: white; cursor: pointer;
+.header-back{
+  width:42px;height:42px;border-radius:var(--r-xs);
+  background:rgba(255,255,255,.15);backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;border:none;color:#fff;cursor:pointer;
+  transition:var(--trans)
 }
-.header-back:active { background: rgba(255,255,255,0.3); }
-.header-title { font-size: 18px; font-weight: 700; }
-.header-sub { font-size: 12px; opacity: 0.9; }
-.page { display: none; padding: 16px; animation: fadeIn 0.2s; }
-.page.active { display: block; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-.home-hero {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  color: white;
-  padding: 24px 20px 28px;
-  margin: -16px -16px 20px -16px;
-  text-align: center;
+.header-back:active{background:rgba(255,255,255,.3);transform:scale(.92)}
+.header-title{font-size:18px;font-weight:700;letter-spacing:-.3px}
+.header-sub{font-size:12px;opacity:.85;margin-top:2px}
+/* ═══ PAGES ═══ */
+.page{display:none;padding:16px;animation:fadeSlide .35s ease}
+.page.active{display:block}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+/* ═══ HERO ═══ */
+.home-hero{
+  background:linear-gradient(135deg,#1e40af 0%,#2563eb 40%,#3b82f6 100%);
+  color:#fff;padding:28px 24px 32px;margin:-16px -16px 24px;
+  text-align:center;position:relative;overflow:hidden
 }
-.home-logo { font-size: 56px; margin-bottom: 8px; }
-.home-title { font-size: 22px; font-weight: 800; }
-.home-sub { font-size: 13px; opacity: 0.9; margin-top: 4px; }
-.home-stats { display: flex; justify-content: center; gap: 16px; margin-top: 20px; flex-wrap: wrap; }
-.home-stat { text-align: center; min-width: 60px; }
-.home-stat-num { font-size: 24px; font-weight: 800; }
-.home-stat-label { font-size: 10px; opacity: 0.85; }
-.sync-indicator {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 20px; padding: 6px 14px;
-  font-size: 12px; margin-top: 12px; cursor: pointer;
+.home-hero::before{
+  content:'';position:absolute;top:-50%;right:-30%;
+  width:300px;height:300px;border-radius:50%;
+  background:rgba(255,255,255,.06)
 }
-.sync-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: #4ade80; animation: pulse 2s infinite;
+.home-hero::after{
+  content:'';position:absolute;bottom:-40%;left:-20%;
+  width:250px;height:250px;border-radius:50%;
+  background:rgba(255,255,255,.04)
 }
-.sync-dot.offline { background: #fbbf24; animation: none; }
-@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
-.quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-.quick-btn {
-  background: white; border: 2px solid var(--gray-200);
-  border-radius: var(--radius); padding: 20px 12px;
-  text-align: center; cursor: pointer; transition: all 0.15s;
+.home-logo{font-size:52px;margin-bottom:8px;position:relative;z-index:1;filter:drop-shadow(0 4px 8px rgba(0,0,0,.2))}
+.home-title{font-size:24px;font-weight:800;letter-spacing:-.5px;position:relative;z-index:1}
+.home-sub{font-size:13px;opacity:.9;margin-top:6px;position:relative;z-index:1}
+.home-stats{
+  display:flex;justify-content:center;gap:8px;margin-top:24px;
+  position:relative;z-index:1;flex-wrap:wrap
 }
-.quick-btn:active { transform: scale(0.97); }
-.quick-btn.primary { background: var(--primary); border-color: var(--primary); color: white; }
-.quick-btn.success { background: var(--success-light); border-color: var(--success); }
-.quick-btn.warning { background: var(--warning-light); border-color: var(--warning); }
-.quick-btn.danger { background: var(--danger-light); border-color: var(--danger); }
-.quick-btn.orange { background: var(--orange-light); border-color: var(--orange); }
-.quick-icon { font-size: 32px; margin-bottom: 8px; }
-.quick-text { font-size: 13px; font-weight: 600; }
-.quick-btn.primary .quick-text { color: white; }
-.quick-btn.success .quick-text { color: var(--success); }
-.quick-btn.warning .quick-text { color: var(--warning); }
-.quick-btn.danger .quick-text { color: var(--danger); }
-.quick-btn.orange .quick-text { color: var(--orange); }
-.secondary-actions { display: flex; gap: 10px; margin-bottom: 16px; }
-.secondary-btn {
-  flex: 1; background: white; border: 2px solid var(--gray-200);
-  border-radius: var(--radius-sm); padding: 12px;
-  text-align: center; cursor: pointer; font-size: 13px;
-  font-weight: 600; color: var(--gray-700);
+.home-stat{
+  background:rgba(255,255,255,.12);backdrop-filter:blur(10px);
+  border-radius:var(--r-sm);padding:12px 16px;min-width:70px;
+  border:1px solid rgba(255,255,255,.15)
 }
-.secondary-btn:active { background: var(--gray-50); }
-.section {
-  background: white; border-radius: var(--radius);
-  padding: 16px; margin-bottom: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+.home-stat-num{font-size:26px;font-weight:800}
+.home-stat-label{font-size:10px;opacity:.8;margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+.sync-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.12);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:var(--r-full);padding:8px 18px;
+  font-size:12px;font-weight:600;margin-top:16px;cursor:pointer;
+  position:relative;z-index:1;transition:var(--trans)
 }
-.section.orange-border { border-left: 4px solid var(--orange); }
-.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.section-title { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
-.section-link { font-size: 13px; color: var(--primary); font-weight: 600; cursor: pointer; }
-.section-link.orange { color: var(--orange); }
-.card {
-  background: white; border-radius: var(--radius);
-  padding: 16px; margin-bottom: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+.sync-pill:active{transform:scale(.95)}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite}
+.sync-dot.off{background:#fbbf24;animation:none}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+/* ═══ QUICK GRID ═══ */
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.quick-btn{
+  background:var(--white);border:none;border-radius:var(--r);
+  padding:22px 14px;text-align:center;cursor:pointer;
+  transition:var(--trans);box-shadow:var(--shadow);
+  position:relative;overflow:hidden
 }
-.prod-card {
-  background: white; border-radius: var(--radius-sm);
-  padding: 12px; margin-bottom: 10px;
-  border: 1px solid var(--gray-200);
-  display: flex; align-items: center; gap: 12px;
+.quick-btn::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:4px;
+  border-radius:var(--r) var(--r) 0 0
 }
-.prod-card.urgent { border-left: 4px solid var(--danger); }
-.prod-card.medium { border-left: 4px solid var(--warning); }
-.prod-card.low { border-left: 4px solid var(--success); }
-.prod-card.expiring { border-left: 4px solid var(--orange); background: var(--orange-light); }
-.prod-card.troca { border-left: 4px solid var(--orange); }
-.prod-card.troca-done { opacity: 0.6; }
-.prod-card.clickable { cursor: pointer; }
-.prod-card.clickable:active { background: var(--gray-50); }
-.prod-img {
-  width: 60px; height: 60px;
-  background: var(--white); border-radius: var(--radius-sm);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 28px; flex-shrink: 0; overflow: hidden;
-  border: 1px solid var(--gray-200); padding: 4px;
+.quick-btn:active{transform:scale(.96);box-shadow:var(--shadow-lg)}
+.quick-btn.primary{background:linear-gradient(135deg,var(--pri),var(--pri-d));color:#fff}
+.quick-btn.primary::before{background:rgba(255,255,255,.3)}
+.quick-btn.success::before{background:var(--suc)}
+.quick-btn.warning::before{background:var(--war)}
+.quick-btn.orange::before{background:var(--ora)}
+.quick-icon{font-size:34px;margin-bottom:10px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.1))}
+.quick-text{font-size:13px;font-weight:700;letter-spacing:-.2px}
+.quick-btn.primary .quick-text{color:#fff}
+.quick-btn.success .quick-text{color:var(--suc)}
+.quick-btn.warning .quick-text{color:var(--war)}
+.quick-btn.orange .quick-text{color:var(--ora)}
+.sec-actions{display:flex;gap:10px;margin-bottom:20px}
+.sec-btn{
+  flex:1;background:var(--white);border:none;
+  border-radius:var(--r-sm);padding:14px;
+  text-align:center;cursor:pointer;font-size:13px;
+  font-weight:600;color:var(--g700);box-shadow:var(--shadow);
+  transition:var(--trans)
 }
-.prod-img img { width: 100%; height: 100%; object-fit: contain; border-radius: 6px; }
-.prod-info { flex: 1; min-width: 0; }
-.prod-name { font-size: 14px; font-weight: 600; line-height: 1.3; }
-.prod-meta { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
-.prod-meta.orange { color: var(--orange); font-weight: 600; }
-.prod-meta.blue { color: var(--primary); }
-.prod-meta.green { color: var(--success); font-weight: 600; }
-.prod-code { font-size: 11px; color: var(--gray-400); margin-top: 2px; font-family: monospace; }
-.prod-badge {
-  font-size: 11px; font-weight: 700;
-  padding: 4px 10px; border-radius: 20px;
-  white-space: nowrap; flex-shrink: 0;
+.sec-btn:active{transform:scale(.97)}
+/* ═══ SECTION ═══ */
+.section{
+  background:var(--white);border-radius:var(--r);
+  padding:18px;margin-bottom:18px;box-shadow:var(--shadow);
+  border:1px solid rgba(0,0,0,.04)
 }
-.badge-danger { background: var(--danger-light); color: var(--danger); }
-.badge-warning { background: var(--warning-light); color: var(--warning); }
-.badge-success { background: var(--success-light); color: var(--success); }
-.badge-info { background: var(--primary-light); color: var(--primary); }
-.badge-orange { background: var(--orange-light); color: var(--orange); }
-.btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  gap: 8px; padding: 14px 20px; border-radius: var(--radius-sm);
-  font-size: 15px; font-weight: 600; border: none; cursor: pointer;
-  transition: all 0.15s; min-height: 48px;
+.section.ora-border{border-left:4px solid var(--ora)}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.section-title{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;letter-spacing:-.2px}
+.section-link{font-size:13px;color:var(--pri);font-weight:600;cursor:pointer}
+.section-link.ora{color:var(--ora)}
+/* ═══ CARDS ═══ */
+.card{
+  background:var(--white);border-radius:var(--r);
+  padding:18px;margin-bottom:14px;
+  box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.04)
 }
-.btn:active { transform: scale(0.98); }
-.btn-primary { background: var(--primary); color: white; }
-.btn-success { background: var(--success); color: white; }
-.btn-danger { background: var(--danger); color: white; }
-.btn-warning { background: var(--warning); color: white; }
-.btn-orange { background: var(--orange); color: white; }
-.btn-gray { background: var(--gray-200); color: var(--gray-700); }
-.btn-outline { background: white; color: var(--primary); border: 2px solid var(--primary); }
-.btn-block { width: 100%; }
-.btn-sm { padding: 10px 14px; font-size: 13px; min-height: 40px; }
-.btn-lg { padding: 18px 24px; font-size: 17px; }
-.btn-scan {
-  background: linear-gradient(135deg, #7C3AED, #5B21B6);
-  color: white; border: none; border-radius: var(--radius-sm);
-  padding: 14px 20px; font-size: 15px; font-weight: 700;
-  cursor: pointer; display: flex; align-items: center;
-  justify-content: center; gap: 8px; transition: all 0.15s;
-  min-height: 48px;
+.prod-card{
+  background:var(--white);border-radius:var(--r-sm);
+  padding:14px;margin-bottom:10px;
+  border:1px solid var(--g200);
+  display:flex;align-items:center;gap:14px;
+  transition:var(--trans)
 }
-.btn-scan:active { transform: scale(0.98); }
-.form-group { margin-bottom: 16px; }
-.form-label { display: block; font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 6px; }
-.form-input, .form-select {
-  width: 100%; padding: 14px 16px;
-  border: 2px solid var(--gray-200);
-  border-radius: var(--radius-sm); font-size: 16px;
-  background: white; transition: border 0.2s;
+.prod-card.urgent{border-left:4px solid var(--dan);background:var(--dan-xl)}
+.prod-card.medium{border-left:4px solid var(--war);background:var(--war-xl)}
+.prod-card.low{border-left:4px solid var(--suc);background:var(--suc-xl)}
+.prod-card.expiring{border-left:4px solid var(--ora);background:var(--ora-xl)}
+.prod-card.troca{border-left:4px solid var(--ora)}
+.prod-card.troca-done{opacity:.55}
+.prod-card.clickable{cursor:pointer}
+.prod-card.clickable:active{transform:scale(.98);box-shadow:var(--shadow-lg)}
+.prod-img{
+  width:56px;height:56px;background:var(--g50);
+  border-radius:var(--r-xs);display:flex;align-items:center;
+  justify-content:center;font-size:26px;flex-shrink:0;
+  overflow:hidden;border:1px solid var(--g200)
 }
-.form-input:focus, .form-select:focus { outline: none; border-color: var(--primary); }
-.form-input.orange:focus, .form-select.orange:focus { border-color: var(--orange); }
-.form-input::placeholder { color: var(--gray-400); }
-textarea.form-input { min-height: 100px; resize: vertical; }
-.search-box { position: relative; margin-bottom: 16px; }
-.search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 18px; }
-.search-input {
-  width: 100%; padding: 14px 48px 14px 48px;
-  border: 2px solid var(--gray-200); border-radius: var(--radius);
-  font-size: 16px; background: white;
+.prod-img img{width:100%;height:100%;object-fit:contain;border-radius:8px}
+.prod-info{flex:1;min-width:0}
+.prod-name{font-size:14px;font-weight:700;line-height:1.35;letter-spacing:-.2px}
+.prod-meta{font-size:12px;color:var(--g500);margin-top:3px;display:flex;align-items:center;gap:4px}
+.prod-meta.ora{color:var(--ora);font-weight:600}
+.prod-meta.blue{color:var(--pri)}
+.prod-meta.green{color:var(--suc);font-weight:600}
+.prod-code{font-size:11px;color:var(--g400);margin-top:3px;font-family:'SF Mono',monospace}
+.prod-badge{
+  font-size:10px;font-weight:800;padding:5px 12px;
+  border-radius:var(--r-full);white-space:nowrap;
+  flex-shrink:0;text-transform:uppercase;letter-spacing:.3px
 }
-.search-input:focus { outline: none; border-color: var(--primary); }
-.search-input.orange:focus { border-color: var(--orange); }
-.scan-btn-inline {
-  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-  background: linear-gradient(135deg, #7C3AED, #5B21B6);
-  border: none; border-radius: 10px; padding: 8px 12px;
-  color: white; font-size: 18px; cursor: pointer;
-  display: flex; align-items: center; gap: 4px;
+.b-dan{background:var(--dan-l);color:var(--dan)}
+.b-war{background:var(--war-l);color:var(--war)}
+.b-suc{background:var(--suc-l);color:var(--suc)}
+.b-info{background:var(--pri-l);color:var(--pri)}
+.b-ora{background:var(--ora-l);color:var(--ora)}
+/* ═══ BUTTONS ═══ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  gap:8px;padding:14px 22px;border-radius:var(--r-sm);
+  font-size:15px;font-weight:700;border:none;cursor:pointer;
+  transition:var(--trans);min-height:50px;letter-spacing:-.2px;
+  position:relative;overflow:hidden
 }
-.scan-btn-inline span { font-size: 11px; font-weight: 700; }
-.modal {
-  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5);
-  display: none; align-items: flex-end; justify-content: center; z-index: 1000;
+.btn:active{transform:scale(.97)}
+.btn-pri{background:linear-gradient(135deg,var(--pri),var(--pri-d));color:#fff;box-shadow:0 4px 14px rgba(37,99,235,.3)}
+.btn-suc{background:linear-gradient(135deg,var(--suc),#15803d);color:#fff;box-shadow:0 4px 14px rgba(22,163,74,.3)}
+.btn-dan{background:linear-gradient(135deg,var(--dan),#b91c1c);color:#fff}
+.btn-war{background:var(--war);color:#fff}
+.btn-ora{background:linear-gradient(135deg,var(--ora),#c2410c);color:#fff;box-shadow:0 4px 14px rgba(234,88,12,.3)}
+.btn-gray{background:var(--g200);color:var(--g700)}
+.btn-outline{background:#fff;color:var(--pri);border:2px solid var(--pri)}
+.btn-scan{
+  background:linear-gradient(135deg,var(--pur),#5b21b6);color:#fff;
+  border:none;border-radius:var(--r-sm);padding:14px 18px;
+  font-size:14px;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:var(--trans);box-shadow:0 4px 14px rgba(124,58,237,.3)
 }
-.modal.show { display: flex; }
-.modal-content {
-  background: white;
-  border-radius: var(--radius) var(--radius) 0 0;
-  width: 100%; max-width: 500px; max-height: 92vh;
-  overflow-y: auto; animation: slideUp 0.3s;
+.btn-scan:active{transform:scale(.96)}
+.btn-block{width:100%}
+.btn-sm{padding:10px 16px;font-size:13px;min-height:42px}
+.btn-lg{padding:18px 28px;font-size:17px}
+/* ═══ FORMS ═══ */
+.fg{margin-bottom:18px}
+.fl{display:block;font-size:13px;font-weight:700;color:var(--g700);margin-bottom:8px;letter-spacing:-.1px}
+.fi,.fs{
+  width:100%;padding:14px 16px;
+  border:2px solid var(--g200);border-radius:var(--r-sm);
+  font-size:16px;background:var(--white);transition:var(--trans);
+  -webkit-appearance:none;appearance:none
 }
-@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-.modal-header {
-  padding: 20px; border-bottom: 1px solid var(--gray-200);
-  display: flex; justify-content: space-between; align-items: center;
-  position: sticky; top: 0; background: white; z-index: 10;
+.fi:focus,.fs:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 4px rgba(37,99,235,.1)}
+.fi.ora:focus{border-color:var(--ora);box-shadow:0 0 0 4px rgba(234,88,12,.1)}
+.fi::placeholder{color:var(--g400)}
+textarea.fi{min-height:100px;resize:vertical}
+/* ═══ SEARCH ═══ */
+.search-box{position:relative;margin-bottom:16px}
+.search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:18px;z-index:1}
+.search-input{
+  width:100%;padding:14px 58px 14px 48px;
+  border:2px solid var(--g200);border-radius:var(--r);
+  font-size:16px;background:var(--white);transition:var(--trans)
 }
-.modal-title { font-size: 18px; font-weight: 700; }
-.modal-close {
-  width: 36px; height: 36px; border-radius: 50%;
-  background: var(--gray-100); border: none;
-  font-size: 20px; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
+.search-input:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 4px rgba(37,99,235,.08)}
+.scan-inline{
+  position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  background:linear-gradient(135deg,var(--pur),#5b21b6);
+  border:none;border-radius:var(--r-xs);padding:8px 14px;
+  color:#fff;font-size:13px;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;gap:5px;
+  transition:var(--trans)
 }
-.modal-body { padding: 20px; }
-/* SCANNER */
-#scannerContainer, #scannerContainerFalta, #scannerContainerTroca {
-  width: 100%; border-radius: var(--radius);
-  overflow: hidden; background: #000; margin-bottom: 16px;
+.scan-inline:active{transform:translateY(-50%) scale(.92)}
+/* ═══ MODAL ═══ */
+.modal{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:rgba(0,0,0,.45);backdrop-filter:blur(4px);
+  display:none;align-items:flex-end;justify-content:center;z-index:1000
 }
-.scanner-wrapper {
-  background: #000; border-radius: var(--radius); overflow: hidden;
-  margin-bottom: 16px; position: relative;
+.modal.show{display:flex}
+.modal-content{
+  background:var(--white);border-radius:var(--r) var(--r) 0 0;
+  width:100%;max-width:500px;max-height:92vh;
+  overflow-y:auto;animation:sheetUp .35s cubic-bezier(.32,.72,0,1)
 }
-.scanner-overlay {
-  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-  display: flex; align-items: center; justify-content: center;
-  pointer-events: none;
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-header{
+  padding:20px 20px 16px;border-bottom:1px solid var(--g200);
+  display:flex;justify-content:space-between;align-items:center;
+  position:sticky;top:0;background:var(--white);z-index:10;
+  border-radius:var(--r) var(--r) 0 0
 }
-.scanner-frame {
-  width: 200px; height: 200px;
-  border: 3px solid #fff;
-  border-radius: 16px;
-  box-shadow: 0 0 0 9999px rgba(0,0,0,0.5);
+.modal-title{font-size:18px;font-weight:800;letter-spacing:-.3px}
+.modal-close{
+  width:38px;height:38px;border-radius:var(--r-xs);
+  background:var(--g100);border:none;font-size:20px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:var(--trans)
 }
-.scanner-line {
-  position: absolute; height: 3px;
-  background: linear-gradient(90deg, transparent, #ef4444, transparent);
-  width: 80%; animation: scan 2s linear infinite;
+.modal-close:active{background:var(--g200)}
+.modal-body{padding:20px}
+/* ═══ SCANNER ═══ */
+.scanner-wrap{
+  border-radius:var(--r);overflow:hidden;
+  margin-bottom:16px;position:relative;
+  background:#000;box-shadow:var(--shadow-lg)
 }
-@keyframes scan { 0%{top:20%;} 50%{top:80%;} 100%{top:20%;} }
-.scanner-status {
-  background: rgba(0,0,0,0.7); color: white;
-  padding: 10px 16px; text-align: center;
-  font-size: 13px; font-weight: 600; border-radius: 0 0 var(--radius) var(--radius);
+.scanner-status{
+  background:rgba(0,0,0,.8);color:#fff;padding:12px 16px;
+  text-align:center;font-size:13px;font-weight:600;
+  border-radius:0 0 var(--r) var(--r);
+  backdrop-filter:blur(10px)
 }
-/* PRODUTO ONLINE */
-.product-online-card {
-  background: white; border-radius: var(--radius);
-  border: 2px solid var(--success); overflow: hidden; margin-bottom: 16px;
+/* ═══ PRODUCT ONLINE ═══ */
+.online-card{
+  background:var(--white);border-radius:var(--r);
+  border:2px solid var(--suc);overflow:hidden;margin-bottom:18px;
+  box-shadow:var(--shadow)
 }
-.product-online-header {
-  background: var(--success-light); padding: 12px 16px;
-  display: flex; align-items: center; gap: 8px;
-  font-weight: 700; color: var(--success); font-size: 14px;
+.online-header{
+  background:linear-gradient(135deg,var(--suc-l),var(--suc-xl));
+  padding:14px 18px;display:flex;align-items:center;gap:8px;
+  font-weight:700;color:var(--suc);font-size:14px
 }
-.product-online-body { padding: 16px; }
-.product-online-imgs {
-  display: flex; gap: 8px; overflow-x: auto;
-  padding-bottom: 8px; margin-bottom: 12px;
+.online-body{padding:18px}
+.online-imgs{
+  display:flex;gap:10px;overflow-x:auto;
+  padding-bottom:10px;margin-bottom:14px;
+  -webkit-overflow-scrolling:touch
 }
-.product-online-img {
-  width: 80px; height: 80px; flex-shrink: 0;
-  border: 2px solid var(--gray-200); border-radius: 10px;
-  overflow: hidden; cursor: pointer; transition: all 0.15s;
+.online-imgs::-webkit-scrollbar{display:none}
+.online-img{
+  width:76px;height:76px;flex-shrink:0;
+  border:2px solid var(--g200);border-radius:var(--r-xs);
+  overflow:hidden;cursor:pointer;transition:var(--trans);
+  background:var(--white)
 }
-.product-online-img.selected { border-color: var(--primary); transform: scale(1.05); }
-.product-online-img img { width: 100%; height: 100%; object-fit: contain; }
-.product-online-info { font-size: 13px; color: var(--gray-700); }
-.product-online-info p { margin-bottom: 6px; }
-.product-online-info strong { color: var(--gray-800); }
-.loading-search {
-  display: flex; flex-direction: column; align-items: center;
-  gap: 12px; padding: 24px; text-align: center;
+.online-img.sel{border-color:var(--pri);transform:scale(1.08);box-shadow:0 4px 12px rgba(37,99,235,.2)}
+.online-img img{width:100%;height:100%;object-fit:contain}
+.online-info{font-size:13px;color:var(--g700)}
+.online-info p{margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.online-info strong{color:var(--g900)}
+/* ═══ TOAST ═══ */
+.toast-wrap{position:fixed;bottom:95px;left:50%;transform:translateX(-50%);z-index:2000;width:90%;max-width:400px}
+.toast{
+  padding:16px 22px;border-radius:var(--r-sm);color:#fff;
+  font-weight:700;text-align:center;margin-bottom:8px;
+  animation:toastPop .35s cubic-bezier(.32,.72,0,1);
+  box-shadow:var(--shadow-lg);font-size:14px
 }
-.loading-search-spinner {
-  width: 40px; height: 40px;
-  border: 4px solid var(--gray-200); border-top-color: var(--primary);
-  border-radius: 50%; animation: spin 0.8s linear infinite;
+@keyframes toastPop{from{transform:translateY(20px) scale(.95);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+.toast.success{background:linear-gradient(135deg,var(--suc),#15803d)}
+.toast.error{background:linear-gradient(135deg,var(--dan),#b91c1c)}
+.toast.warning{background:linear-gradient(135deg,var(--war),#d97706)}
+.toast.info{background:linear-gradient(135deg,var(--pri),var(--pri-d))}
+/* ═══ LOADING ═══ */
+.loading{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(8px);
+  display:none;align-items:center;justify-content:center;
+  flex-direction:column;gap:18px;z-index:3000
 }
-@keyframes spin { to { transform: rotate(360deg); } }
-.toast-container {
-  position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
-  z-index: 2000; width: 90%; max-width: 400px;
+.loading.show{display:flex}
+.spinner{
+  width:48px;height:48px;border:4px solid var(--g200);
+  border-top-color:var(--pri);border-radius:50%;
+  animation:spin .8s linear infinite
 }
-.toast {
-  padding: 14px 20px; border-radius: var(--radius-sm);
-  color: white; font-weight: 600; text-align: center;
-  margin-bottom: 8px; animation: toastIn 0.3s;
+.loading-search{display:flex;flex-direction:column;align-items:center;gap:14px;padding:28px;text-align:center}
+.ls-spinner{width:40px;height:40px;border:4px solid var(--g200);border-top-color:var(--pri);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:14px;color:var(--g700);font-weight:600}
+/* ═══ TAB BAR ═══ */
+.tab-bar{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--white);display:flex;
+  border-top:1px solid var(--g200);z-index:100;
+  padding:6px 8px env(safe-area-inset-bottom) 8px;
+  box-shadow:0 -4px 20px rgba(0,0,0,.06)
 }
-@keyframes toastIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-.toast.success { background: var(--success); }
-.toast.error { background: var(--danger); }
-.toast.warning { background: var(--warning); }
-.toast.info { background: var(--primary); }
-.loading {
-  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(255,255,255,0.95);
-  display: none; align-items: center; justify-content: center;
-  flex-direction: column; gap: 16px; z-index: 3000;
+.tab-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  padding:8px 0 6px;background:none;border:none;
+  color:var(--g400);font-size:10px;font-weight:700;
+  cursor:pointer;gap:4px;border-radius:var(--r-xs);
+  transition:var(--trans);letter-spacing:.2px
 }
-.loading.show { display: flex; }
-.spinner {
-  width: 48px; height: 48px;
-  border: 4px solid var(--gray-200); border-top-color: var(--primary);
-  border-radius: 50%; animation: spin 0.8s linear infinite;
+.tab-btn.active{color:var(--pri);background:var(--pri-xl)}
+.tab-icon{font-size:22px}
+/* ═══ CHIPS ═══ */
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0;margin-bottom:14px;-webkit-overflow-scrolling:touch}
+.chips::-webkit-scrollbar{display:none}
+.chip{
+  padding:9px 18px;border-radius:var(--r-full);font-size:13px;
+  font-weight:700;white-space:nowrap;background:var(--white);
+  color:var(--g600);border:2px solid var(--g200);cursor:pointer;
+  flex-shrink:0;transition:var(--trans)
 }
-.loading-text { font-size: 14px; color: var(--gray-700); text-align: center; }
-.tab-bar {
-  position: fixed; bottom: 0; left: 0; right: 0;
-  background: white; display: flex;
-  border-top: 1px solid var(--gray-200); z-index: 100;
-  padding-bottom: env(safe-area-inset-bottom);
+.chip:active{transform:scale(.95)}
+.chip.active{background:var(--pri);color:#fff;border-color:var(--pri)}
+.chip.active.ora{background:var(--ora);border-color:var(--ora)}
+/* ═══ CARD ACTIONS ═══ */
+.card-actions{
+  display:flex;gap:8px;margin-top:8px;margin-bottom:12px;
+  padding:10px 14px;background:var(--g50);
+  border-radius:0 0 var(--r-sm) var(--r-sm);
+  border:1px solid var(--g200);border-top:none;
+  margin-top:-10px
 }
-.tab-btn {
-  flex: 1; display: flex; flex-direction: column;
-  align-items: center; padding: 10px 0 8px;
-  background: none; border: none; color: var(--gray-400);
-  font-size: 10px; font-weight: 600; cursor: pointer; gap: 4px;
+.act-btn{
+  flex:1;padding:10px;border:none;border-radius:var(--r-xs);
+  font-size:12px;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  gap:4px;transition:var(--trans)
 }
-.tab-btn.active { color: var(--primary); }
-.tab-icon { font-size: 22px; }
-.img-preview {
-  width: 140px; height: 140px; margin: 0 auto 16px;
-  border-radius: var(--radius-sm); background: var(--white);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 48px; overflow: hidden;
-  border: 2px dashed var(--gray-300); padding: 8px;
+.act-btn:active{transform:scale(.95)}
+.act-btn.edit{background:var(--pri-l);color:var(--pri)}
+.act-btn.del{background:var(--dan-l);color:var(--dan)}
+.act-btn.add{background:var(--suc-l);color:var(--suc)}
+.act-btn.ora{background:var(--ora-l);color:var(--ora)}
+.act-btn.gray{background:var(--g200);color:var(--g600)}
+/* ═══ PRIORITY ═══ */
+.prio-sel{display:flex;gap:10px}
+.prio-btn{
+  flex:1;padding:14px;border:2px solid var(--g200);
+  border-radius:var(--r-sm);background:var(--white);cursor:pointer;
+  text-align:center;font-size:12px;font-weight:700;transition:var(--trans)
 }
-.img-preview img { width: 100%; height: 100%; object-fit: contain; border-radius: 8px; }
-.img-preview.has-image { border-style: solid; border-color: var(--success); }
-.priority-selector { display: flex; gap: 8px; }
-.priority-btn {
-  flex: 1; padding: 12px; border: 2px solid var(--gray-200);
-  border-radius: var(--radius-sm); background: white; cursor: pointer;
-  text-align: center; font-size: 12px; font-weight: 600; transition: all 0.15s;
+.prio-btn.alta.sel{border-color:var(--dan);background:var(--dan-l);color:var(--dan);transform:scale(1.05);box-shadow:0 4px 14px rgba(220,38,38,.2)}
+.prio-btn.media.sel{border-color:var(--war);background:var(--war-l);color:var(--war);transform:scale(1.05);box-shadow:0 4px 14px rgba(245,158,11,.2)}
+.prio-btn.baixa.sel{border-color:var(--suc);background:var(--suc-l);color:var(--suc);transform:scale(1.05);box-shadow:0 4px 14px rgba(22,163,74,.2)}
+/* ═══ MOTIVO ═══ */
+.mot-btn{
+  width:100%;padding:16px;border:2px solid transparent;
+  border-radius:var(--r-sm);background:var(--g50);cursor:pointer;
+  text-align:left;font-weight:600;transition:var(--trans);
+  display:flex;align-items:center;gap:14px;margin-bottom:10px;color:var(--g600)
 }
-.priority-btn.alta { border-color: var(--danger); background: var(--danger-light); color: var(--danger); }
-.priority-btn.media { border-color: var(--warning); background: var(--warning-light); color: var(--warning); }
-.priority-btn.baixa { border-color: var(--success); background: var(--success-light); color: var(--success); }
-.priority-btn.selected { transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-.motivo-btn {
-  width: 100%; padding: 14px 16px;
-  border: 2px solid transparent; border-radius: var(--radius-sm);
-  background: var(--gray-100); cursor: pointer; text-align: left;
-  font-weight: 600; transition: all 0.15s;
-  display: flex; align-items: center; gap: 12px; margin-bottom: 8px;
-  color: var(--gray-600);
+.mot-btn.sel.avaria{border-color:var(--dan);background:var(--dan-l);color:var(--dan)}
+.mot-btn.sel.vencimento{border-color:var(--war);background:var(--war-l);color:var(--war)}
+.mot-btn.sel.outros{border-color:var(--pri);background:var(--pri-l);color:var(--pri)}
+.mot-icon{font-size:26px}
+.mot-info{flex:1}
+.mot-title{font-size:14px}
+.mot-desc{font-size:11px;font-weight:400;opacity:.7;margin-top:3px}
+/* ═══ IMG PREVIEW ═══ */
+.img-prev{
+  width:130px;height:130px;margin:0 auto 18px;
+  border-radius:var(--r-sm);background:var(--g50);
+  display:flex;align-items:center;justify-content:center;
+  font-size:44px;overflow:hidden;
+  border:2px dashed var(--g300);transition:var(--trans)
 }
-.motivo-btn.selected.avaria { border-color: var(--danger); background: var(--danger-light); color: var(--danger); }
-.motivo-btn.selected.vencimento { border-color: var(--warning); background: var(--warning-light); color: var(--warning); }
-.motivo-btn.selected.outros { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
-.motivo-icon { font-size: 24px; }
-.motivo-info { flex: 1; }
-.motivo-title { font-size: 14px; }
-.motivo-desc { font-size: 11px; font-weight: 400; opacity: 0.7; margin-top: 2px; }
-.chip-row {
-  display: flex; gap: 8px; overflow-x: auto;
-  padding: 4px 0; margin-bottom: 12px;
-  -webkit-overflow-scrolling: touch;
+.img-prev img{width:100%;height:100%;object-fit:contain;border-radius:10px}
+.img-prev.has{border-style:solid;border-color:var(--suc);background:var(--suc-xl)}
+/* ═══ BANNER ═══ */
+.conn-banner{
+  background:linear-gradient(135deg,var(--war),#d97706);color:#fff;
+  padding:10px 16px;text-align:center;font-size:13px;font-weight:700;
+  display:none;position:fixed;top:0;left:0;right:0;z-index:200
 }
-.chip-row::-webkit-scrollbar { display: none; }
-.chip {
-  padding: 8px 16px; border-radius: 20px; font-size: 13px;
-  font-weight: 600; white-space: nowrap; background: var(--gray-100);
-  color: var(--gray-600); border: none; cursor: pointer; flex-shrink: 0;
+.conn-banner.show{display:block}
+/* ═══ DATE RANGE ═══ */
+.date-range{background:var(--pri-l);border:2px solid var(--pri);border-radius:var(--r-sm);padding:18px;margin-bottom:18px}
+.date-range-title{font-size:14px;font-weight:800;color:var(--pri);margin-bottom:6px}
+.date-range-desc{font-size:12px;color:var(--g600);margin-bottom:16px}
+/* ═══ EMPTY ═══ */
+.empty{text-align:center;padding:44px 20px;color:var(--g400)}
+.empty-icon{font-size:52px;margin-bottom:14px;opacity:.7}
+.empty-text{font-size:14px;font-weight:600}
+/* ═══ BARCODE ═══ */
+.barcode-box{
+  background:var(--g100);border-radius:var(--r-xs);padding:14px;
+  text-align:center;margin-bottom:14px;font-family:'SF Mono',monospace;
+  font-size:20px;font-weight:800;letter-spacing:3px;color:var(--g700);
+  border:2px dashed var(--g300)
 }
-.chip.active { background: var(--primary); color: white; }
-.chip.active.orange { background: var(--orange); }
-.card-actions {
-  display: flex; gap: 8px; margin-top: 10px;
-  padding-top: 10px; border-top: 1px solid var(--gray-100);
+/* ═══ FOUND ═══ */
+.found-card{
+  padding:16px;border-radius:var(--r-sm);margin-bottom:14px;
+  display:flex;gap:14px;align-items:center
 }
-.action-btn {
-  flex: 1; padding: 10px; border: none;
-  border-radius: var(--radius-sm); font-size: 12px; font-weight: 600;
-  cursor: pointer; display: flex; align-items: center;
-  justify-content: center; gap: 4px;
-}
-.action-btn.edit { background: var(--primary-light); color: var(--primary); }
-.action-btn.delete { background: var(--danger-light); color: var(--danger); }
-.action-btn.add { background: var(--success-light); color: var(--success); }
-.action-btn.orange { background: var(--orange-light); color: var(--orange); }
-.action-btn.gray { background: var(--gray-100); color: var(--gray-600); }
-.connection-banner {
-  background: var(--warning); color: white;
-  padding: 10px 16px; text-align: center;
-  font-size: 13px; font-weight: 600; display: none;
-}
-.connection-banner.show { display: block; }
-.date-range {
-  background: var(--primary-light); border: 2px solid var(--primary);
-  border-radius: var(--radius-sm); padding: 16px; margin-bottom: 16px;
-}
-.date-range-title { font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 12px; }
-.date-range-desc { font-size: 12px; color: var(--gray-600); margin-bottom: 16px; }
-.empty-state { text-align: center; padding: 40px 20px; color: var(--gray-500); }
-.empty-icon { font-size: 48px; margin-bottom: 12px; }
-.empty-text { font-size: 14px; }
-/* FOUND RESULT */
-.found-card {
-  padding: 16px; border-radius: var(--radius-sm);
-  margin-bottom: 16px; display: flex; gap: 12px; align-items: center;
-}
-.found-card.success { background: var(--success-light); border: 2px solid var(--success); }
-.found-info { flex: 1; }
-.found-title { font-size: 14px; font-weight: 700; color: var(--success); margin-bottom: 4px; }
-.found-name { font-size: 13px; font-weight: 600; }
-.found-meta { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
-/* Barcode display */
-.barcode-display {
-  background: var(--gray-100); border-radius: var(--radius-sm);
-  padding: 12px; text-align: center; margin-bottom: 12px;
-  font-family: monospace; font-size: 18px; font-weight: 700;
-  letter-spacing: 2px; color: var(--gray-700);
-  border: 2px dashed var(--gray-300);
-}
-/* Source tabs */
-.source-tabs { display: flex; gap: 6px; margin-bottom: 12px; }
-.source-tab {
-  flex: 1; padding: 8px 6px; border: 2px solid var(--gray-200);
-  border-radius: 8px; background: white; font-size: 11px;
-  font-weight: 700; cursor: pointer; text-align: center; color: var(--gray-600);
-}
-.source-tab.active { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+.found-card.success{background:var(--suc-l);border:2px solid var(--suc)}
+.found-info{flex:1}
+.found-title{font-size:14px;font-weight:800;color:var(--suc);margin-bottom:4px}
+.found-name{font-size:13px;font-weight:600}
+.found-meta{font-size:12px;color:var(--g600);margin-top:3px}
+/* ═══ HELPERS ═══ */
+.flex{display:flex}.gap-8{gap:8px}.gap-10{gap:10px}.gap-14{gap:14px}
+.mb-12{margin-bottom:12px}.mb-16{margin-bottom:16px}.mb-20{margin-bottom:20px}
 </style>
 </head>
 <body>
 
-<div class="loading" id="loading">
-  <div class="spinner"></div>
-  <div class="loading-text" id="loadingText">Carregando...</div>
-</div>
+<div class="loading" id="loading"><div class="spinner"></div><div class="loading-text" id="loadingText">Carregando...</div></div>
+<div class="toast-wrap" id="toastWrap"></div>
+<div class="conn-banner" id="connBanner">⚠️ Sem conexão — Dados serão sincronizados ao reconectar</div>
+<div class="modal" id="modal"><div class="modal-content" id="modalContent"></div></div>
 
-<div class="toast-container" id="toastContainer"></div>
-<div class="connection-banner" id="connectionBanner">⚠️ Sem conexão - Dados serão sincronizados quando voltar</div>
-
-<div class="modal" id="modal">
-  <div class="modal-content" id="modalContent"></div>
-</div>
-
-<!-- ========== PAGE: HOME ========== -->
+<!-- ═══ HOME ═══ -->
 <div class="page active" id="pageHome">
   <div class="home-hero">
     <div class="home-logo">📦</div>
     <div class="home-title">Controle de Faltas</div>
     <div class="home-sub">Gestão inteligente de estoque</div>
     <div class="home-stats">
-      <div class="home-stat">
-        <div class="home-stat-num" id="statFaltas">0</div>
-        <div class="home-stat-label">Faltas</div>
-      </div>
-      <div class="home-stat">
-        <div class="home-stat-num" id="statUrgentes">0</div>
-        <div class="home-stat-label">Urgentes</div>
-      </div>
-      <div class="home-stat">
-        <div class="home-stat-num" id="statVencendo">0</div>
-        <div class="home-stat-label">Vencendo</div>
-      </div>
-      <div class="home-stat">
-        <div class="home-stat-num" id="statTrocas">0</div>
-        <div class="home-stat-label">Trocas</div>
-      </div>
+      <div class="home-stat"><div class="home-stat-num" id="statFaltas">0</div><div class="home-stat-label">Faltas</div></div>
+      <div class="home-stat"><div class="home-stat-num" id="statUrgentes">0</div><div class="home-stat-label">Urgentes</div></div>
+      <div class="home-stat"><div class="home-stat-num" id="statVencendo">0</div><div class="home-stat-label">Vencendo</div></div>
+      <div class="home-stat"><div class="home-stat-num" id="statTrocas">0</div><div class="home-stat-label">Trocas</div></div>
     </div>
-    <div class="sync-indicator" id="syncIndicator" onclick="forceSync()">
-      <div class="sync-dot" id="syncDot"></div>
-      <span id="syncText">Sincronizado</span>
+    <div class="sync-pill" id="syncPill" onclick="forceSync()">
+      <div class="sync-dot" id="syncDot"></div><span id="syncText">Sincronizado</span>
     </div>
   </div>
   <div class="quick-grid">
-    <button class="quick-btn primary" onclick="openRealizarFalta()">
-      <div class="quick-icon">➕</div>
-      <div class="quick-text">Registrar Falta</div>
-    </button>
-    <button class="quick-btn orange" onclick="openRegistrarTroca()">
-      <div class="quick-icon">🔄</div>
-      <div class="quick-text">Produto p/ Troca</div>
-    </button>
-    <button class="quick-btn warning" onclick="goToPage('vencimentos')">
-      <div class="quick-icon">⏰</div>
-      <div class="quick-text">Vencimentos</div>
-    </button>
-    <button class="quick-btn success" onclick="openCadastro()">
-      <div class="quick-icon">📝</div>
-      <div class="quick-text">Cadastrar Produto</div>
-    </button>
+    <button class="quick-btn primary" onclick="openRealizarFalta()"><div class="quick-icon">➕</div><div class="quick-text">Registrar Falta</div></button>
+    <button class="quick-btn orange" onclick="openRegistrarTroca()"><div class="quick-icon">🔄</div><div class="quick-text">Produto p/ Troca</div></button>
+    <button class="quick-btn warning" onclick="goToPage('vencimentos')"><div class="quick-icon">⏰</div><div class="quick-text">Vencimentos</div></button>
+    <button class="quick-btn success" onclick="openCadastro()"><div class="quick-icon">📝</div><div class="quick-text">Cadastrar Produto</div></button>
   </div>
-  <div class="secondary-actions">
-    <button class="secondary-btn" onclick="switchTab(1)">📚 Ver Produtos</button>
-    <button class="secondary-btn" onclick="goToPage('trocas')">🔄 Ver Trocas</button>
+  <div class="sec-actions">
+    <button class="sec-btn" onclick="switchTab(1)">📚 Ver Produtos</button>
+    <button class="sec-btn" onclick="goToPage('trocas')">🔄 Ver Trocas</button>
   </div>
-  <div class="section orange-border" id="sectionTrocas" style="display:none;">
-    <div class="section-header">
-      <div class="section-title">🔄 Produtos para Troca</div>
-      <div class="section-link orange" onclick="goToPage('trocas')">Ver todas →</div>
-    </div>
-    <div id="listaTrocasHome"></div>
+  <div class="section ora-border" id="secTrocas" style="display:none">
+    <div class="section-header"><div class="section-title">🔄 Trocas Pendentes</div><div class="section-link ora" onclick="goToPage('trocas')">Ver todas →</div></div>
+    <div id="listTrocasHome"></div>
   </div>
-  <div class="section" id="sectionUrgentes" style="display:none;">
-    <div class="section-header">
-      <div class="section-title">🔴 Faltas Urgentes</div>
-      <div class="section-link" onclick="switchTab(2)">Ver todas →</div>
-    </div>
-    <div id="listaUrgentesHome"></div>
+  <div class="section" id="secUrgentes" style="display:none">
+    <div class="section-header"><div class="section-title">🔴 Faltas Urgentes</div><div class="section-link" onclick="switchTab(2)">Ver todas →</div></div>
+    <div id="listUrgHome"></div>
   </div>
-  <div class="section" id="sectionVencendo" style="display:none;">
-    <div class="section-header">
-      <div class="section-title">⏰ Produtos Vencendo</div>
-      <div class="section-link" onclick="goToPage('vencimentos')">Ver todos →</div>
-    </div>
-    <div id="listaVencendoHome"></div>
+  <div class="section" id="secVencendo" style="display:none">
+    <div class="section-header"><div class="section-title">⏰ Vencendo em Breve</div><div class="section-link" onclick="goToPage('vencimentos')">Ver todos →</div></div>
+    <div id="listVencHome"></div>
   </div>
 </div>
 
-<!-- ========== PAGE: PRODUTOS ========== -->
+<!-- ═══ PRODUTOS ═══ -->
 <div class="page" id="pageProdutos">
   <header class="header">
     <button class="header-back" onclick="goBack()">←</button>
-    <div>
-      <div class="header-title">📚 Produtos Cadastrados</div>
-      <div class="header-sub" id="produtosCount">0 produtos</div>
-    </div>
+    <div><div class="header-title">📚 Produtos</div><div class="header-sub" id="prodCount">0 produtos</div></div>
   </header>
   <div class="search-box">
     <span class="search-icon">🔍</span>
-    <input type="text" class="search-input" id="searchProdutos" placeholder="Buscar produto ou código..." oninput="renderProdutos()">
-    <button class="scan-btn-inline" onclick="abrirScannerProdutos()" title="Escanear código de barras">
-      <span>📷</span><span>SCAN</span>
-    </button>
+    <input type="text" class="search-input" id="searchProd" placeholder="Buscar produto ou código..." oninput="renderProdutos()">
+    <button class="scan-inline" onclick="abrirScannerProdutos()">📷 <span>SCAN</span></button>
   </div>
-  <div id="listaProdutos"></div>
-  <button class="btn btn-primary btn-block btn-lg" onclick="openCadastro()" style="margin-top:16px;">
-    ➕ Cadastrar Novo Produto
-  </button>
+  <div id="listProd"></div>
+  <button class="btn btn-pri btn-block btn-lg" onclick="openCadastro()" style="margin-top:18px">➕ Cadastrar Produto</button>
 </div>
 
-<!-- ========== PAGE: FALTAS ========== -->
+<!-- ═══ FALTAS ═══ -->
 <div class="page" id="pageFaltas">
   <header class="header">
     <button class="header-back" onclick="goBack()">←</button>
-    <div>
-      <div class="header-title">📋 Lista de Faltas</div>
-      <div class="header-sub" id="faltasCount">0 itens</div>
-    </div>
+    <div><div class="header-title">📋 Lista de Faltas</div><div class="header-sub" id="faltasCount">0 itens</div></div>
   </header>
-  <div class="chip-row">
-    <button class="chip active" data-filter="todos" onclick="setFaltaFilter(this)">Todos</button>
-    <button class="chip" data-filter="alta" onclick="setFaltaFilter(this)">🔴 Urgentes</button>
-    <button class="chip" data-filter="media" onclick="setFaltaFilter(this)">🟡 Médio</button>
-    <button class="chip" data-filter="baixa" onclick="setFaltaFilter(this)">🟢 Baixo</button>
-    <button class="chip" data-filter="pedido" onclick="setFaltaFilter(this)">✅ Pedidos</button>
+  <div class="chips">
+    <button class="chip active" data-f="todos" onclick="setFF(this)">Todos</button>
+    <button class="chip" data-f="alta" onclick="setFF(this)">🔴 Urgentes</button>
+    <button class="chip" data-f="media" onclick="setFF(this)">🟡 Médio</button>
+    <button class="chip" data-f="baixa" onclick="setFF(this)">🟢 Baixo</button>
+    <button class="chip" data-f="pedido" onclick="setFF(this)">✅ Pedidos</button>
   </div>
-  <div id="listaFaltas"></div>
-  <div style="display:flex;gap:10px;margin-top:16px;">
-    <button class="btn btn-primary btn-block" onclick="openRealizarFalta()">➕ Nova Falta</button>
-    <button class="btn btn-success" onclick="openPDFModal()">📄</button>
-    <button class="btn btn-gray" onclick="compartilharWhatsApp()">📤</button>
+  <div id="listFaltas"></div>
+  <div class="flex gap-10" style="margin-top:18px">
+    <button class="btn btn-pri btn-block" onclick="openRealizarFalta()">➕ Nova Falta</button>
+    <button class="btn btn-suc" onclick="openPDFModal()">📄</button>
+    <button class="btn btn-gray" onclick="shareWhats()">📤</button>
   </div>
 </div>
 
-<!-- ========== PAGE: TROCAS ========== -->
+<!-- ═══ TROCAS ═══ -->
 <div class="page" id="pageTrocas">
-  <header class="header" style="background: linear-gradient(135deg, var(--orange), #C2410C);">
+  <header class="header" style="background:linear-gradient(135deg,var(--ora),#c2410c);box-shadow:0 4px 20px rgba(234,88,12,.3)">
     <button class="header-back" onclick="goBack()">←</button>
-    <div>
-      <div class="header-title">🔄 Produtos para Troca</div>
-      <div class="header-sub" id="trocasCount">0 itens</div>
-    </div>
+    <div><div class="header-title">🔄 Trocas</div><div class="header-sub" id="trocasCount">0 itens</div></div>
   </header>
-  <div class="chip-row">
-    <button class="chip active orange" data-filter="todos" onclick="setTrocaFilter(this)">Todos</button>
-    <button class="chip" data-filter="pendente" onclick="setTrocaFilter(this)">⏳ Pendentes</button>
-    <button class="chip" data-filter="enviado" onclick="setTrocaFilter(this)">📦 Enviados</button>
-    <button class="chip" data-filter="concluido" onclick="setTrocaFilter(this)">✅ Concluídos</button>
-    <button class="chip" data-filter="avaria" onclick="setTrocaFilter(this)">💔 Avaria</button>
-    <button class="chip" data-filter="vencimento" onclick="setTrocaFilter(this)">📅 Vencimento</button>
+  <div class="chips">
+    <button class="chip active ora" data-t="todos" onclick="setTF(this)">Todos</button>
+    <button class="chip" data-t="pendente" onclick="setTF(this)">⏳ Pendentes</button>
+    <button class="chip" data-t="enviado" onclick="setTF(this)">📦 Enviados</button>
+    <button class="chip" data-t="concluido" onclick="setTF(this)">✅ Concluídos</button>
+    <button class="chip" data-t="avaria" onclick="setTF(this)">💔 Avaria</button>
+    <button class="chip" data-t="vencimento" onclick="setTF(this)">📅 Vencimento</button>
   </div>
-  <div id="listaTrocas"></div>
-  <div style="display:flex;gap:10px;margin-top:16px;">
-    <button class="btn btn-orange btn-block" onclick="openRegistrarTroca()">➕ Nova Troca</button>
-    <button class="btn btn-success" onclick="gerarPDFTrocas()">📄</button>
+  <div id="listTrocas"></div>
+  <div class="flex gap-10" style="margin-top:18px">
+    <button class="btn btn-ora btn-block" onclick="openRegistrarTroca()">➕ Nova Troca</button>
+    <button class="btn btn-suc" onclick="pdfTrocas()">📄</button>
   </div>
 </div>
 
-<!-- ========== PAGE: VENCIMENTOS ========== -->
+<!-- ═══ VENCIMENTOS ═══ -->
 <div class="page" id="pageVencimentos">
   <header class="header">
     <button class="header-back" onclick="goBack()">←</button>
-    <div>
-      <div class="header-title">⏰ Controle de Vencimentos</div>
-      <div class="header-sub">Produtos próximos do vencimento</div>
-    </div>
+    <div><div class="header-title">⏰ Vencimentos</div><div class="header-sub">Controle de validade</div></div>
   </header>
-  <button class="btn btn-success btn-block" onclick="openAddVencimento()" style="margin-bottom:16px;">
-    ➕ Adicionar Vencimento
-  </button>
-  <div class="chip-row">
-    <button class="chip active" data-venc="todos" onclick="setVencFilter(this)">Todos</button>
-    <button class="chip" data-venc="vencidos" onclick="setVencFilter(this)">🔴 Vencidos</button>
-    <button class="chip" data-venc="7dias" onclick="setVencFilter(this)">🟡 7 dias</button>
-    <button class="chip" data-venc="30dias" onclick="setVencFilter(this)">🟢 30 dias</button>
+  <button class="btn btn-suc btn-block mb-16" onclick="openAddVenc()">➕ Adicionar Vencimento</button>
+  <div class="chips">
+    <button class="chip active" data-v="todos" onclick="setVF(this)">Todos</button>
+    <button class="chip" data-v="vencidos" onclick="setVF(this)">🔴 Vencidos</button>
+    <button class="chip" data-v="7dias" onclick="setVF(this)">🟡 7 dias</button>
+    <button class="chip" data-v="30dias" onclick="setVF(this)">🟢 30 dias</button>
   </div>
-  <div id="listaVencimentos"></div>
+  <div id="listVenc"></div>
 </div>
 
-<!-- ========== PAGE: CONFIG ========== -->
+<!-- ═══ CONFIG ═══ -->
 <div class="page" id="pageConfig">
   <header class="header">
     <button class="header-back" onclick="goBack()">←</button>
-    <div>
-      <div class="header-title">⚙️ Configurações</div>
-      <div class="header-sub">Ajustes do aplicativo</div>
-    </div>
+    <div><div class="header-title">⚙️ Configurações</div><div class="header-sub">Ajustes do app</div></div>
   </header>
   <div class="card">
-    <div class="section-title" style="margin-bottom:12px;">🏪 Dados da Loja</div>
-    <div class="form-group">
-      <label class="form-label">Nome da Loja</label>
-      <input type="text" class="form-input" id="configLoja" placeholder="Minha Loja" onchange="saveConfig()">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Responsável</label>
-      <input type="text" class="form-input" id="configResp" placeholder="Seu nome" onchange="saveConfig()">
-    </div>
+    <div class="section-title mb-12">🏪 Dados da Loja</div>
+    <div class="fg"><label class="fl">Nome da Loja</label><input type="text" class="fi" id="cfgLoja" placeholder="Minha Loja" onchange="saveCfg()"></div>
+    <div class="fg"><label class="fl">Responsável</label><input type="text" class="fi" id="cfgResp" placeholder="Seu nome" onchange="saveCfg()"></div>
   </div>
   <div class="card">
-    <div class="section-title" style="margin-bottom:12px;">⏰ Alertas de Vencimento</div>
-    <div class="form-group">
-      <label class="form-label">Dias de Antecedência</label>
-      <select class="form-select" id="configDiasVenc" onchange="saveConfig()">
-        <option value="3">3 dias antes</option>
-        <option value="5">5 dias antes</option>
-        <option value="7" selected>7 dias antes</option>
-        <option value="10">10 dias antes</option>
-        <option value="15">15 dias antes</option>
-        <option value="30">30 dias (1 mês)</option>
-        <option value="60">60 dias (2 meses)</option>
-        <option value="90">90 dias (3 meses)</option>
+    <div class="section-title mb-12">⏰ Alertas de Vencimento</div>
+    <div class="fg"><label class="fl">Dias de Antecedência</label>
+      <select class="fs" id="cfgDias" onchange="saveCfg()">
+        <option value="3">3 dias</option><option value="5">5 dias</option>
+        <option value="7" selected>7 dias</option><option value="10">10 dias</option>
+        <option value="15">15 dias</option><option value="30">1 mês</option>
+        <option value="60">2 meses</option><option value="90">3 meses</option>
       </select>
     </div>
-    <div style="background:var(--warning-light);padding:12px;border-radius:var(--radius-sm);font-size:13px;color:var(--warning);">
-      💡 <strong>Atualmente:</strong> <span id="configVencInfo">7 dias</span>
-    </div>
+    <div style="background:var(--war-l);padding:14px;border-radius:var(--r-sm);font-size:13px;color:var(--war);font-weight:600">💡 Atualmente: <span id="cfgVencInfo">7 dias</span></div>
   </div>
   <div class="card">
-    <div class="section-title" style="margin-bottom:12px;">☁️ Sincronização em Tempo Real</div>
-    <div id="syncInfo" style="font-size:13px;color:var(--gray-500);margin-bottom:12px;"></div>
-    <button class="btn btn-primary btn-block" onclick="forceSync()" style="margin-bottom:10px;">🔄 Sincronizar Agora</button>
-    <div style="background:var(--primary-light);padding:12px;border-radius:var(--radius-sm);font-size:12px;color:var(--primary);">
-      💡 O app sincroniza automaticamente com todos os dispositivos em tempo real via Firebase.
-    </div>
+    <div class="section-title mb-12">☁️ Sincronização</div>
+    <div id="syncInfo" style="font-size:13px;color:var(--g500);margin-bottom:14px"></div>
+    <button class="btn btn-pri btn-block mb-12" onclick="forceSync()">🔄 Sincronizar</button>
+    <div style="background:var(--pri-l);padding:14px;border-radius:var(--r-sm);font-size:12px;color:var(--pri);font-weight:600">💡 O app sincroniza automaticamente em tempo real via Firebase</div>
   </div>
   <div class="card">
-    <div class="section-title" style="margin-bottom:12px;">💾 Backup</div>
-    <button class="btn btn-outline btn-block" onclick="exportarBackup()" style="margin-bottom:10px;">📤 Exportar Backup</button>
-    <label class="btn btn-outline btn-block" style="cursor:pointer;">
-      📥 Importar Backup
-      <input type="file" accept=".json" style="display:none;" onchange="importarBackup(event)">
-    </label>
+    <div class="section-title mb-12">💾 Backup</div>
+    <button class="btn btn-outline btn-block mb-12" onclick="exportBackup()">📤 Exportar</button>
+    <label class="btn btn-outline btn-block" style="cursor:pointer">📥 Importar<input type="file" accept=".json" style="display:none" onchange="importBackup(event)"></label>
   </div>
-  <div class="card">
-    <div class="section-title" style="margin-bottom:12px;">🗑️ Limpar Dados</div>
-    <button class="btn btn-danger btn-block" onclick="limparTudo()">⚠️ Apagar Todos os Dados</button>
-  </div>
+  <div class="card"><button class="btn btn-dan btn-block" onclick="clearAll()">⚠️ Apagar Todos os Dados</button></div>
 </div>
 
+<!-- TAB BAR -->
 <nav class="tab-bar">
-  <button class="tab-btn active" onclick="switchTab(0)">
-    <span class="tab-icon">🏠</span>Início
-  </button>
-  <button class="tab-btn" onclick="switchTab(1)">
-    <span class="tab-icon">📚</span>Produtos
-  </button>
-  <button class="tab-btn" onclick="switchTab(2)">
-    <span class="tab-icon">📋</span>Faltas
-  </button>
-  <button class="tab-btn" onclick="switchTab(3)">
-    <span class="tab-icon">⚙️</span>Config
-  </button>
+  <button class="tab-btn active" onclick="switchTab(0)"><span class="tab-icon">🏠</span>Início</button>
+  <button class="tab-btn" onclick="switchTab(1)"><span class="tab-icon">📚</span>Produtos</button>
+  <button class="tab-btn" onclick="switchTab(2)"><span class="tab-icon">📋</span>Faltas</button>
+  <button class="tab-btn" onclick="switchTab(3)"><span class="tab-icon">⚙️</span>Config</button>
 </nav>
 
 <script>
-// ╔══════════════════════════════════════════════════════════════╗
-// ║  FIREBASE CONFIG                                              ║
-// ╚══════════════════════════════════════════════════════════════╝
-const firebaseConfig = {
-  apiKey: "AIzaSyAFYDsRg1jgr2mP6UvEQofwoWH0Mi2iTps",
-  authDomain: "controle-faltas-d6709.firebaseapp.com",
-  databaseURL: "https://controle-faltas-d6709-default-rtdb.firebaseio.com",
-  projectId: "controle-faltas-d6709",
-  storageBucket: "controle-faltas-d6709.firebasestorage.app",
-  messagingSenderId: "1063821814181",
-  appId: "1:1063821814181:web:4aa8451fd799590d93e04c"
-};
+// ════════════════ FIREBASE ════════════════
+const fbCfg={apiKey:"AIzaSyAFYDsRg1jgr2mP6UvEQofwoWH0Mi2iTps",authDomain:"controle-faltas-d6709.firebaseapp.com",databaseURL:"https://controle-faltas-d6709-default-rtdb.firebaseio.com",projectId:"controle-faltas-d6709",storageBucket:"controle-faltas-d6709.firebasestorage.app",messagingSenderId:"1063821814181",appId:"1:1063821814181:web:4aa8451fd799590d93e04c"};
+let db=null,isOnline=navigator.onLine;
+try{firebase.initializeApp(fbCfg);db=firebase.database();console.log('✅ Firebase OK')}catch(e){console.log('⚠️ Firebase err:',e)}
 
-let db = null;
-let isOnline = navigator.onLine;
+// ════════════════ STATE ════════════════
+let produtos=[],faltas=[],vencimentos=[],trocas=[],config={};
+let curTab=0,curFF='todos',curVF='todos',curTF='todos';
+let navH=['home'],scanMap={},curImg='';
 
-try {
-  firebase.initializeApp(firebaseConfig);
-  db = firebase.database();
-  console.log('✅ Firebase conectado!');
-} catch(e) {
-  console.log('⚠️ Firebase erro:', e);
-}
-
-// ===== STATE =====
-let produtos = [];
-let faltas = [];
-let vencimentos = [];
-let trocas = [];
-let config = {};
-let currentTab = 0;
-let currentFaltaFilter = 'todos';
-let currentVencFilter = 'todos';
-let currentTrocaFilter = 'todos';
-let navHistory = ['home'];
-let scannerInstances = {};
-let currentImage = '';
-let realtimeListeners = {};
-
-// ===== INIT =====
-document.addEventListener('DOMContentLoaded', async () => {
-  showLoading('Conectando ao Firebase...');
-  loadConfig();
-  await loadAllData();
-  setupRealtimeSync(); // Ativa sincronização em tempo real
-  renderHome();
-  hideLoading();
-
-  window.addEventListener('online', () => {
-    isOnline = true;
-    updateConnectionStatus();
-    updateSyncStatus('online');
-    syncData();
-  });
-  window.addEventListener('offline', () => {
-    isOnline = false;
-    updateConnectionStatus();
-    updateSyncStatus('offline');
-  });
-  updateConnectionStatus();
-  updateSyncStatus(isOnline ? 'online' : 'offline');
+// ════════════════ INIT ════════════════
+document.addEventListener('DOMContentLoaded',async()=>{
+  showLoad('Conectando...');loadCfg();await loadAll();setupRT();renderHome();hideLoad();
+  window.addEventListener('online',()=>{isOnline=true;updConn();updSync('on');syncData()});
+  window.addEventListener('offline',()=>{isOnline=false;updConn();updSync('off')});
+  updConn();updSync(isOnline?'on':'off');
 });
 
-// ╔══════════════════════════════════════════════════════════════╗
-// ║  SINCRONIZAÇÃO EM TEMPO REAL                                  ║
-// ╚══════════════════════════════════════════════════════════════╝
-function setupRealtimeSync() {
-  if (!db) return;
-
-  // Escuta mudanças em PRODUTOS
-  db.ref('produtos').on('value', snap => {
-    const novos = snap.val() ? Object.values(snap.val()) : [];
-    if (JSON.stringify(novos) !== JSON.stringify(produtos)) {
-      produtos = novos;
-      localStorage.setItem('produtos', JSON.stringify(produtos));
-      renderHome();
-      if (currentTab === 1) renderProdutos();
-      console.log('🔄 Produtos sincronizados:', produtos.length);
-    }
+// ════════════════ REALTIME SYNC ════════════════
+function setupRT(){
+  if(!db)return;
+  ['produtos','faltas','vencimentos','trocas'].forEach(col=>{
+    db.ref(col).on('value',snap=>{
+      const d=snap.val()?Object.values(snap.val()):[];
+      const cur=col==='produtos'?produtos:col==='faltas'?faltas:col==='vencimentos'?vencimentos:trocas;
+      if(JSON.stringify(d)!==JSON.stringify(cur)){
+        if(col==='produtos')produtos=d;else if(col==='faltas')faltas=d;
+        else if(col==='vencimentos')vencimentos=d;else trocas=d;
+        localStorage.setItem(col,JSON.stringify(d));
+        renderHome();
+        if(curTab===1)renderProdutos();if(curTab===2)renderFaltas();
+      }
+    });
   });
-
-  // Escuta mudanças em FALTAS
-  db.ref('faltas').on('value', snap => {
-    const novas = snap.val() ? Object.values(snap.val()) : [];
-    if (JSON.stringify(novas) !== JSON.stringify(faltas)) {
-      faltas = novas;
-      localStorage.setItem('faltas', JSON.stringify(faltas));
-      renderHome();
-      if (currentTab === 2) renderFaltas();
-      console.log('🔄 Faltas sincronizadas:', faltas.length);
-    }
-  });
-
-  // Escuta mudanças em VENCIMENTOS
-  db.ref('vencimentos').on('value', snap => {
-    const novos = snap.val() ? Object.values(snap.val()) : [];
-    if (JSON.stringify(novos) !== JSON.stringify(vencimentos)) {
-      vencimentos = novos;
-      localStorage.setItem('vencimentos', JSON.stringify(vencimentos));
-      renderHome();
-      console.log('🔄 Vencimentos sincronizados:', vencimentos.length);
-    }
-  });
-
-  // Escuta mudanças em TROCAS
-  db.ref('trocas').on('value', snap => {
-    const novas = snap.val() ? Object.values(snap.val()) : [];
-    if (JSON.stringify(novas) !== JSON.stringify(trocas)) {
-      trocas = novas;
-      localStorage.setItem('trocas', JSON.stringify(trocas));
-      renderHome();
-      console.log('🔄 Trocas sincronizadas:', trocas.length);
-    }
-  });
-
-  console.log('✅ Sincronização em tempo real ativada!');
+}
+function updSync(s){
+  const d=document.getElementById('syncDot'),t=document.getElementById('syncText');
+  if(!d||!t)return;
+  if(s==='on'){d.classList.remove('off');t.textContent='Sincronizado'}
+  else if(s==='sync'){d.style.background='#60a5fa';t.textContent='Sincronizando...'}
+  else{d.classList.add('off');t.textContent='Offline'}
 }
 
-function updateSyncStatus(status) {
-  const dot = document.getElementById('syncDot');
-  const text = document.getElementById('syncText');
-  if (!dot || !text) return;
+// ════════════════ DATA ════════════════
+async function loadAll(){
+  if(db&&isOnline){
+    try{
+      const[a,b,c,d]=await Promise.all([db.ref('produtos').once('value'),db.ref('faltas').once('value'),db.ref('vencimentos').once('value'),db.ref('trocas').once('value')]);
+      produtos=a.val()?Object.values(a.val()):[];faltas=b.val()?Object.values(b.val()):[];
+      vencimentos=c.val()?Object.values(c.val()):[];trocas=d.val()?Object.values(d.val()):[];
+      ['produtos','faltas','vencimentos','trocas'].forEach(k=>localStorage.setItem(k,JSON.stringify(eval(k))));
+    }catch(e){loadLocal()}
+  }else loadLocal();
+}
+function loadLocal(){
+  produtos=J('produtos');faltas=J('faltas');vencimentos=J('vencimentos');trocas=J('trocas');
+}
+function J(k){return JSON.parse(localStorage.getItem(k)||'[]')}
+async function save(col,data){
+  localStorage.setItem(col,JSON.stringify(data));
+  if(db&&isOnline){try{updSync('sync');const o={};data.forEach(i=>o[i.id]=i);await db.ref(col).set(o);updSync('on')}catch(e){updSync('off')}}
+}
+async function syncData(){if(db&&isOnline){updSync('sync');await loadAll();renderAll();updSync('on');toast('✅ Sincronizado!','success')}}
+function forceSync(){syncData()}
 
-  if (status === 'online') {
-    dot.classList.remove('offline');
-    text.textContent = 'Sincronizado';
-  } else if (status === 'syncing') {
-    dot.style.background = '#60a5fa';
-    text.textContent = 'Sincronizando...';
-  } else {
-    dot.classList.add('offline');
-    text.textContent = 'Offline';
-  }
+// ════════════════ NAVIGATION ════════════════
+function switchTab(i){
+  curTab=i;stopAllScan();
+  const p=['pageHome','pageProdutos','pageFaltas','pageConfig'];
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+  document.getElementById(p[i]).classList.add('active');
+  document.querySelectorAll('.tab-btn')[i].classList.add('active');
+  navH=['home'];renderAll();
+}
+function goToPage(pg){
+  stopAllScan();
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+  const map={home:[0,'pageHome'],produtos:[1,'pageProdutos'],faltas:[2,'pageFaltas'],config:[3,'pageConfig'],vencimentos:[-1,'pageVencimentos'],trocas:[-1,'pageTrocas']};
+  const[ti,pid]=map[pg]||[0,'pageHome'];
+  document.getElementById(pid).classList.add('active');
+  if(ti>=0){document.querySelectorAll('.tab-btn')[ti].classList.add('active');curTab=ti}
+  navH.push(pg);renderAll();
+  if(pg==='vencimentos')renderVenc();if(pg==='trocas')renderTrocas();
+}
+function goBack(){navH.length>1?(navH.pop(),goToPage(navH.pop())):switchTab(0)}
+function renderAll(){renderHome();if(curTab===1)renderProdutos();if(curTab===2)renderFaltas()}
+
+// ════════════════ HELPERS ════════════════
+function gn(i){return i.nomeCompleto||[i.tipo,i.marca,i.volume,i.variacao].filter(Boolean).join(' ')||i.nome||''}
+function fmtD(d){if(!d)return'';const[y,m,dd]=d.split('-');return`${dd}/${m}/${y}`}
+function fmtDT(s){if(!s)return'';const d=new Date(s);return`${S(d.getDate())}/${S(d.getMonth()+1)}/${d.getFullYear()} ${S(d.getHours())}:${S(d.getMinutes())}`}
+function S(n){return String(n).padStart(2,'0')}
+function showLoad(t='Carregando...'){document.getElementById('loadingText').textContent=t;document.getElementById('loading').classList.add('show')}
+function hideLoad(){document.getElementById('loading').classList.remove('show')}
+function toast(m,t='success'){const e=document.createElement('div');e.className=`toast ${t}`;e.textContent=m;document.getElementById('toastWrap').appendChild(e);setTimeout(()=>e.remove(),3500)}
+function showModal(h){document.getElementById('modalContent').innerHTML=h;document.getElementById('modal').classList.add('show')}
+function closeModal(){stopAllScan();document.getElementById('modal').classList.remove('show')}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal()});
+function updConn(){document.getElementById('connBanner').classList.toggle('show',!isOnline)}
+
+// ════════════════ SCANNER ENGINE ════════════════
+function initScan(cid,onOk,sid){
+  stopScan(cid);
+  const el=document.getElementById(cid);if(!el)return;
+  const sc=new Html5Qrcode(cid);scanMap[cid]=sc;
+  const st=document.getElementById(sid);if(st)st.textContent='📷 Iniciando câmera...';
+  sc.start({facingMode:'environment'},{fps:10,qrbox:{width:220,height:220},aspectRatio:1.0,
+    formatsToSupport:[Html5QrcodeSupportedFormats.EAN_13,Html5QrcodeSupportedFormats.EAN_8,Html5QrcodeSupportedFormats.CODE_128,Html5QrcodeSupportedFormats.CODE_39,Html5QrcodeSupportedFormats.UPC_A,Html5QrcodeSupportedFormats.UPC_E,Html5QrcodeSupportedFormats.QR_CODE]
+  },txt=>{if(st)st.textContent='✅ '+txt;onOk(txt)},()=>{}).then(()=>{if(st)st.textContent='📷 Aponte para o código de barras'}).catch(e=>{if(st)st.textContent='❌ Câmera indisponível'});
+}
+function stopScan(cid){
+  if(scanMap[cid]){try{scanMap[cid].stop().then(()=>{try{scanMap[cid].clear()}catch(e){}delete scanMap[cid]}).catch(()=>{delete scanMap[cid]})}catch(e){delete scanMap[cid]}}
+}
+function stopAllScan(){Object.keys(scanMap).forEach(k=>stopScan(k))}
+
+function scannerHTML(id,statusId){
+  return`<div class="scanner-wrap"><div id="${id}"></div><div class="scanner-status" id="${statusId}">📷 Iniciando...</div></div>`;
 }
 
-// ===== DATA =====
-async function loadAllData() {
-  if (db && isOnline) {
-    try {
-      const [prodSnap, faltaSnap, vencSnap, trocaSnap] = await Promise.all([
-        db.ref('produtos').once('value'),
-        db.ref('faltas').once('value'),
-        db.ref('vencimentos').once('value'),
-        db.ref('trocas').once('value')
-      ]);
-      produtos = prodSnap.val() ? Object.values(prodSnap.val()) : [];
-      faltas = faltaSnap.val() ? Object.values(faltaSnap.val()) : [];
-      vencimentos = vencSnap.val() ? Object.values(vencSnap.val()) : [];
-      trocas = trocaSnap.val() ? Object.values(trocaSnap.val()) : [];
-      localStorage.setItem('produtos', JSON.stringify(produtos));
-      localStorage.setItem('faltas', JSON.stringify(faltas));
-      localStorage.setItem('vencimentos', JSON.stringify(vencimentos));
-      localStorage.setItem('trocas', JSON.stringify(trocas));
-    } catch(e) {
-      console.log('Erro Firebase, usando localStorage:', e);
-      loadFromLocalStorage();
-    }
-  } else {
-    loadFromLocalStorage();
-  }
+// ════════════════ RENDER HOME ════════════════
+function renderHome(){
+  const $=id=>document.getElementById(id);
+  $('statFaltas').textContent=faltas.length;
+  $('statUrgentes').textContent=faltas.filter(f=>f.prioridade==='alta').length;
+  $('statTrocas').textContent=trocas.filter(t=>t.status==='pendente').length;
+  const hoje=new Date();hoje.setHours(0,0,0,0);
+  const da=parseInt(config.diasVencimento||7);
+  const vc=vencimentos.filter(v=>Math.ceil((new Date(v.validade)-hoje)/864e5)<=da).length;
+  $('statVencendo').textContent=vc;
+
+  const tp=trocas.filter(t=>t.status==='pendente').slice(0,3);
+  const st=$('secTrocas');
+  if(tp.length){st.style.display='block';$('listTrocasHome').innerHTML=tp.map(t=>trocaHTML(t,1)).join('')}else st.style.display='none';
+
+  const urg=faltas.filter(f=>f.prioridade==='alta').slice(0,3);
+  const su=$('secUrgentes');
+  if(urg.length){su.style.display='block';$('listUrgHome').innerHTML=urg.map(faltaHTML).join('')}else su.style.display='none';
+
+  const ve=vencimentos.filter(v=>Math.ceil((new Date(v.validade)-hoje)/864e5)<=da).sort((a,b)=>new Date(a.validade)-new Date(b.validade)).slice(0,3);
+  const sv=$('secVencendo');
+  if(ve.length){sv.style.display='block';$('listVencHome').innerHTML=ve.map(v=>vencHTML(v,Math.ceil((new Date(v.validade)-hoje)/864e5))).join('')}else sv.style.display='none';
 }
 
-function loadFromLocalStorage() {
-  produtos = JSON.parse(localStorage.getItem('produtos') || '[]');
-  faltas = JSON.parse(localStorage.getItem('faltas') || '[]');
-  vencimentos = JSON.parse(localStorage.getItem('vencimentos') || '[]');
-  trocas = JSON.parse(localStorage.getItem('trocas') || '[]');
+// ════════════════ CARD HTML ════════════════
+function faltaHTML(f){
+  const pc=f.prioridade==='alta'?'urgent':f.prioridade==='media'?'medium':'low';
+  const bc=f.prioridade==='alta'?'b-dan':f.prioridade==='media'?'b-war':'b-suc';
+  const pt=f.prioridade==='alta'?'URGENTE':f.prioridade==='media'?'MÉDIA':'BAIXA';
+  const im=f.imagem?`<img src="${f.imagem}" onerror="this.parentElement.innerHTML='📦'">`:'📦';
+  return`<div class="prod-card ${pc}"><div class="prod-img">${f.pedido?'✅':im}</div><div class="prod-info"><div class="prod-name">${gn(f)}</div>${f.codigo?`<div class="prod-code">📊 ${f.codigo}</div>`:''}<div class="prod-meta blue">📅 ${fmtDT(f.dataRegistro||f.createdAt)}</div><div class="prod-meta">📦 ${f.estoqueQtd||0} ${f.estoqueUnid||'UN'}</div>${f.sugestaoQtd?`<div class="prod-meta green">📝 Pedir: ${f.sugestaoQtd} ${f.sugestaoUnid||'UN'}</div>`:''}</div><span class="prod-badge ${f.pedido?'b-info':bc}">${f.pedido?'✅':pt}</span></div>`;
+}
+function trocaHTML(t,compact=0){
+  const im=t.imagem?`<img src="${t.imagem}" onerror="this.parentElement.innerHTML='📦'">`:'📦';
+  const mo=t.motivo==='avaria'?'💔 Avaria':t.motivo==='vencimento'?'📅 Vencimento':`📝 ${t.motivoOutros||'Outros'}`;
+  const sb=t.status==='pendente'?{c:'b-war',t:'⏳ Pendente'}:t.status==='enviado'?{c:'b-info',t:'📦 Enviado'}:{c:'b-suc',t:'✅ Concluído'};
+  return`<div class="prod-card troca ${t.status==='concluido'?'troca-done':''}"><div class="prod-img">${im}</div><div class="prod-info"><div class="prod-name">${gn(t)}</div>${t.codigo?`<div class="prod-code">📊 ${t.codigo}</div>`:''}<div class="prod-meta">📦 ${t.quantidade} ${t.unidade}</div><div class="prod-meta ora">${mo}</div>${!compact?`<div class="prod-meta blue">📅 ${fmtDT(t.dataRegistro||t.createdAt)}</div>`:''}</div><span class="prod-badge ${sb.c}">${compact?sb.t[0]:sb.t}</span></div>`;
+}
+function vencHTML(v,diff){
+  const im=v.imagem?`<img src="${v.imagem}" onerror="this.parentElement.innerHTML='📦'">`:'📦';
+  const isE=diff<0;
+  return`<div class="prod-card ${isE?'expiring':''}"><div class="prod-img">${im}</div><div class="prod-info"><div class="prod-name">${gn(v)}</div><div class="prod-meta">📦 ${v.quantidade||1} un • 📅 ${fmtD(v.validade)}</div></div><span class="prod-badge ${isE?'b-dan':diff<=7?'b-ora':'b-suc'}">${isE?'VENCIDO':diff===0?'HOJE':diff+'d'}</span></div>`;
 }
 
-async function saveData(collection, data) {
-  localStorage.setItem(collection, JSON.stringify(data));
-  if (db && isOnline) {
-    try {
-      updateSyncStatus('syncing');
-      const obj = {};
-      data.forEach(item => { obj[item.id] = item; });
-      await db.ref(collection).set(obj);
-      updateSyncStatus('online');
-    } catch(e) {
-      console.log('Erro ao salvar no Firebase:', e);
-      updateSyncStatus('offline');
-    }
-  } else {
-    updateSyncStatus('offline');
-  }
-}
-
-async function syncData() {
-  if (db && isOnline) {
-    updateSyncStatus('syncing');
-    await loadAllData();
-    renderAll();
-    updateSyncStatus('online');
-    toast('✅ Sincronizado!', 'success');
-  }
-}
-
-function forceSync() { syncData(); }
-
-// ===== NAVIGATION =====
-function switchTab(idx) {
-  currentTab = idx;
-  const pages = ['pageHome', 'pageProdutos', 'pageFaltas', 'pageConfig'];
-  const names = ['home', 'produtos', 'faltas', 'config'];
-  stopAllScanners();
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(pages[idx]).classList.add('active');
-  document.querySelectorAll('.tab-btn')[idx].classList.add('active');
-  navHistory = ['home'];
-  if (idx > 0) navHistory.push(names[idx]);
-  renderAll();
-}
-
-function goToPage(page, addHistory = true) {
-  stopAllScanners();
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-
-  if (page === 'home') {
-    document.getElementById('pageHome').classList.add('active');
-    document.querySelectorAll('.tab-btn')[0].classList.add('active');
-    currentTab = 0; renderHome();
-  } else if (page === 'produtos') {
-    document.getElementById('pageProdutos').classList.add('active');
-    document.querySelectorAll('.tab-btn')[1].classList.add('active');
-    currentTab = 1; renderProdutos();
-  } else if (page === 'faltas') {
-    document.getElementById('pageFaltas').classList.add('active');
-    document.querySelectorAll('.tab-btn')[2].classList.add('active');
-    currentTab = 2; renderFaltas();
-  } else if (page === 'vencimentos') {
-    document.getElementById('pageVencimentos').classList.add('active');
-    renderVencimentos();
-  } else if (page === 'trocas') {
-    document.getElementById('pageTrocas').classList.add('active');
-    renderTrocas();
-  } else if (page === 'config') {
-    document.getElementById('pageConfig').classList.add('active');
-    document.querySelectorAll('.tab-btn')[3].classList.add('active');
-    currentTab = 3; updateSyncInfo();
-  }
-  if (addHistory) navHistory.push(page);
-}
-
-function goBack() {
-  if (navHistory.length > 1) {
-    navHistory.pop();
-    goToPage(navHistory[navHistory.length - 1], false);
-  } else {
-    switchTab(0);
-  }
-}
-
-// ===== RENDER =====
-function renderAll() {
-  renderHome();
-  if (currentTab === 1) renderProdutos();
-  if (currentTab === 2) renderFaltas();
-}
-
-function renderHome() {
-  const el = id => document.getElementById(id);
-  el('statFaltas').textContent = faltas.length;
-  el('statUrgentes').textContent = faltas.filter(f => f.prioridade === 'alta').length;
-  el('statTrocas').textContent = trocas.filter(t => t.status === 'pendente').length;
-
-  const hoje = new Date(); hoje.setHours(0,0,0,0);
-  const diasAlerta = parseInt(config.diasVencimento || 7);
-  const vencendoCount = vencimentos.filter(v => {
-    const d = new Date(v.validade);
-    return Math.ceil((d - hoje) / 86400000) <= diasAlerta;
-  }).length;
-  el('statVencendo').textContent = vencendoCount;
-
-  // Trocas pendentes
-  const trocasPend = trocas.filter(t => t.status === 'pendente').slice(0, 3);
-  const secTrocas = el('sectionTrocas');
-  if (trocasPend.length > 0) {
-    secTrocas.style.display = 'block';
-    el('listaTrocasHome').innerHTML = trocasPend.map(t => renderTrocaCardHTML(t, true)).join('');
-  } else secTrocas.style.display = 'none';
-
-  // Urgentes
-  const urgentes = faltas.filter(f => f.prioridade === 'alta').slice(0, 3);
-  const secUrg = el('sectionUrgentes');
-  if (urgentes.length > 0) {
-    secUrg.style.display = 'block';
-    el('listaUrgentesHome').innerHTML = urgentes.map(f => renderFaltaCardHTML(f)).join('');
-  } else secUrg.style.display = 'none';
-
-  // Vencendo
-  const vencendo = vencimentos.filter(v => {
-    const d = new Date(v.validade);
-    return Math.ceil((d - hoje) / 86400000) <= diasAlerta;
-  }).sort((a,b) => new Date(a.validade) - new Date(b.validade)).slice(0, 3);
-  const secVenc = el('sectionVencendo');
-  if (vencendo.length > 0) {
-    secVenc.style.display = 'block';
-    el('listaVencendoHome').innerHTML = vencendo.map(v => {
-      const diff = Math.ceil((new Date(v.validade) - hoje) / 86400000);
-      return renderVencCardHTML(v, diff);
-    }).join('');
-  } else secVenc.style.display = 'none';
-}
-
-function getNomeExibir(item) {
-  return item.nomeCompleto ||
-    [item.tipo, item.marca, item.volume, item.variacao].filter(Boolean).join(' ') ||
-    item.nome || '';
-}
-
-function renderFaltaCardHTML(f) {
-  const prioClass = f.prioridade === 'alta' ? 'urgent' : f.prioridade === 'media' ? 'medium' : 'low';
-  const badgeClass = f.prioridade === 'alta' ? 'badge-danger' : f.prioridade === 'media' ? 'badge-warning' : 'badge-success';
-  const prioText = f.prioridade === 'alta' ? 'URGENTE' : f.prioridade === 'media' ? 'MÉDIA' : 'BAIXA';
-  const img = f.imagem ? `<img src="${f.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
-  return `
-    <div class="prod-card ${prioClass}">
-      <div class="prod-img">${f.pedido ? '✅' : img}</div>
-      <div class="prod-info">
-        <div class="prod-name">${getNomeExibir(f)}</div>
-        ${f.codigo ? `<div class="prod-code">📊 ${f.codigo}</div>` : ''}
-        <div class="prod-meta blue">📅 ${formatDateTime(f.dataRegistro || f.createdAt)}</div>
-        <div class="prod-meta">📦 Estoque: ${f.estoqueQtd || 0} ${f.estoqueUnid || 'UN'}</div>
-        ${f.sugestaoQtd ? `<div class="prod-meta green">📝 Pedir: ${f.sugestaoQtd} ${f.sugestaoUnid || 'UN'}</div>` : ''}
-      </div>
-      <span class="prod-badge ${f.pedido ? 'badge-info' : badgeClass}">${f.pedido ? '✅' : prioText}</span>
-    </div>`;
-}
-
-function renderTrocaCardHTML(t, compact = false) {
-  const img = t.imagem ? `<img src="${t.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
-  const motivoText = t.motivo === 'avaria' ? '💔 Avaria' : t.motivo === 'vencimento' ? '📅 Vencimento' : `📝 ${t.motivoOutros || 'Outros'}`;
-  const statusBadge = t.status === 'pendente' ? { c:'badge-warning', t:'⏳ Pendente' } :
-                      t.status === 'enviado'  ? { c:'badge-info',    t:'📦 Enviado'  } :
-                                                { c:'badge-success',  t:'✅ Concluído'};
-  return `
-    <div class="prod-card troca ${t.status === 'concluido' ? 'troca-done' : ''}">
-      <div class="prod-img">${img}</div>
-      <div class="prod-info">
-        <div class="prod-name">${getNomeExibir(t)}</div>
-        ${t.codigo ? `<div class="prod-code">📊 ${t.codigo}</div>` : ''}
-        <div class="prod-meta">📦 ${t.quantidade} ${t.unidade}</div>
-        <div class="prod-meta orange">${motivoText}</div>
-        ${!compact ? `<div class="prod-meta blue">📅 ${formatDateTime(t.dataRegistro || t.createdAt)}</div>` : ''}
-      </div>
-      <span class="prod-badge ${statusBadge.c}">${compact ? (t.status==='pendente'?'⏳':t.status==='enviado'?'📦':'✅') : statusBadge.t}</span>
-    </div>`;
-}
-
-function renderVencCardHTML(v, diff) {
-  const isExpired = diff < 0;
-  const img = v.imagem ? `<img src="${v.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
-  return `
-    <div class="prod-card ${isExpired ? 'expiring' : ''}">
-      <div class="prod-img">${img}</div>
-      <div class="prod-info">
-        <div class="prod-name">${getNomeExibir(v)}</div>
-        <div class="prod-meta">📦 ${v.quantidade || 1} un • 📅 ${formatDate(v.validade)}</div>
-      </div>
-      <span class="prod-badge ${isExpired ? 'badge-danger' : diff <= 7 ? 'badge-orange' : 'badge-success'}">
-        ${isExpired ? 'VENCIDO' : diff === 0 ? 'HOJE' : diff + 'd'}
-      </span>
-    </div>`;
-}
-
-// ===== PRODUTOS =====
-function renderProdutos() {
-  const search = (document.getElementById('searchProdutos')?.value || '').toLowerCase();
-  let list = [...produtos];
-  if (search) {
-    list = list.filter(p =>
-      p.nome.toLowerCase().includes(search) ||
-      (p.marca || '').toLowerCase().includes(search) ||
-      (p.codigo || '').includes(search)
-    );
-  }
-  list.sort((a, b) => a.nome.localeCompare(b.nome));
-  document.getElementById('produtosCount').textContent = `${produtos.length} produtos`;
-  const container = document.getElementById('listaProdutos');
-  if (list.length === 0) {
-    container.innerHTML = `<div class="empty-state"><div class="empty-icon">📦</div><div class="empty-text">${search ? 'Nenhum produto encontrado' : 'Nenhum produto cadastrado'}</div></div>`;
-    return;
-  }
-  container.innerHTML = list.map(p => {
-    const img = p.imagem ? `<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
-    return `
-      <div class="prod-card">
-        <div class="prod-img">${img}</div>
-        <div class="prod-info">
-          <div class="prod-name">${getNomeExibir(p)}</div>
-          ${p.codigo ? `<div class="prod-code">📊 ${p.codigo}</div>` : ''}
-        </div>
-      </div>
-      <div class="card-actions">
-        <button class="action-btn add" onclick="openFaltaComProduto('${p.id}')">➕ Falta</button>
-        <button class="action-btn orange" onclick="openTrocaComProduto('${p.id}')">🔄 Troca</button>
-        <button class="action-btn edit" onclick="editarProduto('${p.id}')">✏️</button>
-        <button class="action-btn delete" onclick="excluirProduto('${p.id}')">🗑️</button>
-      </div>`;
+// ════════════════ PRODUTOS ════════════════
+function renderProdutos(){
+  const s=(document.getElementById('searchProd')?.value||'').toLowerCase();
+  let l=[...produtos];
+  if(s)l=l.filter(p=>p.nome.toLowerCase().includes(s)||(p.marca||'').toLowerCase().includes(s)||(p.codigo||'').includes(s));
+  l.sort((a,b)=>a.nome.localeCompare(b.nome));
+  document.getElementById('prodCount').textContent=`${produtos.length} produtos`;
+  const c=document.getElementById('listProd');
+  if(!l.length){c.innerHTML=`<div class="empty"><div class="empty-icon">📦</div><div class="empty-text">${s?'Nenhum resultado':'Nenhum produto'}</div></div>`;return}
+  c.innerHTML=l.map(p=>{
+    const im=p.imagem?`<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">`:'📦';
+    return`<div class="prod-card"><div class="prod-img">${im}</div><div class="prod-info"><div class="prod-name">${gn(p)}</div>${p.codigo?`<div class="prod-code">📊 ${p.codigo}</div>`:''}</div></div><div class="card-actions"><button class="act-btn add" onclick="openFaltaCom('${p.id}')">➕ Falta</button><button class="act-btn ora" onclick="openTrocaCom('${p.id}')">🔄 Troca</button><button class="act-btn edit" onclick="editProd('${p.id}')">✏️</button><button class="act-btn del" onclick="delProd('${p.id}')">🗑️</button></div>`;
   }).join('');
 }
 
-// ===== SCANNER NA LISTA DE PRODUTOS (busca nos cadastrados) =====
-function abrirScannerProdutos() {
-  const html = `
-    <div class="modal-header">
-      <div class="modal-title">📷 Escanear Produto</div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+// Scanner na lista de produtos
+function abrirScannerProdutos(){
+  showModal(`<div class="modal-header"><div class="modal-title">📷 Escanear Produto</div><button class="modal-close" onclick="closeModal()">✕</button></div><div class="modal-body"><p style="font-size:13px;color:var(--g500);text-align:center;margin-bottom:14px">Aponte para o código de barras</p>${scannerHTML('scProd','stProd')}<div id="resProd"></div></div>`);
+  setTimeout(()=>initScan('scProd',onScanProdList,'stProd'),400);
+}
+function onScanProdList(cod){
+  stopScan('scProd');
+  const f=produtos.find(p=>p.codigo===cod);
+  if(f){closeModal();document.getElementById('searchProd').value=cod;renderProdutos();toast(`✅ ${gn(f)}`,'success')}
+  else{document.getElementById('resProd').innerHTML=`<div style="background:var(--war-l);border:2px solid var(--war);border-radius:var(--r-sm);padding:18px;text-align:center;margin-top:14px"><div style="font-size:28px;margin-bottom:8px">🔍</div><div style="font-weight:700;color:var(--war);margin-bottom:8px">Não cadastrado</div><div class="barcode-box">${cod}</div><button class="btn btn-suc btn-block" onclick="closeModal();openCadastro(null,'${cod}')">➕ Cadastrar</button></div>`}
+}
+
+// ════════════════ CADASTRO ════════════════
+function openCadastro(pid=null,codPre=''){
+  const p=pid?produtos.find(x=>x.id===pid):null;
+  curImg=p?.imagem||'';
+  showModal(`<div class="modal-header"><div class="modal-title">${p?'✏️ Editar':'📝 Cadastrar'} Produto</div><button class="modal-close" onclick="closeModal()">✕</button></div>
+  <div class="modal-body">
+    <div class="img-prev ${curImg?'has':''}" id="imgPrev">${curImg?`<img src="${curImg}">`:'📦'}</div>
+    <div class="flex gap-8" style="justify-content:center;margin-bottom:18px">
+      <label class="btn btn-sm btn-outline" style="cursor:pointer">📷 Foto<input type="file" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(event)"></label>
+      <label class="btn btn-sm btn-outline" style="cursor:pointer">🖼️ Galeria<input type="file" accept="image/*" style="display:none" onchange="handlePhoto(event)"></label>
+      <button class="btn btn-sm btn-scan" onclick="openScanCad()">📷 Scan</button>
     </div>
-    <div class="modal-body">
-      <p style="font-size:13px;color:var(--gray-600);margin-bottom:12px;text-align:center;">
-        Aponte a câmera para o código de barras do produto
-      </p>
-      <div class="scanner-wrapper">
-        <div id="scannerContainerProd"></div>
-        <div class="scanner-overlay">
-          <div style="position:relative;width:200px;height:200px;">
-            <div class="scanner-frame"></div>
-            <div class="scanner-line" id="scanLine"></div>
-          </div>
-        </div>
-        <div class="scanner-status" id="scanStatusProd">📷 Iniciando câmera...</div>
+    <div id="scanAreaCad" style="display:none;margin-bottom:16px">${scannerHTML('scCad','stCad')}<button class="btn btn-gray btn-block btn-sm" onclick="closeScanCad()" style="margin-top:8px">✕ Fechar</button></div>
+    <div id="onlineRes" style="display:none"></div>
+    <div id="formProd">
+      <div class="fg"><label class="fl">🔢 Código de Barras</label><div class="flex gap-8"><input type="text" class="fi" id="cadCod" placeholder="Ex: 7891000315507" value="${p?.codigo||codPre}" style="flex:1" onchange="buscarOnline(this.value)"><button class="btn-scan btn-sm" onclick="openScanCad()" style="flex-shrink:0;padding:10px 14px">📷</button></div><div style="font-size:11px;color:var(--g400);margin-top:6px">💡 Digite ou escaneie para buscar automaticamente</div></div>
+      <div style="background:var(--pri-l);border-radius:var(--r-sm);padding:16px;margin-bottom:18px">
+        <div style="font-size:13px;font-weight:800;color:var(--pri);margin-bottom:14px">📝 Dados do Produto</div>
+        <div class="fg"><label class="fl">1️⃣ Tipo / Categoria *</label><input type="text" class="fi" id="cadTipo" placeholder="Ex: Desodorante, Arroz..." value="${p?.tipo||''}" oninput="updPreview()"></div>
+        <div class="fg"><label class="fl">2️⃣ Marca *</label><input type="text" class="fi" id="cadMarca" placeholder="Ex: Rexona, Tio João..." value="${p?.marca||''}" oninput="updPreview()"></div>
+        <div class="fg"><label class="fl">3️⃣ Volume / Peso</label><input type="text" class="fi" id="cadVol" placeholder="Ex: 1kg, 500ml..." value="${p?.volume||''}" oninput="updPreview()"></div>
+        <div class="fg" style="margin-bottom:0"><label class="fl">4️⃣ Variação</label><input type="text" class="fi" id="cadVar" placeholder="Ex: Powder, Lavanda..." value="${p?.variacao||''}" oninput="updPreview()"></div>
       </div>
-      <div id="scanResultProd"></div>
-    </div>`;
-  showModal(html);
-  setTimeout(() => initScanner('scannerContainerProd', onScanProdutoLista, 'scanStatusProd'), 400);
-}
-
-function onScanProdutoLista(codigo) {
-  stopAllScanners();
-  document.getElementById('scanStatusProd').textContent = '✅ Código lido: ' + codigo;
-  document.getElementById('searchProdutos').value = codigo;
-
-  const encontrado = produtos.find(p => p.codigo === codigo);
-  if (encontrado) {
-    closeModal();
-    renderProdutos();
-    toast(`✅ Produto encontrado: ${getNomeExibir(encontrado)}`, 'success');
-  } else {
-    document.getElementById('scanResultProd').innerHTML = `
-      <div style="background:var(--warning-light);border:2px solid var(--warning);border-radius:var(--radius-sm);padding:16px;text-align:center;margin-top:12px;">
-        <div style="font-size:28px;margin-bottom:8px;">🔍</div>
-        <div style="font-weight:700;color:var(--warning);margin-bottom:4px;">Produto não cadastrado</div>
-        <div style="font-size:13px;color:var(--gray-600);margin-bottom:12px;">Código: <strong style="font-family:monospace;">${codigo}</strong></div>
-        <button class="btn btn-success btn-block" onclick="closeModal();openCadastroComCodigo('${codigo}')">
-          ➕ Cadastrar este produto
-        </button>
-      </div>`;
-  }
-}
-
-function openCadastroComCodigo(codigo) {
-  openCadastro(null, codigo);
-}
-
-// ╔══════════════════════════════════════════════════════════════╗
-// ║  CADASTRO PRODUTO COM SCANNER + BUSCA ONLINE                  ║
-// ╚══════════════════════════════════════════════════════════════╝
-function openCadastro(produtoId = null, codigoPreenchido = '') {
-  const produto = produtoId ? produtos.find(p => p.id === produtoId) : null;
-  currentImage = produto?.imagem || '';
-
-  const html = `
-    <div class="modal-header">
-      <div class="modal-title">${produto ? '✏️ Editar Produto' : '📝 Cadastrar Produto'}</div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div style="background:var(--g50);border-radius:var(--r-sm);padding:14px;margin-bottom:18px;border:1px solid var(--g200)"><div style="font-size:11px;color:var(--g500);margin-bottom:4px">📋 Nome completo:</div><div id="prevNome" style="font-size:15px;font-weight:800;color:var(--g800);min-height:22px">-</div></div>
+      <button class="btn btn-suc btn-block btn-lg" onclick="saveProd('${pid||''}')">💾 Salvar Produto</button>
     </div>
-    <div class="modal-body">
-      <div class="img-preview ${currentImage ? 'has-image' : ''}" id="imgPreview">
-        ${currentImage ? `<img src="${currentImage}">` : '📦'}
-      </div>
-      <div style="display:flex;gap:8px;justify-content:center;margin-bottom:16px;">
-        <label class="btn btn-sm btn-outline" style="cursor:pointer;">
-          📷 Foto
-          <input type="file" accept="image/*" capture="environment" style="display:none;" onchange="handlePhoto(event)">
-        </label>
-        <label class="btn btn-sm btn-outline" style="cursor:pointer;">
-          🖼️ Galeria
-          <input type="file" accept="image/*" style="display:none;" onchange="handlePhoto(event)">
-        </label>
-        <button class="btn btn-sm" style="background:linear-gradient(135deg,#7C3AED,#5B21B6);color:white;" onclick="abrirScannerCadastro()">
-          📷 Escanear
-        </button>
-      </div>
-
-      <!-- SCANNER ÁREA (oculta inicialmente) -->
-      <div id="scannerAreaCad" style="display:none;margin-bottom:16px;">
-        <div class="scanner-wrapper">
-          <div id="scannerContainerCad"></div>
-          <div class="scanner-overlay">
-            <div style="position:relative;width:200px;height:200px;">
-              <div class="scanner-frame"></div>
-              <div class="scanner-line"></div>
-            </div>
-          </div>
-          <div class="scanner-status" id="scanStatusCad">📷 Iniciando câmera...</div>
-        </div>
-        <button class="btn btn-gray btn-block btn-sm" onclick="fecharScannerCadastro()" style="margin-top:8px;">
-          ✕ Fechar scanner
-        </button>
-      </div>
-
-      <!-- RESULTADO DA BUSCA ONLINE -->
-      <div id="resultadoBuscaOnline" style="display:none;"></div>
-
-      <!-- FORMULÁRIO -->
-      <div id="formProduto">
-        <div class="form-group">
-          <label class="form-label">🔢 Código de Barras</label>
-          <div style="display:flex;gap:8px;">
-            <input type="text" class="form-input" id="cadCodigo"
-              placeholder="Ex: 7891000315507"
-              value="${produto?.codigo || codigoPreenchido}"
-              style="flex:1;"
-              onchange="buscarProdutoOnlinePorCodigo(this.value)">
-            <button class="btn-scan btn-sm" onclick="abrirScannerCadastro()" style="flex-shrink:0;padding:10px 14px;">
-              📷
-            </button>
-          </div>
-          <div style="font-size:11px;color:var(--gray-500);margin-top:4px;">
-            💡 Digite ou escaneie o código para buscar informações automaticamente
-          </div>
-        </div>
-
-        <div style="background:var(--primary-light);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px;">
-          <div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:12px;">📝 Dados do Produto</div>
-          <div class="form-group">
-            <label class="form-label">1️⃣ Tipo / Categoria *</label>
-            <input type="text" class="form-input" id="cadTipo"
-              placeholder="Ex: Desodorante, Arroz..."
-              value="${produto?.tipo || ''}" oninput="atualizarPreviewNome()">
-          </div>
-          <div class="form-group">
-            <label class="form-label">2️⃣ Marca *</label>
-            <input type="text" class="form-input" id="cadMarca"
-              placeholder="Ex: Rexona, Tio João..."
-              value="${produto?.marca || ''}" oninput="atualizarPreviewNome()">
-          </div>
-          <div class="form-group">
-            <label class="form-label">3️⃣ Volume / Peso</label>
-            <input type="text" class="form-input" id="cadVolume"
-              placeholder="Ex: 1kg, 500ml..."
-              value="${produto?.volume || ''}" oninput="atualizarPreviewNome()">
-          </div>
-          <div class="form-group" style="margin-bottom:0;">
-            <label class="form-label">4️⃣ Fragrância / Cor / Variação</label>
-            <input type="text" class="form-input" id="cadVariacao"
-              placeholder="Ex: Powder, Lavanda..."
-              value="${produto?.variacao || ''}" oninput="atualizarPreviewNome()">
-          </div>
-        </div>
-
-        <div style="background:var(--gray-100);border-radius:var(--radius-sm);padding:12px;margin-bottom:16px;">
-          <div style="font-size:11px;color:var(--gray-500);margin-bottom:4px;">📋 Nome completo:</div>
-          <div id="previewNome" style="font-size:15px;font-weight:700;color:var(--gray-800);min-height:22px;">-</div>
-        </div>
-
-        <button class="btn btn-success btn-block btn-lg" onclick="salvarProduto('${produtoId || ''}')">
-          💾 Salvar Produto
-        </button>
-      </div>
-    </div>`;
-
-  showModal(html);
-  setTimeout(() => {
-    atualizarPreviewNome();
-    if (codigoPreenchido) buscarProdutoOnlinePorCodigo(codigoPreenchido);
-  }, 100);
+  </div>`);
+  setTimeout(()=>{updPreview();if(codPre)buscarOnline(codPre)},100);
+}
+function openScanCad(){const a=document.getElementById('scanAreaCad');if(!a)return;a.style.display='block';a.scrollIntoView({behavior:'smooth'});setTimeout(()=>initScan('scCad',onScanCad,'stCad'),400)}
+function closeScanCad(){stopScan('scCad');const a=document.getElementById('scanAreaCad');if(a)a.style.display='none'}
+function onScanCad(cod){closeScanCad();const el=document.getElementById('cadCod');if(el){el.value=cod;if(navigator.vibrate)navigator.vibrate([100,50,100]);buscarOnline(cod)}}
+function updPreview(){
+  const p=['cadTipo','cadMarca','cadVol','cadVar'].map(id=>document.getElementById(id)?.value.trim()||'').filter(Boolean);
+  const el=document.getElementById('prevNome');if(el)el.textContent=p.join(' ')||'-';
+}
+function handlePhoto(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();r.onload=ev=>{const img=new Image();img.onload=function(){const c=document.createElement('canvas');let w=img.width,h=img.height;const m=400;if(w>m||h>m){if(w>h){h=Math.round(h*m/w);w=m}else{w=Math.round(w*m/h);h=m}}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);curImg=c.toDataURL('image/jpeg',.7);const p=document.getElementById('imgPrev');if(p){p.innerHTML=`<img src="${curImg}">`;p.classList.add('has')}};img.src=ev.target.result};r.readAsDataURL(f);
 }
 
-function abrirScannerCadastro() {
-  const area = document.getElementById('scannerAreaCad');
-  if (!area) return;
-  area.style.display = 'block';
-  area.scrollIntoView({ behavior: 'smooth' });
-  setTimeout(() => initScanner('scannerContainerCad', onScanCadastro, 'scanStatusCad'), 400);
+// ════════════════ BUSCA ONLINE ════════════════
+async function buscarOnline(cod){
+  if(!cod||cod.length<7)return;
+  const c=document.getElementById('onlineRes');if(!c)return;
+  c.style.display='block';
+  c.innerHTML=`<div class="loading-search"><div class="ls-spinner"></div><div style="font-size:14px;font-weight:700;color:var(--pri)">🔍 Buscando na internet...</div><div style="font-size:12px;color:var(--g500)">Código: <strong style="font-family:monospace">${cod}</strong></div></div>`;
+  try{
+    const r=await buscarAPIs(cod);
+    if(r)showOnlineResult(r,cod);
+    else c.innerHTML=`<div style="background:var(--war-l);border:2px solid var(--war);border-radius:var(--r-sm);padding:18px;margin-bottom:18px"><div style="font-weight:800;color:var(--war);margin-bottom:6px">⚠️ Não encontrado online</div><div style="font-size:12px;color:var(--g600)">Preencha manualmente</div></div>`;
+  }catch(e){c.innerHTML=`<div style="background:var(--dan-l);border:2px solid var(--dan);border-radius:var(--r-sm);padding:18px;margin-bottom:18px"><div style="font-weight:800;color:var(--dan)">❌ Erro na busca</div></div>`}
 }
-
-function fecharScannerCadastro() {
-  stopScanner('scannerContainerCad');
-  const area = document.getElementById('scannerAreaCad');
-  if (area) area.style.display = 'none';
-}
-
-function onScanCadastro(codigo) {
-  fecharScannerCadastro();
-  const cadCodigo = document.getElementById('cadCodigo');
-  if (cadCodigo) {
-    cadCodigo.value = codigo;
-    if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
-    buscarProdutoOnlinePorCodigo(codigo);
-  }
-}
-
-// ╔══════════════════════════════════════════════════════════════╗
-// ║  BUSCA ONLINE POR CÓDIGO DE BARRAS                            ║
-// ╚══════════════════════════════════════════════════════════════╝
-async function buscarProdutoOnlinePorCodigo(codigo) {
-  if (!codigo || codigo.length < 7) return;
-
-  const container = document.getElementById('resultadoBuscaOnline');
-  if (!container) return;
-
-  container.style.display = 'block';
-  container.innerHTML = `
-    <div class="loading-search">
-      <div class="loading-search-spinner"></div>
-      <div style="font-size:14px;font-weight:600;color:var(--primary);">🔍 Buscando produto na internet...</div>
-      <div style="font-size:12px;color:var(--gray-500);">Código: <strong style="font-family:monospace;">${codigo}</strong></div>
-    </div>`;
-
-  try {
-    // Tenta múltiplas APIs de produtos
-    const resultado = await buscarEmMultiplasAPIs(codigo);
-
-    if (resultado) {
-      mostrarResultadoBuscaOnline(resultado, codigo);
-    } else {
-      container.innerHTML = `
-        <div style="background:var(--warning-light);border:2px solid var(--warning);border-radius:var(--radius-sm);padding:16px;margin-bottom:16px;">
-          <div style="font-weight:700;color:var(--warning);margin-bottom:6px;">⚠️ Produto não encontrado nas bases de dados</div>
-          <div style="font-size:12px;color:var(--gray-600);">Preencha os dados manualmente abaixo</div>
-          <div style="font-family:monospace;font-size:13px;margin-top:8px;color:var(--gray-700);">Código: ${codigo}</div>
-        </div>`;
-    }
-  } catch(e) {
-    container.innerHTML = `
-      <div style="background:var(--danger-light);border:2px solid var(--danger);border-radius:var(--radius-sm);padding:16px;margin-bottom:16px;">
-        <div style="font-weight:700;color:var(--danger);">❌ Erro na busca online</div>
-        <div style="font-size:12px;color:var(--gray-600);margin-top:4px;">Preencha os dados manualmente</div>
-      </div>`;
-  }
-}
-
-async function buscarEmMultiplasAPIs(codigo) {
-  // API 1: Open Food Facts (alimentos)
-  try {
-    const r = await fetch(`https://world.openfoodfacts.org/api/v0/product/${codigo}.json`, { signal: AbortSignal.timeout(6000) });
-    const data = await r.json();
-    if (data.status === 1 && data.product) {
-      const p = data.product;
-      const nome = p.product_name_pt || p.product_name || p.generic_name_pt || p.generic_name || '';
-      const marca = p.brands || '';
-      const quantidade = p.quantity || '';
-      const categorias = p.categories_tags ? p.categories_tags.slice(0, 3).map(c => c.replace('pt:', '').replace('en:', '')).join(', ') : '';
-
-      // Imagens do Open Food Facts
-      const imagens = [];
-      if (p.image_front_url) imagens.push(p.image_front_url);
-      if (p.image_url) imagens.push(p.image_url);
-      if (p.image_front_small_url) imagens.push(p.image_front_small_url);
-
-      if (nome || marca) {
-        return { nome, marca, quantidade, categorias, imagens, fonte: 'Open Food Facts' };
-      }
-    }
-  } catch(e) { console.log('OpenFoodFacts erro:', e); }
-
-  // API 2: Open Beauty Facts (cosméticos)
-  try {
-    const r = await fetch(`https://world.openbeautyfacts.org/api/v0/product/${codigo}.json`, { signal: AbortSignal.timeout(5000) });
-    const data = await r.json();
-    if (data.status === 1 && data.product) {
-      const p = data.product;
-      const nome = p.product_name_pt || p.product_name || '';
-      const marca = p.brands || '';
-      const quantidade = p.quantity || '';
-      const imagens = [];
-      if (p.image_front_url) imagens.push(p.image_front_url);
-      if (p.image_url) imagens.push(p.image_url);
-      if (nome || marca) {
-        return { nome, marca, quantidade, categorias: 'Cosmético/Beleza', imagens, fonte: 'Open Beauty Facts' };
-      }
-    }
-  } catch(e) { console.log('OpenBeautyFacts erro:', e); }
-
-  // API 3: Open Products Data
-  try {
-    const r = await fetch(`https://world.openproductdata.com/api/v0/product/${codigo}.json`, { signal: AbortSignal.timeout(5000) });
-    const data = await r.json();
-    if (data.status === 1 && data.product) {
-      const p = data.product;
-      const nome = p.product_name || '';
-      const marca = p.brands || '';
-      const imagens = p.image_url ? [p.image_url] : [];
-      if (nome || marca) {
-        return { nome, marca, quantidade: '', categorias: '', imagens, fonte: 'Open Product Data' };
-      }
-    }
-  } catch(e) { console.log('OpenProductData erro:', e); }
-
-  // API 4: UPCitemDB
-  try {
-    const r = await fetch(`https://api.upcitemdb.com/prod/trial/lookup?upc=${codigo}`, { signal: AbortSignal.timeout(5000) });
-    const data = await r.json();
-    if (data.code === 'OK' && data.items && data.items.length > 0) {
-      const item = data.items[0];
-      const imagens = item.images || [];
-      return {
-        nome: item.title || '',
-        marca: item.brand || '',
-        quantidade: item.size || '',
-        categorias: item.category || '',
-        imagens: imagens.slice(0, 5),
-        fonte: 'UPCitemDB',
-        descricao: item.description || ''
-      };
-    }
-  } catch(e) { console.log('UPCitemDB erro:', e); }
-
+async function buscarAPIs(cod){
+  // Open Food Facts
+  try{const r=await fetch(`https://world.openfoodfacts.org/api/v0/product/${cod}.json`,{signal:AbortSignal.timeout(6000)});const d=await r.json();if(d.status===1&&d.product){const p=d.product;const nome=p.product_name_pt||p.product_name||p.generic_name||'';const marca=p.brands||'';const qtd=p.quantity||'';const imgs=[];if(p.image_front_url)imgs.push(p.image_front_url);if(p.image_url)imgs.push(p.image_url);if(nome||marca)return{nome,marca,quantidade:qtd,categorias:p.categories_tags?p.categories_tags.slice(0,3).map(c=>c.replace(/^[a-z]{2}:/,'')).join(', '):'',imagens:imgs,fonte:'Open Food Facts'}}}catch(e){}
+  // Open Beauty Facts
+  try{const r=await fetch(`https://world.openbeautyfacts.org/api/v0/product/${cod}.json`,{signal:AbortSignal.timeout(5000)});const d=await r.json();if(d.status===1&&d.product){const p=d.product;const nome=p.product_name_pt||p.product_name||'';const marca=p.brands||'';const imgs=[];if(p.image_front_url)imgs.push(p.image_front_url);if(nome||marca)return{nome,marca,quantidade:p.quantity||'',categorias:'Cosmético/Beleza',imagens:imgs,fonte:'Open Beauty Facts'}}}catch(e){}
+  // UPCitemDB
+  try{const r=await fetch(`https://api.upcitemdb.com/prod/trial/lookup?upc=${cod}`,{signal:AbortSignal.timeout(5000)});const d=await r.json();if(d.code==='OK'&&d.items&&d.items.length){const i=d.items[0];return{nome:i.title||'',marca:i.brand||'',quantidade:i.size||'',categorias:i.category||'',imagens:(i.images||[]).slice(0,5),fonte:'UPCitemDB',descricao:i.description||''}}}catch(e){}
   return null;
 }
-
-function mostrarResultadoBuscaOnline(resultado, codigo) {
-  const container = document.getElementById('resultadoBuscaOnline');
-  if (!container) return;
-
-  let imagensHTML = '';
-  let imagensDisponiveis = resultado.imagens || [];
-
-  if (imagensDisponiveis.length > 0) {
-    imagensHTML = `
-      <div style="margin-bottom:12px;">
-        <div style="font-size:12px;font-weight:700;color:var(--gray-600);margin-bottom:8px;">📷 Selecione uma foto:</div>
-        <div class="product-online-imgs" id="imgSelectList">
-          ${imagensDisponiveis.map((url, i) => `
-            <div class="product-online-img ${i===0?'selected':''}" onclick="selecionarImagemOnline(this,'${url}')" id="imgOpt${i}">
-              <img src="${url}" onerror="this.parentElement.style.display='none'" loading="lazy">
-            </div>
-          `).join('')}
-        </div>
-      </div>`;
-    // Pré-seleciona primeira imagem
-    setTimeout(() => baixarEDefinirImagem(imagensDisponiveis[0]), 500);
-  }
-
-  container.innerHTML = `
-    <div class="product-online-card">
-      <div class="product-online-header">
-        ✅ Produto encontrado! <span style="font-size:11px;opacity:0.7;margin-left:auto;">Fonte: ${resultado.fonte}</span>
-      </div>
-      <div class="product-online-body">
-        ${imagensHTML}
-        <div class="product-online-info">
-          ${resultado.nome ? `<p>📦 <strong>Nome:</strong> ${resultado.nome}</p>` : ''}
-          ${resultado.marca ? `<p>🏷️ <strong>Marca:</strong> ${resultado.marca}</p>` : ''}
-          ${resultado.quantidade ? `<p>⚖️ <strong>Tamanho:</strong> ${resultado.quantidade}</p>` : ''}
-          ${resultado.categorias ? `<p>🗂️ <strong>Categoria:</strong> ${resultado.categorias}</p>` : ''}
-          ${resultado.descricao ? `<p style="font-size:11px;color:var(--gray-500);margin-top:4px;">${resultado.descricao.substring(0,120)}...</p>` : ''}
-        </div>
-        <button class="btn btn-primary btn-block" onclick="preencherFormComResultado(${JSON.stringify(resultado).replace(/"/g,'&quot;')})" style="margin-top:12px;">
-          ✏️ Usar estas informações
-        </button>
-      </div>
-    </div>`;
+function showOnlineResult(r,cod){
+  const c=document.getElementById('onlineRes');if(!c)return;
+  let imgH='';
+  if(r.imagens&&r.imagens.length){imgH=`<div style="margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:var(--g600);margin-bottom:8px">📷 Selecione uma foto:</div><div class="online-imgs">${r.imagens.map((u,i)=>`<div class="online-img ${i===0?'sel':''}" onclick="selOnlineImg(this,'${u}')"><img src="${u}" onerror="this.parentElement.style.display='none'" loading="lazy"></div>`).join('')}</div></div>`;setTimeout(()=>dlImg(r.imagens[0]),500)}
+  c.innerHTML=`<div class="online-card"><div class="online-header">✅ Produto encontrado!<span style="font-size:11px;opacity:.7;margin-left:auto">${r.fonte}</span></div><div class="online-body">${imgH}<div class="online-info">${r.nome?`<p>📦 <strong>Nome:</strong> ${r.nome}</p>`:''}${r.marca?`<p>🏷️ <strong>Marca:</strong> ${r.marca}</p>`:''}${r.quantidade?`<p>⚖️ <strong>Tamanho:</strong> ${r.quantidade}</p>`:''}${r.categorias?`<p>🗂️ <strong>Categoria:</strong> ${r.categorias}</p>`:''}${r.descricao?`<p style="font-size:11px;color:var(--g500);margin-top:6px">${r.descricao.substring(0,120)}...</p>`:''}</div><button class="btn btn-pri btn-block" onclick='preencherForm(${JSON.stringify(r).replace(/'/g,"\\'")})'style="margin-top:14px">✏️ Usar informações</button></div></div>`;
 }
-
-function selecionarImagemOnline(el, url) {
-  document.querySelectorAll('.product-online-img').forEach(e => e.classList.remove('selected'));
-  el.classList.add('selected');
-  baixarEDefinirImagem(url);
+function selOnlineImg(el,url){document.querySelectorAll('.online-img').forEach(e=>e.classList.remove('sel'));el.classList.add('sel');dlImg(url)}
+async function dlImg(url){
+  try{const img=new Image();img.crossOrigin='anonymous';img.onload=function(){try{const c=document.createElement('canvas');let w=img.width,h=img.height;const m=400;if(w>m||h>m){if(w>h){h=Math.round(h*m/w);w=m}else{w=Math.round(w*m/h);h=m}}c.width=w||400;c.height=h||400;c.getContext('2d').drawImage(img,0,0,c.width,c.height);curImg=c.toDataURL('image/jpeg',.8);const p=document.getElementById('imgPrev');if(p){p.innerHTML=`<img src="${curImg}">`;p.classList.add('has')}}catch(e){curImg=url}};img.onerror=()=>{curImg=url};img.src=url}catch(e){curImg=url}
 }
-
-async function baixarEDefinirImagem(url) {
-  try {
-    // Cria imagem e converte para base64
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = function() {
-      try {
-        const canvas = document.createElement('canvas');
-        let w = img.width, h = img.height;
-        const max = 400;
-        if (w > max || h > max) {
-          if (w > h) { h = Math.round(h * max / w); w = max; }
-          else { w = Math.round(w * max / h); h = max; }
-        }
-        canvas.width = w || 400;
-        canvas.height = h || 400;
-        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-        currentImage = canvas.toDataURL('image/jpeg', 0.8);
-        const preview = document.getElementById('imgPreview');
-        if (preview) {
-          preview.innerHTML = `<img src="${currentImage}">`;
-          preview.classList.add('has-image');
-        }
-      } catch(e) {
-        // Se falhar por CORS, salva a URL diretamente
-        currentImage = url;
-        const preview = document.getElementById('imgPreview');
-        if (preview) {
-          preview.innerHTML = `<img src="${url}" crossorigin="anonymous">`;
-          preview.classList.add('has-image');
-        }
-      }
-    };
-    img.onerror = () => { currentImage = url; };
-    img.src = url;
-  } catch(e) {
-    currentImage = url;
-  }
+function preencherForm(r){
+  const el=id=>document.getElementById(id);
+  if(el('cadTipo')&&!el('cadTipo').value)el('cadTipo').value=r.nome?r.nome.split(' ')[0]:'';
+  if(el('cadMarca')&&!el('cadMarca').value)el('cadMarca').value=r.marca||'';
+  if(el('cadVol')&&!el('cadVol').value)el('cadVol').value=r.quantidade||'';
+  if(el('cadVar')&&!el('cadVar').value&&r.nome){const a=r.nome.split(' ');if(a.length>2)el('cadVar').value=a.slice(2).join(' ')}
+  updPreview();toast('✅ Informações preenchidas!','success');
+  document.getElementById('formProd')?.scrollIntoView({behavior:'smooth'});
 }
-
-function preencherFormComResultado(resultado) {
-  // Preenche os campos do formulário
-  const nomeCompleto = resultado.nome || '';
-  const marca = resultado.marca || '';
-  const quantidade = resultado.quantidade || '';
-
-  // Detecta tipo baseado na categoria ou nome
-  let tipo = '';
-  const cat = (resultado.categorias || '').toLowerCase();
-  const nome = (nomeCompleto || '').toLowerCase();
-
-  if (cat.includes('bebida') || nome.includes('suco') || nome.includes('refrigerante')) tipo = 'Bebida';
-  else if (cat.includes('alimento') || cat.includes('food') || cat.includes('cereal')) tipo = 'Alimento';
-  else if (cat.includes('higiene') || cat.includes('beauty') || cat.includes('cosmetic')) tipo = 'Higiene';
-  else if (cat.includes('limpeza') || nome.includes('detergente') || nome.includes('sabão')) tipo = 'Limpeza';
-  else if (nome.includes('desodorante') || nome.includes('perfume')) tipo = 'Desodorante';
-  else if (nome.includes('shampoo') || nome.includes('condicionador')) tipo = 'Shampoo';
-
-  const cadTipo = document.getElementById('cadTipo');
-  const cadMarca = document.getElementById('cadMarca');
-  const cadVolume = document.getElementById('cadVolume');
-  const cadVariacao = document.getElementById('cadVariacao');
-
-  if (cadTipo && !cadTipo.value) cadTipo.value = tipo || (nomeCompleto.split(' ')[0] || '');
-  if (cadMarca && !cadMarca.value) cadMarca.value = marca;
-  if (cadVolume && !cadVolume.value) cadVolume.value = quantidade;
-  // Variação: parte do nome que não é marca/tipo/quantidade
-  if (cadVariacao && !cadVariacao.value) {
-    const nomeArr = nomeCompleto.split(' ');
-    if (nomeArr.length > 2) {
-      cadVariacao.value = nomeArr.slice(2).join(' ');
-    }
-  }
-
-  atualizarPreviewNome();
-  toast('✅ Informações preenchidas!', 'success');
-
-  // Scroll para o formulário
-  document.getElementById('formProduto')?.scrollIntoView({ behavior: 'smooth' });
+async function saveProd(id){
+  const tipo=document.getElementById('cadTipo').value.trim();
+  const marca=document.getElementById('cadMarca').value.trim();
+  const vol=document.getElementById('cadVol').value.trim();
+  const vari=document.getElementById('cadVar').value.trim();
+  const cod=document.getElementById('cadCod').value.trim();
+  if(!tipo){toast('Digite o tipo!','error');return}
+  if(!marca){toast('Digite a marca!','error');return}
+  const nc=[tipo,marca,vol,vari].filter(Boolean).join(' ');
+  const now=new Date().toISOString();
+  if(id){const i=produtos.findIndex(p=>p.id===id);if(i>=0)produtos[i]={...produtos[i],nome:nc,tipo,marca,volume:vol,variacao:vari,codigo:cod,imagem:curImg,nomeCompleto:nc,updatedAt:now}}
+  else produtos.push({id:Date.now().toString(),nome:nc,tipo,marca,volume:vol,variacao:vari,codigo:cod,imagem:curImg,nomeCompleto:nc,createdAt:now});
+  await save('produtos',produtos);closeModal();renderProdutos();renderHome();toast('✅ Produto salvo!','success');
 }
+function editProd(id){openCadastro(id)}
+async function delProd(id){const p=produtos.find(x=>x.id===id);if(!confirm(`Excluir "${gn(p)}"?`))return;produtos=produtos.filter(x=>x.id!==id);await save('produtos',produtos);renderProdutos();toast('🗑️ Excluído!','success')}
 
-function atualizarPreviewNome() {
-  const tipo = document.getElementById('cadTipo')?.value.trim() || '';
-  const marca = document.getElementById('cadMarca')?.value.trim() || '';
-  const volume = document.getElementById('cadVolume')?.value.trim() || '';
-  const variacao = document.getElementById('cadVariacao')?.value.trim() || '';
-  const partes = [tipo, marca, volume, variacao].filter(Boolean);
-  const preview = document.getElementById('previewNome');
-  if (preview) preview.textContent = partes.join(' ') || '-';
+// ════════════════ FALTAS ════════════════
+function openRealizarFalta(){
+  showModal(`<div class="modal-header"><div class="modal-title">➕ Registrar Falta</div><button class="modal-close" onclick="closeModal()">✕</button></div>
+  <div class="modal-body">
+    <div id="scanAreaF" style="display:none;margin-bottom:16px">${scannerHTML('scF','stF')}<button class="btn btn-gray btn-block btn-sm" onclick="closeScanF()" style="margin-top:8px">✕ Fechar</button></div>
+    <div id="scanResF" style="display:none"></div>
+    <div class="flex gap-8 mb-16"><div class="search-box" style="flex:1;margin-bottom:0"><span class="search-icon">🔍</span><input type="text" class="search-input" id="buscaF" placeholder="Buscar produto..." oninput="renderBuscaF()" style="padding-right:16px"></div><button class="btn-scan" onclick="openScanF()">📷 SCAN</button></div>
+    <div id="resF"></div>
+  </div>`);
+  setTimeout(()=>document.getElementById('buscaF')?.focus(),100);
 }
-
-function handlePhoto(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(ev) {
-    const img = new Image();
-    img.onload = function() {
-      const canvas = document.createElement('canvas');
-      let w = img.width, h = img.height;
-      const max = 400;
-      if (w > max || h > max) {
-        if (w > h) { h = Math.round(h * max / w); w = max; }
-        else { w = Math.round(w * max / h); h = max; }
-      }
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      currentImage = canvas.toDataURL('image/jpeg', 0.7);
-      document.getElementById('imgPreview').innerHTML = `<img src="${currentImage}">`;
-      document.getElementById('imgPreview').classList.add('has-image');
-    };
-    img.src = ev.target.result;
-  };
-  reader.readAsDataURL(file);
+function openScanF(){const a=document.getElementById('scanAreaF');if(!a)return;a.style.display='block';a.scrollIntoView({behavior:'smooth'});setTimeout(()=>initScan('scF',onScanF,'stF'),400)}
+function closeScanF(){stopScan('scF');const a=document.getElementById('scanAreaF');if(a)a.style.display='none'}
+function onScanF(cod){
+  closeScanF();if(navigator.vibrate)navigator.vibrate([100,50,100]);
+  const f=produtos.find(p=>p.codigo===cod);
+  const r=document.getElementById('scanResF');if(r)r.style.display='block';
+  if(f){if(r)r.innerHTML=`<div class="found-card success"><div class="prod-img" style="width:56px;height:56px">${f.imagem?`<img src="${f.imagem}">`:'📦'}</div><div class="found-info"><div class="found-title">✅ Encontrado!</div><div class="found-name">${gn(f)}</div></div></div>`;setTimeout(()=>openFaltaCom(f.id),600)}
+  else{if(r)r.innerHTML=`<div style="background:var(--war-l);border:2px solid var(--war);border-radius:var(--r-sm);padding:18px;margin-bottom:14px"><div style="font-weight:800;color:var(--war);margin-bottom:8px">⚠️ Não cadastrado</div><div class="barcode-box">${cod}</div><button class="btn btn-suc btn-block" onclick="closeModal();openCadastro(null,'${cod}')">➕ Cadastrar</button></div>`}
 }
-
-async function salvarProduto(id) {
-  const tipo = document.getElementById('cadTipo').value.trim();
-  const marca = document.getElementById('cadMarca').value.trim();
-  const volume = document.getElementById('cadVolume').value.trim();
-  const variacao = document.getElementById('cadVariacao').value.trim();
-  const codigo = document.getElementById('cadCodigo').value.trim();
-
-  if (!tipo) { toast('Digite o tipo do produto!', 'error'); return; }
-  if (!marca) { toast('Digite a marca do produto!', 'error'); return; }
-
-  const partes = [tipo, marca, volume, variacao].filter(Boolean);
-  const nomeCompleto = partes.join(' ');
-  const agora = new Date().toISOString();
-
-  if (id) {
-    const idx = produtos.findIndex(p => p.id === id);
-    if (idx >= 0) {
-      produtos[idx] = { ...produtos[idx], nome: nomeCompleto, tipo, marca, volume, variacao, codigo, imagem: currentImage, nomeCompleto, updatedAt: agora };
-    }
-  } else {
-    produtos.push({
-      id: Date.now().toString(),
-      nome: nomeCompleto, tipo, marca, volume, variacao, codigo,
-      imagem: currentImage, nomeCompleto,
-      createdAt: agora
-    });
-  }
-
-  await saveData('produtos', produtos);
-  closeModal();
-  renderProdutos();
-  renderHome();
-  toast('✅ Produto salvo e sincronizado!', 'success');
+function renderBuscaF(){
+  const s=document.getElementById('buscaF').value.toLowerCase();const c=document.getElementById('resF');
+  if(!s){c.innerHTML=`<div class="empty"><div class="empty-text">Digite para buscar</div></div>`;return}
+  const r=produtos.filter(p=>p.nome.toLowerCase().includes(s)||(p.marca||'').toLowerCase().includes(s)||(p.codigo||'').includes(s)).slice(0,10);
+  if(!r.length){c.innerHTML=`<div class="empty"><div class="empty-text">Nenhum resultado</div></div>`;return}
+  c.innerHTML=r.map(p=>{const im=p.imagem?`<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">`:'📦';return`<div class="prod-card clickable" onclick="openFaltaCom('${p.id}')"><div class="prod-img">${im}</div><div class="prod-info"><div class="prod-name">${gn(p)}</div>${p.codigo?`<div class="prod-code">📊 ${p.codigo}</div>`:''}</div><span style="color:var(--pri);font-size:20px">→</span></div>`}).join('');
 }
-
-function editarProduto(id) { openCadastro(id); }
-
-async function excluirProduto(id) {
-  const p = produtos.find(x => x.id === id);
-  if (!confirm(`Excluir "${getNomeExibir(p)}"?`)) return;
-  produtos = produtos.filter(x => x.id !== id);
-  await saveData('produtos', produtos);
-  renderProdutos();
-  toast('🗑️ Excluído!', 'success');
+function openFaltaCom(pid){
+  const p=produtos.find(x=>x.id===pid);if(!p)return;
+  const im=p.imagem?`<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">`:'📦';
+  showModal(`<div class="modal-header"><div class="modal-title">➕ Registrar Falta</div><button class="modal-close" onclick="closeModal()">✕</button></div>
+  <div class="modal-body">
+    <div style="background:var(--pri-l);border:2px solid var(--pri);border-radius:var(--r);padding:18px;margin-bottom:22px"><div class="flex gap-14" style="align-items:center"><div class="prod-img" style="width:76px;height:76px;font-size:34px">${im}</div><div style="flex:1"><div style="font-size:16px;font-weight:800;line-height:1.3">${gn(p)}</div>${p.codigo?`<div style="font-size:12px;color:var(--pri);margin-top:6px;font-family:monospace">📊 ${p.codigo}</div>`:''}</div></div></div>
+    <div class="fg"><label class="fl">🚨 Prioridade</label><div class="prio-sel"><button class="prio-btn alta sel" onclick="setPrio(this,'alta')">🔴 Urgente</button><button class="prio-btn media" onclick="setPrio(this,'media')">🟡 Média</button><button class="prio-btn baixa" onclick="setPrio(this,'baixa')">🟢 Baixa</button></div><input type="hidden" id="fPrio" value="alta"></div>
+    <div style="background:var(--g50);border-radius:var(--r-sm);padding:16px;margin-bottom:18px;border:1px solid var(--g200)"><label class="fl" style="margin-bottom:12px">📦 Estoque Atual</label><div class="flex gap-10"><div class="fg" style="flex:1;margin-bottom:0"><input type="number" class="fi" id="fQtd" value="0" min="0"><div style="font-size:11px;color:var(--g500);margin-top:4px;text-align:center">Quantidade</div></div><div class="fg" style="flex:1;margin-bottom:0"><select class="fs" id="fUnid"><option>UN</option><option>CX</option><option>PCT</option><option>KG</option><option>FD</option><option>DZ</option><option>LT</option></select><div style="font-size:11px;color:var(--g500);margin-top:4px;text-align:center">Unidade</div></div></div></div>
+    <div style="background:var(--suc-l);border:2px solid var(--suc);border-radius:var(--r-sm);padding:16px;margin-bottom:18px"><label class="fl" style="color:var(--suc);margin-bottom:12px">📝 Sugestão de Pedido</label><div class="flex gap-10 mb-12"><div class="fg" style="flex:1;margin-bottom:0"><input type="number" class="fi" id="sQtd" value="1" min="1" style="border-color:var(--suc)"></div><div class="fg" style="flex:1;margin-bottom:0"><select class="fs" id="sUnid" style="border-color:var(--suc)"><option>UN</option><option>CX</option><option>PCT</option><option>KG</option><option>FD</option><option>DZ</option><option>LT</option></select></div></div><textarea class="fi" id="fObs" placeholder="Observações... (opcional)" style="min-height:60px;border-color:var(--suc)"></textarea></div>
+    <button class="btn btn-suc btn-block btn-lg" onclick="salvarFalta('${pid}')">✅ Registrar Falta</button>
+  </div>`);
 }
+function setPrio(b,v){document.querySelectorAll('.prio-btn').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');document.getElementById('fPrio').value=v}
+async function salvarFalta(pid){
+  const p=produtos.find(x=>x.id===pid);if(!p)return;
+  const now=new Date().toISOString();
+  const eq=parseInt(document.getElementById('fQtd').value)||0;
+  const eu=document.getElementById('fUnid').value;
+  const sq=parseInt(document.getElementById('sQtd').value)||1;
+  const su=document.getElementById('sUnid').value;
+  const ob=document.getElementById('fObs').value.trim();
+  faltas.unshift({id:Date.now().toString(),produtoId:pid,nome:p.nome,tipo:p.tipo||'',marca:p.marca||'',volume:p.volume||'',variacao:p.variacao||'',codigo:p.codigo||'',imagem:p.imagem||'',nomeCompleto:gn(p),estoqueQtd:eq,estoqueUnid:eu,sugestaoQtd:sq,sugestaoUnid:su,sugestaoObs:ob,sugestao:`Pedir ${sq} ${su}${ob?' - '+ob:''}`,quantidade:eq,unidade:eu,prioridade:document.getElementById('fPrio').value,pedido:false,createdAt:now,dataRegistro:now});
+  await save('faltas',faltas);closeModal();renderAll();toast('✅ Falta registrada!','success');if(navigator.vibrate)navigator.vibrate(200);
+}
+// Lista faltas
+function setFF(c){document.querySelectorAll('#pageFaltas .chip').forEach(x=>x.classList.remove('active'));c.classList.add('active');curFF=c.dataset.f;renderFaltas()}
+function renderFaltas(){
+  let l=[...faltas];
+  if(['alta','media','baixa'].includes(curFF))l=l.filter(f=>f.prioridade===curFF);
+  else if(curFF==='pedido')l=l.filter(f=>f.pedido);
+  document.getElementById('faltasCount').textContent=`${faltas.length} itens`;
+  const c=document.getElementById('listFaltas');
+  if(!l.length){c.innerHTML=`<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Nenhuma falta</div></div>`;return}
+  c.innerHTML=l.map(f=>`${faltaHTML(f)}<div class="card-actions">${!f.pedido?`<button class="act-btn add" onclick="markPed('${f.id}')">✅ Pedido</button>`:`<button class="act-btn edit" onclick="markPed('${f.id}')">↩️ Desfazer</button>`}<button class="act-btn del" onclick="delFalta('${f.id}')">🗑️</button></div>`).join('');
+}
+async function markPed(id){const i=faltas.findIndex(f=>f.id===id);if(i>=0){faltas[i].pedido=!faltas[i].pedido;await save('faltas',faltas);renderFaltas();renderHome();toast(faltas[i].pedido?'✅ Pedido!':'↩️ Desmarcado','success')}}
+async function delFalta(id){if(!confirm('Excluir falta?'))return;faltas=faltas.filter(f=>f.id!==id);await save('faltas',faltas);renderFaltas();renderHome();toast('🗑️ Excluído!','success')}
 
-// ╔══════════════════════════════════════════════════════════════╗
-// ║  REGISTRAR FALTA COM SCANNER                                  ║
-// ╚══════════════════════════════════════════════════════════════╝
-function openRealizarFalta() {
-  const html = `
-    <div class="modal-header">
-      <div class="modal-title">➕ Registrar Falta</div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+// ════════════════ TROCAS ════════════════
+function openRegistrarTroca(){
+  showModal(`<div class="modal-header"><div class="modal-title">🔄 Registrar Troca</div><button class="modal-close" onclick="closeModal()">✕</button></div>
+  <div class="modal-body">
+    <div id="scanAreaT" style="display:none;margin-bottom:16px">${scannerHTML('scT','stT')}<button class="btn btn-gray btn-block btn-sm" onclick="closeScanT()" style="margin-top:8px">✕ Fechar</button></div>
+    <div id="scanResT" style="display:none"></div>
+    <div class="flex gap-8 mb-16"><div class="search-box" style="flex:1;margin-bottom:0"><span class="search-icon">🔍</span><input type="text" class="search-input ora" id="buscaT" placeholder="Buscar produto..." oninput="renderBuscaT()" style="padding-right:16px"></div><button class="btn-scan" onclick="openScanT()" style="background:linear-gradient(135deg,var(--ora),#c2410c)">📷 SCAN</button></div>
+    <div id="resT"></div>
+  </div>`);
+  setTimeout(()=>document.getElementById('buscaT')?.focus(),100);
+}
+function openScanT(){const a=document.getElementById('scanAreaT');if(!a)return;a.style.display='block';setTimeout(()=>initScan('scT',onScanT,'stT'),400)}
+function closeScanT(){stopScan('scT');const a=document.getElementById('scanAreaT');if(a)a.style.display='none'}
+function onScanT(cod){
+  closeScanT();if(navigator.vibrate)navigator.vibrate([100,50,100]);
+  const f=produtos.find(p=>p.codigo===cod);const r=document.getElementById('scanResT');if(r)r.style.display='block';
+  if(f){if(r)r.innerHTML=`<div class="found-card success"><div class="prod-img" style="width:56px;height:56px">${f.imagem?`<img src="${f.imagem}">`:'📦'}</div><div class="found-info"><div class="found-title">✅ Encontrado!</div><div class="found-name">${gn(f)}</div></div></div>`;setTimeout(()=>openTrocaCom(f.id),600)}
+  else{if(r)r.innerHTML=`<div style="background:var(--war-l);border:2px solid var(--war);border-radius:var(--r-sm);padding:18px;margin-bottom:14px"><div style="font-weight:800;color:var(--war)">⚠️ Não cadastrado</div><div class="barcode-box">${cod}</div><button class="btn btn-suc btn-block" onclick="closeModal();openCadastro(null,'${cod}')">➕ Cadastrar</button></div>`}
+}
+function renderBuscaT(){
+  const s=document.getElementById('buscaT').value.toLowerCase();const c=document.getElementById('resT');
+  if(!s){c.innerHTML=`<div class="empty"><div class="empty-text">Digite para buscar</div></div>`;return}
+  const r=produtos.filter(p=>p.nome.toLowerCase().includes(s)||(p.marca||'').toLowerCase().includes(s)||(p.codigo||'').includes(s)).slice(0,10);
+  if(!r.length){c.innerHTML=`<div class="empty"><div class="empty-text">Nenhum resultado</div></div>`;return}
+  c.innerHTML=r.map(p=>{const im=p.imagem?`<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">`:'📦';return`<div class="prod-card clickable" onclick="openTrocaCom('${p.id}')"><div class="prod-img">${im}</div><div class="prod-info"><div class="prod-name">${gn(p)}</div>${p.codigo?`<div class="prod-code">📊 ${p.codigo}</div>`:''}</div><span style="color:var(--ora);font-size:20px">→</span></div>`}).join('');
+}
+function openTrocaCom(pid){
+  const p=produtos.find(x=>x.id===pid);if(!p)return;
+  const im=p.imagem?`<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">`:'📦';
+  showModal(`<div class="modal-header"><div class="modal-title">🔄 Registrar Troca</div><button class="modal-close" onclick="closeModal()">✕</button></div>
+  <div class="modal-body">
+    <div style="background:var(--ora-l);border:2px solid var(--ora);border-radius:var(--r);padding:18px;margin-bottom:22px"><div class="flex gap-14" style="align-items:center"><div class="prod-img" style="width:76px;height:76px;font-size:34px">${im}</div><div style="flex:1"><div style="font-size:16px;font-weight:800;line-height:1.3">${gn(p)}</div>${p.codigo?`<div style="font-size:12px;color:var(--ora);margin-top:6px;font-family:monospace">📊 ${p.codigo}</div>`:''}</div></div></div>
+    <div style="background:var(--g50);border-radius:var(--r-sm);padding:16px;margin-bottom:18px;border:1px solid var(--g200)"><label class="fl mb-12">📦 Quantidade</label><div class="flex gap-10"><div class="fg" style="flex:1;margin-bottom:0"><input type="number" class="fi ora" id="tQtd" value="1" min="1"></div><div class="fg" style="flex:1;margin-bottom:0"><select class="fs ora" id="tUnid"><option>UN</option><option>CX</option><option>PCT</option><option>KG</option><option>FD</option><option>DZ</option><option>LT</option></select></div></div></div>
+    <div class="fg"><label class="fl">❓ Motivo</label><input type="hidden" id="tMot" value="avaria">
+      <button class="mot-btn sel avaria" onclick="setMot(this,'avaria')"><span class="mot-icon">💔</span><div class="mot-info"><div class="mot-title">Avaria</div><div class="mot-desc">Danificado ou defeito</div></div></button>
+      <button class="mot-btn vencimento" onclick="setMot(this,'vencimento')"><span class="mot-icon">📅</span><div class="mot-info"><div class="mot-title">Vencimento</div><div class="mot-desc">Vencido ou próximo</div></div></button>
+      <button class="mot-btn outros" onclick="setMot(this,'outros')"><span class="mot-icon">📝</span><div class="mot-info"><div class="mot-title">Outros</div><div class="mot-desc">Outro motivo</div></div></button>
     </div>
-    <div class="modal-body">
-      <!-- SCANNER FALTA -->
-      <div id="scannerAreaFalta" style="display:none;margin-bottom:16px;">
-        <div class="scanner-wrapper">
-          <div id="scannerContainerFalta"></div>
-          <div class="scanner-overlay">
-            <div style="position:relative;width:200px;height:200px;">
-              <div class="scanner-frame"></div>
-              <div class="scanner-line"></div>
-            </div>
-          </div>
-          <div class="scanner-status" id="scanStatusFalta">📷 Iniciando câmera...</div>
-        </div>
-        <button class="btn btn-gray btn-block btn-sm" onclick="fecharScannerFalta()" style="margin-top:8px;">
-          ✕ Fechar scanner
-        </button>
-      </div>
-
-      <div style="display:flex;gap:8px;margin-bottom:16px;">
-        <div class="search-box" style="flex:1;margin-bottom:0;">
-          <span class="search-icon">🔍</span>
-          <input type="text" class="search-input" id="buscaFalta"
-            placeholder="Buscar produto..." oninput="renderBuscaFalta()"
-            style="padding-right:16px;">
-        </div>
-        <button class="btn-scan" onclick="abrirScannerFalta()" title="Escanear código">
-          📷<span style="font-size:11px;">SCAN</span>
-        </button>
-      </div>
-
-      <div id="scanResultFalta" style="display:none;"></div>
-      <div id="resultadosFalta"></div>
-    </div>`;
-  showModal(html);
-  setTimeout(() => document.getElementById('buscaFalta')?.focus(), 100);
+    <div class="fg" id="motOutDiv" style="display:none"><label class="fl">Especifique *</label><textarea class="fi" id="tMotOut" placeholder="Motivo..." style="min-height:80px"></textarea></div>
+    <button class="btn btn-ora btn-block btn-lg" onclick="salvarTroca('${pid}')">✅ Registrar Troca</button>
+  </div>`);
 }
-
-function abrirScannerFalta() {
-  const area = document.getElementById('scannerAreaFalta');
-  if (!area) return;
-  area.style.display = 'block';
-  area.scrollIntoView({ behavior: 'smooth' });
-  setTimeout(() => initScanner('scannerContainerFalta', onScanFalta, 'scanStatusFalta'), 400);
+function setMot(b,v){document.querySelectorAll('.mot-btn').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');document.getElementById('tMot').value=v;document.getElementById('motOutDiv').style.display=v==='outros'?'block':'none'}
+async function salvarTroca(pid){
+  const p=produtos.find(x=>x.id===pid);if(!p)return;
+  const mot=document.getElementById('tMot').value;
+  const motO=document.getElementById('tMotOut')?.value.trim()||'';
+  if(mot==='outros'&&!motO){toast('Digite o motivo!','error');return}
+  const now=new Date().toISOString();
+  trocas.unshift({id:Date.now().toString(),produtoId:pid,nome:p.nome,tipo:p.tipo||'',marca:p.marca||'',volume:p.volume||'',variacao:p.variacao||'',codigo:p.codigo||'',imagem:p.imagem||'',nomeCompleto:gn(p),quantidade:parseInt(document.getElementById('tQtd').value)||1,unidade:document.getElementById('tUnid').value,motivo:mot,motivoOutros:motO,status:'pendente',createdAt:now,dataRegistro:now});
+  await save('trocas',trocas);closeModal();renderAll();renderTrocas();toast('✅ Troca registrada!','success');if(navigator.vibrate)navigator.vibrate(200);
 }
-
-function fecharScannerFalta() {
-  stopScanner('scannerContainerFalta');
-  const area = document.getElementById('scannerAreaFalta');
-  if (area) area.style.display = 'none';
-}
-
-function onScanFalta(codigo) {
-  fecharScannerFalta();
-  if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
-
-  // Busca nos produtos cadastrados
-  const encontrado = produtos.find(p => p.codigo === codigo);
-
-  const resultDiv = document.getElementById('scanResultFalta');
-  if (resultDiv) resultDiv.style.display = 'block';
-
-  if (encontrado) {
-    // Produto encontrado: preenche busca e abre direto
-    const buscaInput = document.getElementById('buscaFalta');
-    if (buscaInput) buscaInput.value = getNomeExibir(encontrado);
-
-    if (resultDiv) {
-      resultDiv.innerHTML = `
-        <div class="found-card success" style="margin-bottom:12px;">
-          <div class="prod-img" style="width:60px;height:60px;">
-            ${encontrado.imagem ? `<img src="${encontrado.imagem}">` : '📦'}
-          </div>
-          <div class="found-info">
-            <div class="found-title">✅ Produto encontrado!</div>
-            <div class="found-name">${getNomeExibir(encontrado)}</div>
-            ${encontrado.codigo ? `<div class="found-meta">📊 ${encontrado.codigo}</div>` : ''}
-          </div>
-        </div>`;
-    }
-    setTimeout(() => openFaltaComProduto(encontrado.id), 800);
-  } else {
-    // Produto NÃO encontrado nos cadastrados
-    if (resultDiv) {
-      resultDiv.innerHTML = `
-        <div style="background:var(--warning-light);border:2px solid var(--warning);border-radius:var(--radius-sm);padding:16px;margin-bottom:12px;">
-          <div style="font-weight:700;color:var(--warning);margin-bottom:6px;">⚠️ Produto não cadastrado</div>
-          <div class="barcode-display">${codigo}</div>
-          <div style="font-size:12px;color:var(--gray-600);margin-bottom:12px;">
-            Este código de barras não está na lista de produtos. Cadastre o produto primeiro.
-          </div>
-          <button class="btn btn-primary btn-block" onclick="closeModal();openCadastroComCodigo('${codigo}')">
-            ➕ Cadastrar produto agora
-          </button>
-        </div>`;
-    }
-  }
-}
-
-function renderBuscaFalta() {
-  const search = document.getElementById('buscaFalta').value.toLowerCase();
-  const container = document.getElementById('resultadosFalta');
-  if (!search) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-text">Digite para buscar</div></div>';
-    return;
-  }
-  const results = produtos.filter(p =>
-    p.nome.toLowerCase().includes(search) ||
-    (p.marca || '').toLowerCase().includes(search) ||
-    (p.codigo || '').includes(search)
-  ).slice(0, 10);
-  if (results.length === 0) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-text">Nenhum produto encontrado</div></div>';
-    return;
-  }
-  container.innerHTML = results.map(p => {
-    const img = p.imagem ? `<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
-    return `
-      <div class="prod-card clickable" onclick="openFaltaComProduto('${p.id}')">
-        <div class="prod-img">${img}</div>
-        <div class="prod-info">
-          <div class="prod-name">${getNomeExibir(p)}</div>
-          ${p.codigo ? `<div class="prod-code">📊 ${p.codigo}</div>` : ''}
-        </div>
-        <span style="color:var(--primary);font-size:20px;">→</span>
-      </div>`;
+function setTF(c){document.querySelectorAll('#pageTrocas .chip').forEach(x=>{x.classList.remove('active');x.classList.remove('ora')});c.classList.add('active');c.classList.add('ora');curTF=c.dataset.t;renderTrocas()}
+function renderTrocas(){
+  let l=[...trocas];
+  if(['pendente','enviado','concluido'].includes(curTF))l=l.filter(t=>t.status===curTF);
+  else if(['avaria','vencimento'].includes(curTF))l=l.filter(t=>t.motivo===curTF);
+  document.getElementById('trocasCount').textContent=`${trocas.length} itens`;
+  const c=document.getElementById('listTrocas');
+  if(!l.length){c.innerHTML=`<div class="empty"><div class="empty-icon">🔄</div><div class="empty-text">Nenhuma troca</div></div>`;return}
+  c.innerHTML=l.map(t=>{
+    let ab='';
+    if(t.status==='pendente')ab=`<button class="act-btn edit" onclick="updTroca('${t.id}','enviado')">📦 Enviado</button>`;
+    else if(t.status==='enviado')ab=`<button class="act-btn add" onclick="updTroca('${t.id}','concluido')">✅ Concluir</button>`;
+    else ab=`<button class="act-btn gray" onclick="updTroca('${t.id}','pendente')">↩️ Reabrir</button>`;
+    return`${trocaHTML(t)}<div class="card-actions">${ab}<button class="act-btn del" onclick="delTroca('${t.id}')">🗑️</button></div>`;
   }).join('');
 }
+async function updTroca(id,s){const i=trocas.findIndex(t=>t.id===id);if(i>=0){trocas[i].status=s;await save('trocas',trocas);renderTrocas();renderHome();toast(s==='pendente'?'⏳ Pendente':s==='enviado'?'📦 Enviado':'✅ Concluído','success')}}
+async function delTroca(id){if(!confirm('Excluir?'))return;trocas=trocas.filter(t=>t.id!==id);await save('trocas',trocas);renderTrocas();renderHome();toast('🗑️ Excluído!','success')}
 
-function openFaltaComProduto(produtoId) {
-  const p = produtos.find(x => x.id === produtoId);
-  if (!p) return;
-  const img = p.imagem ? `<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
+// ════════════════ VENCIMENTOS ════════════════
+function setVF(c){document.querySelectorAll('#pageVencimentos .chip').forEach(x=>x.classList.remove('active'));c.classList.add('active');curVF=c.dataset.v;renderVenc()}
 
-  const html = `
-    <div class="modal-header">
-      <div class="modal-title">➕ Registrar Falta</div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+function openAddVenc(){
+  showModal(`<div class="modal-header"><div class="modal-title">📅 Adicionar Vencimento</div><button class="modal-close" onclick="closeModal()">✕</button></div>
+  <div class="modal-body">
+    <div id="scanAreaV" style="display:none;margin-bottom:16px">${scannerHTML('scV','stV')}<button class="btn btn-gray btn-block btn-sm" onclick="closeScanV()" style="margin-top:8px">✕ Fechar</button></div>
+    <div id="scanResV" style="display:none"></div>
+    <div class="flex gap-8 mb-16">
+      <div class="search-box" style="flex:1;margin-bottom:0"><span class="search-icon">🔍</span><input type="text" class="search-input" id="buscaV" placeholder="Buscar produto..." oninput="renderBuscaV()" style="padding-right:16px"></div>
+      <button class="btn-scan" onclick="openScanV()">📷 SCAN</button>
     </div>
-    <div class="modal-body">
-      <div style="background:var(--primary-light);border:2px solid var(--primary);border-radius:var(--radius);padding:16px;margin-bottom:20px;">
-        <div style="display:flex;align-items:center;gap:14px;">
-          <div class="prod-img" style="width:80px;height:80px;font-size:36px;">${img}</div>
-          <div style="flex:1;">
-            <div style="font-size:16px;font-weight:700;color:var(--gray-800);line-height:1.3;">${getNomeExibir(p)}</div>
-            ${p.codigo ? `<div style="font-size:12px;color:var(--primary);margin-top:4px;font-family:monospace;">📊 ${p.codigo}</div>` : ''}
-          </div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">🚨 Prioridade da Falta</label>
-        <div class="priority-selector">
-          <button class="priority-btn alta selected" onclick="setPrioridade(this,'alta')">🔴 Urgente</button>
-          <button class="priority-btn media" onclick="setPrioridade(this,'media')">🟡 Média</button>
-          <button class="priority-btn baixa" onclick="setPrioridade(this,'baixa')">🟢 Baixa</button>
-        </div>
-        <input type="hidden" id="faltaPrioridade" value="alta">
-      </div>
-      <div style="background:var(--gray-50);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px;">
-        <label class="form-label" style="margin-bottom:10px;">📦 Estoque Atual</label>
-        <div style="display:flex;gap:10px;">
-          <div class="form-group" style="flex:1;margin-bottom:0;">
-            <input type="number" class="form-input" id="faltaQtd" value="0" min="0">
-            <div style="font-size:11px;color:var(--gray-500);margin-top:4px;text-align:center;">Quantidade</div>
-          </div>
-          <div class="form-group" style="flex:1;margin-bottom:0;">
-            <select class="form-select" id="faltaUnid">
-              <option>UN</option><option>CX</option><option>PCT</option>
-              <option>KG</option><option>FD</option><option>DZ</option><option>LT</option>
-            </select>
-            <div style="font-size:11px;color:var(--gray-500);margin-top:4px;text-align:center;">Unidade</div>
-          </div>
-        </div>
-      </div>
-      <div style="background:var(--success-light);border:2px solid var(--success);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px;">
-        <label class="form-label" style="color:var(--success);margin-bottom:10px;">📝 Sugestão de Pedido</label>
-        <div style="display:flex;gap:10px;margin-bottom:12px;">
-          <div class="form-group" style="flex:1;margin-bottom:0;">
-            <input type="number" class="form-input" id="sugestaoQtd" value="1" min="1" style="border-color:var(--success);">
-            <div style="font-size:11px;color:var(--success);margin-top:4px;text-align:center;">Quantidade</div>
-          </div>
-          <div class="form-group" style="flex:1;margin-bottom:0;">
-            <select class="form-select" id="sugestaoUnid" style="border-color:var(--success);">
-              <option>UN</option><option>CX</option><option>PCT</option>
-              <option>KG</option><option>FD</option><option>DZ</option><option>LT</option>
-            </select>
-            <div style="font-size:11px;color:var(--success);margin-top:4px;text-align:center;">Unidade</div>
-          </div>
-        </div>
-        <textarea class="form-input" id="faltaObs" placeholder="Observações... (opcional)" style="min-height:60px;border-color:var(--success);"></textarea>
-      </div>
-      <button class="btn btn-success btn-block btn-lg" onclick="salvarFalta('${produtoId}')">
-        ✅ Registrar Falta
-      </button>
-    </div>`;
-  showModal(html);
+    <div id="resV"></div>
+  </div>`);
+  setTimeout(()=>document.getElementById('buscaV')?.focus(),100);
 }
 
-function setPrioridade(btn, valor) {
-  document.querySelectorAll('.priority-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  document.getElementById('faltaPrioridade').value = valor;
-}
-
-async function salvarFalta(produtoId) {
-  const p = produtos.find(x => x.id === produtoId);
-  if (!p) return;
-  const estoqueQtd = parseInt(document.getElementById('faltaQtd').value) || 0;
-  const estoqueUnid = document.getElementById('faltaUnid').value;
-  const sugestaoQtd = parseInt(document.getElementById('sugestaoQtd').value) || 1;
-  const sugestaoUnid = document.getElementById('sugestaoUnid').value;
-  const sugestaoObs = document.getElementById('faltaObs').value.trim();
-  const agora = new Date().toISOString();
-
-  const falta = {
-    id: Date.now().toString(),
-    produtoId, nome: p.nome, tipo: p.tipo || '', marca: p.marca || '',
-    volume: p.volume || '', variacao: p.variacao || '',
-    codigo: p.codigo || '', imagem: p.imagem || '',
-    nomeCompleto: getNomeExibir(p),
-    estoqueQtd, estoqueUnid, sugestaoQtd, sugestaoUnid, sugestaoObs,
-    sugestao: `Pedir ${sugestaoQtd} ${sugestaoUnid}${sugestaoObs ? ` - ${sugestaoObs}` : ''}`,
-    quantidade: estoqueQtd, unidade: estoqueUnid,
-    prioridade: document.getElementById('faltaPrioridade').value,
-    pedido: false, createdAt: agora, dataRegistro: agora
-  };
-
-  faltas.unshift(falta);
-  await saveData('faltas', faltas);
-  closeModal();
-  renderAll();
-  toast('✅ Falta registrada e sincronizada!', 'success');
-  if (navigator.vibrate) navigator.vibrate(200);
-}
-
-// ===== LISTA FALTAS =====
-function setFaltaFilter(chip) {
-  document.querySelectorAll('#pageFaltas .chip').forEach(c => c.classList.remove('active'));
-  chip.classList.add('active');
-  currentFaltaFilter = chip.dataset.filter;
-  renderFaltas();
-}
-
-function renderFaltas() {
-  let list = [...faltas];
-  if (['alta','media','baixa'].includes(currentFaltaFilter)) {
-    list = list.filter(f => f.prioridade === currentFaltaFilter);
-  } else if (currentFaltaFilter === 'pedido') {
-    list = list.filter(f => f.pedido);
-  }
-  document.getElementById('faltasCount').textContent = `${faltas.length} itens`;
-  const container = document.getElementById('listaFaltas');
-  if (list.length === 0) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">Nenhuma falta</div></div>';
-    return;
-  }
-  container.innerHTML = list.map(f => `
-    ${renderFaltaCardHTML(f)}
-    <div class="card-actions">
-      ${!f.pedido
-        ? `<button class="action-btn add" onclick="marcarPedido('${f.id}')">✅ Pedido</button>`
-        : `<button class="action-btn edit" onclick="marcarPedido('${f.id}')">↩️ Desfazer</button>`}
-      <button class="action-btn delete" onclick="excluirFalta('${f.id}')">🗑️</button>
-    </div>`).join('');
-}
-
-async function marcarPedido(id) {
-  const idx = faltas.findIndex(f => f.id === id);
-  if (idx >= 0) {
-    faltas[idx].pedido = !faltas[idx].pedido;
-    await saveData('faltas', faltas);
-    renderFaltas(); renderHome();
-    toast(faltas[idx].pedido ? '✅ Pedido!' : '↩️ Desmarcado', 'success');
-  }
-}
-
-async function excluirFalta(id) {
-  if (!confirm('Excluir falta?')) return;
-  faltas = faltas.filter(f => f.id !== id);
-  await saveData('faltas', faltas);
-  renderFaltas(); renderHome();
-  toast('🗑️ Excluído!', 'success');
-}
-
-// ===== TROCAS =====
-function openRegistrarTroca() {
-  const html = `
-    <div class="modal-header">
-      <div class="modal-title">🔄 Registrar Troca</div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div class="modal-body">
-      <!-- SCANNER TROCA -->
-      <div id="scannerAreaTroca" style="display:none;margin-bottom:16px;">
-        <div class="scanner-wrapper">
-          <div id="scannerContainerTroca"></div>
-          <div class="scanner-overlay">
-            <div style="position:relative;width:200px;height:200px;">
-              <div class="scanner-frame"></div>
-              <div class="scanner-line"></div>
-            </div>
-          </div>
-          <div class="scanner-status" id="scanStatusTroca">📷 Iniciando câmera...</div>
-        </div>
-        <button class="btn btn-gray btn-block btn-sm" onclick="fecharScannerTroca()" style="margin-top:8px;">
-          ✕ Fechar scanner
-        </button>
-      </div>
-      <div id="scanResultTroca" style="display:none;"></div>
-
-      <div style="display:flex;gap:8px;margin-bottom:16px;">
-        <div class="search-box" style="flex:1;margin-bottom:0;">
-          <span class="search-icon">🔍</span>
-          <input type="text" class="search-input orange" id="buscaTroca"
-            placeholder="Buscar produto..." oninput="renderBuscaTroca()">
-        </div>
-        <button class="btn-scan" onclick="abrirScannerTroca()" style="background:linear-gradient(135deg,var(--orange),#C2410C);">
-          📷<span style="font-size:11px;">SCAN</span>
-        </button>
-      </div>
-      <div id="resultadosTroca"></div>
-    </div>`;
-  showModal(html);
-  setTimeout(() => document.getElementById('buscaTroca')?.focus(), 100);
-}
-
-function abrirScannerTroca() {
-  const area = document.getElementById('scannerAreaTroca');
-  if (!area) return;
-  area.style.display = 'block';
-  area.scrollIntoView({ behavior: 'smooth' });
-  setTimeout(() => initScanner('scannerContainerTroca', onScanTroca, 'scanStatusTroca'), 400);
-}
-
-function fecharScannerTroca() {
-  stopScanner('scannerContainerTroca');
-  const area = document.getElementById('scannerAreaTroca');
-  if (area) area.style.display = 'none';
-}
-
-function onScanTroca(codigo) {
-  fecharScannerTroca();
-  if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
-  const encontrado = produtos.find(p => p.codigo === codigo);
-  const resultDiv = document.getElementById('scanResultTroca');
-  if (resultDiv) resultDiv.style.display = 'block';
-
-  if (encontrado) {
-    if (resultDiv) {
-      resultDiv.innerHTML = `
-        <div class="found-card success" style="margin-bottom:12px;">
-          <div class="prod-img" style="width:60px;height:60px;">
-            ${encontrado.imagem ? `<img src="${encontrado.imagem}">` : '📦'}
-          </div>
-          <div class="found-info">
-            <div class="found-title">✅ Produto encontrado!</div>
-            <div class="found-name">${getNomeExibir(encontrado)}</div>
-            ${encontrado.codigo ? `<div class="found-meta">📊 ${encontrado.codigo}</div>` : ''}
-          </div>
-        </div>`;
-    }
-    setTimeout(() => openTrocaComProduto(encontrado.id), 800);
+function openScanV(){const a=document.getElementById('scanAreaV');if(!a)return;a.style.display='block';a.scrollIntoView({behavior:'smooth'});setTimeout(()=>initScan('scV',onScanV,'stV'),400)}
+function closeScanV(){stopScan('scV');const a=document.getElementById('scanAreaV');if(a)a.style.display='none'}
+function onScanV(cod){
+  closeScanV();if(navigator.vibrate)navigator.vibrate([100,50,100]);
+  const f=produtos.find(p=>p.codigo===cod);
+  const r=document.getElementById('scanResV');if(r)r.style.display='block';
+  if(f){
+    if(r)r.innerHTML=`<div class="found-card success"><div class="prod-img" style="width:56px;height:56px">${f.imagem?`<img src="${f.imagem}">`:'📦'}</div><div class="found-info"><div class="found-title">✅ Encontrado!</div><div class="found-name">${gn(f)}</div></div></div>`;
+    setTimeout(()=>openFormVenc(f.id),600);
   } else {
-    if (resultDiv) {
-      resultDiv.innerHTML = `
-        <div style="background:var(--warning-light);border:2px solid var(--warning);border-radius:var(--radius-sm);padding:16px;margin-bottom:12px;">
-          <div style="font-weight:700;color:var(--warning);">⚠️ Produto não cadastrado</div>
-          <div class="barcode-display">${codigo}</div>
-          <button class="btn btn-primary btn-block" onclick="closeModal();openCadastroComCodigo('${codigo}')">
-            ➕ Cadastrar produto agora
-          </button>
-        </div>`;
-    }
+    if(r)r.innerHTML=`<div style="background:var(--war-l);border:2px solid var(--war);border-radius:var(--r-sm);padding:18px;margin-bottom:14px"><div style="font-weight:800;color:var(--war);margin-bottom:8px">⚠️ Não cadastrado</div><div class="barcode-box">${cod}</div><button class="btn btn-suc btn-block" onclick="closeModal();openCadastro(null,'${cod}')">➕ Cadastrar</button></div>`;
   }
 }
 
-function renderBuscaTroca() {
-  const search = document.getElementById('buscaTroca').value.toLowerCase();
-  const container = document.getElementById('resultadosTroca');
-  if (!search) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-text">Digite para buscar</div></div>';
-    return;
-  }
-  const results = produtos.filter(p =>
-    p.nome.toLowerCase().includes(search) ||
-    (p.marca || '').toLowerCase().includes(search) ||
-    (p.codigo || '').includes(search)
-  ).slice(0, 10);
-  if (results.length === 0) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-text">Nenhum produto encontrado</div></div>';
-    return;
-  }
-  container.innerHTML = results.map(p => {
-    const img = p.imagem ? `<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
-    return `
-      <div class="prod-card clickable" onclick="openTrocaComProduto('${p.id}')">
-        <div class="prod-img">${img}</div>
-        <div class="prod-info">
-          <div class="prod-name">${getNomeExibir(p)}</div>
-          ${p.codigo ? `<div class="prod-code">📊 ${p.codigo}</div>` : ''}
-        </div>
-        <span style="color:var(--orange);font-size:20px;">→</span>
-      </div>`;
-  }).join('');
+function renderBuscaV(){
+  const s=document.getElementById('buscaV').value.toLowerCase();const c=document.getElementById('resV');
+  if(!s){c.innerHTML=`<div class="empty"><div class="empty-text">Digite para buscar</div></div>`;return}
+  const r=produtos.filter(p=>p.nome.toLowerCase().includes(s)||(p.marca||'').toLowerCase().includes(s)||(p.codigo||'').includes(s)).slice(0,10);
+  if(!r.length){c.innerHTML=`<div class="empty"><div class="empty-text">Nenhum resultado</div></div>`;return}
+  c.innerHTML=r.map(p=>{const im=p.imagem?`<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">`:'📦';return`<div class="prod-card clickable" onclick="openFormVenc('${p.id}')"><div class="prod-img">${im}</div><div class="prod-info"><div class="prod-name">${gn(p)}</div>${p.codigo?`<div class="prod-code">📊 ${p.codigo}</div>`:''}</div><span style="color:var(--suc)">+ Venc</span></div>`}).join('');
+}
+function openFormVenc(pid){
+  const p=produtos.find(x=>x.id===pid);if(!p)return;
+  const im=p.imagem?`<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">`:'📦';
+  showModal(`<div class="modal-header"><div class="modal-title">📅 Vencimento</div><button class="modal-close" onclick="closeModal()">✕</button></div>
+  <div class="modal-body">
+    <div class="prod-card mb-20"><div class="prod-img">${im}</div><div class="prod-info"><div class="prod-name">${gn(p)}</div>${p.codigo?`<div class="prod-code">📊 ${p.codigo}</div>`:''}</div></div>
+    <div class="fg"><label class="fl">📅 Data de Validade *</label><input type="date" class="fi" id="vData"></div>
+    <div class="fg"><label class="fl">📦 Quantidade</label><input type="number" class="fi" id="vQtd" value="1" min="1"></div>
+    <button class="btn btn-suc btn-block btn-lg" onclick="saveVenc('${pid}')">✅ Salvar</button>
+  </div>`);
+}
+async function saveVenc(pid){
+  const p=produtos.find(x=>x.id===pid);const d=document.getElementById('vData').value;
+  const q=parseInt(document.getElementById('vQtd').value)||1;
+  if(!d){toast('Selecione a data!','error');return}
+  vencimentos.push({id:Date.now().toString(),produtoId:pid,nome:p.nome,tipo:p.tipo||'',marca:p.marca||'',volume:p.volume||'',variacao:p.variacao||'',imagem:p.imagem||'',codigo:p.codigo||'',nomeCompleto:gn(p),validade:d,quantidade:q,createdAt:new Date().toISOString()});
+  await save('vencimentos',vencimentos);closeModal();renderVenc();renderHome();toast('✅ Salvo!','success');
+}
+function renderVenc(){
+  const hoje=new Date();hoje.setHours(0,0,0,0);
+  let l=vencimentos.map(v=>({...v,dias:Math.ceil((new Date(v.validade)-hoje)/864e5)}));
+  if(curVF==='vencidos')l=l.filter(v=>v.dias<0);
+  else if(curVF==='7dias')l=l.filter(v=>v.dias>=0&&v.dias<=7);
+  else if(curVF==='30dias')l=l.filter(v=>v.dias>=0&&v.dias<=30);
+  l.sort((a,b)=>a.dias-b.dias);
+  const c=document.getElementById('listVenc');
+  if(!l.length){c.innerHTML=`<div class="empty"><div class="empty-icon">📅</div><div class="empty-text">Nenhum vencimento</div></div>`;return}
+  c.innerHTML=l.map(v=>`${vencHTML(v,v.dias)}<div class="card-actions"><button class="act-btn add" onclick="faltaDeVenc('${v.id}')">➕ Falta</button><button class="act-btn del" onclick="delVenc('${v.id}')">🗑️</button></div>`).join('');
+}
+async function faltaDeVenc(vid){
+  const v=vencimentos.find(x=>x.id===vid);if(!v)return;
+  const now=new Date().toISOString();
+  faltas.unshift({id:Date.now().toString(),produtoId:v.produtoId,nome:v.nome,marca:v.marca,volume:v.volume,imagem:v.imagem,nomeCompleto:v.nomeCompleto,quantidade:v.quantidade,unidade:'UN',prioridade:'alta',sugestao:'Produto vencido/vencendo',pedido:false,createdAt:now,dataRegistro:now,estoqueQtd:0,estoqueUnid:'UN'});
+  await save('faltas',faltas);renderAll();toast('✅ Falta criada!','success');
+}
+async function delVenc(id){if(!confirm('Excluir?'))return;vencimentos=vencimentos.filter(v=>v.id!==id);await save('vencimentos',vencimentos);renderVenc();renderHome();toast('🗑️ Excluído!','success')}
+
+// ════════════════ CONFIG ════════════════
+function loadCfg(){
+  config=JSON.parse(localStorage.getItem('config')||'{}');
+  const $=id=>document.getElementById(id);
+  if($('cfgLoja'))$('cfgLoja').value=config.loja||'';
+  if($('cfgResp'))$('cfgResp').value=config.responsavel||'';
+  if($('cfgDias'))$('cfgDias').value=config.diasVencimento||'7';
+  updVencInfo();
+}
+function updVencInfo(){
+  const d=parseInt(config.diasVencimento||7);
+  const t=d>=30?`${Math.floor(d/30)} ${Math.floor(d/30)===1?'mês':'meses'}`:`${d} dias`;
+  const el=document.getElementById('cfgVencInfo');if(el)el.textContent=t;
+}
+function saveCfg(){
+  config.loja=document.getElementById('cfgLoja').value;
+  config.responsavel=document.getElementById('cfgResp').value;
+  config.diasVencimento=document.getElementById('cfgDias').value;
+  localStorage.setItem('config',JSON.stringify(config));updVencInfo();renderHome();
+}
+function updateSyncInfo(){
+  const el=document.getElementById('syncInfo');
+  if(db)el.innerHTML=`<span style="color:var(--suc)">✅ Firebase Conectado</span><br>Sincronização em tempo real ativa`;
+  else el.innerHTML=`<span style="color:var(--war)">⚠️ Modo Offline</span>`;
+}
+function exportBackup(){
+  const b={versao:'3.0',data:new Date().toISOString(),produtos,faltas,vencimentos,trocas,config};
+  const bl=new Blob([JSON.stringify(b,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(bl);
+  a.download=`backup_${new Date().toISOString().split('T')[0]}.json`;a.click();
+  toast('📤 Exportado!','success');
+}
+function importBackup(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();r.onload=async ev=>{
+    try{const d=JSON.parse(ev.target.result);if(!confirm('Substituir dados?'))return;
+      if(d.produtos){produtos=d.produtos;await save('produtos',produtos)}
+      if(d.faltas){faltas=d.faltas;await save('faltas',faltas)}
+      if(d.vencimentos){vencimentos=d.vencimentos;await save('vencimentos',vencimentos)}
+      if(d.trocas){trocas=d.trocas;await save('trocas',trocas)}
+      loadCfg();renderAll();toast('📥 Importado!','success');
+    }catch(e){toast('❌ Arquivo inválido!','error')}
+  };r.readAsText(f);
+}
+async function clearAll(){
+  if(!confirm('⚠️ Apagar TUDO?'))return;if(!confirm('⚠️ CONFIRMAR?'))return;
+  produtos=[];faltas=[];vencimentos=[];trocas=[];
+  await Promise.all([save('produtos',produtos),save('faltas',faltas),save('vencimentos',vencimentos),save('trocas',trocas)]);
+  renderAll();toast('🗑️ Apagado!','success');
 }
 
-function openTrocaComProduto(produtoId) {
-  const p = produtos.find(x => x.id === produtoId);
-  if (!p) return;
-  const img = p.imagem ? `<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
-
-  const html = `
-    <div class="modal-header">
-      <div class="modal-title">🔄 Registrar Troca</div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+// ════════════════ PDF ════════════════
+function openPDFModal(){
+  const h=new Date(),m=new Date();m.setMonth(m.getMonth()-1);
+  showModal(`<div class="modal-header"><div class="modal-title">📄 Gerar PDF</div><button class="modal-close" onclick="closeModal()">✕</button></div>
+  <div class="modal-body">
+    <div class="date-range"><div class="date-range-title">📅 Período</div><div class="date-range-desc">Selecione as datas para o relatório</div>
+      <div class="fg"><label class="fl">Data Inicial</label><input type="date" class="fi" id="pdfDi" value="${m.toISOString().split('T')[0]}"></div>
+      <div class="fg" style="margin-bottom:0"><label class="fl">Data Final</label><input type="date" class="fi" id="pdfDf" value="${h.toISOString().split('T')[0]}"></div>
     </div>
-    <div class="modal-body">
-      <div style="background:var(--orange-light);border:2px solid var(--orange);border-radius:var(--radius);padding:16px;margin-bottom:20px;">
-        <div style="display:flex;align-items:center;gap:14px;">
-          <div class="prod-img" style="width:80px;height:80px;font-size:36px;">${img}</div>
-          <div style="flex:1;">
-            <div style="font-size:16px;font-weight:700;line-height:1.3;">${getNomeExibir(p)}</div>
-            ${p.codigo ? `<div style="font-size:12px;color:var(--orange);margin-top:4px;font-family:monospace;">📊 ${p.codigo}</div>` : ''}
-          </div>
-        </div>
-      </div>
-      <div style="background:var(--gray-50);border-radius:var(--radius-sm);padding:14px;margin-bottom:16px;">
-        <label class="form-label" style="margin-bottom:10px;">📦 Quantidade para Troca</label>
-        <div style="display:flex;gap:10px;">
-          <div class="form-group" style="flex:1;margin-bottom:0;">
-            <input type="number" class="form-input orange" id="trocaQtd" value="1" min="1">
-          </div>
-          <div class="form-group" style="flex:1;margin-bottom:0;">
-            <select class="form-select orange" id="trocaUnid">
-              <option>UN</option><option>CX</option><option>PCT</option>
-              <option>KG</option><option>FD</option><option>DZ</option><option>LT</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">❓ Motivo da Troca</label>
-        <input type="hidden" id="trocaMotivo" value="avaria">
-        <button class="motivo-btn selected avaria" onclick="setMotivo(this,'avaria')">
-          <span class="motivo-icon">💔</span>
-          <div class="motivo-info"><div class="motivo-title">Avaria</div><div class="motivo-desc">Produto danificado</div></div>
-        </button>
-        <button class="motivo-btn vencimento" onclick="setMotivo(this,'vencimento')">
-          <span class="motivo-icon">📅</span>
-          <div class="motivo-info"><div class="motivo-title">Vencimento</div><div class="motivo-desc">Produto vencido</div></div>
-        </button>
-        <button class="motivo-btn outros" onclick="setMotivo(this,'outros')">
-          <span class="motivo-icon">📝</span>
-          <div class="motivo-info"><div class="motivo-title">Outros</div><div class="motivo-desc">Outro motivo</div></div>
-        </button>
-      </div>
-      <div class="form-group" id="motivoOutrosDiv" style="display:none;">
-        <label class="form-label">Especifique o motivo *</label>
-        <textarea class="form-input" id="trocaMotivoOutros" placeholder="Digite o motivo..." style="min-height:80px;"></textarea>
-      </div>
-      <button class="btn btn-orange btn-block btn-lg" onclick="salvarTroca('${produtoId}')">
-        ✅ Registrar Troca
-      </button>
-    </div>`;
-  showModal(html);
+    <div style="background:var(--g50);border-radius:var(--r-sm);padding:14px;margin-bottom:18px;font-size:13px;color:var(--g500);border:1px solid var(--g200)">📊 Total: <strong>${faltas.length}</strong> faltas</div>
+    <button class="btn btn-pri btn-block btn-lg mb-12" onclick="pdfPeriodo()">📄 PDF do Período</button>
+    <button class="btn btn-suc btn-block" onclick="pdfAll()">📄 Todas as Faltas</button>
+  </div>`);
 }
-
-function setMotivo(btn, valor) {
-  document.querySelectorAll('.motivo-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  document.getElementById('trocaMotivo').value = valor;
-  document.getElementById('motivoOutrosDiv').style.display = valor === 'outros' ? 'block' : 'none';
+function pdfPeriodo(){
+  const i=document.getElementById('pdfDi').value,f=document.getElementById('pdfDf').value;
+  if(!i||!f){toast('Selecione as datas!','warning');return}
+  const di=new Date(i);di.setHours(0,0,0,0);const df=new Date(f);df.setHours(23,59,59,999);
+  const fl=faltas.filter(x=>{const d=new Date(x.dataRegistro||x.createdAt);return d>=di&&d<=df});
+  if(!fl.length){toast('Nenhuma falta no período','warning');return}
+  mkPDF(fl,i,f);closeModal();
 }
-
-async function salvarTroca(produtoId) {
-  const p = produtos.find(x => x.id === produtoId);
-  if (!p) return;
-  const motivo = document.getElementById('trocaMotivo').value;
-  const motivoOutros = document.getElementById('trocaMotivoOutros')?.value.trim() || '';
-  if (motivo === 'outros' && !motivoOutros) { toast('Digite o motivo!', 'error'); return; }
-  const agora = new Date().toISOString();
-
-  const troca = {
-    id: Date.now().toString(),
-    produtoId, nome: p.nome, tipo: p.tipo || '', marca: p.marca || '',
-    volume: p.volume || '', variacao: p.variacao || '',
-    codigo: p.codigo || '', imagem: p.imagem || '',
-    nomeCompleto: getNomeExibir(p),
-    quantidade: parseInt(document.getElementById('trocaQtd').value) || 1,
-    unidade: document.getElementById('trocaUnid').value,
-    motivo, motivoOutros, status: 'pendente',
-    createdAt: agora, dataRegistro: agora
-  };
-
-  trocas.unshift(troca);
-  await saveData('trocas', trocas);
-  closeModal();
-  renderAll();
-  renderTrocas();
-  toast('✅ Troca registrada e sincronizada!', 'success');
-  if (navigator.vibrate) navigator.vibrate(200);
+function pdfAll(){if(!faltas.length){toast('Lista vazia','warning');return}mkPDF(faltas);closeModal()}
+function mkPDF(list,pi,pf){
+  const{jsPDF}=window.jspdf;const doc=new jsPDF();
+  const loja=config.loja||'Minha Loja';const data=fmtD(new Date().toISOString().split('T')[0]);
+  doc.setFillColor(37,99,235);doc.rect(0,0,210,30,'F');doc.setTextColor(255);doc.setFontSize(18);
+  doc.text('LISTA DE FALTAS',105,12,{align:'center'});doc.setFontSize(11);doc.text(loja,105,20,{align:'center'});
+  doc.setFontSize(10);doc.text(pi&&pf?`Período: ${fmtD(pi)} a ${fmtD(pf)}`:`Gerado: ${data}`,105,27,{align:'center'});
+  doc.autoTable({startY:35,head:[['#','Produto','Data','Estoque','Prioridade','Pedido']],
+    body:list.map((f,i)=>[i+1,gn(f),fmtDT(f.dataRegistro||f.createdAt),`${f.estoqueQtd||0} ${f.estoqueUnid||'UN'}`,f.prioridade==='alta'?'URGENTE':f.prioridade==='media'?'MÉDIA':'BAIXA',`${f.sugestaoQtd||1} ${f.sugestaoUnid||'UN'}${f.sugestaoObs?' ('+f.sugestaoObs+')':''}`]),
+    headStyles:{fillColor:[37,99,235],fontSize:9},alternateRowStyles:{fillColor:[249,250,251]},styles:{fontSize:8,cellPadding:3}});
+  doc.save(`faltas_${pi||data.replace(/\//g,'-')}.pdf`);toast('📄 PDF gerado!','success');
 }
-
-function setTrocaFilter(chip) {
-  document.querySelectorAll('#pageTrocas .chip').forEach(c => { c.classList.remove('active'); c.classList.remove('orange'); });
-  chip.classList.add('active'); chip.classList.add('orange');
-  currentTrocaFilter = chip.dataset.filter;
-  renderTrocas();
+function pdfTrocas(){
+  if(!trocas.length){toast('Lista vazia','warning');return}
+  const{jsPDF}=window.jspdf;const doc=new jsPDF();const loja=config.loja||'Minha Loja';const data=fmtD(new Date().toISOString().split('T')[0]);
+  doc.setFillColor(234,88,12);doc.rect(0,0,210,30,'F');doc.setTextColor(255);doc.setFontSize(18);
+  doc.text('PRODUTOS PARA TROCA',105,12,{align:'center'});doc.setFontSize(11);doc.text(loja,105,20,{align:'center'});
+  doc.setFontSize(10);doc.text(`Gerado: ${data}`,105,27,{align:'center'});
+  const tl=trocas.filter(t=>t.status!=='concluido');
+  doc.autoTable({startY:35,head:[['#','Produto','Qtd','Motivo','Data','Status']],
+    body:tl.map((t,i)=>[i+1,gn(t),`${t.quantidade} ${t.unidade}`,t.motivo==='avaria'?'Avaria':t.motivo==='vencimento'?'Vencimento':t.motivoOutros||'Outros',fmtDT(t.dataRegistro||t.createdAt),t.status==='pendente'?'Pendente':'Enviado']),
+    headStyles:{fillColor:[234,88,12]},styles:{fontSize:8,cellPadding:3}});
+  doc.save(`trocas_${data.replace(/\//g,'-')}.pdf`);toast('📄 PDF!','success');
 }
-
-function renderTrocas() {
-  let list = [...trocas];
-  if (['pendente','enviado','concluido'].includes(currentTrocaFilter)) {
-    list = list.filter(t => t.status === currentTrocaFilter);
-  } else if (['avaria','vencimento'].includes(currentTrocaFilter)) {
-    list = list.filter(t => t.motivo === currentTrocaFilter);
-  }
-  document.getElementById('trocasCount').textContent = `${trocas.length} itens`;
-  const container = document.getElementById('listaTrocas');
-  if (list.length === 0) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🔄</div><div class="empty-text">Nenhuma troca</div></div>';
-    return;
-  }
-  container.innerHTML = list.map(t => {
-    let actionBtns = '';
-    if (t.status === 'pendente') actionBtns = `<button class="action-btn edit" onclick="atualizarStatusTroca('${t.id}','enviado')">📦 Enviado</button>`;
-    else if (t.status === 'enviado') actionBtns = `<button class="action-btn add" onclick="atualizarStatusTroca('${t.id}','concluido')">✅ Concluir</button>`;
-    else actionBtns = `<button class="action-btn gray" onclick="atualizarStatusTroca('${t.id}','pendente')">↩️ Reabrir</button>`;
-    return `${renderTrocaCardHTML(t)}<div class="card-actions">${actionBtns}<button class="action-btn delete" onclick="excluirTroca('${t.id}')">🗑️</button></div>`;
-  }).join('');
-}
-
-async function atualizarStatusTroca(id, status) {
-  const idx = trocas.findIndex(t => t.id === id);
-  if (idx >= 0) {
-    trocas[idx].status = status;
-    await saveData('trocas', trocas);
-    renderTrocas(); renderHome();
-    toast(status === 'pendente' ? '⏳ Pendente' : status === 'enviado' ? '📦 Enviado' : '✅ Concluído', 'success');
-  }
-}
-
-async function excluirTroca(id) {
-  if (!confirm('Excluir troca?')) return;
-  trocas = trocas.filter(t => t.id !== id);
-  await saveData('trocas', trocas);
-  renderTrocas(); renderHome();
-  toast('🗑️ Excluído!', 'success');
-}
-
-// ===== VENCIMENTOS =====
-function setVencFilter(chip) {
-  document.querySelectorAll('#pageVencimentos .chip').forEach(c => c.classList.remove('active'));
-  chip.classList.add('active');
-  currentVencFilter = chip.dataset.venc;
-  renderVencimentos();
-}
-
-function openAddVencimento() {
-  const html = `
-    <div class="modal-header">
-      <div class="modal-title">📅 Adicionar Vencimento</div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="search-box">
-        <span class="search-icon">🔍</span>
-        <input type="text" class="search-input" id="buscaVenc" placeholder="Buscar produto..." oninput="renderBuscaVenc()">
-      </div>
-      <div id="resultadosVenc"></div>
-    </div>`;
-  showModal(html);
-  setTimeout(() => document.getElementById('buscaVenc')?.focus(), 100);
-}
-
-function renderBuscaVenc() {
-  const search = document.getElementById('buscaVenc').value.toLowerCase();
-  const container = document.getElementById('resultadosVenc');
-  if (!search) { container.innerHTML = '<div class="empty-state"><div class="empty-text">Digite para buscar</div></div>'; return; }
-  const results = produtos.filter(p =>
-    p.nome.toLowerCase().includes(search) ||
-    (p.marca || '').toLowerCase().includes(search)
-  ).slice(0, 10);
-  if (results.length === 0) { container.innerHTML = '<div class="empty-state"><div class="empty-text">Nenhum produto</div></div>'; return; }
-  container.innerHTML = results.map(p => {
-    const img = p.imagem ? `<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
-    return `
-      <div class="prod-card clickable" onclick="abrirFormVenc('${p.id}')">
-        <div class="prod-img">${img}</div>
-        <div class="prod-info">
-          <div class="prod-name">${getNomeExibir(p)}</div>
-          ${p.codigo ? `<div class="prod-code">📊 ${p.codigo}</div>` : ''}
-        </div>
-        <span style="color:var(--success);">+ Venc</span>
-      </div>`;
-  }).join('');
-}
-
-function abrirFormVenc(produtoId) {
-  const p = produtos.find(x => x.id === produtoId);
-  if (!p) return;
-  const img = p.imagem ? `<img src="${p.imagem}" onerror="this.parentElement.innerHTML='📦'">` : '📦';
-  const html = `
-    <div class="modal-header">
-      <div class="modal-title">📅 Adicionar Vencimento</div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="prod-card" style="margin-bottom:20px;">
-        <div class="prod-img">${img}</div>
-        <div class="prod-info">
-          <div class="prod-name">${getNomeExibir(p)}</div>
-          ${p.codigo ? `<div class="prod-code">📊 ${p.codigo}</div>` : ''}
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Data de Validade *</label>
-        <input type="date" class="form-input" id="vencData">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Quantidade</label>
-        <input type="number" class="form-input" id="vencQtd" value="1" min="1">
-      </div>
-      <button class="btn btn-success btn-block btn-lg" onclick="salvarVencimento('${produtoId}')">✅ Salvar</button>
-    </div>`;
-  showModal(html);
-}
-
-async function salvarVencimento(produtoId) {
-  const p = produtos.find(x => x.id === produtoId);
-  const data = document.getElementById('vencData').value;
-  const qtd = parseInt(document.getElementById('vencQtd').value) || 1;
-  if (!data) { toast('Selecione a data!', 'error'); return; }
-
-  vencimentos.push({
-    id: Date.now().toString(),
-    produtoId, nome: p.nome, tipo: p.tipo || '', marca: p.marca || '',
-    volume: p.volume || '', variacao: p.variacao || '',
-    imagem: p.imagem || '', codigo: p.codigo || '',
-    nomeCompleto: getNomeExibir(p),
-    validade: data, quantidade: qtd,
-    createdAt: new Date().toISOString()
-  });
-
-  await saveData('vencimentos', vencimentos);
-  closeModal(); renderVencimentos(); renderHome();
-  toast('✅ Salvo!', 'success');
-}
-
-function renderVencimentos() {
-  const hoje = new Date(); hoje.setHours(0,0,0,0);
-  let list = vencimentos.map(v => ({ ...v, dias: Math.ceil((new Date(v.validade) - hoje) / 86400000) }));
-  if (currentVencFilter === 'vencidos') list = list.filter(v => v.dias < 0);
-  else if (currentVencFilter === '7dias') list = list.filter(v => v.dias >= 0 && v.dias <= 7);
-  else if (currentVencFilter === '30dias') list = list.filter(v => v.dias >= 0 && v.dias <= 30);
-  list.sort((a,b) => a.dias - b.dias);
-  const container = document.getElementById('listaVencimentos');
-  if (list.length === 0) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">📅</div><div class="empty-text">Nenhum vencimento</div></div>';
-    return;
-  }
-  container.innerHTML = list.map(v => `
-    ${renderVencCardHTML(v, v.dias)}
-    <div class="card-actions">
-      <button class="action-btn add" onclick="criarFaltaDeVenc('${v.id}')">➕ Falta</button>
-      <button class="action-btn delete" onclick="excluirVenc('${v.id}')">🗑️</button>
-    </div>`).join('');
-}
-
-async function criarFaltaDeVenc(vencId) {
-  const v = vencimentos.find(x => x.id === vencId);
-  if (!v) return;
-  const agora = new Date().toISOString();
-  faltas.unshift({
-    id: Date.now().toString(),
-    produtoId: v.produtoId, nome: v.nome, marca: v.marca,
-    volume: v.volume, imagem: v.imagem, nomeCompleto: v.nomeCompleto,
-    quantidade: v.quantidade, unidade: 'UN', prioridade: 'alta',
-    sugestao: 'Produto vencido/vencendo', pedido: false,
-    createdAt: agora, dataRegistro: agora
-  });
-  await saveData('faltas', faltas);
-  renderAll();
-  toast('✅ Falta criada!', 'success');
-}
-
-async function excluirVenc(id) {
-  if (!confirm('Excluir?')) return;
-  vencimentos = vencimentos.filter(v => v.id !== id);
-  await saveData('vencimentos', vencimentos);
-  renderVencimentos(); renderHome();
-  toast('🗑️ Excluído!', 'success');
-}
-
-// ===== CONFIG =====
-function loadConfig() {
-  config = JSON.parse(localStorage.getItem('config') || '{}');
-  const el = id => document.getElementById(id);
-  if (el('configLoja')) el('configLoja').value = config.loja || '';
-  if (el('configResp')) el('configResp').value = config.responsavel || '';
-  if (el('configDiasVenc')) el('configDiasVenc').value = config.diasVencimento || '7';
-  updateVencInfo();
-}
-
-function updateVencInfo() {
-  const dias = parseInt(config.diasVencimento || 7);
-  const texto = dias >= 30 ? `${Math.floor(dias/30)} ${Math.floor(dias/30)===1?'mês':'meses'} antes` : `${dias} dias antes`;
-  const info = document.getElementById('configVencInfo');
-  if (info) info.textContent = texto;
-}
-
-function saveConfig() {
-  config.loja = document.getElementById('configLoja').value;
-  config.responsavel = document.getElementById('configResp').value;
-  config.diasVencimento = document.getElementById('configDiasVenc').value;
-  localStorage.setItem('config', JSON.stringify(config));
-  updateVencInfo(); renderHome();
-}
-
-function updateSyncInfo() {
-  const info = document.getElementById('syncInfo');
-  if (db) {
-    info.innerHTML = `<span style="color:var(--success);">✅ Firebase Conectado</span><br>Sincronização em tempo real ativa para todos os dispositivos`;
-  } else {
-    info.innerHTML = `<span style="color:var(--warning);">⚠️ Modo Offline</span><br>Dados salvos localmente`;
-  }
-}
-
-function updateConnectionStatus() {
-  document.getElementById('connectionBanner').classList.toggle('show', !isOnline);
-}
-
-function exportarBackup() {
-  const backup = { versao: '3.0', data: new Date().toISOString(), produtos, faltas, vencimentos, trocas, config };
-  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `backup_${new Date().toISOString().split('T')[0]}.json`;
-  a.click();
-  toast('📤 Exportado!', 'success');
-}
-
-function importarBackup(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = async function(ev) {
-    try {
-      const data = JSON.parse(ev.target.result);
-      if (!confirm('Substituir todos os dados?')) return;
-      if (data.produtos) { produtos = data.produtos; await saveData('produtos', produtos); }
-      if (data.faltas) { faltas = data.faltas; await saveData('faltas', faltas); }
-      if (data.vencimentos) { vencimentos = data.vencimentos; await saveData('vencimentos', vencimentos); }
-      if (data.trocas) { trocas = data.trocas; await saveData('trocas', trocas); }
-      loadConfig(); renderAll();
-      toast('📥 Importado e sincronizado!', 'success');
-    } catch { toast('❌ Arquivo inválido!', 'error'); }
-  };
-  reader.readAsText(file);
-}
-
-async function limparTudo() {
-  if (!confirm('⚠️ Apagar TUDO?')) return;
-  if (!confirm('⚠️ Tem certeza? Esta ação não pode ser desfeita!')) return;
-  produtos = []; faltas = []; vencimentos = []; trocas = [];
-  await Promise.all([
-    saveData('produtos', produtos), saveData('faltas', faltas),
-    saveData('vencimentos', vencimentos), saveData('trocas', trocas)
-  ]);
-  renderAll();
-  toast('🗑️ Apagado!', 'success');
-}
-
-// ===== PDF =====
-function openPDFModal() {
-  const hoje = new Date();
-  const umMesAtras = new Date();
-  umMesAtras.setMonth(umMesAtras.getMonth() - 1);
-  const html = `
-    <div class="modal-header">
-      <div class="modal-title">📄 Gerar PDF</div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="date-range">
-        <div class="date-range-title">📅 Período</div>
-        <div class="form-group">
-          <label class="form-label">Data Inicial</label>
-          <input type="date" class="form-input" id="pdfDataInicio" value="${umMesAtras.toISOString().split('T')[0]}">
-        </div>
-        <div class="form-group" style="margin-bottom:0;">
-          <label class="form-label">Data Final</label>
-          <input type="date" class="form-input" id="pdfDataFim" value="${hoje.toISOString().split('T')[0]}">
-        </div>
-      </div>
-      <button class="btn btn-primary btn-block btn-lg" onclick="gerarPDFPeriodo()" style="margin-bottom:12px;">
-        📄 PDF do Período
-      </button>
-      <button class="btn btn-success btn-block" onclick="gerarPDF()">
-        📄 Todas as Faltas
-      </button>
-    </div>`;
-  showModal(html);
-}
-
-function gerarPDFPeriodo() {
-  const inicio = document.getElementById('pdfDataInicio').value;
-  const fim = document.getElementById('pdfDataFim').value;
-  if (!inicio || !fim) { toast('Selecione as datas!', 'warning'); return; }
-  const dataInicio = new Date(inicio); dataInicio.setHours(0,0,0,0);
-  const dataFim = new Date(fim); dataFim.setHours(23,59,59,999);
-  const faltasFiltradas = faltas.filter(f => {
-    const d = new Date(f.dataRegistro || f.createdAt);
-    return d >= dataInicio && d <= dataFim;
-  });
-  if (faltasFiltradas.length === 0) { toast('Nenhuma falta no período', 'warning'); return; }
-  gerarPDFComDados(faltasFiltradas, inicio, fim);
-  closeModal();
-}
-
-function gerarPDF() {
-  if (faltas.length === 0) { toast('Lista vazia', 'warning'); return; }
-  gerarPDFComDados(faltas);
-  closeModal();
-}
-
-function gerarPDFComDados(listaFaltas, periodoInicio, periodoFim) {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  const loja = config.loja || 'Minha Loja';
-  const data = formatDate(new Date().toISOString().split('T')[0]);
-  doc.setFillColor(37, 99, 235);
-  doc.rect(0, 0, 210, 30, 'F');
-  doc.setTextColor(255);
-  doc.setFontSize(18);
-  doc.text('LISTA DE FALTAS', 105, 12, { align: 'center' });
-  doc.setFontSize(11);
-  doc.text(loja, 105, 20, { align: 'center' });
-  doc.setFontSize(10);
-  doc.text(periodoInicio && periodoFim ? `Período: ${formatDate(periodoInicio)} a ${formatDate(periodoFim)}` : `Gerado em: ${data}`, 105, 27, { align: 'center' });
-  doc.autoTable({
-    startY: 35,
-    head: [['#', 'Produto', 'Data', 'Estoque', 'Prioridade', 'Pedido']],
-    body: listaFaltas.map((f, i) => [
-      i+1, getNomeExibir(f),
-      formatDateTime(f.dataRegistro || f.createdAt),
-      `${f.estoqueQtd || 0} ${f.estoqueUnid || 'UN'}`,
-      f.prioridade === 'alta' ? 'URGENTE' : f.prioridade === 'media' ? 'MÉDIA' : 'BAIXA',
-      `${f.sugestaoQtd || 1} ${f.sugestaoUnid || 'UN'}${f.sugestaoObs ? ` (${f.sugestaoObs})` : ''}`
-    ]),
-    headStyles: { fillColor: [37, 99, 235], fontSize: 9 },
-    alternateRowStyles: { fillColor: [249, 250, 251] },
-    styles: { fontSize: 8, cellPadding: 3 }
-  });
-  const fy = doc.lastAutoTable.finalY || 200;
-  doc.setFontSize(10); doc.setTextColor(0);
-  doc.text(`Total: ${listaFaltas.length} | Urgentes: ${listaFaltas.filter(f => f.prioridade==='alta').length} | Média: ${listaFaltas.filter(f => f.prioridade==='media').length} | Baixa: ${listaFaltas.filter(f => f.prioridade==='baixa').length}`, 14, fy+10);
-  doc.save(`faltas_${periodoInicio||data.replace(/\//g,'-')}.pdf`);
-  toast('📄 PDF gerado!', 'success');
-}
-
-function gerarPDFTrocas() {
-  if (trocas.length === 0) { toast('Lista vazia', 'warning'); return; }
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  const loja = config.loja || 'Minha Loja';
-  const data = formatDate(new Date().toISOString().split('T')[0]);
-  doc.setFillColor(234, 88, 12);
-  doc.rect(0, 0, 210, 30, 'F');
-  doc.setTextColor(255);
-  doc.setFontSize(18);
-  doc.text('PRODUTOS PARA TROCA', 105, 12, { align: 'center' });
-  doc.setFontSize(11);
-  doc.text(loja, 105, 20, { align: 'center' });
-  doc.setFontSize(10);
-  doc.text(`Gerado em: ${data}`, 105, 27, { align: 'center' });
-  const trocasPend = trocas.filter(t => t.status !== 'concluido');
-  doc.autoTable({
-    startY: 35,
-    head: [['#', 'Produto', 'Qtd', 'Motivo', 'Data', 'Status']],
-    body: trocasPend.map((t, i) => [
-      i+1, getNomeExibir(t), `${t.quantidade} ${t.unidade}`,
-      t.motivo === 'avaria' ? 'Avaria' : t.motivo === 'vencimento' ? 'Vencimento' : t.motivoOutros || 'Outros',
-      formatDateTime(t.dataRegistro || t.createdAt),
-      t.status === 'pendente' ? 'Pendente' : t.status === 'enviado' ? 'Enviado' : 'Concluído'
-    ]),
-    headStyles: { fillColor: [234, 88, 12] },
-    styles: { fontSize: 8, cellPadding: 3 }
-  });
-  doc.save(`trocas_${data.replace(/\//g,'-')}.pdf`);
-  toast('📄 PDF gerado!', 'success');
-}
-
-function compartilharWhatsApp() {
-  if (faltas.length === 0) { toast('Lista vazia', 'warning'); return; }
-  const loja = config.loja || 'Minha Loja';
-  let text = `📦 *LISTA DE FALTAS - ${loja}*\n📅 ${formatDate(new Date().toISOString().split('T')[0])}\n\n`;
-  ['alta','media','baixa'].forEach(p => {
-    const items = faltas.filter(f => f.prioridade === p);
-    if (items.length) {
-      const emoji = p==='alta' ? '🔴 *URGENTES*' : p==='media' ? '🟡 *MÉDIOS*' : '🟢 *BAIXOS*';
-      text += `${emoji}\n`;
-      items.forEach((f,i) => {
-        text += `${i+1}. ${getNomeExibir(f)}\n`;
-        text += `   📅 ${formatDateTime(f.dataRegistro||f.createdAt)}\n`;
-        text += `   📦 Estoque: ${f.estoqueQtd||0} ${f.estoqueUnid||'UN'}\n`;
-        text += `   📝 Pedir: ${f.sugestaoQtd||1} ${f.sugestaoUnid||'UN'}\n`;
-      });
-      text += '\n';
-    }
-  });
-  text += `📊 Total: ${faltas.length} itens`;
-  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
-}
-
-// ╔══════════════════════════════════════════════════════════════╗
-// ║  SCANNER ENGINE                                               ║
-// ╚══════════════════════════════════════════════════════════════╝
-let scannerInstMap = {};
-
-function initScanner(containerId, onSuccess, statusId) {
-  // Para qualquer scanner anterior no mesmo container
-  stopScanner(containerId);
-
-  const container = document.getElementById(containerId);
-  if (!container) return;
-
-  const scanner = new Html5Qrcode(containerId);
-  scannerInstMap[containerId] = scanner;
-
-  const statusEl = document.getElementById(statusId);
-  if (statusEl) statusEl.textContent = '📷 Iniciando câmera...';
-
-  scanner.start(
-    { facingMode: 'environment' },
-    {
-      fps: 10,
-      qrbox: { width: 200, height: 200 },
-      aspectRatio: 1.0,
-      formatsToSupport: [
-        Html5QrcodeSupportedFormats.EAN_13,
-        Html5QrcodeSupportedFormats.EAN_8,
-        Html5QrcodeSupportedFormats.CODE_128,
-        Html5QrcodeSupportedFormats.CODE_39,
-        Html5QrcodeSupportedFormats.UPC_A,
-        Html5QrcodeSupportedFormats.UPC_E,
-        Html5QrcodeSupportedFormats.QR_CODE
-      ]
-    },
-    (decodedText) => {
-      if (statusEl) statusEl.textContent = '✅ Lido: ' + decodedText;
-      onSuccess(decodedText);
-    },
-    (err) => { /* Ignorar erros de leitura */ }
-  ).then(() => {
-    if (statusEl) statusEl.textContent = '📷 Aponte para o código de barras';
-  }).catch(err => {
-    if (statusEl) statusEl.textContent = '❌ Câmera não disponível: ' + err;
-    console.log('Scanner erro:', err);
-  });
-}
-
-function stopScanner(containerId) {
-  if (containerId && scannerInstMap[containerId]) {
-    const scanner = scannerInstMap[containerId];
-    try {
-      scanner.stop().then(() => {
-        scanner.clear();
-        delete scannerInstMap[containerId];
-      }).catch(() => {
-        try { scanner.clear(); } catch(e) {}
-        delete scannerInstMap[containerId];
-      });
-    } catch(e) {
-      delete scannerInstMap[containerId];
-    }
-  }
-}
-
-function stopAllScanners() {
-  Object.keys(scannerInstMap).forEach(id => stopScanner(id));
-}
-
-// ===== MODAL =====
-function showModal(html) {
-  document.getElementById('modalContent').innerHTML = html;
-  document.getElementById('modal').classList.add('show');
-}
-
-function closeModal() {
-  stopAllScanners();
-  document.getElementById('modal').classList.remove('show');
-}
-
-document.getElementById('modal').addEventListener('click', (e) => {
-  if (e.target === e.currentTarget) closeModal();
-});
-
-// ===== UTILS =====
-function formatDate(d) {
-  if (!d) return '';
-  const [y, m, day] = d.split('-');
-  return `${day}/${m}/${y}`;
-}
-
-function formatDateTime(dateStr) {
-  if (!dateStr) return '';
-  const date = new Date(dateStr);
-  return `${String(date.getDate()).padStart(2,'0')}/${String(date.getMonth()+1).padStart(2,'0')}/${date.getFullYear()} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
-}
-
-function showLoading(text = 'Carregando...') {
-  document.getElementById('loadingText').textContent = text;
-  document.getElementById('loading').classList.add('show');
-}
-
-function hideLoading() {
-  document.getElementById('loading').classList.remove('show');
-}
-
-function toast(msg, type = 'success') {
-  const t = document.createElement('div');
-  t.className = `toast ${type}`;
-  t.textContent = msg;
-  document.getElementById('toastContainer').appendChild(t);
-  setTimeout(() => t.remove(), 3500);
+function shareWhats(){
+  if(!faltas.length){toast('Lista vazia','warning');return}
+  const loja=config.loja||'Minha Loja';
+  let t=`📦 *FALTAS - ${loja}*\n📅 ${fmtD(new Date().toISOString().split('T')[0])}\n\n`;
+  ['alta','media','baixa'].forEach(p=>{const it=faltas.filter(f=>f.prioridade===p);if(it.length){const e=p==='alta'?'🔴 *URGENTES*':p==='media'?'🟡 *MÉDIOS*':'🟢 *BAIXOS*';t+=`${e}\n`;it.forEach((f,i)=>{t+=`${i+1}. ${gn(f)}\n   📦 Est: ${f.estoqueQtd||0} ${f.estoqueUnid||'UN'} • Pedir: ${f.sugestaoQtd||1} ${f.sugestaoUnid||'UN'}\n`});t+='\n'}});
+  t+=`📊 Total: ${faltas.length}`;window.open(`https://wa.me/?text=${encodeURIComponent(t)}`,'_blank');
 }
 </script>
 </body>
