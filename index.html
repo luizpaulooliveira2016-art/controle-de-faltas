@@ -777,24 +777,32 @@
 
 <script>
     // ============================================
-    // FIREBASE
+    // ============================================
+    // FIREBASE CONFIG
     // ============================================
     const firebaseConfig = {
-        apiKey: "AIzaSyBxKcnEpMLSmERhblGOPJd6iveUhOqwtMQ",
-        authDomain: "controle-faltas-app.firebaseapp.com",
-        projectId: "controle-faltas-app",
-        storageBucket: "controle-faltas-app.appspot.com",
-        messagingSenderId: "601aboraquefunciona",
-        appId: "1:601:web:controlefaltas2024"
+        apiKey: "AIzaSyAFYDsRg1jgr2mP6UvEQofwoWH0Mi2iTps",
+        authDomain: "controle-faltas-d6709.firebaseapp.com",
+        databaseURL: "https://controle-faltas-d6709-default-rtdb.firebaseio.com",
+        projectId: "controle-faltas-d6709",
+        storageBucket: "controle-faltas-d6709.firebasestorage.app",
+        messagingSenderId: "1063821814181",
+        appId: "1:1063821814181:web:4aa8451fd799590d93e04c"
     };
 
     let db = null, firebaseConectado = false;
+
     try {
         firebase.initializeApp(firebaseConfig);
-        db = firebase.firestore();
-        db.enablePersistence({ synchronizeTabs: true }).catch(e => console.log('Persist:', e));
-        firebaseConectado = true;
-    } catch (e) { console.log('Firebase offline'); }
+        db = firebase.database();
+        firebase.database().ref('.info/connected').on('value', snap => {
+            firebaseConectado = !!snap.val();
+            updateSync(firebaseConectado);
+        });
+    } catch (e) {
+        console.warn('Firebase error:', e);
+        firebaseConectado = false;
+    }
 
     // ============================================
     // DADOS
@@ -815,92 +823,136 @@
     }
 
     // ============================================
-    // FIREBASE SYNC
-    // ============================================
-    const cols = { produtos:'produtos', faltas:'faltas', vencimentos:'vencimentos', trocas:'trocas' };
+    
 
-    async function syncPara(col, dados) {
+
+    // ============================================
+    // REALTIME DATABASE — SYNC
+    // ============================================
+    const REFS = {
+        produtos: 'produtos',
+        faltas: 'faltas',
+        vencimentos: 'vencimentos',
+        trocas: 'trocas'
+    };
+
+    // Salva uma coleção inteira no Realtime Database
+    async function syncPara(colecao, dados) {
         if (!db || !firebaseConectado) return;
         try {
-            const batch = db.batch();
-            const snap = await db.collection(col).get();
-            snap.docs.forEach(doc => batch.delete(doc.ref));
-            dados.forEach(item => {
-                batch.set(db.collection(col).doc(String(item.id)), JSON.parse(JSON.stringify(item)));
-            });
-            await batch.commit();
-        } catch (e) { console.log('Sync err:', e); }
+            const obj = {};
+            dados.forEach(item => { obj[String(item.id)] = item; });
+            await db.ref(REFS[colecao]).set(obj);
+        } catch (e) { console.warn('syncPara err:', e); }
     }
 
-    async function syncDe(col) {
+    // Lê uma coleção do Realtime Database
+    async function syncDe(colecao) {
         if (!db || !firebaseConectado) return null;
         try {
-            const snap = await db.collection(col).get();
-            return snap.docs.map(d => d.data());
-        } catch (e) { return null; }
+            const snap = await db.ref(REFS[colecao]).get();
+            if (!snap.exists()) return [];
+            const val = snap.val();
+            return Object.values(val);
+        } catch (e) { console.warn('syncDe err:', e); return null; }
     }
 
+    // Sincronizar tudo agora (botão manual)
     async function sincronizarAgora() {
-        if (!db || !firebaseConectado) { toast('Firebase não configurado!', 'error'); updateSync(false); return; }
+        if (!db || !firebaseConectado) {
+            toast('Sem conexão com Firebase!', 'error');
+            updateSync(false);
+            return;
+        }
         toast('🔄 Sincronizando...', 'info');
         try {
-            await Promise.all([syncPara(cols.produtos, produtos), syncPara(cols.faltas, faltas),
-                syncPara(cols.vencimentos, vencimentos), syncPara(cols.trocas, trocas)]);
+            await Promise.all([
+                syncPara('produtos', produtos),
+                syncPara('faltas', faltas),
+                syncPara('vencimentos', vencimentos),
+                syncPara('trocas', trocas)
+            ]);
             updateSync(true);
             updateFbStatus('✅ Sincronizado — ' + new Date().toLocaleTimeString('pt-BR'));
-            toast('Sincronizado!');
-        } catch (e) { updateSync(false); updateFbStatus('❌ Erro: ' + e.message); toast('Erro!', 'error'); }
+            toast('Sincronizado com sucesso!');
+        } catch (e) {
+            updateSync(false);
+            updateFbStatus('❌ Erro: ' + e.message);
+            toast('Erro na sincronização!', 'error');
+        }
     }
 
+    // Carrega dados do Firebase na inicialização
     async function carregarFb() {
-        if (!db || !firebaseConectado) { updateSync(false); updateFbStatus('⚠️ Modo offline'); return; }
+        if (!db || !firebaseConectado) {
+            updateSync(false);
+            updateFbStatus('⚠️ Offline — usando dados locais');
+            return;
+        }
         try {
-            const [pF,fF,vF,tF] = await Promise.all([syncDe(cols.produtos),syncDe(cols.faltas),syncDe(cols.vencimentos),syncDe(cols.trocas)]);
+            const [pF, fF, vF, tF] = await Promise.all([
+                syncDe('produtos'),
+                syncDe('faltas'),
+                syncDe('vencimentos'),
+                syncDe('trocas')
+            ]);
             if (pF && pF.length >= produtos.length) produtos = pF;
             if (fF && fF.length >= faltas.length) faltas = fF;
             if (vF && vF.length >= vencimentos.length) vencimentos = vF;
             if (tF && tF.length >= trocas.length) trocas = tF;
-            salvarLocal(); updateSync(true); updateFbStatus('✅ Conectado'); renderAll();
-        } catch (e) { updateSync(false); updateFbStatus('⚠️ Erro: ' + e.message); }
-    }
-
-    function iniciarListeners() {
-        if (!db || !firebaseConectado) return;
-        Object.entries(cols).forEach(([key, col]) => {
-            try {
-                db.collection(col).onSnapshot(snap => {
-                    const dados = snap.docs.map(d => d.data());
-                    if (dados.length > 0) {
-                        if (key==='produtos' && dados.length>=produtos.length) produtos=dados;
-                        else if (key==='faltas' && dados.length>=faltas.length) faltas=dados;
-                        else if (key==='vencimentos' && dados.length>=vencimentos.length) vencimentos=dados;
-                        else if (key==='trocas' && dados.length>=trocas.length) trocas=dados;
-                        salvarLocal(); renderAll();
-                    }
-                }, e => console.log('Listener err:', e));
-            } catch(e){}
-        });
-    }
-
-    function updateSync(on) {
-        const el = document.getElementById('sync-status');
-        el.className = 'sync-badge ' + (on ? 'online' : 'offline');
-        el.textContent = on ? '🟢 Online' : '🔴 Offline';
-    }
-
-    function updateFbStatus(msg) {
-        const el = document.getElementById('firebase-status');
-        if (el) el.innerHTML = msg;
-    }
-
-    function salvarESync() {
-        salvarLocal();
-        if (firebaseConectado) {
-            syncPara(cols.produtos, produtos); syncPara(cols.faltas, faltas);
-            syncPara(cols.vencimentos, vencimentos); syncPara(cols.trocas, trocas);
+            salvarLocal();
+            updateSync(true);
+            updateFbStatus('✅ Conectado — dados carregados do Firebase');
+            renderAll();
+        } catch (e) {
+            updateSync(false);
+            updateFbStatus('⚠️ Erro ao carregar: ' + e.message);
         }
     }
 
+    // Listeners em tempo real (atualiza automaticamente)
+    function iniciarListeners() {
+        if (!db || !firebaseConectado) return;
+
+        db.ref(REFS.produtos).on('value', snap => {
+            if (snap.exists()) {
+                const dados = Object.values(snap.val());
+                if (dados.length >= produtos.length) { produtos = dados; salvarLocal(); renderProdutos(); renderDashboard(); }
+            }
+        }, e => console.warn('Listener produtos:', e));
+
+        db.ref(REFS.faltas).on('value', snap => {
+            if (snap.exists()) {
+                const dados = Object.values(snap.val());
+                if (dados.length >= faltas.length) { faltas = dados; salvarLocal(); renderFaltas(); renderDashboard(); }
+            }
+        }, e => console.warn('Listener faltas:', e));
+
+        db.ref(REFS.vencimentos).on('value', snap => {
+            if (snap.exists()) {
+                const dados = Object.values(snap.val());
+                if (dados.length >= vencimentos.length) { vencimentos = dados; salvarLocal(); renderVencimentos(); renderDashboard(); }
+            }
+        }, e => console.warn('Listener vencimentos:', e));
+
+        db.ref(REFS.trocas).on('value', snap => {
+            if (snap.exists()) {
+                const dados = Object.values(snap.val());
+                if (dados.length >= trocas.length) { trocas = dados; salvarLocal(); renderTrocas(); renderDashboard(); }
+            }
+        }, e => console.warn('Listener trocas:', e));
+    }
+
+    // Salva local E sincroniza com Firebase
+    function salvarESync() {
+        salvarLocal();
+        if (db && firebaseConectado) {
+            syncPara('produtos', produtos);
+            syncPara('faltas', faltas);
+            syncPara('vencimentos', vencimentos);
+            syncPara('trocas', trocas);
+        }
+    }
     // ============================================
     // TOAST
     // ============================================
