@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -24,6 +23,8 @@
             --info-light: #cffafe;
             --purple: #7c3aed;
             --purple-light: #ede9fe;
+            --orange: #ea580c;
+            --orange-light: #fff7ed;
             --gray-50: #f9fafb;
             --gray-100: #f3f4f6;
             --gray-200: #e5e7eb;
@@ -33,11 +34,14 @@
             --gray-600: #4b5563;
             --gray-700: #374151;
             --gray-800: #1f2937;
-            --shadow: 0 1px 3px rgba(0,0,0,0.12);
-            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --gray-900: #111827;
+            --shadow: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 40px rgba(0,0,0,0.15);
             --radius: 8px;
-            --radius-lg: 12px;
+            --radius-lg: 14px;
+            --radius-xl: 20px;
         }
 
         body {
@@ -45,72 +49,215 @@
             background: var(--gray-100);
             color: var(--gray-800);
             min-height: 100vh;
-            padding-bottom: 80px;
+            padding-bottom: 90px;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* HEADER */
+        /* ===== HEADER ===== */
         .header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            background: linear-gradient(135deg, #1e3a8a, var(--primary), #3b82f6);
             color: white;
-            padding: 16px 20px;
+            padding: 18px 20px 14px;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 4px 15px rgba(37,99,235,0.3);
         }
-        .header h1 { font-size: 1.2rem; font-weight: 700; text-align: center; }
-        .header p { text-align: center; font-size: 0.75rem; opacity: 0.85; margin-top: 2px; }
-        .sync-status {
-            text-align: center; font-size: 0.7rem; margin-top: 4px;
-            padding: 2px 10px; border-radius: 10px; display: inline-block;
+        .header-top { display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.3px; }
+        .header h1 span { font-weight: 400; opacity: 0.8; font-size: 0.85rem; }
+        .sync-badge {
+            font-size: 0.65rem; padding: 3px 10px; border-radius: 20px;
+            font-weight: 600; display: inline-flex; align-items: center; gap: 4px;
         }
-        .sync-status.online { background: rgba(255,255,255,0.2); color: #bbf7d0; }
-        .sync-status.offline { background: rgba(255,255,255,0.2); color: #fca5a5; }
-        .header-center { text-align: center; }
+        .sync-badge.online { background: rgba(34,197,94,0.2); color: #86efac; }
+        .sync-badge.offline { background: rgba(239,68,68,0.2); color: #fca5a5; }
 
-        /* TABS */
+        /* ===== TABS ===== */
         .tabs {
-            display: flex;
-            background: white;
-            border-bottom: 2px solid var(--gray-200);
-            overflow-x: auto;
-            position: sticky;
-            top: 76px;
-            z-index: 99;
+            display: flex; background: white;
+            border-bottom: 1px solid var(--gray-200);
+            overflow-x: auto; position: sticky;
+            top: 60px; z-index: 99;
             box-shadow: var(--shadow);
+            scrollbar-width: none;
         }
+        .tabs::-webkit-scrollbar { display: none; }
         .tab-btn {
-            flex: 1; min-width: max-content; padding: 10px 10px;
-            border: none; background: none; font-size: 0.72rem;
+            flex: 1; min-width: max-content; padding: 11px 12px;
+            border: none; background: none; font-size: 0.7rem;
             font-weight: 600; color: var(--gray-500); cursor: pointer;
-            transition: all 0.2s; border-bottom: 3px solid transparent; white-space: nowrap;
+            transition: all 0.2s; border-bottom: 3px solid transparent;
+            white-space: nowrap; position: relative;
         }
         .tab-btn:hover { color: var(--primary); background: var(--primary-light); }
         .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: var(--primary-light); }
         .tab-badge {
-            background: var(--danger); color: white; border-radius: 10px;
-            padding: 1px 6px; font-size: 0.6rem; margin-left: 3px; vertical-align: top;
+            position: absolute; top: 4px; right: 4px;
+            background: var(--danger); color: white; border-radius: 50%;
+            width: 18px; height: 18px; font-size: 0.6rem;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
         }
 
-        /* CONTENT */
+        /* ===== CONTENT ===== */
         .content { padding: 14px; max-width: 900px; margin: 0 auto; }
         .tab-content { display: none; }
-        .tab-content.active { display: block; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* CARDS */
+        /* ===== CARDS ===== */
         .card {
             background: white; border-radius: var(--radius-lg);
-            box-shadow: var(--shadow); padding: 18px; margin-bottom: 14px;
+            box-shadow: var(--shadow-md); padding: 18px; margin-bottom: 14px;
+            transition: box-shadow 0.2s;
         }
+        .card:hover { box-shadow: var(--shadow-lg); }
         .card-title {
-            font-size: 0.95rem; font-weight: 700; color: var(--gray-800);
+            font-size: 0.92rem; font-weight: 700; color: var(--gray-800);
             margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
         }
 
-        /* FORMS */
+        /* ===== DASHBOARD STAT CARDS CLICÁVEIS ===== */
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 10px; margin-bottom: 14px;
+        }
+        .stat-card {
+            background: white; border-radius: var(--radius-lg); padding: 16px 12px;
+            text-align: center; box-shadow: var(--shadow-md);
+            cursor: pointer; transition: all 0.25s; position: relative;
+            overflow: hidden; border: 2px solid transparent;
+        }
+        .stat-card::before {
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 100%; height: 4px;
+        }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-xl); }
+        .stat-card:active { transform: scale(0.97); }
+        .stat-card.purple::before { background: var(--purple); }
+        .stat-card.danger::before { background: var(--danger); }
+        .stat-card.warning::before { background: var(--warning); }
+        .stat-card.info::before { background: var(--info); }
+        .stat-card.success::before { background: var(--success); }
+        .stat-card.orange::before { background: var(--orange); }
+        .stat-card .stat-icon { font-size: 1.5rem; margin-bottom: 4px; }
+        .stat-card .stat-number { font-size: 1.8rem; font-weight: 800; line-height: 1; }
+        .stat-card .stat-label { font-size: 0.65rem; color: var(--gray-500); font-weight: 700; text-transform: uppercase; margin-top: 4px; letter-spacing: 0.5px; }
+        .stat-card .stat-action { font-size: 0.6rem; color: var(--primary); margin-top: 6px; font-weight: 600; opacity: 0; transition: opacity 0.2s; }
+        .stat-card:hover .stat-action { opacity: 1; }
+
+        /* ===== PAINEL ROLANTE (MARQUEE/CAROUSEL) ===== */
+        .rolling-panel {
+            background: linear-gradient(135deg, var(--gray-900), var(--gray-800));
+            border-radius: var(--radius-lg); padding: 0;
+            margin-bottom: 14px; overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+        .rolling-header {
+            padding: 10px 16px; display: flex;
+            justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .rolling-header span { color: white; font-size: 0.78rem; font-weight: 700; }
+        .rolling-controls { display: flex; gap: 6px; }
+        .rolling-controls button {
+            background: rgba(255,255,255,0.1); border: none;
+            color: white; width: 28px; height: 28px; border-radius: 50%;
+            cursor: pointer; font-size: 0.8rem; transition: background 0.2s;
+        }
+        .rolling-controls button:hover { background: rgba(255,255,255,0.25); }
+        .rolling-track {
+            display: flex; overflow-x: auto; scroll-behavior: smooth;
+            scrollbar-width: none; padding: 14px 12px;
+            gap: 10px; scroll-snap-type: x mandatory;
+        }
+        .rolling-track::-webkit-scrollbar { display: none; }
+        .rolling-item {
+            min-width: 220px; max-width: 220px;
+            background: rgba(255,255,255,0.08);
+            border-radius: var(--radius); padding: 14px;
+            scroll-snap-align: start; cursor: pointer;
+            transition: all 0.2s; border: 1px solid rgba(255,255,255,0.08);
+            flex-shrink: 0;
+        }
+        .rolling-item:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.2); transform: translateY(-2px); }
+        .rolling-item .ri-type {
+            font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.5px; margin-bottom: 6px; display: flex;
+            align-items: center; gap: 4px;
+        }
+        .ri-type-falta { color: #f87171; }
+        .ri-type-vencido { color: #fbbf24; }
+        .ri-type-troca { color: #22d3ee; }
+        .ri-type-critico { color: #ef4444; }
+        .rolling-item .ri-name { color: white; font-size: 0.82rem; font-weight: 600; line-height: 1.3; }
+        .rolling-item .ri-detail { color: rgba(255,255,255,0.5); font-size: 0.7rem; margin-top: 4px; }
+        .rolling-item .ri-badge {
+            display: inline-block; padding: 2px 8px; border-radius: 4px;
+            font-size: 0.62rem; font-weight: 700; margin-top: 6px;
+        }
+        .ri-badge-danger { background: rgba(239,68,68,0.2); color: #f87171; }
+        .ri-badge-warning { background: rgba(251,191,36,0.2); color: #fbbf24; }
+        .ri-badge-info { background: rgba(34,211,238,0.2); color: #22d3ee; }
+        .rolling-empty { color: rgba(255,255,255,0.4); text-align: center; padding: 20px; font-size: 0.85rem; width: 100%; }
+
+        /* ===== FLOATING ACTION BUTTON (FAB) ===== */
+        .fab-container { position: fixed; bottom: 20px; right: 20px; z-index: 150; }
+        .fab-main {
+            width: 56px; height: 56px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white; border: none; font-size: 1.5rem;
+            cursor: pointer; box-shadow: 0 4px 15px rgba(37,99,235,0.4);
+            transition: all 0.3s; display: flex; align-items: center;
+            justify-content: center;
+        }
+        .fab-main:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(37,99,235,0.5); }
+        .fab-main.open { transform: rotate(45deg); background: var(--danger); }
+        .fab-menu {
+            position: absolute; bottom: 65px; right: 0;
+            display: flex; flex-direction: column; gap: 8px;
+            opacity: 0; pointer-events: none;
+            transform: translateY(10px); transition: all 0.3s;
+        }
+        .fab-menu.show { opacity: 1; pointer-events: all; transform: translateY(0); }
+        .fab-item {
+            display: flex; align-items: center; gap: 10px;
+            justify-content: flex-end; white-space: nowrap;
+        }
+        .fab-item-label {
+            background: var(--gray-900); color: white;
+            padding: 6px 12px; border-radius: 6px;
+            font-size: 0.75rem; font-weight: 600;
+            box-shadow: var(--shadow-md);
+        }
+        .fab-item-btn {
+            width: 44px; height: 44px; border-radius: 50%;
+            border: none; color: white; font-size: 1.1rem;
+            cursor: pointer; box-shadow: var(--shadow-md);
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.2s;
+        }
+        .fab-item-btn:hover { transform: scale(1.1); }
+        .fab-item-btn.purple { background: var(--purple); }
+        .fab-item-btn.blue { background: var(--primary); }
+        .fab-item-btn.orange { background: var(--warning); }
+        .fab-item-btn.cyan { background: var(--info); }
+        .fab-backdrop {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.3);
+            z-index: 149;
+        }
+        .fab-backdrop.show { display: block; }
+
+        /* ===== FORMS ===== */
         .form-group { margin-bottom: 12px; }
         .form-group label {
-            display: block; font-size: 0.8rem; font-weight: 600;
+            display: block; font-size: 0.78rem; font-weight: 600;
             color: var(--gray-700); margin-bottom: 4px;
         }
         .form-group input, .form-group select, .form-group textarea {
@@ -118,14 +265,14 @@
             border-radius: var(--radius); font-size: 0.88rem;
             transition: border-color 0.2s; background: white;
         }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+        .form-group input:focus, .form-group select:focus {
             outline: none; border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+            box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
         }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
 
-        /* BUTTONS */
+        /* ===== BUTTONS ===== */
         .btn {
             padding: 10px 18px; border: none; border-radius: var(--radius);
             font-size: 0.82rem; font-weight: 600; cursor: pointer;
@@ -144,87 +291,111 @@
         .btn-purple { background: var(--purple); color: white; }
         .btn-purple:hover { background: #6d28d9; }
         .btn-sm { padding: 5px 10px; font-size: 0.72rem; }
+        .btn-xs { padding: 3px 7px; font-size: 0.65rem; }
         .btn-block { width: 100%; justify-content: center; }
         .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
-        .btn-outline {
-            background: white; border: 1.5px solid var(--gray-300); color: var(--gray-700);
-        }
+        .btn-outline { background: white; border: 1.5px solid var(--gray-300); color: var(--gray-600); }
         .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
 
-        /* SEARCH */
+        /* ===== SEARCH ===== */
         .search-bar { position: relative; margin-bottom: 14px; }
         .search-bar input {
-            width: 100%; padding: 12px 16px 12px 40px;
-            border: 2px solid var(--gray-200); border-radius: var(--radius-lg); font-size: 0.88rem;
+            width: 100%; padding: 12px 16px 12px 42px;
+            border: 2px solid var(--gray-200); border-radius: var(--radius-xl);
+            font-size: 0.88rem; background: var(--gray-50);
         }
-        .search-bar input:focus { border-color: var(--primary); outline: none; }
-        .search-bar .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--gray-400); }
+        .search-bar input:focus { border-color: var(--primary); outline: none; background: white; }
+        .search-bar .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gray-400); font-size: 1rem; }
         .search-bar .barcode-btn {
-            position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
-            background: var(--primary); color: white; border: none; border-radius: 6px;
-            padding: 6px 12px; font-size: 0.75rem; cursor: pointer; font-weight: 600;
+            position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+            background: var(--primary); color: white; border: none;
+            border-radius: 16px; padding: 7px 14px; font-size: 0.72rem;
+            cursor: pointer; font-weight: 600; transition: background 0.2s;
         }
         .search-bar .barcode-btn:hover { background: var(--primary-dark); }
 
-        /* SEARCH RESULTS DROPDOWN */
+        /* ===== SEARCH DROPDOWN ===== */
         .search-results-dropdown {
             display: none; position: absolute; top: 100%; left: 0; right: 0;
-            background: white; border: 2px solid var(--primary); border-top: none;
-            border-radius: 0 0 var(--radius) var(--radius);
-            max-height: 280px; overflow-y: auto; z-index: 50; box-shadow: var(--shadow-lg);
+            background: white; border: 2px solid var(--primary);
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+            max-height: 300px; overflow-y: auto; z-index: 50;
+            box-shadow: var(--shadow-xl);
         }
         .search-results-dropdown.show { display: block; }
-        .search-results-dropdown .result-section-title {
-            padding: 8px 14px; font-size: 0.72rem; font-weight: 700;
-            color: var(--gray-500); background: var(--gray-50); text-transform: uppercase;
-            border-bottom: 1px solid var(--gray-200);
+        .result-section-title {
+            padding: 8px 14px; font-size: 0.7rem; font-weight: 700;
+            color: var(--gray-500); background: var(--gray-50);
+            text-transform: uppercase; border-bottom: 1px solid var(--gray-200);
+            position: sticky; top: 0;
         }
-        .search-results-dropdown .result-item {
+        .result-item {
             padding: 10px 14px; border-bottom: 1px solid var(--gray-100);
             cursor: pointer; transition: background 0.15s;
         }
-        .search-results-dropdown .result-item:hover { background: var(--primary-light); }
-        .search-results-dropdown .result-item .r-name { font-weight: 600; font-size: 0.82rem; }
-        .search-results-dropdown .result-item .r-detail { font-size: 0.72rem; color: var(--gray-500); }
-        .search-results-dropdown .result-item .r-source {
-            font-size: 0.65rem; padding: 1px 6px; border-radius: 4px; font-weight: 600;
-        }
+        .result-item:hover { background: var(--primary-light); }
+        .result-item .r-name { font-weight: 600; font-size: 0.82rem; }
+        .result-item .r-detail { font-size: 0.7rem; color: var(--gray-500); margin-top: 2px; }
+        .r-source { font-size: 0.6rem; padding: 2px 7px; border-radius: 4px; font-weight: 700; }
         .source-local { background: var(--success-light); color: var(--success); }
         .source-online { background: var(--info-light); color: var(--info); }
 
-        /* SCANNER */
+        /* ===== PRODUTO CARD COM IMAGEM ===== */
+        .produto-card {
+            border: 1px solid var(--gray-200); border-radius: var(--radius-lg);
+            padding: 12px; margin-bottom: 10px; display: flex;
+            align-items: center; gap: 12px; transition: all 0.2s;
+            background: white;
+        }
+        .produto-card:hover { border-color: var(--primary); box-shadow: var(--shadow-md); transform: translateX(3px); }
+        .produto-img {
+            width: 55px; height: 55px; border-radius: var(--radius);
+            object-fit: cover; background: var(--gray-100);
+            border: 1px solid var(--gray-200); flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; color: var(--gray-400);
+        }
+        .produto-img img {
+            width: 100%; height: 100%; object-fit: cover;
+            border-radius: var(--radius);
+        }
+        .produto-info { flex: 1; min-width: 0; }
+        .produto-info .p-name { font-weight: 700; font-size: 0.85rem; color: var(--gray-800); line-height: 1.3; }
+        .produto-info .p-details { font-size: 0.7rem; color: var(--gray-500); margin-top: 3px; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+
+        /* ===== SCANNER ===== */
         .scanner-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.92); z-index: 1000;
+            background: rgba(0,0,0,0.95); z-index: 1000;
             flex-direction: column; align-items: center; justify-content: center;
         }
         .scanner-overlay.show { display: flex; }
         .scanner-overlay video { width: 90%; max-width: 500px; border-radius: var(--radius-lg); border: 3px solid var(--primary); }
         .scanner-overlay .close-scanner {
-            margin-top: 20px; padding: 12px 30px; background: var(--danger);
-            color: white; border: none; border-radius: var(--radius); font-size: 1rem; cursor: pointer;
+            margin-top: 16px; padding: 12px 30px; background: var(--danger);
+            color: white; border: none; border-radius: var(--radius-xl);
+            font-size: 0.9rem; cursor: pointer; font-weight: 600;
         }
-        .scanner-overlay p { color: white; margin-bottom: 14px; font-size: 0.95rem; }
-        .scanner-manual {
-            margin-top: 12px; display: flex; gap: 8px; width: 90%; max-width: 500px;
-        }
-        .scanner-manual input {
-            flex: 1; padding: 10px; border: none; border-radius: var(--radius); font-size: 0.9rem;
-        }
+        .scanner-overlay p { color: white; margin-bottom: 14px; font-size: 0.9rem; }
+        .scanner-manual { margin-top: 12px; display: flex; gap: 8px; width: 90%; max-width: 500px; }
+        .scanner-manual input { flex: 1; padding: 10px 14px; border: none; border-radius: var(--radius-xl); font-size: 0.9rem; }
 
-        /* TABLE */
+        /* ===== TABLE ===== */
         .table-container { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--gray-200); }
-        table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.76rem; }
         thead th {
             background: var(--gray-800); color: white; padding: 10px 10px;
             text-align: left; font-weight: 600; white-space: nowrap;
+            position: sticky; top: 0;
         }
         tbody td { padding: 9px 10px; border-bottom: 1px solid var(--gray-200); vertical-align: middle; }
-        tbody tr:hover { background: var(--gray-50); }
+        tbody tr { transition: background 0.15s; }
+        tbody tr:hover { background: var(--primary-light); }
         tbody tr:nth-child(even) { background: var(--gray-50); }
+        tbody tr:nth-child(even):hover { background: var(--primary-light); }
 
-        /* BADGES */
-        .badge { padding: 3px 9px; border-radius: 20px; font-size: 0.68rem; font-weight: 600; white-space: nowrap; }
+        /* ===== BADGES ===== */
+        .badge { padding: 3px 9px; border-radius: 20px; font-size: 0.66rem; font-weight: 600; white-space: nowrap; }
         .badge-danger { background: var(--danger-light); color: var(--danger); }
         .badge-warning { background: var(--warning-light); color: #92400e; }
         .badge-success { background: var(--success-light); color: var(--success); }
@@ -232,58 +403,47 @@
         .badge-gray { background: var(--gray-200); color: var(--gray-600); }
         .badge-purple { background: var(--purple-light); color: var(--purple); }
 
-        /* STATS */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 14px; }
-        .stat-card {
-            background: white; border-radius: var(--radius); padding: 14px;
-            text-align: center; box-shadow: var(--shadow); border-left: 4px solid var(--primary);
-        }
-        .stat-card.danger { border-left-color: var(--danger); }
-        .stat-card.warning { border-left-color: var(--warning); }
-        .stat-card.success { border-left-color: var(--success); }
-        .stat-card.info { border-left-color: var(--info); }
-        .stat-card.purple { border-left-color: var(--purple); }
-        .stat-card .stat-number { font-size: 1.6rem; font-weight: 800; }
-        .stat-card .stat-label { font-size: 0.68rem; color: var(--gray-500); font-weight: 600; text-transform: uppercase; margin-top: 2px; }
-
-        /* MODAL */
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 200; align-items: center;
-            justify-content: center; padding: 16px;
-        }
-        .modal-overlay.show { display: flex; }
-        .modal {
-            background: white; border-radius: var(--radius-lg); width: 100%;
-            max-width: 500px; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg);
-        }
-        .modal-header {
-            padding: 14px 18px; border-bottom: 1px solid var(--gray-200);
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .modal-header h3 { font-size: 0.95rem; font-weight: 700; }
-        .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gray-400); }
-        .modal-close:hover { color: var(--gray-800); }
-        .modal-body { padding: 18px; }
-        .modal-footer { padding: 14px 18px; border-top: 1px solid var(--gray-200); display: flex; gap: 8px; justify-content: flex-end; }
-
-        /* LOCATION TAG */
         .location-tag {
             display: inline-flex; align-items: center; gap: 3px;
             background: var(--info-light); color: var(--info);
-            padding: 2px 7px; border-radius: 4px; font-size: 0.7rem; font-weight: 600;
+            padding: 2px 7px; border-radius: 4px; font-size: 0.68rem; font-weight: 600;
         }
 
-        /* ACTION BTNS */
         .action-btns { display: flex; gap: 3px; flex-wrap: wrap; }
-        .action-btns .btn-sm { padding: 4px 7px; font-size: 0.68rem; }
+        .action-btns .btn-sm { padding: 4px 7px; font-size: 0.66rem; }
 
-        /* TOAST */
-        .toast-container { position: fixed; top: 80px; right: 14px; z-index: 300; display: flex; flex-direction: column; gap: 8px; }
+        .row-done { opacity: 0.4; }
+        .row-done td { text-decoration: line-through; }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 200;
+            align-items: center; justify-content: center; padding: 16px;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal {
+            background: white; border-radius: var(--radius-xl); width: 100%;
+            max-width: 460px; max-height: 90vh; overflow-y: auto;
+            box-shadow: var(--shadow-xl); animation: modalIn 0.3s ease;
+        }
+        @keyframes modalIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-header {
+            padding: 16px 20px; border-bottom: 1px solid var(--gray-200);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .modal-header h3 { font-size: 0.95rem; font-weight: 700; }
+        .modal-close { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--gray-400); padding: 4px; }
+        .modal-close:hover { color: var(--gray-800); }
+        .modal-body { padding: 18px 20px; }
+        .modal-footer { padding: 14px 20px; border-top: 1px solid var(--gray-200); display: flex; gap: 8px; justify-content: flex-end; }
+
+        /* ===== TOAST ===== */
+        .toast-container { position: fixed; top: 70px; right: 14px; z-index: 300; display: flex; flex-direction: column; gap: 8px; }
         .toast {
-            background: white; padding: 10px 18px; border-radius: var(--radius);
-            box-shadow: var(--shadow-lg); font-size: 0.82rem; font-weight: 500;
-            border-left: 4px solid var(--success); animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s;
+            background: white; padding: 12px 18px; border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl); font-size: 0.82rem; font-weight: 500;
+            border-left: 4px solid var(--success); animation: slideIn 0.3s ease, fadeOut 0.5s ease 2.5s;
             max-width: 300px;
         }
         .toast.error { border-left-color: var(--danger); }
@@ -292,34 +452,26 @@
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
 
-        /* EMPTY STATE */
-        .empty-state { text-align: center; padding: 35px 20px; color: var(--gray-400); }
-        .empty-state .icon { font-size: 2.5rem; margin-bottom: 10px; }
+        .empty-state { text-align: center; padding: 30px 20px; color: var(--gray-400); }
+        .empty-state .icon { font-size: 2.5rem; margin-bottom: 8px; }
+        .empty-state p { font-size: 0.85rem; }
 
-        /* FILTER BAR */
         .filter-bar { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; align-items: center; }
-        .filter-bar select { padding: 7px 10px; border: 1.5px solid var(--gray-300); border-radius: var(--radius); font-size: 0.78rem; }
+        .filter-bar select { padding: 7px 10px; border: 1.5px solid var(--gray-300); border-radius: var(--radius); font-size: 0.76rem; }
 
-        /* PRODUTO CADASTRADO CARD */
-        .produto-card {
-            border: 1px solid var(--gray-200); border-radius: var(--radius);
-            padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between;
-            align-items: center; transition: all 0.15s;
-        }
-        .produto-card:hover { border-color: var(--primary); background: var(--primary-light); }
-        .produto-card .p-info .p-name { font-weight: 600; font-size: 0.85rem; }
-        .produto-card .p-info .p-details { font-size: 0.72rem; color: var(--gray-500); }
-
-        /* DONE ROW */
-        .row-done { opacity: 0.45; }
-        .row-done td { text-decoration: line-through; }
-
-        /* RESPONSIVE */
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 600px) {
             .form-row, .form-row-3 { grid-template-columns: 1fr; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .tab-btn { padding: 9px 8px; font-size: 0.68rem; }
+            .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+            .stat-card { padding: 12px 8px; }
+            .stat-card .stat-number { font-size: 1.4rem; }
+            .stat-card .stat-label { font-size: 0.58rem; }
+            .tab-btn { padding: 9px 8px; font-size: 0.65rem; }
             .content { padding: 10px; }
+            .rolling-item { min-width: 180px; max-width: 180px; }
+        }
+        @media (max-width: 380px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
@@ -327,10 +479,9 @@
 
 <!-- HEADER -->
 <div class="header">
-    <h1>📋 Sistema de Controle</h1>
-    <p>Faltas • Vencimentos • Trocas • Cadastro</p>
-    <div class="header-center">
-        <span class="sync-status" id="sync-status">⏳ Conectando...</span>
+    <div class="header-top">
+        <h1>📋 Controle <span>v2.0</span></h1>
+        <span class="sync-badge" id="sync-status">⏳ Conectando...</span>
     </div>
 </div>
 
@@ -339,31 +490,33 @@
     <button class="tab-btn active" onclick="switchTab('dashboard')">📊 Painel</button>
     <button class="tab-btn" onclick="switchTab('cadastro')">📦 Cadastro</button>
     <button class="tab-btn" onclick="switchTab('faltas')">🚫 Faltas</button>
-    <button class="tab-btn" onclick="switchTab('vencimentos')">📅 Vencim.</button>
+    <button class="tab-btn" onclick="switchTab('vencimentos')" id="tab-btn-venc">📅 Vencim.</button>
     <button class="tab-btn" onclick="switchTab('trocas')">🔄 Trocas</button>
-    <button class="tab-btn" onclick="switchTab('config')">⚙️ Config</button>
+    <button class="tab-btn" onclick="switchTab('config')">⚙️</button>
 </div>
 
 <div class="content">
 
     <!-- ===== DASHBOARD ===== -->
     <div id="tab-dashboard" class="tab-content active">
+        <!-- Stats clicáveis -->
         <div class="stats-grid" id="dashboard-stats"></div>
-        <div class="card">
-            <div class="card-title">⚡ Ações Rápidas</div>
-            <div class="btn-group">
-                <button class="btn btn-purple btn-sm" onclick="switchTab('cadastro')">📦 Cadastrar</button>
-                <button class="btn btn-primary btn-sm" onclick="switchTab('faltas')">🚫 Falta</button>
-                <button class="btn btn-warning btn-sm" onclick="switchTab('vencimentos')">📅 Vencimento</button>
-                <button class="btn btn-info btn-sm" onclick="switchTab('trocas')">🔄 Troca</button>
+
+        <!-- Painel Rolante -->
+        <div class="rolling-panel">
+            <div class="rolling-header">
+                <span>🔔 Alertas e Pendências</span>
+                <div class="rolling-controls">
+                    <button onclick="scrollRolling(-1)">◀</button>
+                    <button onclick="scrollRolling(1)">▶</button>
+                </div>
             </div>
+            <div class="rolling-track" id="rolling-track"></div>
         </div>
+
+        <!-- Últimos registros -->
         <div class="card">
-            <div class="card-title">🔔 Vencimentos Críticos</div>
-            <div id="dashboard-venc-criticos"></div>
-        </div>
-        <div class="card">
-            <div class="card-title">📋 Últimos Registros</div>
+            <div class="card-title">📋 Atividade Recente</div>
             <div id="dashboard-ultimos"></div>
         </div>
     </div>
@@ -371,72 +524,55 @@
     <!-- ===== CADASTRO ===== -->
     <div id="tab-cadastro" class="tab-content">
         <div class="card">
-            <div class="card-title">📦 Cadastrar Produto</div>
-            <div class="search-bar" style="margin-bottom:8px;">
+            <div class="card-title">🔍 Buscar Online para Cadastrar</div>
+            <div class="search-bar">
                 <span class="search-icon">🔎</span>
-                <input type="text" id="cad-busca-online" placeholder="Buscar online por nome ou código de barras..." oninput="buscarParaCadastro()" autocomplete="off">
-                <button class="barcode-btn" onclick="abrirScanner('cadastro')">📷</button>
+                <input type="text" id="cad-busca-online" placeholder="Nome ou código de barras..." oninput="buscarParaCadastro()" autocomplete="off">
+                <button class="barcode-btn" onclick="abrirScanner('cadastro')">📷 Scan</button>
                 <div class="search-results-dropdown" id="cad-busca-results"></div>
-            </div>
-            <div id="cad-form">
-                <div class="form-group">
-                    <label>Nome do Produto *</label>
-                    <input type="text" id="cad-nome" placeholder="Nome do produto">
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Código de Barras (EAN)</label>
-                        <input type="text" id="cad-ean" placeholder="EAN">
-                    </div>
-                    <div class="form-group">
-                        <label>Marca</label>
-                        <input type="text" id="cad-marca" placeholder="Marca">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Seção</label>
-                        <select id="cad-secao">
-                            <option value="">Selecione...</option>
-                            <option>Mercearia</option><option>Bebidas</option>
-                            <option>Limpeza</option><option>Higiene</option>
-                            <option>Frios</option><option>Hortifruti</option>
-                            <option>Padaria</option><option>Açougue</option>
-                            <option>Bazar</option><option>Pet</option>
-                            <option>Outros</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Preço (R$)</label>
-                        <input type="number" id="cad-preco" placeholder="0.00" step="0.01" min="0">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Localização Padrão</label>
-                    <input type="text" id="cad-local" placeholder="Ex: Gôndola 3, Corredor 5">
-                </div>
-                <input type="hidden" id="cad-edit-id" value="">
-                <button class="btn btn-purple btn-block" onclick="salvarProduto()">💾 Salvar Produto</button>
-                <button class="btn btn-sm btn-outline" id="cad-cancel-edit" style="display:none;margin-top:8px;width:100%;justify-content:center;" onclick="cancelarEdicaoProduto()">Cancelar Edição</button>
             </div>
         </div>
 
+        <div class="card" id="cad-form-card">
+            <div class="card-title" id="cad-form-title">➕ Cadastrar Produto</div>
+            <div class="form-group">
+                <label>Nome do Produto *</label>
+                <input type="text" id="cad-nome" placeholder="Nome do produto">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Código de Barras (EAN)</label>
+                    <input type="text" id="cad-ean" placeholder="EAN">
+                </div>
+                <div class="form-group">
+                    <label>Marca</label>
+                    <input type="text" id="cad-marca" placeholder="Marca">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Preço (R$)</label>
+                    <input type="number" id="cad-preco" placeholder="0.00" step="0.01" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Localização</label>
+                    <input type="text" id="cad-local" placeholder="Ex: Gôndola 3">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Imagem (URL)</label>
+                <input type="text" id="cad-imagem" placeholder="https://... ou deixe em branco">
+            </div>
+            <input type="hidden" id="cad-edit-id" value="">
+            <button class="btn btn-purple btn-block" onclick="salvarProduto()">💾 Salvar Produto</button>
+            <button class="btn btn-sm btn-outline btn-block" id="cad-cancel-edit" style="display:none;margin-top:8px;" onclick="cancelarEdicaoProduto()">Cancelar Edição</button>
+        </div>
+
         <div class="card">
-            <div class="card-title">📋 Produtos Cadastrados (<span id="cad-total">0</span>)</div>
+            <div class="card-title">📦 Produtos (<span id="cad-total">0</span>)</div>
             <div class="search-bar">
                 <span class="search-icon">🔎</span>
-                <input type="text" id="cad-filtro" placeholder="Filtrar produtos cadastrados..." oninput="renderProdutos()">
-            </div>
-            <div class="filter-bar">
-                <select id="cad-filtro-secao" onchange="renderProdutos()">
-                    <option value="">Todas as seções</option>
-                    <option>Mercearia</option><option>Bebidas</option>
-                    <option>Limpeza</option><option>Higiene</option>
-                    <option>Frios</option><option>Hortifruti</option>
-                    <option>Padaria</option><option>Açougue</option>
-                    <option>Bazar</option><option>Pet</option>
-                    <option>Outros</option>
-                </select>
+                <input type="text" id="cad-filtro" placeholder="Filtrar produtos..." oninput="renderProdutos()">
             </div>
             <div id="cad-lista"></div>
         </div>
@@ -445,11 +581,11 @@
     <!-- ===== FALTAS ===== -->
     <div id="tab-faltas" class="tab-content">
         <div class="card">
-            <div class="card-title">🔍 Buscar Produto (Cadastrados + Online)</div>
+            <div class="card-title">🔍 Buscar Produto</div>
             <div class="search-bar">
                 <span class="search-icon">🔎</span>
-                <input type="text" id="falta-busca" placeholder="Nome, EAN ou código de barras..." oninput="buscarProduto('falta')" autocomplete="off">
-                <button class="barcode-btn" onclick="abrirScanner('falta')">📷</button>
+                <input type="text" id="falta-busca" placeholder="Cadastrados + Online..." oninput="buscarProduto('falta')" autocomplete="off">
+                <button class="barcode-btn" onclick="abrirScanner('falta')">📷 Scan</button>
                 <div class="search-results-dropdown" id="falta-results"></div>
             </div>
         </div>
@@ -458,7 +594,7 @@
             <div class="card-title">➕ Registrar Falta</div>
             <div class="form-group">
                 <label>Produto</label>
-                <input type="text" id="falta-produto" placeholder="Nome do produto">
+                <input type="text" id="falta-produto" placeholder="Nome">
             </div>
             <div class="form-row">
                 <div class="form-group">
@@ -469,12 +605,10 @@
                     <label>Seção</label>
                     <select id="falta-secao">
                         <option value="">Selecione...</option>
-                        <option>Mercearia</option><option>Bebidas</option>
-                        <option>Limpeza</option><option>Higiene</option>
-                        <option>Frios</option><option>Hortifruti</option>
-                        <option>Padaria</option><option>Açougue</option>
-                        <option>Bazar</option><option>Pet</option>
-                        <option>Outros</option>
+                        <option>Mercearia</option><option>Bebidas</option><option>Limpeza</option>
+                        <option>Higiene</option><option>Frios</option><option>Hortifruti</option>
+                        <option>Padaria</option><option>Açougue</option><option>Bazar</option>
+                        <option>Pet</option><option>Outros</option>
                     </select>
                 </div>
             </div>
@@ -484,7 +618,7 @@
                     <input type="text" id="falta-estoque" value="Não informado">
                 </div>
                 <div class="form-group">
-                    <label>Sugestão de Pedido</label>
+                    <label>Sugestão Pedido</label>
                     <input type="text" id="falta-sugestao" value="Não informado">
                 </div>
             </div>
@@ -496,18 +630,16 @@
         </div>
 
         <div class="card">
-            <div class="card-title">📋 Lista de Faltas (<span id="faltas-total">0</span>)</div>
+            <div class="card-title">📋 Faltas (<span id="faltas-total">0</span>)</div>
             <div class="filter-bar">
                 <select id="filtro-falta-secao" onchange="renderFaltas()">
                     <option value="">Todas</option>
-                    <option>Mercearia</option><option>Bebidas</option>
-                    <option>Limpeza</option><option>Higiene</option>
-                    <option>Frios</option><option>Hortifruti</option>
-                    <option>Padaria</option><option>Açougue</option>
-                    <option>Bazar</option><option>Pet</option>
-                    <option>Outros</option>
+                    <option>Mercearia</option><option>Bebidas</option><option>Limpeza</option>
+                    <option>Higiene</option><option>Frios</option><option>Hortifruti</option>
+                    <option>Padaria</option><option>Açougue</option><option>Bazar</option>
+                    <option>Pet</option><option>Outros</option>
                 </select>
-                <button class="btn btn-sm btn-danger" onclick="limparFaltas()">🗑️ Limpar</button>
+                <button class="btn btn-sm btn-danger" onclick="limparFaltas()">🗑️</button>
             </div>
             <div id="faltas-lista"></div>
         </div>
@@ -519,8 +651,8 @@
             <div class="card-title">🔍 Buscar Produto</div>
             <div class="search-bar">
                 <span class="search-icon">🔎</span>
-                <input type="text" id="venc-busca" placeholder="Nome, EAN ou código de barras..." oninput="buscarProduto('venc')" autocomplete="off">
-                <button class="barcode-btn" onclick="abrirScanner('venc')">📷</button>
+                <input type="text" id="venc-busca" placeholder="Cadastrados + Online..." oninput="buscarProduto('venc')" autocomplete="off">
+                <button class="barcode-btn" onclick="abrirScanner('venc')">📷 Scan</button>
                 <div class="search-results-dropdown" id="venc-results"></div>
             </div>
         </div>
@@ -530,7 +662,7 @@
             <input type="hidden" id="venc-edit-id" value="">
             <div class="form-group">
                 <label>Produto</label>
-                <input type="text" id="venc-produto" placeholder="Nome do produto">
+                <input type="text" id="venc-produto" placeholder="Nome">
             </div>
             <div class="form-row-3">
                 <div class="form-group">
@@ -539,7 +671,7 @@
                 </div>
                 <div class="form-group">
                     <label>Quantidade</label>
-                    <input type="number" id="venc-qtd" placeholder="Qtd" min="1" value="1">
+                    <input type="number" id="venc-qtd" min="1" value="1">
                 </div>
                 <div class="form-group">
                     <label>Validade</label>
@@ -549,18 +681,16 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>Localização</label>
-                    <input type="text" id="venc-local" placeholder="Ex: Gôndola 3">
+                    <input type="text" id="venc-local" placeholder="Gôndola, prateleira...">
                 </div>
                 <div class="form-group">
                     <label>Seção</label>
                     <select id="venc-secao">
                         <option value="">Selecione...</option>
-                        <option>Mercearia</option><option>Bebidas</option>
-                        <option>Limpeza</option><option>Higiene</option>
-                        <option>Frios</option><option>Hortifruti</option>
-                        <option>Padaria</option><option>Açougue</option>
-                        <option>Bazar</option><option>Pet</option>
-                        <option>Outros</option>
+                        <option>Mercearia</option><option>Bebidas</option><option>Limpeza</option>
+                        <option>Higiene</option><option>Frios</option><option>Hortifruti</option>
+                        <option>Padaria</option><option>Açougue</option><option>Bazar</option>
+                        <option>Pet</option><option>Outros</option>
                     </select>
                 </div>
             </div>
@@ -574,19 +704,17 @@
                 <select id="filtro-venc-status" onchange="renderVencimentos()">
                     <option value="">Todos</option>
                     <option value="vencido">Vencidos</option>
-                    <option value="critico">Crítico (≤3d)</option>
-                    <option value="proximo">Próximo (≤7d)</option>
+                    <option value="critico">Crítico ≤3d</option>
+                    <option value="proximo">Próximo ≤7d</option>
                     <option value="ok">OK</option>
-                    <option value="feito">✅ Ação Feita</option>
+                    <option value="feito">✅ Feito</option>
                 </select>
                 <select id="filtro-venc-secao" onchange="renderVencimentos()">
                     <option value="">Todas</option>
-                    <option>Mercearia</option><option>Bebidas</option>
-                    <option>Limpeza</option><option>Higiene</option>
-                    <option>Frios</option><option>Hortifruti</option>
-                    <option>Padaria</option><option>Açougue</option>
-                    <option>Bazar</option><option>Pet</option>
-                    <option>Outros</option>
+                    <option>Mercearia</option><option>Bebidas</option><option>Limpeza</option>
+                    <option>Higiene</option><option>Frios</option><option>Hortifruti</option>
+                    <option>Padaria</option><option>Açougue</option><option>Bazar</option>
+                    <option>Pet</option><option>Outros</option>
                 </select>
                 <button class="btn btn-sm btn-danger" onclick="limparVencimentos()">🗑️</button>
             </div>
@@ -600,8 +728,8 @@
             <div class="card-title">🔍 Buscar Produto</div>
             <div class="search-bar">
                 <span class="search-icon">🔎</span>
-                <input type="text" id="troca-busca" placeholder="Nome, EAN ou código de barras..." oninput="buscarProduto('troca')" autocomplete="off">
-                <button class="barcode-btn" onclick="abrirScanner('troca')">📷</button>
+                <input type="text" id="troca-busca" placeholder="Cadastrados + Online..." oninput="buscarProduto('troca')" autocomplete="off">
+                <button class="barcode-btn" onclick="abrirScanner('troca')">📷 Scan</button>
                 <div class="search-results-dropdown" id="troca-results"></div>
             </div>
         </div>
@@ -611,7 +739,7 @@
             <input type="hidden" id="troca-edit-id" value="">
             <div class="form-group">
                 <label>Produto</label>
-                <input type="text" id="troca-produto" placeholder="Nome do produto">
+                <input type="text" id="troca-produto" placeholder="Nome">
             </div>
             <div class="form-row-3">
                 <div class="form-group">
@@ -620,7 +748,7 @@
                 </div>
                 <div class="form-group">
                     <label>Quantidade</label>
-                    <input type="number" id="troca-qtd" placeholder="Qtd" min="1" value="1">
+                    <input type="number" id="troca-qtd" min="1" value="1">
                 </div>
                 <div class="form-group">
                     <label>Motivo</label>
@@ -634,7 +762,7 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>Localização</label>
-                    <input type="text" id="troca-local" placeholder="Ex: Depósito">
+                    <input type="text" id="troca-local" placeholder="Depósito, gôndola...">
                 </div>
                 <div class="form-group">
                     <label>Observação</label>
@@ -662,15 +790,12 @@
     <!-- ===== CONFIG ===== -->
     <div id="tab-config" class="tab-content">
         <div class="card">
-            <div class="card-title">🔗 Firebase / Sincronização</div>
-            <div class="form-group">
-                <label>Status da Conexão</label>
-                <div id="firebase-status" style="padding:10px;border-radius:var(--radius);font-size:0.82rem;background:var(--gray-50);"></div>
-            </div>
+            <div class="card-title">🔗 Sincronização Firebase</div>
+            <div id="firebase-status" style="padding:10px;border-radius:var(--radius);font-size:0.8rem;background:var(--gray-50);margin-bottom:12px;"></div>
             <button class="btn btn-primary btn-block" onclick="sincronizarAgora()">🔄 Sincronizar Agora</button>
         </div>
         <div class="card">
-            <div class="card-title">💾 Backup Local</div>
+            <div class="card-title">💾 Backup</div>
             <div class="btn-group" style="flex-direction:column;">
                 <button class="btn btn-success btn-block" onclick="exportarDados()">📤 Exportar JSON</button>
                 <button class="btn btn-info btn-block" onclick="document.getElementById('import-file').click()">📥 Importar JSON</button>
@@ -680,14 +805,13 @@
         </div>
         <div class="card">
             <div class="card-title">ℹ️ Sobre</div>
-            <p style="font-size:0.82rem;color:var(--gray-600);line-height:1.6;">
+            <p style="font-size:0.8rem;color:var(--gray-600);line-height:1.6;">
                 Sistema de Controle v2.0<br>
-                ✅ Cadastro com busca online<br>
-                ✅ Banco de dados Firebase + LocalStorage<br>
-                ✅ Sincronização em tempo real<br>
-                ✅ Edição de vencimentos e trocas<br>
-                ✅ Ação feita + Enviar para troca<br>
-                ✅ Localização em trocas e vencimentos
+                ✅ Stats clicáveis que levam às seções<br>
+                ✅ Painel rolante de alertas<br>
+                ✅ Botão flutuante (FAB) de ações rápidas<br>
+                ✅ Imagens de produtos no cadastro<br>
+                ✅ Firebase + sincronização em tempo real
             </p>
         </div>
     </div>
@@ -698,7 +822,7 @@
     <p>📷 Aponte para o código de barras</p>
     <video id="scanner-video" autoplay playsinline></video>
     <div class="scanner-manual">
-        <input type="text" id="scanner-manual-input" placeholder="Ou digite o código aqui...">
+        <input type="text" id="scanner-manual-input" placeholder="Ou digite o código...">
         <button class="btn btn-success btn-sm" onclick="usarCodigoManual()">OK</button>
     </div>
     <button class="close-scanner" onclick="fecharScanner()">✖ Fechar</button>
@@ -712,14 +836,14 @@
             <button class="modal-close" onclick="fecharModal('modal-enviar-troca')">&times;</button>
         </div>
         <div class="modal-body">
-            <p style="font-size:0.82rem;color:var(--gray-600);margin-bottom:12px;" id="modal-troca-info"></p>
+            <div id="modal-troca-info" style="font-size:0.82rem;color:var(--gray-600);margin-bottom:14px;padding:10px;background:var(--gray-50);border-radius:var(--radius);"></div>
             <div class="form-group">
-                <label>Quantidade para Troca</label>
+                <label>Quantidade</label>
                 <input type="number" id="modal-troca-qtd" min="1">
             </div>
             <div class="form-group">
                 <label>Localização</label>
-                <input type="text" id="modal-troca-local" placeholder="Ex: Depósito">
+                <input type="text" id="modal-troca-local" placeholder="Depósito...">
             </div>
             <input type="hidden" id="modal-troca-venc-id">
         </div>
@@ -730,12 +854,37 @@
     </div>
 </div>
 
+<!-- FAB (Floating Action Button) -->
+<div class="fab-backdrop" id="fab-backdrop" onclick="toggleFab()"></div>
+<div class="fab-container">
+    <div class="fab-menu" id="fab-menu">
+        <div class="fab-item" onclick="fabAction('cadastro')">
+            <span class="fab-item-label">Cadastrar Produto</span>
+            <button class="fab-item-btn purple">📦</button>
+        </div>
+        <div class="fab-item" onclick="fabAction('falta')">
+            <span class="fab-item-label">Registrar Falta</span>
+            <button class="fab-item-btn blue">🚫</button>
+        </div>
+        <div class="fab-item" onclick="fabAction('vencimento')">
+            <span class="fab-item-label">Registrar Vencimento</span>
+            <button class="fab-item-btn orange">📅</button>
+        </div>
+        <div class="fab-item" onclick="fabAction('troca')">
+            <span class="fab-item-label">Registrar Troca</span>
+            <button class="fab-item-btn cyan">🔄</button>
+        </div>
+    </div>
+    <button class="fab-main" id="fab-main" onclick="toggleFab()">+</button>
+</div>
+
 <!-- TOAST -->
 <div class="toast-container" id="toast-container"></div>
 
+
 <script>
     // ============================================
-    // FIREBASE CONFIG E INICIALIZAÇÃO
+    // FIREBASE CONFIG
     // ============================================
     const firebaseConfig = {
         apiKey: "AIzaSyBxKcnEpMLSmERhblGOPJd6iveUhOqwtMQ",
@@ -752,12 +901,10 @@
     try {
         firebase.initializeApp(firebaseConfig);
         db = firebase.firestore();
-        db.enablePersistence({ synchronizeTabs: true }).catch(err => {
-            console.log('Persistence error:', err);
-        });
+        db.enablePersistence({ synchronizeTabs: true }).catch(err => console.log('Persistence:', err));
         firebaseConectado = true;
     } catch (e) {
-        console.log('Firebase não configurado, usando apenas localStorage');
+        console.log('Firebase não disponível, usando localStorage');
         firebaseConectado = false;
     }
 
@@ -772,7 +919,9 @@
     let scannerTarget = '';
     let scannerStream = null;
     let searchTimeout = null;
-    let onlineSearchCache = {};
+    let onlineCache = {};
+    let fabAberto = false;
+    let rollingAutoScroll = null;
 
     function salvarLocal() {
         localStorage.setItem('produtos', JSON.stringify(produtos));
@@ -784,41 +933,28 @@
     // ============================================
     // FIREBASE SYNC
     // ============================================
-    const colecoes = {
-        produtos: 'produtos',
-        faltas: 'faltas',
-        vencimentos: 'vencimentos',
-        trocas: 'trocas'
-    };
+    const colecoes = { produtos: 'produtos', faltas: 'faltas', vencimentos: 'vencimentos', trocas: 'trocas' };
 
-    async function syncParaFirebase(colecao, dados) {
+    async function syncParaFirebase(col, dados) {
         if (!db || !firebaseConectado) return;
         try {
             const batch = db.batch();
-            // Limpa coleção antes
-            const snapshot = await db.collection(colecao).get();
-            snapshot.docs.forEach(doc => batch.delete(doc.ref));
-
-            // Adiciona novos
+            const snap = await db.collection(col).get();
+            snap.docs.forEach(doc => batch.delete(doc.ref));
             dados.forEach(item => {
-                const ref = db.collection(colecao).doc(String(item.id));
-                batch.set(ref, item);
+                const ref = db.collection(col).doc(String(item.id));
+                batch.set(ref, JSON.parse(JSON.stringify(item)));
             });
             await batch.commit();
-        } catch (e) {
-            console.log('Erro sync firebase:', e);
-        }
+        } catch (e) { console.log('Sync error:', e); }
     }
 
-    async function syncDoFirebase(colecao) {
+    async function syncDoFirebase(col) {
         if (!db || !firebaseConectado) return null;
         try {
-            const snapshot = await db.collection(colecao).get();
-            return snapshot.docs.map(doc => doc.data());
-        } catch (e) {
-            console.log('Erro ao ler firebase:', e);
-            return null;
-        }
+            const snap = await db.collection(col).get();
+            return snap.docs.map(doc => doc.data());
+        } catch (e) { return null; }
     }
 
     async function sincronizarAgora() {
@@ -827,33 +963,30 @@
             updateSyncStatus(false);
             return;
         }
-
-        toast('Sincronizando...', 'info');
-
+        toast('🔄 Sincronizando...', 'info');
         try {
-            // Enviar para Firebase
-            await syncParaFirebase(colecoes.produtos, produtos);
-            await syncParaFirebase(colecoes.faltas, faltas);
-            await syncParaFirebase(colecoes.vencimentos, vencimentos);
-            await syncParaFirebase(colecoes.trocas, trocas);
-
+            await Promise.all([
+                syncParaFirebase(colecoes.produtos, produtos),
+                syncParaFirebase(colecoes.faltas, faltas),
+                syncParaFirebase(colecoes.vencimentos, vencimentos),
+                syncParaFirebase(colecoes.trocas, trocas)
+            ]);
             updateSyncStatus(true);
-            toast('Sincronizado com sucesso!', 'success');
-            updateFirebaseStatus('✅ Conectado e sincronizado — ' + new Date().toLocaleTimeString('pt-BR'));
+            updateFirebaseStatus('✅ Sincronizado — ' + new Date().toLocaleTimeString('pt-BR'));
+            toast('Sincronizado!', 'success');
         } catch (e) {
             updateSyncStatus(false);
-            toast('Erro na sincronização!', 'error');
             updateFirebaseStatus('❌ Erro: ' + e.message);
+            toast('Erro na sincronização!', 'error');
         }
     }
 
     async function carregarDoFirebase() {
         if (!db || !firebaseConectado) {
             updateSyncStatus(false);
-            updateFirebaseStatus('⚠️ Usando apenas dados locais (Firebase não configurado)');
+            updateFirebaseStatus('⚠️ Modo offline — usando dados locais');
             return;
         }
-
         try {
             const [pFb, fFb, vFb, tFb] = await Promise.all([
                 syncDoFirebase(colecoes.produtos),
@@ -861,57 +994,43 @@
                 syncDoFirebase(colecoes.vencimentos),
                 syncDoFirebase(colecoes.trocas)
             ]);
-
-            // Merge: Firebase tem prioridade se tiver mais dados
-            if (pFb && pFb.length > 0 && pFb.length >= produtos.length) produtos = pFb;
-            if (fFb && fFb.length > 0 && fFb.length >= faltas.length) faltas = fFb;
-            if (vFb && vFb.length > 0 && vFb.length >= vencimentos.length) vencimentos = vFb;
-            if (tFb && tFb.length > 0 && tFb.length >= trocas.length) trocas = tFb;
-
+            if (pFb && pFb.length >= produtos.length) produtos = pFb;
+            if (fFb && fFb.length >= faltas.length) faltas = fFb;
+            if (vFb && vFb.length >= vencimentos.length) vencimentos = vFb;
+            if (tFb && tFb.length >= trocas.length) trocas = tFb;
             salvarLocal();
             updateSyncStatus(true);
-            updateFirebaseStatus('✅ Conectado — Dados carregados do Firebase');
+            updateFirebaseStatus('✅ Conectado — dados carregados');
             renderAll();
         } catch (e) {
             updateSyncStatus(false);
-            updateFirebaseStatus('⚠️ Erro ao conectar: ' + e.message + ' — Usando dados locais');
+            updateFirebaseStatus('⚠️ Erro: ' + e.message);
         }
     }
 
-    // Listener em tempo real
     function iniciarListenerFirebase() {
         if (!db || !firebaseConectado) return;
-
-        Object.entries(colecoes).forEach(([key, colecao]) => {
+        Object.entries(colecoes).forEach(([key, col]) => {
             try {
-                db.collection(colecao).onSnapshot(snapshot => {
-                    const dados = snapshot.docs.map(doc => doc.data());
+                db.collection(col).onSnapshot(snap => {
+                    const dados = snap.docs.map(doc => doc.data());
                     if (dados.length > 0) {
-                        if (key === 'produtos' && dados.length >= produtos.length) { produtos = dados; }
-                        else if (key === 'faltas' && dados.length >= faltas.length) { faltas = dados; }
-                        else if (key === 'vencimentos' && dados.length >= vencimentos.length) { vencimentos = dados; }
-                        else if (key === 'trocas' && dados.length >= trocas.length) { trocas = dados; }
+                        if (key === 'produtos' && dados.length >= produtos.length) produtos = dados;
+                        else if (key === 'faltas' && dados.length >= faltas.length) faltas = dados;
+                        else if (key === 'vencimentos' && dados.length >= vencimentos.length) vencimentos = dados;
+                        else if (key === 'trocas' && dados.length >= trocas.length) trocas = dados;
                         salvarLocal();
                         renderAll();
                     }
-                }, err => {
-                    console.log('Listener error:', err);
-                });
-            } catch (e) {
-                console.log('Erro listener:', e);
-            }
+                }, err => console.log('Listener err:', err));
+            } catch (e) {}
         });
     }
 
     function updateSyncStatus(online) {
         const el = document.getElementById('sync-status');
-        if (online) {
-            el.className = 'sync-status online';
-            el.textContent = '🟢 Online';
-        } else {
-            el.className = 'sync-status offline';
-            el.textContent = '🔴 Offline (Local)';
-        }
+        el.className = 'sync-badge ' + (online ? 'online' : 'offline');
+        el.textContent = online ? '🟢 Online' : '🔴 Offline';
     }
 
     function updateFirebaseStatus(msg) {
@@ -921,7 +1040,6 @@
 
     function salvarESincronizar() {
         salvarLocal();
-        // Sync em background
         if (firebaseConectado) {
             syncParaFirebase(colecoes.produtos, produtos);
             syncParaFirebase(colecoes.faltas, faltas);
@@ -943,6 +1061,50 @@
     }
 
     // ============================================
+    // FAB (Floating Action Button)
+    // ============================================
+    function toggleFab() {
+        fabAberto = !fabAberto;
+        document.getElementById('fab-main').classList.toggle('open', fabAberto);
+        document.getElementById('fab-menu').classList.toggle('show', fabAberto);
+        document.getElementById('fab-backdrop').classList.toggle('show', fabAberto);
+    }
+
+    function fabAction(action) {
+        toggleFab();
+        switch (action) {
+            case 'cadastro':
+                switchTab('cadastro');
+                setTimeout(() => document.getElementById('cad-nome').focus(), 300);
+                break;
+            case 'falta':
+                switchTab('faltas');
+                document.getElementById('falta-form-card').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('falta-form-card').scrollIntoView({ behavior: 'smooth' });
+                    document.getElementById('falta-produto').focus();
+                }, 300);
+                break;
+            case 'vencimento':
+                switchTab('vencimentos');
+                document.getElementById('venc-form-card').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('venc-form-card').scrollIntoView({ behavior: 'smooth' });
+                    document.getElementById('venc-produto').focus();
+                }, 300);
+                break;
+            case 'troca':
+                switchTab('trocas');
+                document.getElementById('troca-form-card').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('troca-form-card').scrollIntoView({ behavior: 'smooth' });
+                    document.getElementById('troca-produto').focus();
+                }, 300);
+                break;
+        }
+    }
+
+    // ============================================
     // TABS
     // ============================================
     function switchTab(tab) {
@@ -952,6 +1114,7 @@
         const map = { dashboard: 0, cadastro: 1, faltas: 2, vencimentos: 3, trocas: 4, config: 5 };
         if (map[tab] !== undefined) document.querySelectorAll('.tab-btn')[map[tab]].classList.add('active');
         renderAll();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function renderAll() {
@@ -963,99 +1126,76 @@
     }
 
     // ============================================
-    // BUSCA ONLINE (Open Food Facts) - MELHORADA
+    // BUSCA ONLINE (Open Food Facts) MELHORADA
     // ============================================
     async function buscarOnline(query) {
         if (query.length < 3) return [];
+        if (onlineCache[query]) return onlineCache[query];
 
-        // Cache
-        if (onlineSearchCache[query]) return onlineSearchCache[query];
-
-        let resultados = [];
-
+        let results = [];
         try {
             if (/^\d{8,14}$/.test(query)) {
-                // Busca por EAN
-                const resp = await fetch(`https://world.openfoodfacts.org/api/v0/product/${query}.json`, { signal: AbortSignal.timeout(5000) });
+                const resp = await fetch(`https://world.openfoodfacts.org/api/v0/product/${query}.json`, { signal: AbortSignal.timeout(6000) });
                 const data = await resp.json();
                 if (data.status === 1 && data.product) {
-                    resultados.push({
+                    results.push({
                         nome: data.product.product_name || data.product.product_name_pt || data.product.product_name_en || 'Produto',
                         ean: query,
                         marca: data.product.brands || '',
-                        secao: mapearCategoria(data.product.categories_tags),
+                        imagem: data.product.image_small_url || data.product.image_url || '',
+                        categorias: data.product.categories_tags || [],
                         source: 'online'
                     });
                 }
             } else {
-                // Busca por nome
-                const resp = await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=10&lc=pt`, { signal: AbortSignal.timeout(5000) });
+                const resp = await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=10&lc=pt`, { signal: AbortSignal.timeout(6000) });
                 const data = await resp.json();
                 if (data.products) {
-                    resultados = data.products
+                    results = data.products
                         .filter(p => p.product_name || p.product_name_pt)
                         .map(p => ({
                             nome: p.product_name || p.product_name_pt || p.product_name_en || 'Produto',
                             ean: p.code || '',
                             marca: p.brands || '',
-                            secao: mapearCategoria(p.categories_tags),
+                            imagem: p.image_small_url || p.image_url || '',
+                            categorias: p.categories_tags || [],
                             source: 'online'
                         }));
                 }
             }
-        } catch (e) {
-            console.log('Erro busca online:', e);
-        }
+        } catch (e) { console.log('Busca online erro:', e); }
 
-        onlineSearchCache[query] = resultados;
-        return resultados;
+        onlineCache[query] = results;
+        return results;
     }
 
-    function mapearCategoria(tags) {
-        if (!tags || !Array.isArray(tags)) return '';
-        const str = tags.join(' ').toLowerCase();
-        if (str.includes('beverage') || str.includes('drink') || str.includes('bebida')) return 'Bebidas';
-        if (str.includes('cleaning') || str.includes('limpeza')) return 'Limpeza';
-        if (str.includes('hygiene') || str.includes('higiene') || str.includes('beauty')) return 'Higiene';
-        if (str.includes('meat') || str.includes('carne')) return 'Açougue';
-        if (str.includes('bread') || str.includes('pão') || str.includes('bakery')) return 'Padaria';
-        if (str.includes('fruit') || str.includes('vegetable') || str.includes('fruta')) return 'Hortifruti';
-        if (str.includes('dairy') || str.includes('cheese') || str.includes('frio')) return 'Frios';
-        if (str.includes('pet') || str.includes('animal')) return 'Pet';
-        return 'Mercearia';
-    }
-
-    // Busca combinada: local + online
+    // Busca combinada: LOCAL + ONLINE
     async function buscarProduto(prefix) {
         const input = document.getElementById(prefix + '-busca');
-        const resultsDiv = document.getElementById(prefix + '-results');
+        const dropdown = document.getElementById(prefix + '-results');
         const query = input.value.trim().toLowerCase();
 
-        if (query.length < 2) {
-            resultsDiv.classList.remove('show');
-            resultsDiv.innerHTML = '';
-            return;
-        }
+        if (query.length < 2) { dropdown.classList.remove('show'); dropdown.innerHTML = ''; return; }
 
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(async () => {
-            // 1. Buscar nos produtos cadastrados
+            // Locais
             const locais = produtos.filter(p => {
-                const texto = `${p.nome} ${p.ean} ${p.marca} ${p.secao}`.toLowerCase();
-                return texto.includes(query);
+                return `${p.nome} ${p.ean} ${p.marca}`.toLowerCase().includes(query);
             }).map(p => ({ ...p, source: 'local' }));
 
-            // Mostrar locais primeiro
             let html = '';
-
             if (locais.length > 0) {
-                html += '<div class="result-section-title">📦 Produtos Cadastrados</div>';
-                html += locais.slice(0, 5).map((p, i) => `
-                    <div class="result-item" onclick="selecionarResultado('${prefix}', 'local', ${i})">
+                html += '<div class="result-section-title">📦 CADASTRADOS</div>';
+                html += locais.slice(0, 6).map((p, i) => `
+                    <div class="result-item" onclick="selecionarResult('${prefix}','local',${i})">
                         <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <div>
-                                <div class="r-name">${p.marca ? p.marca + ' - ' : ''}${p.nome}</div>
-                                <div class="r-detail">EAN: ${p.ean || 'N/A'} ${p.secao ? '• ' + p.secao : ''} ${p.local ? '• 📍 ' + p.local : ''}</div>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                ${p.imagem ? '<img src="'+p.imagem+'" style="width:32px;height:32px;border-radius:4px;object-fit:cover;">' : '<span style="font-size:1.2rem;">📦</span>'}
+                                <div>
+                                    <div class="r-name">${p.marca ? p.marca+' - ':''}${p.nome}</div>
+                                    <div class="r-detail">EAN: ${p.ean||'N/A'} ${p.local?'• 📍 '+p.local:''}</div>
+                                </div>
                             </div>
                             <span class="r-source source-local">LOCAL</span>
                         </div>
@@ -1063,31 +1203,30 @@
                 `).join('');
             }
 
-            // Loading online
-            html += '<div class="result-section-title">🌐 Buscando Online...</div>';
-            html += '<div class="result-item"><div class="r-detail">⏳ Consultando banco de dados online...</div></div>';
+            html += '<div class="result-section-title">🌐 BUSCANDO ONLINE...</div>';
+            html += '<div class="result-item"><div class="r-detail">⏳ Consultando...</div></div>';
+            dropdown.innerHTML = html;
+            dropdown.classList.add('show');
 
-            resultsDiv.innerHTML = html;
-            resultsDiv.classList.add('show');
+            window['__local_' + prefix] = locais;
 
-            // Guardar locais para seleção
-            window['__localResults_' + prefix] = locais;
-
-            // 2. Buscar online
+            // Online
             const online = await buscarOnline(input.value.trim());
-            window['__onlineResults_' + prefix] = online;
+            window['__online_' + prefix] = online;
 
-            // Rebuild com tudo
+            // Rebuild
             html = '';
-
             if (locais.length > 0) {
-                html += '<div class="result-section-title">📦 Produtos Cadastrados (' + locais.length + ')</div>';
-                html += locais.slice(0, 8).map((p, i) => `
-                    <div class="result-item" onclick="selecionarResultado('${prefix}', 'local', ${i})">
+                html += '<div class="result-section-title">📦 CADASTRADOS (' + locais.length + ')</div>';
+                html += locais.slice(0, 6).map((p, i) => `
+                    <div class="result-item" onclick="selecionarResult('${prefix}','local',${i})">
                         <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <div>
-                                <div class="r-name">${p.marca ? p.marca + ' - ' : ''}${p.nome}</div>
-                                <div class="r-detail">EAN: ${p.ean || 'N/A'} ${p.secao ? '• ' + p.secao : ''} ${p.local ? '• 📍 ' + p.local : ''}</div>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                ${p.imagem ? '<img src="'+p.imagem+'" style="width:32px;height:32px;border-radius:4px;object-fit:cover;">' : '<span style="font-size:1.2rem;">📦</span>'}
+                                <div>
+                                    <div class="r-name">${p.marca ? p.marca+' - ':''}${p.nome}</div>
+                                    <div class="r-detail">EAN: ${p.ean||'N/A'} ${p.local?'• 📍 '+p.local:''}</div>
+                                </div>
                             </div>
                             <span class="r-source source-local">LOCAL</span>
                         </div>
@@ -1096,13 +1235,16 @@
             }
 
             if (online.length > 0) {
-                html += '<div class="result-section-title">🌐 Resultados Online (' + online.length + ')</div>';
+                html += '<div class="result-section-title">🌐 ONLINE (' + online.length + ')</div>';
                 html += online.slice(0, 8).map((p, i) => `
-                    <div class="result-item" onclick="selecionarResultado('${prefix}', 'online', ${i})">
+                    <div class="result-item" onclick="selecionarResult('${prefix}','online',${i})">
                         <div style="display:flex;justify-content:space-between;align-items:center;">
-                            <div>
-                                <div class="r-name">${p.marca ? p.marca + ' - ' : ''}${p.nome}</div>
-                                <div class="r-detail">EAN: ${p.ean || 'N/A'} ${p.secao ? '• ' + p.secao : ''}</div>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                ${p.imagem ? '<img src="'+p.imagem+'" style="width:32px;height:32px;border-radius:4px;object-fit:cover;">' : '<span style="font-size:1.2rem;">🌐</span>'}
+                                <div>
+                                    <div class="r-name">${p.marca ? p.marca+' - ':''}${p.nome}</div>
+                                    <div class="r-detail">EAN: ${p.ean||'N/A'}</div>
+                                </div>
                             </div>
                             <span class="r-source source-online">ONLINE</span>
                         </div>
@@ -1111,42 +1253,31 @@
             }
 
             if (locais.length === 0 && online.length === 0) {
-                html = `<div class="result-item">
-                    <div class="r-detail">Nenhum resultado encontrado.</div>
-                    <a href="#" onclick="usarManual('${prefix}','${input.value.trim()}');return false;" style="color:var(--primary);font-weight:600;font-size:0.8rem;">+ Usar "${input.value.trim()}" manualmente</a>
-                </div>`;
+                html = '<div class="result-item"><div class="r-detail">Nenhum resultado.</div><a href="#" onclick="usarManual(\''+prefix+'\',\''+input.value.trim()+'\');return false;" style="color:var(--primary);font-weight:600;font-size:0.78rem;">+ Usar manualmente</a></div>';
             }
 
-            resultsDiv.innerHTML = html;
+            dropdown.innerHTML = html;
         }, 350);
     }
 
-    function selecionarResultado(prefix, source, index) {
-        let p;
-        if (source === 'local') {
-            p = window['__localResults_' + prefix]?.[index];
-        } else {
-            p = window['__onlineResults_' + prefix]?.[index];
-        }
+    function selecionarResult(prefix, source, idx) {
+        const p = source === 'local' ? window['__local_'+prefix]?.[idx] : window['__online_'+prefix]?.[idx];
         if (!p) return;
-
-        const nomeCompleto = (p.marca ? p.marca + ' - ' : '') + p.nome;
+        const nome = (p.marca ? p.marca + ' - ' : '') + p.nome;
 
         if (prefix === 'falta') {
-            document.getElementById('falta-produto').value = nomeCompleto;
+            document.getElementById('falta-produto').value = nome;
             document.getElementById('falta-ean').value = p.ean || '';
-            document.getElementById('falta-secao').value = p.secao || '';
             document.getElementById('falta-form-card').style.display = 'block';
             document.getElementById('falta-form-card').scrollIntoView({ behavior: 'smooth' });
         } else if (prefix === 'venc') {
-            document.getElementById('venc-produto').value = nomeCompleto;
+            document.getElementById('venc-produto').value = nome;
             document.getElementById('venc-ean').value = p.ean || '';
-            document.getElementById('venc-secao').value = p.secao || '';
             if (p.local) document.getElementById('venc-local').value = p.local;
             document.getElementById('venc-form-card').style.display = 'block';
             document.getElementById('venc-form-card').scrollIntoView({ behavior: 'smooth' });
         } else if (prefix === 'troca') {
-            document.getElementById('troca-produto').value = nomeCompleto;
+            document.getElementById('troca-produto').value = nome;
             document.getElementById('troca-ean').value = p.ean || '';
             if (p.local) document.getElementById('troca-local').value = p.local;
             document.getElementById('troca-form-card').style.display = 'block';
@@ -1155,83 +1286,72 @@
 
         document.getElementById(prefix + '-results').classList.remove('show');
         document.getElementById(prefix + '-busca').value = '';
-        toast(source === 'local' ? 'Produto local selecionado!' : 'Produto online selecionado!', 'info');
+        toast(source === 'local' ? '📦 Produto local!' : '🌐 Produto online!', 'info');
     }
 
     function usarManual(prefix, query) {
-        if (prefix === 'falta') {
-            document.getElementById('falta-produto').value = query;
-            document.getElementById('falta-form-card').style.display = 'block';
-        } else if (prefix === 'venc') {
-            document.getElementById('venc-produto').value = query;
-            document.getElementById('venc-form-card').style.display = 'block';
-        } else if (prefix === 'troca') {
-            document.getElementById('troca-produto').value = query;
-            document.getElementById('troca-form-card').style.display = 'block';
+        const fieldMap = { falta: 'falta-produto', venc: 'venc-produto', troca: 'troca-produto' };
+        const cardMap = { falta: 'falta-form-card', venc: 'venc-form-card', troca: 'troca-form-card' };
+        if (fieldMap[prefix]) document.getElementById(fieldMap[prefix]).value = query;
+        if (cardMap[prefix]) {
+            document.getElementById(cardMap[prefix]).style.display = 'block';
+            document.getElementById(cardMap[prefix]).scrollIntoView({ behavior: 'smooth' });
         }
         document.getElementById(prefix + '-results').classList.remove('show');
         document.getElementById(prefix + '-busca').value = '';
     }
 
-    // Busca para cadastro (só online)
+    // Busca para CADASTRO (só online)
     async function buscarParaCadastro() {
         const input = document.getElementById('cad-busca-online');
-        const resultsDiv = document.getElementById('cad-busca-results');
+        const dropdown = document.getElementById('cad-busca-results');
         const query = input.value.trim();
 
-        if (query.length < 3) {
-            resultsDiv.classList.remove('show');
-            return;
-        }
+        if (query.length < 3) { dropdown.classList.remove('show'); return; }
 
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(async () => {
-            resultsDiv.innerHTML = '<div class="result-item"><div class="r-detail">⏳ Buscando online...</div></div>';
-            resultsDiv.classList.add('show');
+            dropdown.innerHTML = '<div class="result-item"><div class="r-detail">⏳ Buscando online...</div></div>';
+            dropdown.classList.add('show');
 
-            const resultados = await buscarOnline(query);
-            window['__cadResults'] = resultados;
+            const results = await buscarOnline(query);
+            window['__cadResults'] = results;
 
-            if (resultados.length === 0) {
-                resultsDiv.innerHTML = `<div class="result-item">
-                    <div class="r-detail">Nenhum resultado. Cadastre manualmente abaixo.</div>
-                </div>`;
-                if (/^\d+$/.test(query)) {
-                    document.getElementById('cad-ean').value = query;
-                } else {
-                    document.getElementById('cad-nome').value = query;
-                }
+            if (results.length === 0) {
+                dropdown.innerHTML = '<div class="result-item"><div class="r-detail">Nenhum resultado. Cadastre manualmente.</div></div>';
+                if (/^\d+$/.test(query)) document.getElementById('cad-ean').value = query;
+                else document.getElementById('cad-nome').value = query;
                 return;
             }
 
-            resultsDiv.innerHTML = resultados.map((p, i) => `
+            dropdown.innerHTML = results.map((p, i) => `
                 <div class="result-item" onclick="selecionarParaCadastro(${i})">
-                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        ${p.imagem ? '<img src="'+p.imagem+'" style="width:40px;height:40px;border-radius:6px;object-fit:cover;">' : '<span style="font-size:1.5rem;">🌐</span>'}
                         <div>
-                            <div class="r-name">${p.marca ? p.marca + ' - ' : ''}${p.nome}</div>
-                            <div class="r-detail">EAN: ${p.ean || 'N/A'} ${p.secao ? '• ' + p.secao : ''}</div>
+                            <div class="r-name">${p.marca ? p.marca+' - ':''}${p.nome}</div>
+                            <div class="r-detail">EAN: ${p.ean||'N/A'}</div>
                         </div>
-                        <span class="r-source source-online">ONLINE</span>
                     </div>
                 </div>
             `).join('');
         }, 400);
     }
 
-    function selecionarParaCadastro(index) {
-        const p = window['__cadResults']?.[index];
+    function selecionarParaCadastro(idx) {
+        const p = window['__cadResults']?.[idx];
         if (!p) return;
-        document.getElementById('cad-nome').value = p.nome;
+        document.getElementById('cad-nome').value = p.nome || '';
         document.getElementById('cad-ean').value = p.ean || '';
         document.getElementById('cad-marca').value = p.marca || '';
-        if (p.secao) document.getElementById('cad-secao').value = p.secao;
+        document.getElementById('cad-imagem').value = p.imagem || '';
         document.getElementById('cad-busca-results').classList.remove('show');
         document.getElementById('cad-busca-online').value = '';
         toast('Dados preenchidos! Confira e salve.', 'info');
     }
 
     // ============================================
-    // SCANNER - CÓDIGO DE BARRAS
+    // SCANNER
     // ============================================
     async function abrirScanner(target) {
         scannerTarget = target;
@@ -1248,21 +1368,20 @@
 
             if ('BarcodeDetector' in window) {
                 const detector = new BarcodeDetector({
-                    formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128', 'code_39', 'qr_code']
+                    formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128', 'code_39']
                 });
                 const scan = setInterval(async () => {
                     try {
-                        const barcodes = await detector.detect(video);
-                        if (barcodes.length > 0) {
+                        const codes = await detector.detect(video);
+                        if (codes.length > 0) {
                             clearInterval(scan);
-                            const code = barcodes[0].rawValue;
-                            processarCodigoScanner(code);
+                            processarCodigo(codes[0].rawValue);
                         }
                     } catch (e) {}
                 }, 400);
                 window.__scanInterval = scan;
             } else {
-                toast('Câmera aberta! Use o campo abaixo para digitar o código.', 'warning');
+                toast('Digite o código no campo abaixo', 'warning');
             }
         } catch (err) {
             toast('Erro câmera: ' + err.message, 'error');
@@ -1279,13 +1398,12 @@
     function usarCodigoManual() {
         const code = document.getElementById('scanner-manual-input').value.trim();
         if (!code) { toast('Digite um código!', 'error'); return; }
-        processarCodigoScanner(code);
+        processarCodigo(code);
     }
 
-    function processarCodigoScanner(code) {
+    function processarCodigo(code) {
         fecharScanner();
-        toast('Código: ' + code, 'success');
-
+        toast('📷 Código: ' + code, 'success');
         if (scannerTarget === 'cadastro') {
             document.getElementById('cad-busca-online').value = code;
             buscarParaCadastro();
@@ -1296,36 +1414,31 @@
     }
 
     // ============================================
-    // CADASTRO DE PRODUTOS
+    // CADASTRO DE PRODUTOS (sem seção, com imagem)
     // ============================================
     function salvarProduto() {
         const nome = document.getElementById('cad-nome').value.trim();
-        if (!nome) { toast('Informe o nome do produto!', 'error'); return; }
+        if (!nome) { toast('Informe o nome!', 'error'); return; }
 
         const editId = document.getElementById('cad-edit-id').value;
-
         const produto = {
             id: editId ? parseInt(editId) : Date.now(),
             nome,
             ean: document.getElementById('cad-ean').value.trim(),
             marca: document.getElementById('cad-marca').value.trim(),
-            secao: document.getElementById('cad-secao').value,
             preco: parseFloat(document.getElementById('cad-preco').value) || 0,
             local: document.getElementById('cad-local').value.trim(),
+            imagem: document.getElementById('cad-imagem').value.trim(),
             criadoEm: new Date().toISOString()
         };
 
         if (editId) {
             const idx = produtos.findIndex(p => p.id === parseInt(editId));
-            if (idx !== -1) {
-                produto.criadoEm = produtos[idx].criadoEm;
-                produtos[idx] = produto;
-            }
+            if (idx !== -1) { produto.criadoEm = produtos[idx].criadoEm; produtos[idx] = produto; }
             toast('Produto atualizado!');
         } else {
-            // Verificar duplicata por EAN
             if (produto.ean && produtos.some(p => p.ean === produto.ean)) {
-                if (!confirm('Já existe um produto com este EAN. Cadastrar mesmo assim?')) return;
+                if (!confirm('Já existe produto com este EAN. Continuar?')) return;
             }
             produtos.unshift(produto);
             toast('Produto cadastrado!');
@@ -1337,19 +1450,13 @@
     }
 
     function limparFormCadastro() {
-        document.getElementById('cad-nome').value = '';
-        document.getElementById('cad-ean').value = '';
-        document.getElementById('cad-marca').value = '';
-        document.getElementById('cad-secao').value = '';
-        document.getElementById('cad-preco').value = '';
-        document.getElementById('cad-local').value = '';
+        ['cad-nome','cad-ean','cad-marca','cad-preco','cad-local','cad-imagem'].forEach(id => document.getElementById(id).value = '');
         document.getElementById('cad-edit-id').value = '';
         document.getElementById('cad-cancel-edit').style.display = 'none';
+        document.getElementById('cad-form-title').textContent = '➕ Cadastrar Produto';
     }
 
-    function cancelarEdicaoProduto() {
-        limparFormCadastro();
-    }
+    function cancelarEdicaoProduto() { limparFormCadastro(); }
 
     function editarProduto(id) {
         const p = produtos.find(x => x.id === id);
@@ -1358,16 +1465,16 @@
         document.getElementById('cad-nome').value = p.nome || '';
         document.getElementById('cad-ean').value = p.ean || '';
         document.getElementById('cad-marca').value = p.marca || '';
-        document.getElementById('cad-secao').value = p.secao || '';
         document.getElementById('cad-preco').value = p.preco || '';
         document.getElementById('cad-local').value = p.local || '';
+        document.getElementById('cad-imagem').value = p.imagem || '';
         document.getElementById('cad-cancel-edit').style.display = 'block';
-        document.getElementById('cad-form').scrollIntoView({ behavior: 'smooth' });
-        toast('Editando: ' + p.nome, 'info');
+        document.getElementById('cad-form-title').textContent = '✏️ Editando Produto';
+        document.getElementById('cad-form-card').scrollIntoView({ behavior: 'smooth' });
     }
 
     function removerProduto(id) {
-        if (!confirm('Remover este produto?')) return;
+        if (!confirm('Remover produto?')) return;
         produtos = produtos.filter(p => p.id !== id);
         salvarESincronizar();
         renderProdutos();
@@ -1376,15 +1483,12 @@
 
     function renderProdutos() {
         const filtro = (document.getElementById('cad-filtro')?.value || '').toLowerCase();
-        const filtroSecao = document.getElementById('cad-filtro-secao')?.value || '';
-
         let lista = produtos;
         if (filtro) lista = lista.filter(p => `${p.nome} ${p.ean} ${p.marca}`.toLowerCase().includes(filtro));
-        if (filtroSecao) lista = lista.filter(p => p.secao === filtroSecao);
 
         document.getElementById('cad-total').textContent = produtos.length;
-
         const div = document.getElementById('cad-lista');
+
         if (lista.length === 0) {
             div.innerHTML = '<div class="empty-state"><div class="icon">📦</div><p>Nenhum produto cadastrado</p></div>';
             return;
@@ -1392,23 +1496,24 @@
 
         div.innerHTML = lista.map(p => `
             <div class="produto-card">
-                <div class="p-info">
+                <div class="produto-img">
+                    ${p.imagem ? '<img src="'+p.imagem+'" alt="'+p.nome+'" onerror="this.parentElement.innerHTML=\'📦\'">' : '📦'}
+                </div>
+                <div class="produto-info">
                     <div class="p-name">${p.marca ? p.marca + ' - ' : ''}${p.nome}</div>
                     <div class="p-details">
-                        ${p.ean ? 'EAN: ' + p.ean + ' • ' : ''}
-                        ${p.secao ? '<span class="badge badge-info">' + p.secao + '</span> ' : ''}
-                        ${p.preco ? 'R$ ' + p.preco.toFixed(2) + ' • ' : ''}
-                        ${p.local ? '📍 ' + p.local : ''}
+                        ${p.ean ? '<span class="badge badge-gray">'+p.ean+'</span>' : ''}
+                        ${p.preco ? '<span class="badge badge-success">R$ '+p.preco.toFixed(2)+'</span>' : ''}
+                        ${p.local ? '<span class="location-tag">📍 '+p.local+'</span>' : ''}
                     </div>
                 </div>
-                <div class="action-btns">
-                    <button class="btn btn-sm btn-warning" onclick="editarProduto(${p.id})">✏️</button>
-                    <button class="btn btn-sm btn-danger" onclick="removerProduto(${p.id})">🗑️</button>
+                <div class="action-btns" style="flex-direction:column;">
+                    <button class="btn btn-xs btn-warning" onclick="editarProduto(${p.id})">✏️</button>
+                    <button class="btn btn-xs btn-danger" onclick="removerProduto(${p.id})">🗑️</button>
                 </div>
             </div>
         `).join('');
     }
-
     // ============================================
     // FALTAS
     // ============================================
@@ -1416,7 +1521,7 @@
         const produto = document.getElementById('falta-produto').value.trim();
         if (!produto) { toast('Informe o produto!', 'error'); return; }
 
-        const falta = {
+        faltas.unshift({
             id: Date.now(),
             produto,
             ean: document.getElementById('falta-ean').value.trim(),
@@ -1425,9 +1530,7 @@
             sugestao: document.getElementById('falta-sugestao').value.trim() || 'Não informado',
             obs: document.getElementById('falta-obs').value.trim(),
             data: new Date().toISOString()
-        };
-
-        faltas.unshift(falta);
+        });
         salvarESincronizar();
         renderFaltas();
         limparFormFalta();
@@ -1445,69 +1548,39 @@
     }
 
     function removerFalta(id) {
-        if (!confirm('Remover esta falta?')) return;
+        if (!confirm('Remover falta?')) return;
         faltas = faltas.filter(f => f.id !== id);
-        salvarESincronizar();
-        renderFaltas();
-        toast('Falta removida.');
+        salvarESincronizar(); renderFaltas(); toast('Removido.');
     }
 
     function limparFaltas() {
         if (!confirm('Limpar TODAS as faltas?')) return;
-        faltas = [];
-        salvarESincronizar();
-        renderFaltas();
-        toast('Faltas limpas.');
+        faltas = []; salvarESincronizar(); renderFaltas(); toast('Limpo.');
     }
 
     function renderFaltas() {
-        const filtroSecao = document.getElementById('filtro-falta-secao')?.value || '';
+        const filtro = document.getElementById('filtro-falta-secao')?.value || '';
         let lista = faltas;
-        if (filtroSecao) lista = lista.filter(f => f.secao === filtroSecao);
+        if (filtro) lista = lista.filter(f => f.secao === filtro);
 
         document.getElementById('faltas-total').textContent = faltas.length;
         const div = document.getElementById('faltas-lista');
 
         if (lista.length === 0) {
-            div.innerHTML = '<div class="empty-state"><div class="icon">✅</div><p>Nenhuma falta registrada</p></div>';
+            div.innerHTML = '<div class="empty-state"><div class="icon">✅</div><p>Nenhuma falta</p></div>';
             return;
         }
 
-        div.innerHTML = `
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Produto</th>
-                            <th>Seção</th>
-                            <th>Estoque</th>
-                            <th>Sugestão</th>
-                            <th>Data</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${lista.map(f => `
-                            <tr>
-                                <td>
-                                    <strong>${f.produto}</strong>
-                                    ${f.ean ? '<br><span style="font-size:0.68rem;color:var(--gray-400);">EAN: ' + f.ean + '</span>' : ''}
-                                    ${f.obs ? '<br><span style="font-size:0.68rem;color:var(--gray-500);">📝 ' + f.obs + '</span>' : ''}
-                                </td>
-                                <td>${f.secao ? '<span class="badge badge-info">' + f.secao + '</span>' : '-'}</td>
-                                <td><span class="badge badge-gray">${f.estoque || 'Não informado'}</span></td>
-                                <td><span class="badge badge-gray">${f.sugestao || 'Não informado'}</span></td>
-                                <td style="font-size:0.72rem;">${formatarData(f.data)}</td>
-                                <td>
-                                    <div class="action-btns">
-                                        <button class="btn btn-sm btn-danger" onclick="removerFalta(${f.id})" title="Remover">🗑️</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            </div>`;
+        div.innerHTML = `<div class="table-container"><table>
+            <thead><tr><th>Produto</th><th>Seção</th><th>Estoque</th><th>Sugestão</th><th>Data</th><th>Ação</th></tr></thead>
+            <tbody>${lista.map(f => `<tr>
+                <td><strong>${f.produto}</strong>${f.ean ? '<br><span style="font-size:0.65rem;color:var(--gray-400);">'+f.ean+'</span>' : ''}${f.obs ? '<br><span style="font-size:0.65rem;color:var(--gray-500);">📝 '+f.obs+'</span>' : ''}</td>
+                <td>${f.secao ? '<span class="badge badge-info">'+f.secao+'</span>' : '-'}</td>
+                <td><span class="badge badge-gray">${f.estoque||'Não informado'}</span></td>
+                <td><span class="badge badge-gray">${f.sugestao||'Não informado'}</span></td>
+                <td style="font-size:0.7rem;">${fmtData(f.data)}</td>
+                <td><button class="btn btn-xs btn-danger" onclick="removerFalta(${f.id})">🗑️</button></td>
+            </tr>`).join('')}</tbody></table></div>`;
     }
 
     // ============================================
@@ -1520,7 +1593,6 @@
         if (!dataVal) { toast('Informe a validade!', 'error'); return; }
 
         const editId = document.getElementById('venc-edit-id').value;
-
         const venc = {
             id: editId ? parseInt(editId) : Date.now(),
             produto,
@@ -1540,23 +1612,18 @@
                 venc.criadoEm = vencimentos[idx].criadoEm || venc.criadoEm;
                 vencimentos[idx] = venc;
             }
-            toast('Vencimento atualizado!');
+            toast('Atualizado!');
         } else {
             vencimentos.unshift(venc);
             toast('Vencimento registrado!');
         }
 
-        salvarESincronizar();
-        renderVencimentos();
-        limparFormVenc();
+        salvarESincronizar(); renderVencimentos(); limparFormVenc();
     }
 
     function limparFormVenc() {
-        document.getElementById('venc-produto').value = '';
-        document.getElementById('venc-ean').value = '';
+        ['venc-produto','venc-ean','venc-data','venc-local'].forEach(id => document.getElementById(id).value = '');
         document.getElementById('venc-qtd').value = '1';
-        document.getElementById('venc-data').value = '';
-        document.getElementById('venc-local').value = '';
         document.getElementById('venc-secao').value = '';
         document.getElementById('venc-edit-id').value = '';
         document.getElementById('venc-form-title').textContent = '➕ Registrar Vencimento';
@@ -1586,37 +1653,29 @@
         const v = vencimentos.find(x => x.id === id);
         if (!v) return;
         v.acaoFeita = !v.acaoFeita;
-        salvarESincronizar();
-        renderVencimentos();
-        toast(v.acaoFeita ? '✅ Marcado como ação feita!' : '↩️ Ação desmarcada.', 'info');
+        salvarESincronizar(); renderVencimentos();
+        toast(v.acaoFeita ? '✅ Ação feita!' : '↩️ Desmarcado.', 'info');
     }
 
     function removerVencimento(id) {
-        if (!confirm('Remover este vencimento?')) return;
+        if (!confirm('Remover?')) return;
         vencimentos = vencimentos.filter(v => v.id !== id);
-        salvarESincronizar();
-        renderVencimentos();
-        toast('Vencimento removido.');
+        salvarESincronizar(); renderVencimentos(); toast('Removido.');
     }
 
     function limparVencimentos() {
-        if (!confirm('Limpar TODOS os vencimentos?')) return;
-        vencimentos = [];
-        salvarESincronizar();
-        renderVencimentos();
-        toast('Vencimentos limpos.');
+        if (!confirm('Limpar TODOS?')) return;
+        vencimentos = []; salvarESincronizar(); renderVencimentos(); toast('Limpo.');
     }
 
-    // Enviar para Troca (Modal)
+    // Modal Enviar para Troca
     function abrirModalEnviarTroca(id) {
         const v = vencimentos.find(x => x.id === id);
         if (!v) return;
         document.getElementById('modal-troca-info').innerHTML = `
             <strong>${v.produto}</strong><br>
-            Qtd disponível: <strong>${v.qtd || 1}</strong> | 
-            Validade: <strong>${formatarDataSimples(v.data)}</strong>
-            ${v.local ? ' | 📍 ' + v.local : ''}
-        `;
+            Qtd: <strong>${v.qtd||1}</strong> | Val: <strong>${fmtDataSimples(v.data)}</strong>
+            ${v.local ? ' | 📍 '+v.local : ''}`;
         document.getElementById('modal-troca-qtd').value = v.qtd || 1;
         document.getElementById('modal-troca-qtd').max = v.qtd || 1;
         document.getElementById('modal-troca-local').value = v.local || '';
@@ -1628,31 +1687,23 @@
         const vencId = parseInt(document.getElementById('modal-troca-venc-id').value);
         const qtd = parseInt(document.getElementById('modal-troca-qtd').value) || 0;
         const local = document.getElementById('modal-troca-local').value.trim();
-
         if (qtd <= 0) { toast('Quantidade inválida!', 'error'); return; }
 
         const v = vencimentos.find(x => x.id === vencId);
-        if (!v) { toast('Vencimento não encontrado!', 'error'); return; }
+        if (!v) return;
+        if (qtd > (v.qtd || 1)) { toast('Quantidade maior que disponível!', 'error'); return; }
 
-        if (qtd > (v.qtd || 1)) {
-            toast('Quantidade maior que o disponível!', 'error');
-            return;
-        }
-
-        // Criar troca
-        const troca = {
+        trocas.unshift({
             id: Date.now(),
             produto: v.produto,
             ean: v.ean || '',
-            qtd: qtd,
+            qtd,
             motivo: 'Vencido',
             local: local || v.local || '',
-            obs: 'Enviado de vencimento (Val: ' + formatarDataSimples(v.data) + ')',
+            obs: 'Via vencimento (Val: ' + fmtDataSimples(v.data) + ')',
             data: new Date().toISOString()
-        };
-        trocas.unshift(troca);
+        });
 
-        // Atualizar ou remover vencimento
         if (qtd >= (v.qtd || 1)) {
             vencimentos = vencimentos.filter(x => x.id !== vencId);
         } else {
@@ -1662,42 +1713,29 @@
 
         salvarESincronizar();
         fecharModal('modal-enviar-troca');
-        renderVencimentos();
-        renderTrocas();
-        toast('✅ ' + qtd + 'x ' + v.produto + ' enviado para trocas!');
+        renderVencimentos(); renderTrocas();
+        toast('✅ ' + qtd + 'x enviado para trocas!');
     }
 
     function getStatusVenc(dataStr) {
-        const hoje = new Date();
-        hoje.setHours(0, 0, 0, 0);
-        const data = new Date(dataStr + 'T00:00:00');
-        const diff = Math.ceil((data - hoje) / (1000 * 60 * 60 * 24));
-
-        if (diff < 0) return { label: 'Vencido (' + Math.abs(diff) + 'd)', badge: 'badge-danger', dias: diff, key: 'vencido' };
-        if (diff === 0) return { label: 'HOJE!', badge: 'badge-danger', dias: 0, key: 'critico' };
-        if (diff <= 3) return { label: diff + ' dia' + (diff > 1 ? 's' : ''), badge: 'badge-danger', dias: diff, key: 'critico' };
-        if (diff <= 7) return { label: diff + ' dias', badge: 'badge-warning', dias: diff, key: 'proximo' };
-        if (diff <= 30) return { label: diff + ' dias', badge: 'badge-success', dias: diff, key: 'ok' };
-        return { label: diff + ' dias', badge: 'badge-gray', dias: diff, key: 'ok' };
+        const hoje = new Date(); hoje.setHours(0,0,0,0);
+        const d = new Date(dataStr + 'T00:00:00');
+        const diff = Math.ceil((d - hoje) / 86400000);
+        if (diff < 0) return { label: 'Vencido ('+Math.abs(diff)+'d)', badge: 'badge-danger', key: 'vencido', dias: diff };
+        if (diff === 0) return { label: 'HOJE!', badge: 'badge-danger', key: 'critico', dias: 0 };
+        if (diff <= 3) return { label: diff+'d', badge: 'badge-danger', key: 'critico', dias: diff };
+        if (diff <= 7) return { label: diff+'d', badge: 'badge-warning', key: 'proximo', dias: diff };
+        if (diff <= 30) return { label: diff+'d', badge: 'badge-success', key: 'ok', dias: diff };
+        return { label: diff+'d', badge: 'badge-gray', key: 'ok', dias: diff };
     }
 
     function renderVencimentos() {
-        const filtroStatus = document.getElementById('filtro-venc-status')?.value || '';
-        const filtroSecao = document.getElementById('filtro-venc-secao')?.value || '';
-
+        const fStatus = document.getElementById('filtro-venc-status')?.value || '';
+        const fSecao = document.getElementById('filtro-venc-secao')?.value || '';
         let lista = [...vencimentos];
-        if (filtroSecao) lista = lista.filter(v => v.secao === filtroSecao);
-
-        if (filtroStatus === 'feito') {
-            lista = lista.filter(v => v.acaoFeita);
-        } else if (filtroStatus) {
-            lista = lista.filter(v => {
-                if (v.acaoFeita) return false;
-                return getStatusVenc(v.data).key === filtroStatus;
-            });
-        }
-
-        // Ordenar: vencidos primeiro, depois por data
+        if (fSecao) lista = lista.filter(v => v.secao === fSecao);
+        if (fStatus === 'feito') lista = lista.filter(v => v.acaoFeita);
+        else if (fStatus) lista = lista.filter(v => !v.acaoFeita && getStatusVenc(v.data).key === fStatus);
         lista.sort((a, b) => new Date(a.data) - new Date(b.data));
 
         document.getElementById('venc-total').textContent = vencimentos.length;
@@ -1708,51 +1746,25 @@
             return;
         }
 
-        div.innerHTML = `
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Produto</th>
-                            <th>Qtd</th>
-                            <th>Validade</th>
-                            <th>Status</th>
-                            <th>Local</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${lista.map(v => {
-                            const s = getStatusVenc(v.data);
-                            const isDone = v.acaoFeita;
-                            return `
-                            <tr class="${isDone ? 'row-done' : ''}">
-                                <td>
-                                    <strong>${v.produto}</strong>
-                                    ${v.ean ? '<br><span style="font-size:0.67rem;color:var(--gray-400);">EAN: ' + v.ean + '</span>' : ''}
-                                    ${v.secao ? '<br><span class="badge badge-purple" style="font-size:0.62rem;">' + v.secao + '</span>' : ''}
-                                </td>
-                                <td><strong>${v.qtd || 1}</strong></td>
-                                <td style="font-size:0.78rem;font-weight:600;">${formatarDataSimples(v.data)}</td>
-                                <td>
-                                    <span class="badge ${isDone ? 'badge-gray' : s.badge}">${isDone ? '✅ Feito' : s.label}</span>
-                                </td>
-                                <td>${v.local ? '<span class="location-tag">📍 ' + v.local + '</span>' : '<span style="color:var(--gray-400);font-size:0.72rem;">-</span>'}</td>
-                                <td>
-                                    <div class="action-btns">
-                                        <button class="btn btn-sm ${isDone ? 'btn-outline' : 'btn-success'}" onclick="toggleAcaoVenc(${v.id})" title="${isDone ? 'Desmarcar' : 'Ação feita'}">
-                                            ${isDone ? '↩️' : '✅'}
-                                        </button>
-                                        <button class="btn btn-sm btn-warning" onclick="editarVencimento(${v.id})" title="Editar">✏️</button>
-                                        <button class="btn btn-sm btn-info" onclick="abrirModalEnviarTroca(${v.id})" title="Enviar p/ Troca">🔄</button>
-                                        <button class="btn btn-sm btn-danger" onclick="removerVencimento(${v.id})" title="Remover">🗑️</button>
-                                    </div>
-                                </td>
-                            </tr>`;
-                        }).join('')}
-                    </tbody>
-                </table>
-            </div>`;
+        div.innerHTML = `<div class="table-container"><table>
+            <thead><tr><th>Produto</th><th>Qtd</th><th>Validade</th><th>Status</th><th>Local</th><th>Ações</th></tr></thead>
+            <tbody>${lista.map(v => {
+                const s = getStatusVenc(v.data);
+                const done = v.acaoFeita;
+                return `<tr class="${done?'row-done':''}">
+                    <td><strong>${v.produto}</strong>${v.ean?'<br><span style="font-size:0.64rem;color:var(--gray-400);">'+v.ean+'</span>':''}${v.secao?'<br><span class="badge badge-purple" style="font-size:0.6rem;">'+v.secao+'</span>':''}</td>
+                    <td><strong>${v.qtd||1}</strong></td>
+                    <td style="font-size:0.76rem;font-weight:600;">${fmtDataSimples(v.data)}</td>
+                    <td><span class="badge ${done?'badge-gray':s.badge}">${done?'✅ Feito':s.label}</span></td>
+                    <td>${v.local?'<span class="location-tag">📍 '+v.local+'</span>':'<span style="color:var(--gray-300);">-</span>'}</td>
+                    <td><div class="action-btns">
+                        <button class="btn btn-xs ${done?'btn-outline':'btn-success'}" onclick="toggleAcaoVenc(${v.id})" title="${done?'Desmarcar':'Feito'}">${done?'↩️':'✅'}</button>
+                        <button class="btn btn-xs btn-warning" onclick="editarVencimento(${v.id})">✏️</button>
+                        <button class="btn btn-xs btn-info" onclick="abrirModalEnviarTroca(${v.id})">🔄</button>
+                        <button class="btn btn-xs btn-danger" onclick="removerVencimento(${v.id})">🗑️</button>
+                    </div></td>
+                </tr>`;
+            }).join('')}</tbody></table></div>`;
     }
 
     // ============================================
@@ -1763,7 +1775,6 @@
         if (!produto) { toast('Informe o produto!', 'error'); return; }
 
         const editId = document.getElementById('troca-edit-id').value;
-
         const troca = {
             id: editId ? parseInt(editId) : Date.now(),
             produto,
@@ -1777,28 +1788,19 @@
 
         if (editId) {
             const idx = trocas.findIndex(t => t.id === parseInt(editId));
-            if (idx !== -1) {
-                troca.data = trocas[idx].data;
-                trocas[idx] = troca;
-            }
+            if (idx !== -1) { troca.data = trocas[idx].data; trocas[idx] = troca; }
             toast('Troca atualizada!');
         } else {
             trocas.unshift(troca);
             toast('Troca registrada!');
         }
-
-        salvarESincronizar();
-        renderTrocas();
-        limparFormTroca();
+        salvarESincronizar(); renderTrocas(); limparFormTroca();
     }
 
     function limparFormTroca() {
-        document.getElementById('troca-produto').value = '';
-        document.getElementById('troca-ean').value = '';
+        ['troca-produto','troca-ean','troca-local','troca-obs'].forEach(id => document.getElementById(id).value = '');
         document.getElementById('troca-qtd').value = '1';
         document.getElementById('troca-motivo').value = '';
-        document.getElementById('troca-local').value = '';
-        document.getElementById('troca-obs').value = '';
         document.getElementById('troca-edit-id').value = '';
         document.getElementById('troca-form-title').textContent = '➕ Registrar Troca';
         document.getElementById('troca-cancel-edit').style.display = 'none';
@@ -1824,86 +1826,51 @@
     }
 
     function removerTroca(id) {
-        if (!confirm('Remover esta troca?')) return;
+        if (!confirm('Remover troca?')) return;
         trocas = trocas.filter(t => t.id !== id);
-        salvarESincronizar();
-        renderTrocas();
-        toast('Troca removida.');
+        salvarESincronizar(); renderTrocas(); toast('Removido.');
     }
 
     function limparTrocas() {
-        if (!confirm('Limpar TODAS as trocas?')) return;
-        trocas = [];
-        salvarESincronizar();
-        renderTrocas();
-        toast('Trocas limpas.');
+        if (!confirm('Limpar TODAS?')) return;
+        trocas = []; salvarESincronizar(); renderTrocas(); toast('Limpo.');
     }
 
     function renderTrocas() {
-        const filtroMotivo = document.getElementById('filtro-troca-motivo')?.value || '';
+        const filtro = document.getElementById('filtro-troca-motivo')?.value || '';
         let lista = trocas;
-        if (filtroMotivo) lista = lista.filter(t => t.motivo === filtroMotivo);
+        if (filtro) lista = lista.filter(t => t.motivo === filtro);
 
         document.getElementById('trocas-total').textContent = trocas.length;
         const div = document.getElementById('trocas-lista');
 
         if (lista.length === 0) {
-            div.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>Nenhuma troca registrada</p></div>';
+            div.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>Nenhuma troca</p></div>';
             return;
         }
 
-        div.innerHTML = `
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Produto</th>
-                            <th>Qtd</th>
-                            <th>Motivo</th>
-                            <th>Local</th>
-                            <th>Data</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${lista.map(t => {
-                            const motivoBadge = {
-                                'Vencido': 'badge-danger',
-                                'Avariado': 'badge-warning',
-                                'Defeito': 'badge-info',
-                                'Recall': 'badge-purple',
-                                'Outros': 'badge-gray'
-                            };
-                            return `
-                            <tr>
-                                <td>
-                                    <strong>${t.produto}</strong>
-                                    ${t.ean ? '<br><span style="font-size:0.67rem;color:var(--gray-400);">EAN: ' + t.ean + '</span>' : ''}
-                                    ${t.obs ? '<br><span style="font-size:0.67rem;color:var(--gray-500);">📝 ' + t.obs + '</span>' : ''}
-                                </td>
-                                <td><strong>${t.qtd || 1}</strong></td>
-                                <td><span class="badge ${motivoBadge[t.motivo] || 'badge-gray'}">${t.motivo || '-'}</span></td>
-                                <td>${t.local ? '<span class="location-tag">📍 ' + t.local + '</span>' : '<span style="color:var(--gray-400);font-size:0.72rem;">-</span>'}</td>
-                                <td style="font-size:0.72rem;">${formatarData(t.data)}</td>
-                                <td>
-                                    <div class="action-btns">
-                                        <button class="btn btn-sm btn-warning" onclick="editarTroca(${t.id})" title="Editar">✏️</button>
-                                        <button class="btn btn-sm btn-danger" onclick="removerTroca(${t.id})" title="Remover">🗑️</button>
-                                    </div>
-                                </td>
-                            </tr>`;
-                        }).join('')}
-                    </tbody>
-                </table>
-            </div>`;
+        const mBadge = { Vencido:'badge-danger', Avariado:'badge-warning', Defeito:'badge-info', Recall:'badge-purple', Outros:'badge-gray' };
+
+        div.innerHTML = `<div class="table-container"><table>
+            <thead><tr><th>Produto</th><th>Qtd</th><th>Motivo</th><th>Local</th><th>Data</th><th>Ações</th></tr></thead>
+            <tbody>${lista.map(t => `<tr>
+                <td><strong>${t.produto}</strong>${t.ean?'<br><span style="font-size:0.64rem;color:var(--gray-400);">'+t.ean+'</span>':''}${t.obs?'<br><span style="font-size:0.64rem;color:var(--gray-500);">📝 '+t.obs+'</span>':''}</td>
+                <td><strong>${t.qtd||1}</strong></td>
+                <td><span class="badge ${mBadge[t.motivo]||'badge-gray'}">${t.motivo||'-'}</span></td>
+                <td>${t.local?'<span class="location-tag">📍 '+t.local+'</span>':'<span style="color:var(--gray-300);">-</span>'}</td>
+                <td style="font-size:0.7rem;">${fmtData(t.data)}</td>
+                <td><div class="action-btns">
+                    <button class="btn btn-xs btn-warning" onclick="editarTroca(${t.id})">✏️</button>
+                    <button class="btn btn-xs btn-danger" onclick="removerTroca(${t.id})">🗑️</button>
+                </div></td>
+            </tr>`).join('')}</tbody></table></div>`;
     }
 
     // ============================================
-    // DASHBOARD
+    // DASHBOARD — Stats Clicáveis + Painel Rolante
     // ============================================
     function renderDashboard() {
         let vencidos = 0, criticos = 0, proximos = 0;
-
         vencimentos.forEach(v => {
             if (v.acaoFeita) return;
             const s = getStatusVenc(v.data);
@@ -1912,119 +1879,224 @@
             else if (s.key === 'proximo') proximos++;
         });
 
+        // Stats Clicáveis
         document.getElementById('dashboard-stats').innerHTML = `
-            <div class="stat-card purple">
+            <div class="stat-card purple" onclick="switchTab('cadastro')">
+                <div class="stat-icon">📦</div>
                 <div class="stat-number">${produtos.length}</div>
                 <div class="stat-label">Cadastrados</div>
+                <div class="stat-action">Toque para ver →</div>
             </div>
-            <div class="stat-card danger">
+            <div class="stat-card danger" onclick="switchTab('faltas')">
+                <div class="stat-icon">🚫</div>
                 <div class="stat-number">${faltas.length}</div>
                 <div class="stat-label">Faltas</div>
+                <div class="stat-action">Toque para ver →</div>
             </div>
-            <div class="stat-card warning">
+            <div class="stat-card warning" onclick="switchTab('vencimentos')">
+                <div class="stat-icon">📅</div>
                 <div class="stat-number">${vencimentos.length}</div>
                 <div class="stat-label">Vencimentos</div>
+                <div class="stat-action">Toque para ver →</div>
             </div>
-            <div class="stat-card info">
+            <div class="stat-card info" onclick="switchTab('trocas')">
+                <div class="stat-icon">🔄</div>
                 <div class="stat-number">${trocas.length}</div>
                 <div class="stat-label">Trocas</div>
+                <div class="stat-action">Toque para ver →</div>
             </div>
-            <div class="stat-card ${vencidos > 0 ? 'danger' : 'success'}">
+            <div class="stat-card ${vencidos > 0 ? 'danger' : 'success'}" onclick="irParaVencidos()">
+                <div class="stat-icon">${vencidos > 0 ? '⚠️' : '✅'}</div>
                 <div class="stat-number">${vencidos}</div>
                 <div class="stat-label">Vencidos</div>
+                <div class="stat-action">Toque para ver →</div>
             </div>
-            <div class="stat-card ${criticos > 0 ? 'danger' : 'success'}">
+            <div class="stat-card ${criticos > 0 ? 'orange' : 'success'}" onclick="irParaCriticos()">
+                <div class="stat-icon">${criticos > 0 ? '🔥' : '👍'}</div>
                 <div class="stat-number">${criticos}</div>
                 <div class="stat-label">Críticos ≤3d</div>
+                <div class="stat-action">Toque para ver →</div>
             </div>
         `;
 
-        // Vencimentos críticos
-        const criticosList = vencimentos
-            .filter(v => {
-                if (v.acaoFeita) return false;
-                const s = getStatusVenc(v.data);
-                return s.key === 'vencido' || s.key === 'critico' || s.key === 'proximo';
-            })
-            .sort((a, b) => new Date(a.data) - new Date(b.data))
-            .slice(0, 10);
-
-        const critDiv = document.getElementById('dashboard-venc-criticos');
-        if (criticosList.length === 0) {
-            critDiv.innerHTML = '<p style="color:var(--success);font-size:0.85rem;">✅ Nenhum vencimento crítico! Tudo em dia.</p>';
-        } else {
-            critDiv.innerHTML = criticosList.map(v => {
-                const s = getStatusVenc(v.data);
-                return `
-                    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--gray-100);">
-                        <div style="flex:1;">
-                            <strong style="font-size:0.82rem;">${v.produto}</strong>
-                            <span style="font-size:0.72rem;color:var(--gray-400);"> x${v.qtd || 1}</span>
-                            ${v.local ? '<span class="location-tag" style="margin-left:4px;">📍 ' + v.local + '</span>' : ''}
-                        </div>
-                        <div style="text-align:right;">
-                            <span class="badge ${s.badge}">${s.label}</span>
-                            <div style="font-size:0.7rem;color:var(--gray-400);margin-top:2px;">${formatarDataSimples(v.data)}</div>
-                        </div>
-                    </div>`;
-            }).join('');
-        }
+        // Painel Rolante
+        renderRollingPanel(vencidos, criticos);
 
         // Últimos registros
-        const todos = [
-            ...faltas.slice(0, 5).map(f => ({ tipo: '🚫', tipoNome: 'Falta', nome: f.produto, data: f.data })),
-            ...vencimentos.slice(0, 5).map(v => ({ tipo: '📅', tipoNome: 'Venc', nome: v.produto, data: v.criadoEm || v.data })),
-            ...trocas.slice(0, 5).map(t => ({ tipo: '🔄', tipoNome: 'Troca', nome: t.produto, data: t.data })),
-            ...produtos.slice(0, 3).map(p => ({ tipo: '📦', tipoNome: 'Cadastro', nome: p.nome, data: p.criadoEm }))
-        ].sort((a, b) => new Date(b.data) - new Date(a.data)).slice(0, 10);
-
-        const ultimosDiv = document.getElementById('dashboard-ultimos');
-        if (todos.length === 0) {
-            ultimosDiv.innerHTML = '<p style="color:var(--gray-400);font-size:0.82rem;">Nenhum registro ainda.</p>';
-        } else {
-            ultimosDiv.innerHTML = todos.map(item => `
-                <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--gray-100);">
-                    <div>
-                        <span style="font-size:0.72rem;font-weight:700;">${item.tipo} ${item.tipoNome}</span>
-                        <span style="font-size:0.8rem;margin-left:6px;">${item.nome}</span>
-                    </div>
-                    <span style="font-size:0.68rem;color:var(--gray-400);">${formatarData(item.data)}</span>
-                </div>
-            `).join('');
-        }
+        renderUltimosRegistros();
 
         // Tab badges
         updateTabBadges(vencidos + criticos);
     }
 
+    function irParaVencidos() {
+        switchTab('vencimentos');
+        setTimeout(() => { document.getElementById('filtro-venc-status').value = 'vencido'; renderVencimentos(); }, 100);
+    }
+
+    function irParaCriticos() {
+        switchTab('vencimentos');
+        setTimeout(() => { document.getElementById('filtro-venc-status').value = 'critico'; renderVencimentos(); }, 100);
+    }
+
+    // ============================================
+    // PAINEL ROLANTE (Auto-scroll carousel)
+    // ============================================
+    function renderRollingPanel() {
+        const track = document.getElementById('rolling-track');
+        let items = [];
+
+        // Vencidos
+        vencimentos.filter(v => !v.acaoFeita && getStatusVenc(v.data).key === 'vencido').forEach(v => {
+            items.push({
+                type: 'vencido', typeName: '⚠️ VENCIDO', typeClass: 'ri-type-vencido',
+                name: v.produto, detail: 'Val: ' + fmtDataSimples(v.data) + ' | x' + (v.qtd||1),
+                badgeClass: 'ri-badge-danger', badgeText: getStatusVenc(v.data).label,
+                action: () => { switchTab('vencimentos'); document.getElementById('filtro-venc-status').value = 'vencido'; renderVencimentos(); }
+            });
+        });
+
+        // Críticos
+        vencimentos.filter(v => !v.acaoFeita && getStatusVenc(v.data).key === 'critico').forEach(v => {
+            items.push({
+                type: 'critico', typeName: '🔥 CRÍTICO', typeClass: 'ri-type-critico',
+                name: v.produto, detail: 'Val: ' + fmtDataSimples(v.data) + ' | x' + (v.qtd||1),
+                badgeClass: 'ri-badge-danger', badgeText: getStatusVenc(v.data).label,
+                action: () => { switchTab('vencimentos'); document.getElementById('filtro-venc-status').value = 'critico'; renderVencimentos(); }
+            });
+        });
+
+        // Próximos
+        vencimentos.filter(v => !v.acaoFeita && getStatusVenc(v.data).key === 'proximo').forEach(v => {
+            items.push({
+                type: 'proximo', typeName: '📅 PRÓXIMO', typeClass: 'ri-type-vencido',
+                name: v.produto, detail: 'Val: ' + fmtDataSimples(v.data) + ' | x' + (v.qtd||1),
+                badgeClass: 'ri-badge-warning', badgeText: getStatusVenc(v.data).label,
+                action: () => { switchTab('vencimentos'); }
+            });
+        });
+
+        // Faltas recentes (últimas 5)
+        faltas.slice(0, 5).forEach(f => {
+            items.push({
+                type: 'falta', typeName: '🚫 FALTA', typeClass: 'ri-type-falta',
+                name: f.produto, detail: (f.secao || '') + ' | Est: ' + (f.estoque || 'N/I'),
+                badgeClass: 'ri-badge-danger', badgeText: 'Falta',
+                action: () => switchTab('faltas')
+            });
+        });
+
+        // Trocas pendentes (últimas 3)
+        trocas.slice(0, 3).forEach(t => {
+            items.push({
+                type: 'troca', typeName: '🔄 TROCA', typeClass: 'ri-type-troca',
+                name: t.produto, detail: (t.motivo||'') + ' | x' + (t.qtd||1),
+                badgeClass: 'ri-badge-info', badgeText: t.motivo || 'Troca',
+                action: () => switchTab('trocas')
+            });
+        });
+
+        if (items.length === 0) {
+            track.innerHTML = '<div class="rolling-empty">✅ Tudo em dia! Nenhum alerta.</div>';
+            return;
+        }
+
+        // Guardar referências para clique
+        window.__rollingItems = items;
+
+        track.innerHTML = items.map((item, i) => `
+            <div class="rolling-item" onclick="window.__rollingItems[${i}].action()">
+                <div class="ri-type ${item.typeClass}">${item.typeName}</div>
+                <div class="ri-name">${item.name}</div>
+                <div class="ri-detail">${item.detail}</div>
+                <span class="ri-badge ${item.badgeClass}">${item.badgeText}</span>
+            </div>
+        `).join('');
+
+        // Auto-scroll
+        iniciarAutoScroll();
+    }
+
+    function iniciarAutoScroll() {
+        if (rollingAutoScroll) clearInterval(rollingAutoScroll);
+        const track = document.getElementById('rolling-track');
+        if (!track || track.children.length <= 1) return;
+
+        rollingAutoScroll = setInterval(() => {
+            const maxScroll = track.scrollWidth - track.clientWidth;
+            if (track.scrollLeft >= maxScroll - 10) {
+                track.scrollTo({ left: 0, behavior: 'smooth' });
+            } else {
+                track.scrollBy({ left: 230, behavior: 'smooth' });
+            }
+        }, 3500);
+
+        // Pausar no hover/touch
+        track.addEventListener('mouseenter', () => clearInterval(rollingAutoScroll));
+        track.addEventListener('touchstart', () => clearInterval(rollingAutoScroll), { passive: true });
+        track.addEventListener('mouseleave', () => iniciarAutoScroll());
+        track.addEventListener('touchend', () => setTimeout(iniciarAutoScroll, 2000));
+    }
+
+    function scrollRolling(dir) {
+        const track = document.getElementById('rolling-track');
+        track.scrollBy({ left: dir * 230, behavior: 'smooth' });
+    }
+
+    // ============================================
+    // ÚLTIMOS REGISTROS
+    // ============================================
+    function renderUltimosRegistros() {
+        const todos = [
+            ...faltas.slice(0, 4).map(f => ({ icon: '🚫', tipo: 'Falta', nome: f.produto, data: f.data, tab: 'faltas' })),
+            ...vencimentos.slice(0, 4).map(v => ({ icon: '📅', tipo: 'Venc', nome: v.produto, data: v.criadoEm || v.data, tab: 'vencimentos' })),
+            ...trocas.slice(0, 4).map(t => ({ icon: '🔄', tipo: 'Troca', nome: t.produto, data: t.data, tab: 'trocas' })),
+            ...produtos.slice(0, 3).map(p => ({ icon: '📦', tipo: 'Cadastro', nome: p.nome, data: p.criadoEm, tab: 'cadastro' }))
+        ].sort((a, b) => new Date(b.data) - new Date(a.data)).slice(0, 10);
+
+        const div = document.getElementById('dashboard-ultimos');
+        if (todos.length === 0) {
+            div.innerHTML = '<p style="color:var(--gray-400);font-size:0.82rem;">Nenhum registro.</p>';
+            return;
+        }
+
+        div.innerHTML = todos.map(item => `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--gray-100);cursor:pointer;" onclick="switchTab('${item.tab}')">
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="font-size:1rem;">${item.icon}</span>
+                    <div>
+                        <div style="font-size:0.78rem;font-weight:600;">${item.nome}</div>
+                        <div style="font-size:0.65rem;color:var(--gray-400);">${item.tipo}</div>
+                    </div>
+                </div>
+                <span style="font-size:0.65rem;color:var(--gray-400);">${fmtData(item.data)}</span>
+            </div>
+        `).join('');
+    }
+
     function updateTabBadges(urgentes) {
         document.querySelectorAll('.tab-badge').forEach(b => b.remove());
         if (urgentes > 0) {
-            const btns = document.querySelectorAll('.tab-btn');
             const span = document.createElement('span');
             span.className = 'tab-badge';
             span.textContent = urgentes;
-            btns[3]?.appendChild(span); // tab vencimentos
+            document.getElementById('tab-btn-venc')?.appendChild(span);
         }
     }
 
     // ============================================
-    // CONFIG - EXPORTAR / IMPORTAR / LIMPAR
+    // CONFIG
     // ============================================
     function exportarDados() {
-        const dados = {
-            produtos, faltas, vencimentos, trocas,
-            exportadoEm: new Date().toISOString(),
-            versao: '2.0'
-        };
+        const dados = { produtos, faltas, vencimentos, trocas, exportadoEm: new Date().toISOString(), versao: '2.0' };
         const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'controle-backup-' + new Date().toISOString().split('T')[0] + '.json';
+        a.download = 'backup-' + new Date().toISOString().split('T')[0] + '.json';
         a.click();
         URL.revokeObjectURL(url);
-        toast('Dados exportados!');
+        toast('Exportado!');
     }
 
     function importarDados(event) {
@@ -2033,62 +2105,52 @@
         const reader = new FileReader();
         reader.onload = function(e) {
             try {
-                const dados = JSON.parse(e.target.result);
-                if (dados.produtos) produtos = dados.produtos;
-                if (dados.faltas) faltas = dados.faltas;
-                if (dados.vencimentos) vencimentos = dados.vencimentos;
-                if (dados.trocas) trocas = dados.trocas;
-                salvarESincronizar();
-                renderAll();
-                toast('Dados importados com sucesso! (' + (dados.versao || '1.0') + ')');
-            } catch (err) {
-                toast('Erro ao importar: ' + err.message, 'error');
-            }
+                const d = JSON.parse(e.target.result);
+                if (d.produtos) produtos = d.produtos;
+                if (d.faltas) faltas = d.faltas;
+                if (d.vencimentos) vencimentos = d.vencimentos;
+                if (d.trocas) trocas = d.trocas;
+                salvarESincronizar(); renderAll();
+                toast('Importado com sucesso!');
+            } catch (err) { toast('Erro: ' + err.message, 'error'); }
         };
         reader.readAsText(file);
         event.target.value = '';
     }
 
     function limparTudo() {
-        if (!confirm('⚠️ APAGAR TODOS OS DADOS?\nProdutos, faltas, vencimentos e trocas serão perdidos!')) return;
-        if (!confirm('TEM CERTEZA? Esta ação NÃO pode ser desfeita!')) return;
-        produtos = [];
-        faltas = [];
-        vencimentos = [];
-        trocas = [];
-        salvarESincronizar();
-        renderAll();
-        toast('Todos os dados foram apagados.', 'warning');
+        if (!confirm('⚠️ APAGAR TUDO?')) return;
+        if (!confirm('CERTEZA? Não pode desfazer!')) return;
+        produtos = []; faltas = []; vencimentos = []; trocas = [];
+        salvarESincronizar(); renderAll();
+        toast('Tudo apagado.', 'warning');
     }
 
     // ============================================
     // UTILITÁRIOS
     // ============================================
-    function formatarData(dataISO) {
-        if (!dataISO) return '-';
+    function fmtData(iso) {
+        if (!iso) return '-';
         try {
-            const d = new Date(dataISO);
-            if (isNaN(d.getTime())) return dataISO;
+            const d = new Date(iso);
+            if (isNaN(d)) return iso;
             return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-        } catch (e) { return dataISO; }
+        } catch (e) { return iso; }
     }
 
-    function formatarDataSimples(dataStr) {
-        if (!dataStr) return '-';
-        const parts = dataStr.split('-');
-        if (parts.length === 3) return parts[2] + '/' + parts[1] + '/' + parts[0];
-        return dataStr;
+    function fmtDataSimples(str) {
+        if (!str) return '-';
+        const p = str.split('-');
+        return p.length === 3 ? p[2]+'/'+p[1]+'/'+p[0] : str;
     }
 
     function fecharModal(id) {
         document.getElementById(id).classList.remove('show');
     }
 
-    // Fechar modal clicando fora
-    document.querySelectorAll('.modal-overlay').forEach(overlay => {
-        overlay.addEventListener('click', function(e) {
-            if (e.target === this) this.classList.remove('show');
-        });
+    // Fechar modais ao clicar fora
+    document.querySelectorAll('.modal-overlay').forEach(o => {
+        o.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('show'); });
     });
 
     // Fechar dropdowns ao clicar fora
@@ -2107,7 +2169,7 @@
         iniciarListenerFirebase();
         renderAll();
 
-        // Auto-sync a cada 5 minutos
+        // Auto-sync a cada 5 min
         setInterval(() => {
             if (firebaseConectado) {
                 syncParaFirebase(colecoes.produtos, produtos);
@@ -2115,7 +2177,7 @@
                 syncParaFirebase(colecoes.vencimentos, vencimentos);
                 syncParaFirebase(colecoes.trocas, trocas);
             }
-        }, 5 * 60 * 1000);
+        }, 300000);
     }
 
     init();
