@@ -728,11 +728,12 @@
         return '📦';
     }
 
+        
     function prodCardTop(p) {
         return `<div class="pc-top">
             <div class="pc-img">${p.imagem ? '<img src="' + p.imagem + '" onerror="this.parentElement.innerHTML=\'📦\'">' : '📦'}</div>
             <div class="pc-info">
-                <div class="pc-name">${p.marca ? p.marca + ' - ' : ''}${p.nome}${p.peso ? ' ' + p.peso : ''}${p.tipo ? ' - ' + p.tipo : ''}</div>
+                <div class="pc-name">${p.nome}</div>
                 ${p.ean ? '<span class="pc-ean-code">Cód: ' + p.ean + '</span>' : ''}
                 <div class="pc-badges" style="margin-top:4px;">
                     ${p.marca ? '<span class="badge badge-purple">' + p.marca + '</span>' : ''}
