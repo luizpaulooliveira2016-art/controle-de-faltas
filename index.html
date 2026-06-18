@@ -14,27 +14,19 @@
         .top-header-inner{display:flex;justify-content:space-between;align-items:center}
         .app-brand{display:flex;align-items:center;gap:10px}
         .app-brand .logo{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:1.2rem}
-        .app-brand .brand-text{color:white}
-        .app-brand .brand-text h1{font-size:1rem;font-weight:800}
-        .app-brand .brand-text p{font-size:0.65rem;opacity:0.65;margin-top:1px}
+        .app-brand .brand-text{color:white}.app-brand .brand-text h1{font-size:1rem;font-weight:800}.app-brand .brand-text p{font-size:0.65rem;opacity:0.65;margin-top:1px}
         .sync-pill{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:0.65rem;font-weight:700;border:1px solid rgba(255,255,255,0.15)}
-        .sync-pill.online{background:rgba(34,197,94,0.15);color:#86efac}
-        .sync-pill.offline{background:rgba(239,68,68,0.15);color:#fca5a5}
+        .sync-pill.online{background:rgba(34,197,94,0.15);color:#86efac}.sync-pill.offline{background:rgba(239,68,68,0.15);color:#fca5a5}
         .sync-pill .dot{width:7px;height:7px;border-radius:50%;animation:pdot 2s infinite}
-        .sync-pill.online .dot{background:#4ade80}
-        .sync-pill.offline .dot{background:#f87171;animation:none}
+        .sync-pill.online .dot{background:#4ade80}.sync-pill.offline .dot{background:#f87171;animation:none}
         @keyframes pdot{0%,100%{opacity:1}50%{opacity:0.4}}
         .bottom-nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);background:white;border-top:1px solid var(--g200);display:flex;align-items:center;justify-content:space-around;z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,0.08)}
         .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 20px;border-radius:12px;cursor:pointer;border:none;background:none;flex:1;position:relative;transition:all 0.25s}
-        .nav-item .nav-icon{font-size:1.4rem;transition:transform 0.25s}
-        .nav-item .nav-label{font-size:0.6rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.5px}
-        .nav-item.active{background:var(--primary-light)}
-        .nav-item.active .nav-icon{transform:scale(1.15)}
-        .nav-item.active .nav-label{color:var(--primary)}
+        .nav-item .nav-icon{font-size:1.4rem;transition:transform 0.25s}.nav-item .nav-label{font-size:0.6rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.5px}
+        .nav-item.active{background:var(--primary-light)}.nav-item.active .nav-icon{transform:scale(1.15)}.nav-item.active .nav-label{color:var(--primary)}
         .nav-notif-badge{position:absolute;top:4px;right:14px;background:var(--danger);color:white;border-radius:50%;width:18px;height:18px;font-size:0.58rem;display:flex;align-items:center;justify-content:center;font-weight:800;animation:bounce 1s infinite}
         @keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
-        .screen{display:none;padding:16px;max-width:600px;margin:0 auto}
-        .screen.active{display:block;animation:fadeUp .3s ease}
+        .screen{display:none;padding:16px;max-width:600px;margin:0 auto}.screen.active{display:block;animation:fadeUp .3s ease}
         @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
         .stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
         .stat-btn{background:white;border-radius:var(--r-lg);padding:18px 16px;text-align:left;box-shadow:var(--sh-md);cursor:pointer;transition:all 0.25s;border:none;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:4px}
@@ -44,34 +36,35 @@
         .stat-btn .sb-icon{font-size:1.6rem;margin-bottom:4px}.stat-btn .sb-num{font-size:2rem;font-weight:900;line-height:1}.stat-btn .sb-label{font-size:0.68rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.5px}.stat-btn .sb-arrow{position:absolute;top:16px;right:16px;font-size:1rem;color:var(--g300)}
         .alerts-panel{border-radius:var(--r-lg);margin-bottom:16px;overflow:hidden;box-shadow:var(--sh-lg);background:linear-gradient(135deg,#312e81,#4c1d95,#5b21b6);border:1px solid rgba(255,255,255,0.08)}
         .alerts-header{padding:14px 18px;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.15);border-bottom:1px solid rgba(255,255,255,0.08)}
-        .alerts-header-left{display:flex;align-items:center;gap:8px}
-        .alerts-header-left span{color:white;font-size:0.82rem;font-weight:700}
+        .alerts-header-left{display:flex;align-items:center;gap:8px}.alerts-header-left span{color:white;font-size:0.82rem;font-weight:700}
         .alerts-count{background:rgba(255,255,255,0.15);color:white;padding:2px 10px;border-radius:20px;font-size:0.65rem;font-weight:700}
-        .alerts-nav{display:flex;gap:6px}
-        .alerts-nav button{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:white;width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center}
-        .alerts-track{display:flex;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;padding:14px 12px;gap:10px;scroll-snap-type:x mandatory}
-        .alerts-track::-webkit-scrollbar{display:none}
-        .alert-card{min-width:210px;max-width:210px;flex-shrink:0;border-radius:var(--r-lg);overflow:hidden;cursor:pointer;transition:all 0.25s;scroll-snap-align:start;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12)}
-        .alert-card:hover{transform:translateY(-3px);background:rgba(255,255,255,0.15)}
-        .alert-card-img{width:100%;height:88px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.1)}
-        .alert-card-img img{width:100%;height:100%;object-fit:contain;padding:6px}
+        .alerts-nav{display:flex;gap:6px}.alerts-nav button{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:white;width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center}
+        .alerts-track{display:flex;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;padding:14px 12px;gap:10px;scroll-snap-type:x mandatory}.alerts-track::-webkit-scrollbar{display:none}
+        .alert-card{min-width:210px;max-width:210px;flex-shrink:0;border-radius:var(--r-lg);overflow:hidden;cursor:pointer;transition:all 0.25s;scroll-snap-align:start;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12)}.alert-card:hover{transform:translateY(-3px);background:rgba(255,255,255,0.15)}
+        .alert-card-img{width:100%;height:88px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.1)}.alert-card-img img{width:100%;height:100%;object-fit:contain;padding:6px}
         .alert-card-img .no-img{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2.2rem}
         .ac-vencido .no-img{background:linear-gradient(135deg,rgba(220,38,38,0.4),rgba(153,27,27,0.4))}.ac-critico .no-img{background:linear-gradient(135deg,rgba(234,88,12,0.4),rgba(194,65,12,0.4))}.ac-proximo .no-img{background:linear-gradient(135deg,rgba(245,158,11,0.4),rgba(217,119,6,0.4))}.ac-falta .no-img{background:linear-gradient(135deg,rgba(37,99,235,0.4),rgba(29,78,216,0.4))}.ac-troca .no-img{background:linear-gradient(135deg,rgba(8,145,178,0.4),rgba(14,116,144,0.4))}
-        .alert-card-info{padding:10px 12px}
-        .ac-type{font-size:0.58rem;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:3px}
+        .alert-card-info{padding:10px 12px}.ac-type{font-size:0.58rem;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:3px}
         .ac-vencido .ac-type{color:#fca5a5}.ac-critico .ac-type{color:#fdba74}.ac-proximo .ac-type{color:#fde68a}.ac-falta .ac-type{color:#93c5fd}.ac-troca .ac-type{color:#67e8f9}
         .ac-name{color:white;font-size:0.8rem;font-weight:700;line-height:1.3;white-space:normal;word-break:break-word;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-        .ac-footer{display:flex;justify-content:space-between;align-items:center}
-        .ac-detail{color:rgba(255,255,255,0.5);font-size:0.65rem}
+        .ac-footer{display:flex;justify-content:space-between;align-items:center}.ac-detail{color:rgba(255,255,255,0.5);font-size:0.65rem}
         .ac-pill{padding:2px 8px;border-radius:20px;font-size:0.6rem;font-weight:700}
         .ac-vencido .ac-pill{background:rgba(220,38,38,0.25);color:#fca5a5}.ac-critico .ac-pill{background:rgba(234,88,12,0.25);color:#fdba74}.ac-proximo .ac-pill{background:rgba(245,158,11,0.25);color:#fde68a}.ac-falta .ac-pill{background:rgba(37,99,235,0.25);color:#93c5fd}.ac-troca .ac-pill{background:rgba(8,145,178,0.25);color:#67e8f9}
         .alerts-empty{color:rgba(255,255,255,0.4);text-align:center;padding:30px;font-size:0.85rem;width:100%}
         .list-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.list-header h2{font-size:1rem;font-weight:800}.list-header .list-count{font-size:0.72rem;color:var(--g500);background:var(--g100);padding:3px 10px;border-radius:20px;font-weight:600}
         .filter-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}.filter-row input,.filter-row select{padding:8px 12px;border:1.5px solid var(--g200);border-radius:var(--r);font-size:0.78rem;background:white;flex:1;min-width:100px}.filter-row input:focus,.filter-row select:focus{border-color:var(--primary);outline:none}
+
+        /* SEARCH BAR COM SCANNER */
+        .pick-search{position:relative;margin-bottom:14px}
+        .pick-search input{width:100%;padding:12px 50px 12px 42px;border:2px solid var(--g200);border-radius:var(--r-xl);font-size:0.88rem;background:var(--g50)}
+        .pick-search input:focus{border-color:var(--primary);background:white;outline:none}
+        .pick-search .psi{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1rem;color:var(--g400)}
+        .pick-search .pscan{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:var(--primary);color:white;border:none;border-radius:var(--r-xl);padding:7px 14px;font-size:0.72rem;cursor:pointer;font-weight:700}
+        .pick-search .pscan:hover{background:var(--primary-dark)}
+
         .product-card{background:white;border-radius:var(--r-lg);margin-bottom:12px;box-shadow:var(--sh-md);overflow:hidden;transition:all 0.2s}.product-card:hover{box-shadow:var(--sh-lg);transform:translateY(-1px)}.product-card.pc-done{opacity:0.5}
         .pc-top{display:flex}
-        .pc-img{width:85px;min-height:85px;max-height:110px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--g100);overflow:hidden;font-size:2rem;color:var(--g400)}
-        .pc-img img{width:85px;height:85px;object-fit:contain;background:white;padding:4px}
+        .pc-img{width:85px;min-height:85px;max-height:110px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--g100);overflow:hidden;font-size:2rem;color:var(--g400)}.pc-img img{width:85px;height:85px;object-fit:contain;background:white;padding:4px}
         .pc-info{flex:1;padding:12px 14px;min-width:0}
         .pc-name{font-weight:800;font-size:0.88rem;line-height:1.3;word-break:break-word;white-space:normal}
         .pc-ean-code{display:block;font-size:0.6rem;color:var(--g400);margin-top:2px;font-family:monospace;letter-spacing:0.5px}
@@ -155,28 +148,66 @@
         .config-item-left .ci-text .ci-title{font-size:0.85rem;font-weight:700}.config-item-left .ci-text .ci-sub{font-size:0.7rem;color:var(--g500)}
         .empty-state{text-align:center;padding:40px 20px;color:var(--g400)}.empty-state .es-icon{font-size:3rem;margin-bottom:10px}
         .back-btn{background:none;border:none;font-size:1.2rem;cursor:pointer;padding:4px 8px;margin-right:8px;color:var(--g600)}
+        .ean-hint{font-size:0.62rem;color:var(--g400);margin-top:2px}
         @media(max-width:480px){.form-row{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
 <div class="top-header"><div class="top-header-inner"><div class="app-brand"><div class="logo">📋</div><div class="brand-text"><h1>Controle</h1><p>Estoque & Validades</p></div></div><div class="sync-pill offline" id="sync-pill"><div class="dot"></div><span id="sync-text">Conectando...</span></div></div></div>
+
 <div id="screen-home" class="screen active"><div class="stats-row" id="stats-row"></div><div class="alerts-panel"><div class="alerts-header"><div class="alerts-header-left"><span>🔔 Alertas</span><span class="alerts-count" id="alerts-count">0</span></div><div class="alerts-nav"><button onclick="scrollAlerts(-1)">◀</button><button onclick="scrollAlerts(1)">▶</button></div></div><div class="alerts-track" id="alerts-track"></div></div></div>
+
 <div id="screen-cadastros" class="screen"><div class="list-header"><h2><button class="back-btn" onclick="goScreen('home')">←</button>📦 Cadastrados</h2><span class="list-count" id="cad-list-count">0</span></div><div class="filter-row"><input type="text" id="filtro-cad" placeholder="🔎 Buscar..." oninput="renderCadastros()"></div><div id="lista-cadastros"></div></div>
+
 <div id="screen-faltas" class="screen"><div class="list-header"><h2><button class="back-btn" onclick="goScreen('home')">←</button>🚫 Faltas</h2><span class="list-count" id="falta-list-count">0</span></div><div class="filter-row"><input type="text" id="filtro-falta-marca" placeholder="🔎 Marca..." oninput="renderFaltas()"><input type="date" id="filtro-falta-de" onchange="renderFaltas()"><input type="date" id="filtro-falta-ate" onchange="renderFaltas()"></div><div id="lista-faltas"></div><div id="faltas-share" style="display:none;margin-top:10px;gap:8px;flex-wrap:wrap;"><button class="btn btn-success btn-sm" onclick="gerarPDF('faltas')">📄 PDF</button><button class="btn btn-success btn-sm" onclick="compartilharWA('faltas')">💬 WhatsApp</button></div></div>
+
 <div id="screen-vencimentos" class="screen"><div class="list-header"><h2><button class="back-btn" onclick="goScreen('home')">←</button>📅 Vencimentos</h2><span class="list-count" id="venc-list-count">0</span></div><div class="filter-row"><select id="filtro-venc-status" onchange="renderVencimentos()"><option value="">Todos</option><option value="vencido">Vencidos</option><option value="critico">≤3d</option><option value="proximo">≤7d</option><option value="ok">OK</option><option value="feito">✅ Feito</option></select><input type="text" id="filtro-venc-marca" placeholder="🔎 Marca..." oninput="renderVencimentos()"></div><div id="lista-vencimentos"></div><div id="venc-share" style="display:none;margin-top:10px;gap:8px;flex-wrap:wrap;"><button class="btn btn-success btn-sm" onclick="gerarPDF('vencimentos')">📄 PDF</button><button class="btn btn-success btn-sm" onclick="compartilharWA('vencimentos')">💬 WhatsApp</button></div></div>
+
 <div id="screen-trocas" class="screen"><div class="list-header"><h2><button class="back-btn" onclick="goScreen('home')">←</button>🔄 Trocas</h2><span class="list-count" id="troca-list-count">0</span></div><div class="filter-row"><select id="filtro-troca-motivo" onchange="renderTrocas()"><option value="">Todos</option><option>Vencido</option><option>Avariado</option><option>Defeito</option><option>Recall</option><option>Outros</option></select><input type="date" id="filtro-troca-de" onchange="renderTrocas()"><input type="date" id="filtro-troca-ate" onchange="renderTrocas()"></div><div id="lista-trocas"></div><div id="trocas-share" style="display:none;margin-top:10px;gap:8px;flex-wrap:wrap;"><button class="btn btn-success btn-sm" onclick="gerarPDF('trocas')">📄 PDF</button><button class="btn btn-success btn-sm" onclick="compartilharWA('trocas')">💬 WhatsApp</button></div></div>
-<div id="screen-pick-falta" class="screen"><div class="list-header"><h2><button class="back-btn" onclick="goScreen('home')">←</button>🚫 Selecionar para Falta</h2></div><div class="filter-row"><input type="text" id="pick-falta-filtro" placeholder="🔎 Buscar..." oninput="renderPickFalta()"></div><div id="pick-falta-lista"></div></div>
-<div id="screen-pick-venc" class="screen"><div class="list-header"><h2><button class="back-btn" onclick="goScreen('home')">←</button>📅 Selecionar para Vencimento</h2></div><div class="filter-row"><input type="text" id="pick-venc-filtro" placeholder="🔎 Buscar..." oninput="renderPickVenc()"></div><div id="pick-venc-lista"></div></div>
-<div id="screen-pick-troca" class="screen"><div class="list-header"><h2><button class="back-btn" onclick="goScreen('home')">←</button>🔄 Selecionar para Troca</h2></div><div class="filter-row"><input type="text" id="pick-troca-filtro" placeholder="🔎 Buscar..." oninput="renderPickTroca()"></div><div id="pick-troca-lista"></div></div>
+
+<!-- PICK SCREENS COM SCANNER -->
+<div id="screen-pick-falta" class="screen">
+    <div class="list-header"><h2><button class="back-btn" onclick="goScreen('home')">←</button>🚫 Selecionar para Falta</h2></div>
+    <div class="pick-search"><span class="psi">🔎</span><input type="text" id="pick-falta-filtro" placeholder="Buscar por nome ou código..." oninput="renderPickFalta()"><button class="pscan" onclick="abrirScanner('pick-falta')">📷 Scan</button></div>
+    <div id="pick-falta-lista"></div>
+</div>
+<div id="screen-pick-venc" class="screen">
+    <div class="list-header"><h2><button class="back-btn" onclick="goScreen('home')">←</button>📅 Selecionar para Vencimento</h2></div>
+    <div class="pick-search"><span class="psi">🔎</span><input type="text" id="pick-venc-filtro" placeholder="Buscar por nome ou código..." oninput="renderPickVenc()"><button class="pscan" onclick="abrirScanner('pick-venc')">📷 Scan</button></div>
+    <div id="pick-venc-lista"></div>
+</div>
+<div id="screen-pick-troca" class="screen">
+    <div class="list-header"><h2><button class="back-btn" onclick="goScreen('home')">←</button>🔄 Selecionar para Troca</h2></div>
+    <div class="pick-search"><span class="psi">🔎</span><input type="text" id="pick-troca-filtro" placeholder="Buscar por nome ou código..." oninput="renderPickTroca()"><button class="pscan" onclick="abrirScanner('pick-troca')">📷 Scan</button></div>
+    <div id="pick-troca-lista"></div>
+</div>
+
 <div id="screen-notificacoes" class="screen"><div class="list-header"><h2>🔔 Notificações</h2><button class="btn btn-outline btn-sm" onclick="limparNotifs()">Limpar</button></div><div id="lista-notifs"></div></div>
+
 <div id="screen-config" class="screen"><div class="list-header"><h2>⚙️ Configurações</h2></div><div id="config-firebase" style="padding:12px 16px;border-radius:var(--r-lg);font-size:0.8rem;background:white;margin-bottom:12px;box-shadow:var(--sh-md);"></div><div class="config-item" onclick="sincronizarAgora()"><div class="config-item-left"><div class="ci-icon" style="background:#dbeafe;">🔄</div><div class="ci-text"><div class="ci-title">Sincronizar</div><div class="ci-sub">Forçar sync</div></div></div><div>›</div></div><div class="config-item" onclick="exportarDados()"><div class="config-item-left"><div class="ci-icon" style="background:#dcfce7;">📤</div><div class="ci-text"><div class="ci-title">Exportar</div><div class="ci-sub">Backup JSON</div></div></div><div>›</div></div><div class="config-item" onclick="document.getElementById('import-file').click()"><div class="config-item-left"><div class="ci-icon" style="background:#cffafe;">📥</div><div class="ci-text"><div class="ci-title">Importar</div><div class="ci-sub">Restaurar</div></div></div><div>›</div></div><input type="file" id="import-file" accept=".json" style="display:none" onchange="importarDados(event)"><div class="config-item" onclick="limparTudo()"><div class="config-item-left"><div class="ci-icon" style="background:#fee2e2;">🗑️</div><div class="ci-text"><div class="ci-title">Limpar TUDO</div><div class="ci-sub">Apaga tudo</div></div></div><div>›</div></div></div>
+
 <nav class="bottom-nav"><button class="nav-item active" id="nav-home" onclick="goScreen('home')"><span class="nav-icon">🏠</span><span class="nav-label">Início</span></button><button class="nav-item" id="nav-notificacoes" onclick="goScreen('notificacoes')"><span class="nav-icon">🔔</span><span class="nav-label">Alertas</span><span class="nav-notif-badge" id="notif-badge" style="display:none;">0</span></button><button class="nav-item" id="nav-config" onclick="goScreen('config')"><span class="nav-icon">⚙️</span><span class="nav-label">Config</span></button></nav>
+
 <div class="fab-backdrop" id="fab-backdrop" onclick="toggleFab()"></div>
 <div class="fab-wrap"><div class="fab-menu" id="fab-menu"><div class="fab-opt" onclick="abrirFormCadastro()"><span class="fab-opt-label">Cadastrar Produto</span><button class="fab-opt-icon foi-purple">📦</button></div><div class="fab-opt" onclick="abrirPickScreen('falta')"><span class="fab-opt-label">Registrar Falta</span><button class="fab-opt-icon foi-blue">🚫</button></div><div class="fab-opt" onclick="abrirPickScreen('venc')"><span class="fab-opt-label">Registrar Vencimento</span><button class="fab-opt-icon foi-orange">📅</button></div><div class="fab-opt" onclick="abrirPickScreen('troca')"><span class="fab-opt-label">Registrar Troca</span><button class="fab-opt-icon foi-cyan">🔄</button></div></div><button class="fab-btn" id="fab-btn" onclick="toggleFab()">+</button></div>
-<div class="modal-overlay" id="modal-cadastro"><div class="modal-sheet"><div class="modal-handle"></div><div class="modal-head"><h3 id="modal-cad-title">📦 Cadastrar Produto</h3><button class="modal-close-btn" onclick="fecharModal('modal-cadastro')">✕</button></div><div class="modal-body-pad"><div class="online-search-bar"><span class="si">🔎</span><input type="text" id="cad-busca" placeholder="Buscar online..." oninput="buscarParaCadastro()" autocomplete="off"><button class="scan-btn" onclick="abrirScanner('cadastro')">📷</button></div><div class="online-results" id="cad-online-results"></div><input type="hidden" id="cad-edit-id" value=""><div class="form-group"><label>Código (EAN)</label><input type="text" id="cad-ean" placeholder="Código de barras"></div><div class="form-group"><label>Nome *</label><input type="text" id="cad-nome" placeholder="Nome do produto"></div><div class="form-row"><div class="form-group"><label>Marca</label><input type="text" id="cad-marca" placeholder="Marca" oninput="autocompleteMarca(this,'cad-ac-marca')" autocomplete="off"><div class="autocomplete-dropdown" id="cad-ac-marca"></div></div><div class="form-group"><label>Peso / ML</label><input type="text" id="cad-peso" placeholder="500g, 1L..."></div></div><div class="form-row"><div class="form-group"><label>Tipo / Variação</label><input type="text" id="cad-tipo" placeholder="Integral, Zero..."></div><div class="form-group"><label>Imagem (URL)</label><input type="text" id="cad-imagem" placeholder="https://..."></div></div></div><div class="modal-footer-pad"><button class="btn btn-outline btn-sm" onclick="fecharModal('modal-cadastro')">Cancelar</button><button class="btn btn-purple" onclick="salvarProduto()">💾 Salvar</button></div></div></div>
+
+<!-- MODAL CADASTRO com múltiplos EAN -->
+<div class="modal-overlay" id="modal-cadastro"><div class="modal-sheet"><div class="modal-handle"></div><div class="modal-head"><h3 id="modal-cad-title">📦 Cadastrar Produto</h3><button class="modal-close-btn" onclick="fecharModal('modal-cadastro')">✕</button></div><div class="modal-body-pad">
+    <div class="online-search-bar"><span class="si">🔎</span><input type="text" id="cad-busca" placeholder="Buscar online por nome ou EAN..." oninput="buscarParaCadastro()" autocomplete="off"><button class="scan-btn" onclick="abrirScanner('cadastro')">📷</button></div>
+    <div class="online-results" id="cad-online-results"></div>
+    <input type="hidden" id="cad-edit-id" value="">
+    <div class="form-group"><label>Códigos de Barras (EAN)</label><input type="text" id="cad-ean" placeholder="Ex: 7891234567890, 7891234567891"><div class="ean-hint">💡 Separe múltiplos códigos por vírgula</div></div>
+    <div class="form-group"><label>Nome *</label><input type="text" id="cad-nome" placeholder="Nome do produto"></div>
+    <div class="form-row"><div class="form-group"><label>Marca</label><input type="text" id="cad-marca" placeholder="Marca" oninput="autocompleteMarca(this,'cad-ac-marca')" autocomplete="off"><div class="autocomplete-dropdown" id="cad-ac-marca"></div></div><div class="form-group"><label>Peso / ML</label><input type="text" id="cad-peso" placeholder="500g, 1L..."></div></div>
+    <div class="form-row"><div class="form-group"><label>Tipo / Variação</label><input type="text" id="cad-tipo" placeholder="Integral, Zero..."></div><div class="form-group"><label>Imagem (URL)</label><input type="text" id="cad-imagem" placeholder="https://..."></div></div>
+</div><div class="modal-footer-pad"><button class="btn btn-outline btn-sm" onclick="fecharModal('modal-cadastro')">Cancelar</button><button class="btn btn-purple" onclick="salvarProduto()">💾 Salvar</button></div></div></div>
+
 <div class="modal-overlay" id="modal-enviar-troca"><div class="modal-sheet"><div class="modal-handle"></div><div class="modal-head"><h3>🔄 Enviar para Troca</h3><button class="modal-close-btn" onclick="fecharModal('modal-enviar-troca')">✕</button></div><div class="modal-body-pad"><div id="modal-et-info" style="padding:12px;background:var(--g50);border-radius:var(--r);margin-bottom:14px;font-size:0.85rem;"></div><div class="form-group"><label>Quantidade</label><input type="number" id="et-qtd" min="1"></div><div class="form-group"><label>Localização</label><input type="text" id="et-local" placeholder="Depósito..."></div><input type="hidden" id="et-venc-id"></div><div class="modal-footer-pad"><button class="btn btn-outline btn-sm" onclick="fecharModal('modal-enviar-troca')">Cancelar</button><button class="btn btn-info" onclick="confirmarEnviarTroca()">✅ Confirmar</button></div></div></div>
-<div class="scanner-overlay" id="scanner-overlay"><p>📷 Aponte para o código</p><video id="scanner-video" autoplay playsinline></video><div class="scanner-manual-row"><input type="text" id="scanner-manual" placeholder="Ou digite..."><button class="btn btn-success btn-sm" onclick="usarCodigoManual()">OK</button></div><button class="scanner-close" onclick="fecharScanner()">✕ Fechar</button></div>
+
+<div class="scanner-overlay" id="scanner-overlay"><p>📷 Aponte para o código</p><video id="scanner-video" autoplay playsinline></video><div class="scanner-manual-row"><input type="text" id="scanner-manual" placeholder="Ou digite o código..."><button class="btn btn-success btn-sm" onclick="usarCodigoManual()">OK</button></div><button class="scanner-close" onclick="fecharScanner()">✕ Fechar</button></div>
+
 <div class="toast-wrap" id="toast-wrap"></div>
+
 
 <script>
     // ============================================
@@ -313,20 +344,63 @@
     document.querySelectorAll('.modal-overlay').forEach(o => { o.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('show'); }); });
 
     // ============================================
-    // BUSCA ONLINE
+    // BUSCA ONLINE MELHORADA (múltiplas fontes)
     // ============================================
     async function buscarOnline(query) {
-        if (query.length < 3) return []; if (onlineCache[query]) return onlineCache[query]; let r = [];
+        if (query.length < 3) return [];
+        if (onlineCache[query]) return onlineCache[query];
+        let r = [];
         try {
+            // 1. Open Food Facts
             if (/^\d{8,14}$/.test(query)) {
-                const resp = await fetch(`https://world.openfoodfacts.org/api/v0/product/${query}.json`, { signal: AbortSignal.timeout(6000) }); const data = await resp.json();
-                if (data.status === 1 && data.product) r.push({ nome: data.product.product_name || data.product.product_name_pt || 'Produto', ean: query, marca: data.product.brands || '', imagem: data.product.image_small_url || data.product.image_url || '', peso: data.product.quantity || '', source: 'online' });
+                const resp = await fetch(`https://world.openfoodfacts.org/api/v0/product/${query}.json`, { signal: AbortSignal.timeout(5000) });
+                const data = await resp.json();
+                if (data.status === 1 && data.product) {
+                    r.push({ nome: data.product.product_name || data.product.product_name_pt || data.product.product_name_en || 'Produto', ean: query, marca: data.product.brands || '', imagem: data.product.image_small_url || data.product.image_url || '', peso: data.product.quantity || '', source: 'online' });
+                }
             } else {
-                const resp = await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=10&lc=pt`, { signal: AbortSignal.timeout(6000) }); const data = await resp.json();
-                if (data.products) r = data.products.filter(p => p.product_name || p.product_name_pt).map(p => ({ nome: p.product_name || p.product_name_pt || 'Produto', ean: p.code || '', marca: p.brands || '', imagem: p.image_small_url || p.image_url || '', peso: p.quantity || '', source: 'online' }));
+                const resp = await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=15&lc=pt`, { signal: AbortSignal.timeout(5000) });
+                const data = await resp.json();
+                if (data.products) r = data.products.filter(p => p.product_name || p.product_name_pt).map(p => ({ nome: p.product_name || p.product_name_pt || p.product_name_en || 'Produto', ean: p.code || '', marca: p.brands || '', imagem: p.image_small_url || p.image_url || '', peso: p.quantity || '', source: 'online' }));
             }
-        } catch (e) { console.log('err:', e); }
-        onlineCache[query] = r; return r;
+
+            // 2. Se não achou por EAN no OFF, tenta Open Beauty Facts
+            if (r.length === 0 && /^\d{8,14}$/.test(query)) {
+                try {
+                    const resp2 = await fetch(`https://world.openbeautyfacts.org/api/v0/product/${query}.json`, { signal: AbortSignal.timeout(4000) });
+                    const data2 = await resp2.json();
+                    if (data2.status === 1 && data2.product) {
+                        r.push({ nome: data2.product.product_name || 'Produto', ean: query, marca: data2.product.brands || '', imagem: data2.product.image_small_url || data2.product.image_url || '', peso: data2.product.quantity || '', source: 'online' });
+                    }
+                } catch (e2) {}
+            }
+
+            // 3. Se não achou por EAN, tenta Open Pet Food Facts
+            if (r.length === 0 && /^\d{8,14}$/.test(query)) {
+                try {
+                    const resp3 = await fetch(`https://world.openpetfoodfacts.org/api/v0/product/${query}.json`, { signal: AbortSignal.timeout(4000) });
+                    const data3 = await resp3.json();
+                    if (data3.status === 1 && data3.product) {
+                        r.push({ nome: data3.product.product_name || 'Produto', ean: query, marca: data3.product.brands || '', imagem: data3.product.image_small_url || data3.product.image_url || '', peso: data3.product.quantity || '', source: 'online' });
+                    }
+                } catch (e3) {}
+            }
+
+            // 4. Se buscou por nome e achou pouco, tenta também em inglês
+            if (r.length < 3 && !/^\d{8,14}$/.test(query)) {
+                try {
+                    const resp4 = await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=10&lc=en`, { signal: AbortSignal.timeout(4000) });
+                    const data4 = await resp4.json();
+                    if (data4.products) {
+                        const novos = data4.products.filter(p => (p.product_name || p.product_name_en) && !r.some(x => x.ean === p.code))
+                            .map(p => ({ nome: p.product_name || p.product_name_en || 'Produto', ean: p.code || '', marca: p.brands || '', imagem: p.image_small_url || p.image_url || '', peso: p.quantity || '', source: 'online' }));
+                        r = r.concat(novos);
+                    }
+                } catch (e4) {}
+            }
+        } catch (e) { console.log('busca err:', e); }
+        onlineCache[query] = r;
+        return r;
     }
 
     async function buscarParaCadastro() {
@@ -334,19 +408,31 @@
         if (q.length < 3) { dd.classList.remove('show'); return; }
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(async () => {
-            dd.innerHTML = '<div class="or-item"><div class="or-info"><div class="or-name">⏳ Buscando...</div></div></div>'; dd.classList.add('show');
+            dd.innerHTML = '<div class="or-item"><div class="or-info"><div class="or-name">⏳ Buscando em várias fontes...</div></div></div>'; dd.classList.add('show');
             const results = await buscarOnline(q); window.__cadOnline = results;
-            if (!results.length) { dd.innerHTML = '<div class="or-item"><div class="or-info"><div class="or-name">Nenhum resultado</div></div></div>'; return; }
-            dd.innerHTML = results.map((p, i) => `<div class="or-item" onclick="selecionarCad(${i})">${p.imagem ? '<img src="'+p.imagem+'" onerror="this.outerHTML=\'<div class=or-icon>📦</div>\'">' : '<div class="or-icon">📦</div>'}<div class="or-info"><div class="or-name">${p.marca?p.marca+' - ':''}${p.nome}</div><div class="or-ean">EAN: ${p.ean||'N/A'}${p.peso?' | '+p.peso:''}</div></div><span class="or-badge online">ONLINE</span></div>`).join('');
+            if (!results.length) { dd.innerHTML = '<div class="or-item"><div class="or-info"><div class="or-name">Nenhum resultado encontrado</div><div class="or-ean">Preencha os campos manualmente</div></div></div>'; return; }
+            dd.innerHTML = results.map((p, i) => `<div class="or-item" onclick="selecionarCad(${i})">${p.imagem ? '<img src="'+p.imagem+'" onerror="this.outerHTML=\'<div class=or-icon>📦</div>\'">' : '<div class="or-icon">📦</div>'}<div class="or-info"><div class="or-name">${p.marca ? p.marca + ' - ' : ''}${p.nome}</div><div class="or-ean">EAN: ${p.ean || 'N/A'}${p.peso ? ' | ' + p.peso : ''}</div></div><span class="or-badge online">ONLINE</span></div>`).join('');
         }, 400);
     }
 
     function selecionarCad(idx) {
         const p = window.__cadOnline?.[idx]; if (!p) return;
-        document.getElementById('cad-ean').value = p.ean || ''; document.getElementById('cad-nome').value = p.nome || '';
-        document.getElementById('cad-marca').value = p.marca || ''; document.getElementById('cad-peso').value = p.peso || '';
+        // Adiciona EAN ao campo (suporta múltiplos)
+        const eanField = document.getElementById('cad-ean');
+        const currentEan = eanField.value.trim();
+        if (p.ean) {
+            if (currentEan && !currentEan.split(',').map(e => e.trim()).includes(p.ean)) {
+                eanField.value = currentEan + ', ' + p.ean;
+            } else if (!currentEan) {
+                eanField.value = p.ean;
+            }
+        }
+        document.getElementById('cad-nome').value = p.nome || '';
+        document.getElementById('cad-marca').value = p.marca || '';
+        document.getElementById('cad-peso').value = p.peso || '';
         document.getElementById('cad-imagem').value = p.imagem || '';
-        document.getElementById('cad-online-results').classList.remove('show'); document.getElementById('cad-busca').value = '';
+        document.getElementById('cad-online-results').classList.remove('show');
+        document.getElementById('cad-busca').value = '';
         toast('Preenchido!', 'info');
     }
 
@@ -368,23 +454,79 @@
     });
 
     // ============================================
-    // SCANNER
+    // SCANNER (suporta pick-falta, pick-venc, pick-troca, cadastro)
     // ============================================
     async function abrirScanner(target) {
-        scannerTarget = target; document.getElementById('scanner-manual').value = ''; document.getElementById('scanner-overlay').classList.add('show');
-        try { scannerStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1280 } } }); document.getElementById('scanner-video').srcObject = scannerStream;
-            if ('BarcodeDetector' in window) { const det = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128'] }); const sc = setInterval(async () => { try { const c = await det.detect(document.getElementById('scanner-video')); if (c.length > 0) { clearInterval(sc); processarCodigo(c[0].rawValue); } } catch (e) {} }, 400); window.__scan = sc; }
+        scannerTarget = target; document.getElementById('scanner-manual').value = '';
+        document.getElementById('scanner-overlay').classList.add('show');
+        try {
+            scannerStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1280 } } });
+            document.getElementById('scanner-video').srcObject = scannerStream;
+            if ('BarcodeDetector' in window) {
+                const det = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128'] });
+                const sc = setInterval(async () => { try { const c = await det.detect(document.getElementById('scanner-video')); if (c.length > 0) { clearInterval(sc); processarCodigo(c[0].rawValue); } } catch (e) {} }, 400);
+                window.__scan = sc;
+            }
         } catch (e) { toast('Câmera: ' + e.message, 'err'); fecharScanner(); }
     }
     function fecharScanner() { document.getElementById('scanner-overlay').classList.remove('show'); if (scannerStream) { scannerStream.getTracks().forEach(t => t.stop()); scannerStream = null; } if (window.__scan) clearInterval(window.__scan); }
     function usarCodigoManual() { const c = document.getElementById('scanner-manual').value.trim(); if (!c) return; processarCodigo(c); }
-    function processarCodigo(code) { fecharScanner(); toast('📷 ' + code); document.getElementById('cad-busca').value = code; buscarParaCadastro(); }
+
+    function processarCodigo(code) {
+        fecharScanner();
+        toast('📷 ' + code);
+
+        if (scannerTarget === 'cadastro') {
+            // Preenche o EAN e busca online
+            const eanField = document.getElementById('cad-ean');
+            const current = eanField.value.trim();
+            if (current && !current.split(',').map(e => e.trim()).includes(code)) {
+                eanField.value = current + ', ' + code;
+            } else if (!current) {
+                eanField.value = code;
+            }
+            document.getElementById('cad-busca').value = code;
+            buscarParaCadastro();
+        } else if (scannerTarget === 'pick-falta') {
+            document.getElementById('pick-falta-filtro').value = code;
+            renderPickFalta();
+        } else if (scannerTarget === 'pick-venc') {
+            document.getElementById('pick-venc-filtro').value = code;
+            renderPickVenc();
+        } else if (scannerTarget === 'pick-troca') {
+            document.getElementById('pick-troca-filtro').value = code;
+            renderPickTroca();
+        }
+    }
 
     // ============================================
-    // NOME COMPLETO DO PRODUTO
+    // NOME COMPLETO + HELPERS EAN
     // ============================================
     function nomeProdutoCompleto(p) {
         return [p.nome, p.marca, p.peso, p.tipo].filter(v => v && v.trim() !== '').join(' ').trim();
+    }
+
+    // Verifica se produto tem determinado EAN (suporta múltiplos)
+    function produtoTemEan(p, ean) {
+        if (!p.ean || !ean) return false;
+        const eans = p.ean.split(',').map(e => e.trim());
+        return eans.includes(ean.trim());
+    }
+
+    // Filtra produtos por texto (suporta busca por qualquer EAN)
+    function filtrarProdutos(lista, filtro) {
+        if (!filtro) return lista;
+        const q = filtro.toLowerCase();
+        return lista.filter(p => {
+            const texto = `${p.nome} ${p.ean} ${p.marca} ${p.peso} ${p.tipo}`.toLowerCase();
+            if (texto.includes(q)) return true;
+            // Busca em cada EAN separado
+            if (p.ean) {
+                const eans = p.ean.split(',').map(e => e.trim());
+                if (eans.some(e => e.includes(q))) return true;
+            }
+            return false;
+        });
     }
 
     // ============================================
@@ -395,13 +537,19 @@
         if (!nome) { toast('Nome obrigatório!', 'err'); return; }
         const editId = document.getElementById('cad-edit-id').value;
         const prod = { id: editId ? parseInt(editId) : Date.now(), ean: document.getElementById('cad-ean').value.trim(), nome, marca: document.getElementById('cad-marca').value.trim(), peso: document.getElementById('cad-peso').value.trim(), tipo: document.getElementById('cad-tipo').value.trim(), imagem: document.getElementById('cad-imagem').value.trim(), criadoEm: new Date().toISOString() };
+        const nc = nomeProdutoCompleto(prod);
         if (editId) {
             const idx = produtos.findIndex(p => p.id === parseInt(editId));
             if (idx !== -1) { prod.criadoEm = produtos[idx].criadoEm; produtos[idx] = prod; }
-            toast('Atualizado!'); enviarNotif('cadastro', '✏️ Editado: ' + nomeProdutoCompleto(prod));
+            toast('Atualizado!'); enviarNotif('cadastro', '✏️ Editado: ' + nc);
         } else {
-            if (prod.ean && produtos.some(p => p.ean === prod.ean)) { if (!confirm('EAN já existe. Continuar?')) return; }
-            produtos.unshift(prod); toast('Cadastrado!'); enviarNotif('cadastro', '📦 Novo: ' + nomeProdutoCompleto(prod));
+            // Verifica duplicata por qualquer EAN
+            if (prod.ean) {
+                const novasEans = prod.ean.split(',').map(e => e.trim()).filter(e => e);
+                const dup = produtos.find(p => novasEans.some(ne => produtoTemEan(p, ne)));
+                if (dup) { if (!confirm('EAN já existe em "' + nomeProdutoCompleto(dup) + '". Continuar?')) return; }
+            }
+            produtos.unshift(prod); toast('Cadastrado!'); enviarNotif('cadastro', '📦 Novo: ' + nc);
         }
         salvarESync(); renderAll(); limparFormCad(); fecharModal('modal-cadastro');
     }
@@ -414,10 +562,10 @@
 
     function editarProduto(id) {
         const p = produtos.find(x => x.id === id); if (!p) return;
-        document.getElementById('cad-edit-id').value = p.id; document.getElementById('cad-ean').value = p.ean || '';
-        document.getElementById('cad-nome').value = p.nome || ''; document.getElementById('cad-marca').value = p.marca || '';
-        document.getElementById('cad-peso').value = p.peso || ''; document.getElementById('cad-tipo').value = p.tipo || '';
-        document.getElementById('cad-imagem').value = p.imagem || '';
+        document.getElementById('cad-edit-id').value = p.id;
+        document.getElementById('cad-ean').value = p.ean || ''; document.getElementById('cad-nome').value = p.nome || '';
+        document.getElementById('cad-marca').value = p.marca || ''; document.getElementById('cad-peso').value = p.peso || '';
+        document.getElementById('cad-tipo').value = p.tipo || ''; document.getElementById('cad-imagem').value = p.imagem || '';
         document.getElementById('modal-cad-title').textContent = '✏️ Editar Produto'; document.getElementById('modal-cadastro').classList.add('show');
     }
 
@@ -428,18 +576,28 @@
     }
 
     // ============================================
-    // HELPERS
+    // HELPERS VISUAIS
     // ============================================
-    function getImgProduto(nome, ean) { const p = produtos.find(x => { if (ean && x.ean === ean) return true; if (x.nome && nome && nome.toLowerCase().includes(x.nome.toLowerCase())) return true; return false; }); return p?.imagem || ''; }
+    function getImgProduto(nome, ean) {
+        const p = produtos.find(x => {
+            if (ean && produtoTemEan(x, ean)) return true;
+            if (x.nome && nome && nome.toLowerCase().includes(x.nome.toLowerCase())) return true;
+            return false;
+        });
+        return p?.imagem || '';
+    }
     function imgHTML(nome, ean) { const img = getImgProduto(nome, ean); if (img) return `<img src="${img}" onerror="this.outerHTML='📦'">`; return '📦'; }
 
     function prodCardTop(p) {
-        const nomeCompleto = nomeProdutoCompleto(p);
+        const nc = nomeProdutoCompleto(p);
+        // Mostra primeiro EAN no código
+        const firstEan = p.ean ? p.ean.split(',')[0].trim() : '';
+        const moreEans = p.ean && p.ean.includes(',') ? ' (+)' : '';
         return `<div class="pc-top">
             <div class="pc-img">${p.imagem ? '<img src="' + p.imagem + '" onerror="this.parentElement.innerHTML=\'📦\'">' : '📦'}</div>
             <div class="pc-info">
-                <div class="pc-name">${nomeCompleto}</div>
-                ${p.ean ? '<span class="pc-ean-code">Cód: ' + p.ean + '</span>' : ''}
+                <div class="pc-name">${nc}</div>
+                ${firstEan ? '<span class="pc-ean-code">Cód: ' + firstEan + moreEans + '</span>' : ''}
             </div>
         </div>`;
     }
@@ -449,7 +607,12 @@
     function jaInserido(tipo, prodId, ean) {
         const set = tipo === 'falta' ? _jaFalta : tipo === 'venc' ? _jaVenc : _jaTroca;
         if (set.has(prodId)) return true;
-        if (ean) { const arr = tipo === 'falta' ? faltas : tipo === 'venc' ? vencimentos : trocas; const hoje = new Date().toDateString(); return arr.some(x => x.ean === ean && new Date(x.data).toDateString() === hoje); }
+        if (ean) {
+            const arr = tipo === 'falta' ? faltas : tipo === 'venc' ? vencimentos : trocas;
+            const hoje = new Date().toDateString();
+            const eans = ean.split(',').map(e => e.trim());
+            return arr.some(x => eans.some(e => x.ean === e) && new Date(x.data).toDateString() === hoje);
+        }
         return false;
     }
 
@@ -458,25 +621,23 @@
         if (btn) { btn.className = 'ef-toggle ef-toggle-done'; btn.textContent = texto; btn.disabled = true; btn.onclick = null; }
         const exp = document.getElementById(prefix + '-expand-' + id); if (exp) exp.classList.remove('show');
     }
-
     function toggleExp(prefix, id) { const el = document.getElementById(prefix + '-expand-' + id); if (el) el.classList.toggle('show'); }
 
     // ============================================
-    // PICK FALTA (usa nomeProdutoCompleto)
+    // PICK FALTA (com scanner)
     // ============================================
     function renderPickFalta() {
-        const filtro = (document.getElementById('pick-falta-filtro')?.value || '').toLowerCase();
-        let lista = produtos;
-        if (filtro) lista = lista.filter(p => `${p.nome} ${p.ean} ${p.marca} ${p.peso} ${p.tipo}`.toLowerCase().includes(filtro));
+        const filtro = (document.getElementById('pick-falta-filtro')?.value || '').trim();
+        let lista = filtrarProdutos(produtos, filtro);
         const div = document.getElementById('pick-falta-lista');
-        if (!lista.length) { div.innerHTML = '<div class="empty-state"><div class="es-icon">📦</div><p>Nenhum produto</p></div>'; return; }
+        if (!lista.length) { div.innerHTML = '<div class="empty-state"><div class="es-icon">📦</div><p>' + (filtro ? 'Nenhum produto com esse código/nome' : 'Nenhum produto') + '</p></div>'; return; }
         div.innerHTML = lista.map(p => {
             const done = jaInserido('falta', p.id, p.ean);
             return `<div class="product-card">${prodCardTop(p)}
-                <div class="pc-actions"><button class="ef-toggle ${done?'ef-toggle-done':'ef-toggle-falta'}" id="pf-btn-${p.id}" ${done?'disabled':`onclick="toggleExp('pf',${p.id})"`}>${done?'✓ Já inserido na Falta':'🚫 Inserir na Falta ▾'}</button></div>
+                <div class="pc-actions"><button class="ef-toggle ${done ? 'ef-toggle-done' : 'ef-toggle-falta'}" id="pf-btn-${p.id}" ${done ? 'disabled' : `onclick="toggleExp('pf',${p.id})"`}>${done ? '✓ Já inserido na Falta' : '🚫 Inserir na Falta ▾'}</button></div>
                 <div class="expand-form" id="pf-expand-${p.id}">
-                    <div class="ef-row"><label>Estoque:</label><div class="unit-group"><input type="number" id="pf-eq-${p.id}" placeholder="Qtd" min="0">${unidadeSelectHTML('pf-eu-'+p.id)}</div><button class="btn-action btn-undone" style="min-width:auto;padding:6px 10px;font-size:0.7rem;flex:none;" onclick="document.getElementById('pf-eq-${p.id}').value=''">N/I</button></div>
-                    <div class="ef-row"><label>Pedido:</label><div class="unit-group"><input type="number" id="pf-sq-${p.id}" placeholder="Qtd" min="0">${unidadeSelectHTML('pf-su-'+p.id)}</div><button class="btn-action btn-undone" style="min-width:auto;padding:6px 10px;font-size:0.7rem;flex:none;" onclick="document.getElementById('pf-sq-${p.id}').value=''">N/I</button></div>
+                    <div class="ef-row"><label>Estoque:</label><div class="unit-group"><input type="number" id="pf-eq-${p.id}" placeholder="Qtd" min="0">${unidadeSelectHTML('pf-eu-' + p.id)}</div><button class="btn-action btn-undone" style="min-width:auto;padding:6px 10px;font-size:0.7rem;flex:none;" onclick="document.getElementById('pf-eq-${p.id}').value=''">N/I</button></div>
+                    <div class="ef-row"><label>Pedido:</label><div class="unit-group"><input type="number" id="pf-sq-${p.id}" placeholder="Qtd" min="0">${unidadeSelectHTML('pf-su-' + p.id)}</div><button class="btn-action btn-undone" style="min-width:auto;padding:6px 10px;font-size:0.7rem;flex:none;" onclick="document.getElementById('pf-sq-${p.id}').value=''">N/I</button></div>
                     <div class="ef-row"><label>Obs:</label><input type="text" id="pf-obs-${p.id}" placeholder="Opcional" style="flex:1;"></div>
                     <div class="ef-actions"><button class="ef-btn ef-btn-cancel" onclick="toggleExp('pf',${p.id})">Cancelar</button><button class="ef-btn ef-btn-primary" onclick="cfmFalta(${p.id})">✅ Confirmar</button></div>
                 </div></div>`;
@@ -486,31 +647,31 @@
     function cfmFalta(id) {
         const p = produtos.find(x => x.id === id); if (!p) return;
         const nc = nomeProdutoCompleto(p);
-        if (p.ean && faltas.some(x => x.ean === p.ean && new Date(x.data).toDateString() === new Date().toDateString())) { toast('⚠️ ' + nc + ' já inserido nas Faltas hoje!', 'warn'); return; }
-        const eq = document.getElementById('pf-eq-'+id)?.value||'', eu = document.querySelector(`[name="pf-eu-${id}"]`)?.value||'un';
-        const sq = document.getElementById('pf-sq-'+id)?.value||'', su = document.querySelector(`[name="pf-su-${id}"]`)?.value||'un';
-        const obs = document.getElementById('pf-obs-'+id)?.value.trim()||'';
-        faltas.unshift({ id: Date.now(), produto: nc, ean: p.ean||'', marca: p.marca||'', estoque: eq ? eq+' '+eu : 'Não informado', sugestao: sq ? sq+' '+su : 'Não informado', obs, data: new Date().toISOString() });
-        salvarESync(); toast('🚫 Falta: '+nc); enviarNotif('falta', '🚫 Falta: '+nc);
+        const firstEan = p.ean ? p.ean.split(',')[0].trim() : '';
+        if (firstEan && faltas.some(x => x.ean === firstEan && new Date(x.data).toDateString() === new Date().toDateString())) { toast('⚠️ ' + nc + ' já inserido nas Faltas hoje!', 'warn'); return; }
+        const eq = document.getElementById('pf-eq-' + id)?.value || '', eu = document.querySelector(`[name="pf-eu-${id}"]`)?.value || 'un';
+        const sq = document.getElementById('pf-sq-' + id)?.value || '', su = document.querySelector(`[name="pf-su-${id}"]`)?.value || 'un';
+        const obs = document.getElementById('pf-obs-' + id)?.value.trim() || '';
+        faltas.unshift({ id: Date.now(), produto: nc, ean: firstEan, marca: p.marca || '', estoque: eq ? eq + ' ' + eu : 'Não informado', sugestao: sq ? sq + ' ' + su : 'Não informado', obs, data: new Date().toISOString() });
+        salvarESync(); toast('🚫 Falta: ' + nc); enviarNotif('falta', '🚫 Falta: ' + nc);
         _jaFalta.add(id); marcarBotao('pf', id, '✓ Já inserido na Falta');
         renderHome(); renderFaltas(); renderNotifs();
     }
 
     // ============================================
-    // PICK VENCIMENTO (usa nomeProdutoCompleto)
+    // PICK VENCIMENTO (com scanner)
     // ============================================
     function renderPickVenc() {
-        const filtro = (document.getElementById('pick-venc-filtro')?.value || '').toLowerCase();
-        let lista = produtos;
-        if (filtro) lista = lista.filter(p => `${p.nome} ${p.ean} ${p.marca} ${p.peso} ${p.tipo}`.toLowerCase().includes(filtro));
+        const filtro = (document.getElementById('pick-venc-filtro')?.value || '').trim();
+        let lista = filtrarProdutos(produtos, filtro);
         const div = document.getElementById('pick-venc-lista');
-        if (!lista.length) { div.innerHTML = '<div class="empty-state"><div class="es-icon">📦</div><p>Nenhum produto</p></div>'; return; }
+        if (!lista.length) { div.innerHTML = '<div class="empty-state"><div class="es-icon">📦</div><p>' + (filtro ? 'Nenhum produto com esse código/nome' : 'Nenhum produto') + '</p></div>'; return; }
         div.innerHTML = lista.map(p => {
             const done = jaInserido('venc', p.id, p.ean);
             return `<div class="product-card">${prodCardTop(p)}
-                <div class="pc-actions"><button class="ef-toggle ${done?'ef-toggle-done':'ef-toggle-venc'}" id="pv-btn-${p.id}" ${done?'disabled':`onclick="toggleExp('pv',${p.id})"`}>${done?'✓ Já inserido no Vencimento':'📅 Inserir Vencimento ▾'}</button></div>
+                <div class="pc-actions"><button class="ef-toggle ${done ? 'ef-toggle-done' : 'ef-toggle-venc'}" id="pv-btn-${p.id}" ${done ? 'disabled' : `onclick="toggleExp('pv',${p.id})"`}>${done ? '✓ Já inserido no Vencimento' : '📅 Inserir Vencimento ▾'}</button></div>
                 <div class="expand-form" id="pv-expand-${p.id}">
-                    <div class="ef-row"><label>Qtd:</label><div class="unit-group"><input type="number" id="pv-q-${p.id}" placeholder="Qtd" min="1" value="1">${unidadeSelectHTML('pv-u-'+p.id)}</div></div>
+                    <div class="ef-row"><label>Qtd:</label><div class="unit-group"><input type="number" id="pv-q-${p.id}" placeholder="Qtd" min="1" value="1">${unidadeSelectHTML('pv-u-' + p.id)}</div></div>
                     <div class="ef-row"><label>Validade:</label><input type="date" id="pv-d-${p.id}" style="flex:1;"></div>
                     <div class="ef-row"><label>Local:</label><input type="text" id="pv-l-${p.id}" placeholder="Gôndola..." style="flex:1;"></div>
                     <div class="ef-actions"><button class="ef-btn ef-btn-cancel" onclick="toggleExp('pv',${p.id})">Cancelar</button><button class="ef-btn ef-btn-warning" onclick="cfmVenc(${p.id})">✅ Confirmar</button></div>
@@ -521,32 +682,32 @@
     function cfmVenc(id) {
         const p = produtos.find(x => x.id === id); if (!p) return;
         const nc = nomeProdutoCompleto(p);
-        const data = document.getElementById('pv-d-'+id)?.value||'';
+        const firstEan = p.ean ? p.ean.split(',')[0].trim() : '';
+        const data = document.getElementById('pv-d-' + id)?.value || '';
         if (!data) { toast('Informe a validade!', 'err'); return; }
-        if (p.ean && vencimentos.some(x => x.ean === p.ean && x.data === data)) { toast('⚠️ '+nc+' já tem esse vencimento!', 'warn'); return; }
-        const qtd = parseInt(document.getElementById('pv-q-'+id)?.value)||1, un = document.querySelector(`[name="pv-u-${id}"]`)?.value||'un';
-        const local = document.getElementById('pv-l-'+id)?.value.trim()||'';
-        vencimentos.unshift({ id: Date.now(), produto: nc, ean: p.ean||'', marca: p.marca||'', qtd, unidade: un, data, local, acaoFeita: false, criadoEm: new Date().toISOString() });
-        salvarESync(); toast('📅 Vencimento: '+nc); enviarNotif('vencimento', '📅 Novo: '+nc+' ('+fmtDS(data)+')');
+        if (firstEan && vencimentos.some(x => x.ean === firstEan && x.data === data)) { toast('⚠️ ' + nc + ' já tem esse vencimento!', 'warn'); return; }
+        const qtd = parseInt(document.getElementById('pv-q-' + id)?.value) || 1, un = document.querySelector(`[name="pv-u-${id}"]`)?.value || 'un';
+        const local = document.getElementById('pv-l-' + id)?.value.trim() || '';
+        vencimentos.unshift({ id: Date.now(), produto: nc, ean: firstEan, marca: p.marca || '', qtd, unidade: un, data, local, acaoFeita: false, criadoEm: new Date().toISOString() });
+        salvarESync(); toast('📅 Vencimento: ' + nc); enviarNotif('vencimento', '📅 Novo: ' + nc + ' (' + fmtDS(data) + ')');
         _jaVenc.add(id); marcarBotao('pv', id, '✓ Já inserido no Vencimento');
         renderHome(); renderVencimentos(); renderNotifs();
     }
 
     // ============================================
-    // PICK TROCA (usa nomeProdutoCompleto)
+    // PICK TROCA (com scanner)
     // ============================================
     function renderPickTroca() {
-        const filtro = (document.getElementById('pick-troca-filtro')?.value || '').toLowerCase();
-        let lista = produtos;
-        if (filtro) lista = lista.filter(p => `${p.nome} ${p.ean} ${p.marca} ${p.peso} ${p.tipo}`.toLowerCase().includes(filtro));
+        const filtro = (document.getElementById('pick-troca-filtro')?.value || '').trim();
+        let lista = filtrarProdutos(produtos, filtro);
         const div = document.getElementById('pick-troca-lista');
-        if (!lista.length) { div.innerHTML = '<div class="empty-state"><div class="es-icon">📦</div><p>Nenhum produto</p></div>'; return; }
+        if (!lista.length) { div.innerHTML = '<div class="empty-state"><div class="es-icon">📦</div><p>' + (filtro ? 'Nenhum produto com esse código/nome' : 'Nenhum produto') + '</p></div>'; return; }
         div.innerHTML = lista.map(p => {
             const done = jaInserido('troca', p.id, p.ean);
             return `<div class="product-card">${prodCardTop(p)}
-                <div class="pc-actions"><button class="ef-toggle ${done?'ef-toggle-done':'ef-toggle-troca'}" id="pt-btn-${p.id}" ${done?'disabled':`onclick="toggleExp('pt',${p.id})"`}>${done?'✓ Já inserido na Troca':'🔄 Inserir Troca ▾'}</button></div>
+                <div class="pc-actions"><button class="ef-toggle ${done ? 'ef-toggle-done' : 'ef-toggle-troca'}" id="pt-btn-${p.id}" ${done ? 'disabled' : `onclick="toggleExp('pt',${p.id})"`}>${done ? '✓ Já inserido na Troca' : '🔄 Inserir Troca ▾'}</button></div>
                 <div class="expand-form" id="pt-expand-${p.id}">
-                    <div class="ef-row"><label>Qtd:</label><div class="unit-group"><input type="number" id="pt-q-${p.id}" placeholder="Qtd" min="1" value="1">${unidadeSelectHTML('pt-u-'+p.id)}</div></div>
+                    <div class="ef-row"><label>Qtd:</label><div class="unit-group"><input type="number" id="pt-q-${p.id}" placeholder="Qtd" min="1" value="1">${unidadeSelectHTML('pt-u-' + p.id)}</div></div>
                     <div class="ef-row"><label>Motivo:</label><select id="pt-m-${p.id}" style="flex:1;padding:8px;border:1.5px solid var(--g200);border-radius:var(--r);font-size:0.82rem;"><option value="">Selecione</option><option>Vencido</option><option>Avariado</option><option>Defeito</option><option>Recall</option><option>Outros</option></select></div>
                     <div class="ef-row"><label>Local:</label><input type="text" id="pt-l-${p.id}" placeholder="Depósito..." style="flex:1;"></div>
                     <div class="ef-row"><label>Obs:</label><input type="text" id="pt-o-${p.id}" placeholder="Opcional" style="flex:1;"></div>
@@ -558,24 +719,32 @@
     function cfmTroca(id) {
         const p = produtos.find(x => x.id === id); if (!p) return;
         const nc = nomeProdutoCompleto(p);
-        if (p.ean && trocas.some(x => x.ean === p.ean && new Date(x.data).toDateString() === new Date().toDateString())) { toast('⚠️ '+nc+' já inserido nas Trocas hoje!', 'warn'); return; }
-        const qtd = parseInt(document.getElementById('pt-q-'+id)?.value)||1, un = document.querySelector(`[name="pt-u-${id}"]`)?.value||'un';
-        const motivo = document.getElementById('pt-m-'+id)?.value||'', local = document.getElementById('pt-l-'+id)?.value.trim()||'';
-        const obs = document.getElementById('pt-o-'+id)?.value.trim()||'';
-        trocas.unshift({ id: Date.now(), produto: nc, ean: p.ean||'', marca: p.marca||'', qtd, unidade: un, motivo, local, obs, data: new Date().toISOString() });
-        salvarESync(); toast('🔄 Troca: '+nc); enviarNotif('troca', '🔄 Troca: '+nc+' x'+qtd);
+        const firstEan = p.ean ? p.ean.split(',')[0].trim() : '';
+        if (firstEan && trocas.some(x => x.ean === firstEan && new Date(x.data).toDateString() === new Date().toDateString())) { toast('⚠️ ' + nc + ' já inserido nas Trocas hoje!', 'warn'); return; }
+        const qtd = parseInt(document.getElementById('pt-q-' + id)?.value) || 1, un = document.querySelector(`[name="pt-u-${id}"]`)?.value || 'un';
+        const motivo = document.getElementById('pt-m-' + id)?.value || '', local = document.getElementById('pt-l-' + id)?.value.trim() || '';
+        const obs = document.getElementById('pt-o-' + id)?.value.trim() || '';
+        trocas.unshift({ id: Date.now(), produto: nc, ean: firstEan, marca: p.marca || '', qtd, unidade: un, motivo, local, obs, data: new Date().toISOString() });
+        salvarESync(); toast('🔄 Troca: ' + nc); enviarNotif('troca', '🔄 Troca: ' + nc + ' x' + qtd);
         _jaTroca.add(id); marcarBotao('pt', id, '✓ Já inserido na Troca');
         renderHome(); renderTrocas(); renderNotifs();
     }
+
+
+
+
+
+
+
+
 
 
     // ============================================
     // RENDER CADASTROS
     // ============================================
     function renderCadastros() {
-        const filtro = (document.getElementById('filtro-cad')?.value || '').toLowerCase();
-        let lista = produtos;
-        if (filtro) lista = lista.filter(p => `${p.nome} ${p.ean} ${p.marca} ${p.tipo} ${p.peso}`.toLowerCase().includes(filtro));
+        const filtro = (document.getElementById('filtro-cad')?.value || '').trim();
+        let lista = filtrarProdutos(produtos, filtro);
         document.getElementById('cad-list-count').textContent = produtos.length;
         const div = document.getElementById('lista-cadastros');
         if (!lista.length) { div.innerHTML = '<div class="empty-state"><div class="es-icon">📦</div><p>Nenhum produto cadastrado</p></div>'; return; }
@@ -636,7 +805,7 @@
 
     function editarFalta(id) {
         const f = faltas.find(x => x.id === id); if (!f) return;
-        const p = produtos.find(x => (x.ean && x.ean === f.ean) || nomeProdutoCompleto(x) === f.produto);
+        const p = produtos.find(x => (x.ean && produtoTemEan(x, f.ean)) || nomeProdutoCompleto(x) === f.produto);
         if (p) {
             faltas = faltas.filter(x => x.id !== id); salvarLocal(); _jaFalta.delete(p.id);
             goList('pick-falta');
@@ -729,7 +898,7 @@
 
     function editarVenc(id) {
         const v = vencimentos.find(x => x.id === id); if (!v) return;
-        const p = produtos.find(x => (x.ean && x.ean === v.ean) || nomeProdutoCompleto(x) === v.produto);
+        const p = produtos.find(x => (x.ean && produtoTemEan(x, v.ean)) || nomeProdutoCompleto(x) === v.produto);
         if (p) {
             vencimentos = vencimentos.filter(x => x.id !== id); salvarLocal(); _jaVenc.delete(p.id);
             goList('pick-venc');
@@ -823,7 +992,7 @@
 
     function editarTroca(id) {
         const t = trocas.find(x => x.id === id); if (!t) return;
-        const p = produtos.find(x => (x.ean && x.ean === t.ean) || nomeProdutoCompleto(x) === t.produto);
+        const p = produtos.find(x => (x.ean && produtoTemEan(x, t.ean)) || nomeProdutoCompleto(x) === t.produto);
         if (p) {
             trocas = trocas.filter(x => x.id !== id); salvarLocal(); _jaTroca.delete(p.id);
             goList('pick-troca');
@@ -907,7 +1076,7 @@
     }
 
     // ============================================
-    // PDF — DOWNLOAD DIRETO
+    // PDF
     // ============================================
     function gerarPDF(tipo) {
         let titulo, headers, rows;
@@ -939,7 +1108,7 @@ tbody tr:nth-child(even){background:#f9fafb}tbody td{padding:7px 8px;border:1px 
 <p class="tot">Total: ${rows.length} itens</p>
 <table><thead><tr>${headers.map(h => '<th>' + h + '</th>').join('')}</tr></thead>
 <tbody>${rows.map(r => '<tr>' + r.map(c => '<td>' + c + '</td>').join('') + '</tr>').join('')}</tbody></table>
-<div class="ft">Controle de Estoque v2.4</div></body></html>`;
+<div class="ft">Controle de Estoque v2.5</div></body></html>`;
 
         try {
             const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
@@ -969,7 +1138,7 @@ tbody tr:nth-child(even){background:#f9fafb}tbody td{padding:7px 8px;border:1px 
             const l = getTrocasFiltradas(); if (!l.length) { toast('Sem dados!', 'warn'); return; }
             linhas = l.map((t, i) => `${i + 1}. *${t.produto}* x${t.qtd || 1}${t.unidade ? ' ' + t.unidade : ''}\n   ${t.motivo || '-'}${t.local ? ' | 📍 ' + t.local : ''}${t.obs ? ' | ' + t.obs : ''}`);
         }
-        const msg = `${titulo}\n📆 ${new Date().toLocaleDateString('pt-BR')} | Total: ${linhas.length}\n${'─'.repeat(28)}\n\n${linhas.join('\n\n')}\n\n${'─'.repeat(28)}\n_Controle v2.4_`;
+        const msg = `${titulo}\n📆 ${new Date().toLocaleDateString('pt-BR')} | Total: ${linhas.length}\n${'─'.repeat(28)}\n\n${linhas.join('\n\n')}\n\n${'─'.repeat(28)}\n_Controle v2.5_`;
         window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
     }
 
@@ -977,7 +1146,7 @@ tbody tr:nth-child(even){background:#f9fafb}tbody td{padding:7px 8px;border:1px 
     // CONFIG
     // ============================================
     function exportarDados() {
-        const d = { produtos, faltas, vencimentos, trocas, exportadoEm: new Date().toISOString(), versao: '2.4' };
+        const d = { produtos, faltas, vencimentos, trocas, exportadoEm: new Date().toISOString(), versao: '2.5' };
         const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(d, null, 2)], { type: 'application/json' }));
         a.download = 'backup-' + new Date().toISOString().split('T')[0] + '.json'; a.click(); toast('Exportado!');
     }
@@ -1012,7 +1181,6 @@ tbody tr:nth-child(even){background:#f9fafb}tbody td{padding:7px 8px;border:1px 
         try { const d = new Date(iso); return isNaN(d) ? iso : d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }); }
         catch (e) { return iso; }
     }
-
     function fmtDS(str) {
         if (!str) return '-';
         const p = str.split('-');
