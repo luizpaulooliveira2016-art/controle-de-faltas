@@ -10,21 +10,20 @@
         *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
         :root{--primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;--success:#16a34a;--success-light:#dcfce7;--warning:#f59e0b;--warning-light:#fef3c7;--danger:#dc2626;--danger-light:#fee2e2;--info:#0891b2;--info-light:#cffafe;--purple:#7c3aed;--purple-light:#ede9fe;--orange:#ea580c;--g50:#f9fafb;--g100:#f3f4f6;--g200:#e5e7eb;--g300:#d1d5db;--g400:#9ca3af;--g500:#6b7280;--g600:#4b5563;--g700:#374151;--g800:#1f2937;--g900:#111827;--sh:0 1px 3px rgba(0,0,0,0.1);--sh-md:0 4px 12px rgba(0,0,0,0.08);--sh-lg:0 10px 30px rgba(0,0,0,0.12);--sh-xl:0 20px 50px rgba(0,0,0,0.18);--r:10px;--r-lg:16px;--r-xl:24px;--nav-h:68px}
         body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#f0f2f7;color:var(--g800);min-height:100vh;padding-bottom:var(--nav-h);overflow-x:hidden}
-        .top-header{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 50%,#2563eb 100%);padding:16px 20px 14px;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(37,99,235,0.35)}
-        .top-header-inner{display:flex;justify-content:space-between;align-items:center}
-        .app-brand{display:flex;align-items:center;gap:10px}.app-brand .logo{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:1.2rem}.app-brand .brand-text{color:white}.app-brand .brand-text h1{font-size:1rem;font-weight:800}.app-brand .brand-text p{font-size:0.65rem;opacity:0.65;margin-top:1px}
-        .sync-pill{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:0.65rem;font-weight:700;border:1px solid rgba(255,255,255,0.15)}.sync-pill.online{background:rgba(34,197,94,0.15);color:#86efac}.sync-pill.offline{background:rgba(239,68,68,0.15);color:#fca5a5}.sync-pill .dot{width:7px;height:7px;border-radius:50%;animation:pdot 2s infinite}.sync-pill.online .dot{background:#4ade80}.sync-pill.offline .dot{background:#f87171;animation:none}
-        @keyframes pdot{0%,100%{opacity:1}50%{opacity:0.4}}
-        .bottom-nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);background:white;border-top:1px solid var(--g200);display:flex;align-items:center;justify-content:space-around;z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,0.08)}.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 20px;border-radius:12px;cursor:pointer;border:none;background:none;flex:1;position:relative;transition:all 0.25s}.nav-item .nav-icon{font-size:1.4rem;transition:transform 0.25s}.nav-item .nav-label{font-size:0.6rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.5px}.nav-item.active{background:var(--primary-light)}.nav-item.active .nav-icon{transform:scale(1.15)}.nav-item.active .nav-label{color:var(--primary)}.nav-notif-badge{position:absolute;top:4px;right:14px;background:var(--danger);color:white;border-radius:50%;width:18px;height:18px;font-size:0.58rem;display:flex;align-items:center;justify-content:center;font-weight:800;animation:bounce 1s infinite}
-        @keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
-        .screen{display:none;padding:16px;max-width:600px;margin:0 auto}.screen.active{display:block;animation:fadeUp .3s ease}
-        @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+        .top-header{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 50%,#2563eb 100%);padding:16px 20px 14px;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(37,99,235,0.35)}.top-header-inner{display:flex;justify-content:space-between;align-items:center}.app-brand{display:flex;align-items:center;gap:10px}.app-brand .logo{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:1.2rem}.app-brand .brand-text{color:white}.app-brand .brand-text h1{font-size:1rem;font-weight:800}.app-brand .brand-text p{font-size:0.65rem;opacity:0.65;margin-top:1px}
+        .sync-pill{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:0.65rem;font-weight:700;border:1px solid rgba(255,255,255,0.15)}.sync-pill.online{background:rgba(34,197,94,0.15);color:#86efac}.sync-pill.offline{background:rgba(239,68,68,0.15);color:#fca5a5}.sync-pill .dot{width:7px;height:7px;border-radius:50%;animation:pdot 2s infinite}.sync-pill.online .dot{background:#4ade80}.sync-pill.offline .dot{background:#f87171;animation:none}@keyframes pdot{0%,100%{opacity:1}50%{opacity:0.4}}
+        .bottom-nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);background:white;border-top:1px solid var(--g200);display:flex;align-items:center;justify-content:space-around;z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,0.08)}.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 20px;border-radius:12px;cursor:pointer;border:none;background:none;flex:1;position:relative;transition:all 0.25s}.nav-item .nav-icon{font-size:1.4rem;transition:transform 0.25s}.nav-item .nav-label{font-size:0.6rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.5px}.nav-item.active{background:var(--primary-light)}.nav-item.active .nav-icon{transform:scale(1.15)}.nav-item.active .nav-label{color:var(--primary)}.nav-notif-badge{position:absolute;top:4px;right:14px;background:var(--danger);color:white;border-radius:50%;width:18px;height:18px;font-size:0.58rem;display:flex;align-items:center;justify-content:center;font-weight:800;animation:bounce 1s infinite}@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+        .screen{display:none;padding:16px;max-width:600px;margin:0 auto}.screen.active{display:block;animation:fadeUp .3s ease}@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
         .stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}.stat-btn{background:white;border-radius:var(--r-lg);padding:18px 16px;text-align:left;box-shadow:var(--sh-md);cursor:pointer;transition:all 0.25s;border:none;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:4px}.stat-btn::after{content:'';position:absolute;bottom:0;left:0;height:3px;width:100%;border-radius:0 0 var(--r-lg) var(--r-lg)}.stat-btn.sb-purple::after{background:var(--purple)}.stat-btn.sb-blue::after{background:var(--primary)}.stat-btn.sb-orange::after{background:var(--warning)}.stat-btn.sb-cyan::after{background:var(--info)}.stat-btn:hover{transform:translateY(-3px);box-shadow:var(--sh-lg)}.stat-btn:active{transform:scale(0.97)}.stat-btn .sb-icon{font-size:1.6rem;margin-bottom:4px}.stat-btn .sb-num{font-size:2rem;font-weight:900;line-height:1}.stat-btn .sb-label{font-size:0.68rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.5px}.stat-btn .sb-arrow{position:absolute;top:16px;right:16px;font-size:1rem;color:var(--g300)}
         .alerts-panel{border-radius:var(--r-lg);margin-bottom:16px;overflow:hidden;box-shadow:var(--sh-lg);background:linear-gradient(135deg,#312e81,#4c1d95,#5b21b6);border:1px solid rgba(255,255,255,0.08)}.alerts-header{padding:14px 18px;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.15);border-bottom:1px solid rgba(255,255,255,0.08)}.alerts-header-left{display:flex;align-items:center;gap:8px}.alerts-header-left span{color:white;font-size:0.82rem;font-weight:700}.alerts-count{background:rgba(255,255,255,0.15);color:white;padding:2px 10px;border-radius:20px;font-size:0.65rem;font-weight:700}.alerts-nav{display:flex;gap:6px}.alerts-nav button{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:white;width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center}.alerts-track{display:flex;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;padding:14px 12px;gap:10px;scroll-snap-type:x mandatory}.alerts-track::-webkit-scrollbar{display:none}
         .alert-card{min-width:210px;max-width:210px;flex-shrink:0;border-radius:var(--r-lg);overflow:hidden;cursor:pointer;transition:all 0.25s;scroll-snap-align:start;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12)}.alert-card:hover{transform:translateY(-3px);background:rgba(255,255,255,0.15)}.alert-card-img{width:100%;height:88px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.1)}.alert-card-img img{width:100%;height:100%;object-fit:contain;padding:6px}.alert-card-img .no-img{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2.2rem}.ac-vencido .no-img{background:linear-gradient(135deg,rgba(220,38,38,0.4),rgba(153,27,27,0.4))}.ac-critico .no-img{background:linear-gradient(135deg,rgba(234,88,12,0.4),rgba(194,65,12,0.4))}.ac-proximo .no-img{background:linear-gradient(135deg,rgba(245,158,11,0.4),rgba(217,119,6,0.4))}.ac-falta .no-img{background:linear-gradient(135deg,rgba(37,99,235,0.4),rgba(29,78,216,0.4))}.ac-troca .no-img{background:linear-gradient(135deg,rgba(8,145,178,0.4),rgba(14,116,144,0.4))}.alert-card-info{padding:10px 12px}.ac-type{font-size:0.58rem;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:3px}.ac-vencido .ac-type{color:#fca5a5}.ac-critico .ac-type{color:#fdba74}.ac-proximo .ac-type{color:#fde68a}.ac-falta .ac-type{color:#93c5fd}.ac-troca .ac-type{color:#67e8f9}.ac-name{color:white;font-size:0.8rem;font-weight:700;line-height:1.3;white-space:normal;word-break:break-word;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.ac-footer{display:flex;justify-content:space-between;align-items:center}.ac-detail{color:rgba(255,255,255,0.5);font-size:0.65rem}.ac-pill{padding:2px 8px;border-radius:20px;font-size:0.6rem;font-weight:700}.ac-vencido .ac-pill{background:rgba(220,38,38,0.25);color:#fca5a5}.ac-critico .ac-pill{background:rgba(234,88,12,0.25);color:#fdba74}.ac-proximo .ac-pill{background:rgba(245,158,11,0.25);color:#fde68a}.ac-falta .ac-pill{background:rgba(37,99,235,0.25);color:#93c5fd}.ac-troca .ac-pill{background:rgba(8,145,178,0.25);color:#67e8f9}.alerts-empty{color:rgba(255,255,255,0.4);text-align:center;padding:30px;font-size:0.85rem;width:100%}
         .list-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.list-header h2{font-size:1rem;font-weight:800}.list-header .list-count{font-size:0.72rem;color:var(--g500);background:var(--g100);padding:3px 10px;border-radius:20px;font-weight:600}.filter-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}.filter-row input,.filter-row select{padding:8px 12px;border:1.5px solid var(--g200);border-radius:var(--r);font-size:0.78rem;background:white;flex:1;min-width:80px}.filter-row input:focus,.filter-row select:focus{border-color:var(--primary);outline:none}
         .pick-search{position:relative;margin-bottom:14px}.pick-search input{width:100%;padding:12px 50px 12px 42px;border:2px solid var(--g200);border-radius:var(--r-xl);font-size:0.88rem;background:var(--g50)}.pick-search input:focus{border-color:var(--primary);background:white;outline:none}.pick-search .psi{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1rem;color:var(--g400)}.pick-search .pscan{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:var(--primary);color:white;border:none;border-radius:var(--r-xl);padding:7px 14px;font-size:0.72rem;cursor:pointer;font-weight:700}.pick-search .pscan:hover{background:var(--primary-dark)}
-        .product-card{background:white;border-radius:var(--r-lg);margin-bottom:12px;box-shadow:var(--sh-md);overflow:hidden;transition:all 0.2s}.product-card:hover{box-shadow:var(--sh-lg);transform:translateY(-1px)}.product-card.pc-done{opacity:0.5}.pc-top{display:flex}.pc-img{width:85px;min-height:85px;max-height:110px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--g100);overflow:hidden;font-size:2rem;color:var(--g400)}.pc-img img{width:85px;height:85px;object-fit:contain;background:white;padding:4px}.pc-info{flex:1;padding:12px 14px;min-width:0}.pc-name{font-weight:800;font-size:0.88rem;line-height:1.3;word-break:break-word;white-space:normal}.pc-ean-code{display:block;font-size:0.6rem;color:var(--g400);margin-top:2px;font-family:monospace;letter-spacing:0.5px}.pc-sub{font-size:0.68rem;color:var(--g400);margin-top:3px;display:flex;flex-wrap:wrap;gap:4px;align-items:center}.pc-badges{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}.pc-actions{display:flex;gap:6px;padding:10px 14px;border-top:1px solid var(--g100);flex-wrap:wrap;background:var(--g50)}.pc-actions .btn-action{flex:1;padding:7px 10px;border:none;border-radius:var(--r);font-size:0.72rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all 0.2s;min-width:60px}.btn-edit{background:var(--warning-light);color:#92400e}.btn-edit:hover{background:var(--warning);color:white}.btn-delete{background:var(--danger-light);color:var(--danger)}.btn-delete:hover{background:var(--danger);color:white}.btn-done{background:var(--success-light);color:var(--success)}.btn-done:hover{background:var(--success);color:white}.btn-troca{background:var(--info-light);color:var(--info)}.btn-troca:hover{background:var(--info);color:white}.btn-undone{background:var(--g200);color:var(--g600)}
+        .product-card{background:white;border-radius:var(--r-lg);margin-bottom:12px;box-shadow:var(--sh-md);overflow:hidden;transition:all 0.2s}.product-card:hover{box-shadow:var(--sh-lg);transform:translateY(-1px)}.product-card.pc-done{opacity:0.5}.pc-top{display:flex}.pc-img{width:85px;min-height:85px;max-height:110px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--g100);overflow:hidden;font-size:2rem;color:var(--g400);cursor:pointer}.pc-img img{width:85px;height:85px;object-fit:contain;background:white;padding:4px}.pc-info{flex:1;padding:12px 14px;min-width:0}.pc-name{font-weight:800;font-size:0.88rem;line-height:1.3;word-break:break-word;white-space:normal}.pc-ean-code{display:block;font-size:0.6rem;color:var(--g400);margin-top:2px;font-family:monospace;letter-spacing:0.5px}.pc-sub{font-size:0.68rem;color:var(--g400);margin-top:3px;display:flex;flex-wrap:wrap;gap:4px;align-items:center}.pc-badges{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+        .pc-actions{display:flex;gap:6px;padding:10px 14px;border-top:1px solid var(--g100);flex-wrap:wrap;background:var(--g50)}.pc-actions .btn-action{flex:1;padding:7px 10px;border:none;border-radius:var(--r);font-size:0.72rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all 0.2s;min-width:60px}.btn-edit{background:var(--warning-light);color:#92400e}.btn-edit:hover{background:var(--warning);color:white}.btn-delete{background:var(--danger-light);color:var(--danger)}.btn-delete:hover{background:var(--danger);color:white}.btn-done{background:var(--success-light);color:var(--success)}.btn-done:hover{background:var(--success);color:white}.btn-troca{background:var(--info-light);color:var(--info)}.btn-troca:hover{background:var(--info);color:white}.btn-undone{background:var(--g200);color:var(--g600)}
+        .btn-pedido{background:var(--purple-light);color:var(--purple)}.btn-pedido:hover{background:var(--purple);color:white}
+        .btn-pedido-done{background:#dcfce7!important;color:#16a34a!important;cursor:default;opacity:0.85;border:1.5px solid #86efac}
+        .btn-troca-done{background:#dcfce7!important;color:#16a34a!important;cursor:default;opacity:0.85;border:1.5px solid #86efac}
         .expand-form{display:none;padding:12px 14px;background:var(--g50);border-top:1px solid var(--g200);animation:fadeUp .25s ease}.expand-form.show{display:block}.expand-form .ef-row{display:flex;gap:8px;margin-bottom:8px;align-items:center;flex-wrap:wrap}.expand-form .ef-row label{font-size:0.72rem;font-weight:700;color:var(--g600);min-width:70px}.expand-form .ef-row input,.expand-form .ef-row select{padding:8px 10px;border:1.5px solid var(--g200);border-radius:var(--r);font-size:0.82rem;flex:1;min-width:60px;background:white}.expand-form .ef-row input:focus,.expand-form .ef-row select:focus{border-color:var(--primary);outline:none}.expand-form .ef-actions{display:flex;gap:8px;margin-top:8px}.ef-btn{padding:8px 16px;border:none;border-radius:var(--r);font-size:0.78rem;font-weight:700;cursor:pointer;flex:1;display:flex;align-items:center;justify-content:center;gap:5px}.ef-btn-primary{background:var(--primary);color:white}.ef-btn-warning{background:var(--warning);color:white}.ef-btn-info{background:var(--info);color:white}.ef-btn-cancel{background:var(--g200);color:var(--g600)}.ef-toggle{padding:8px 14px;border:none;border-radius:var(--r);font-size:0.75rem;font-weight:700;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:5px;transition:all 0.2s}.ef-toggle-falta{background:var(--primary-light);color:var(--primary)}.ef-toggle-falta:hover{background:var(--primary);color:white}.ef-toggle-venc{background:var(--warning-light);color:#92400e}.ef-toggle-venc:hover{background:var(--warning);color:white}.ef-toggle-troca{background:var(--info-light);color:var(--info)}.ef-toggle-troca:hover{background:var(--info);color:white}.ef-toggle-done{background:#fee2e2!important;color:#dc2626!important;cursor:not-allowed!important;opacity:0.85;border:1.5px solid #fca5a5}.ef-toggle-done:hover{background:#fee2e2!important;color:#dc2626!important;transform:none!important}.unit-group{display:flex;gap:4px;flex:1}.unit-group input{flex:1;min-width:50px}.unit-group select{width:72px;flex:none}
         .fab-wrap{position:fixed;bottom:calc(var(--nav-h) + 16px);right:20px;z-index:150}.fab-btn{width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border:none;font-size:1.6rem;cursor:pointer;box-shadow:0 4px 20px rgba(37,99,235,0.45);transition:all 0.3s;display:flex;align-items:center;justify-content:center}.fab-btn:hover{transform:scale(1.08)}.fab-btn.open{transform:rotate(45deg);background:linear-gradient(135deg,var(--danger),#b91c1c)}.fab-menu{position:absolute;bottom:70px;right:0;display:flex;flex-direction:column;gap:10px;opacity:0;pointer-events:none;transform:translateY(15px);transition:all 0.3s}.fab-menu.show{opacity:1;pointer-events:all;transform:translateY(0)}.fab-opt{display:flex;align-items:center;gap:10px;justify-content:flex-end;cursor:pointer;white-space:nowrap}.fab-opt-label{background:var(--g900);color:white;padding:7px 14px;border-radius:8px;font-size:0.78rem;font-weight:600;box-shadow:var(--sh-md)}.fab-opt-icon{width:46px;height:46px;border-radius:50%;border:none;color:white;font-size:1.1rem;cursor:pointer;box-shadow:var(--sh-md);display:flex;align-items:center;justify-content:center;transition:transform 0.2s}.fab-opt-icon:hover{transform:scale(1.1)}.foi-purple{background:var(--purple)}.foi-blue{background:var(--primary)}.foi-orange{background:var(--warning)}.foi-cyan{background:var(--info)}.fab-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.25);z-index:149}.fab-backdrop.show{display:block}
         .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}.modal-overlay.show{display:flex}.modal-sheet{background:white;border-radius:var(--r-xl) var(--r-xl) 0 0;width:100%;max-width:600px;max-height:92vh;overflow-y:auto;box-shadow:var(--sh-xl);animation:sheetUp .35s cubic-bezier(0.34,1.56,0.64,1)}@keyframes sheetUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}.modal-handle{width:40px;height:4px;background:var(--g300);border-radius:2px;margin:12px auto 0}.modal-head{padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--g100)}.modal-head h3{font-size:1rem;font-weight:800}.modal-close-btn{background:var(--g100);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;color:var(--g500)}.modal-body-pad{padding:20px}.modal-footer-pad{padding:14px 20px;border-top:1px solid var(--g100);display:flex;gap:8px;justify-content:flex-end}
@@ -38,7 +37,8 @@
         .scanner-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:500;flex-direction:column;align-items:center;justify-content:center}.scanner-overlay.show{display:flex}.scanner-overlay video{width:90%;max-width:480px;border-radius:var(--r-lg);border:3px solid var(--primary)}.scanner-overlay p{color:white;margin-bottom:16px;font-size:0.9rem;font-weight:600}.scanner-manual-row{margin-top:14px;display:flex;gap:8px;width:90%;max-width:480px}.scanner-manual-row input{flex:1;padding:12px 16px;border:none;border-radius:var(--r-xl);font-size:0.9rem}.scanner-close{margin-top:14px;padding:12px 32px;background:var(--danger);color:white;border:none;border-radius:var(--r-xl);font-size:0.9rem;cursor:pointer;font-weight:700}
         .notif-item{background:white;border-radius:var(--r-lg);padding:14px 16px;margin-bottom:10px;box-shadow:var(--sh-md);display:flex;gap:12px;align-items:flex-start}.notif-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}.notif-icon.ni-cad{background:var(--purple-light)}.notif-icon.ni-falta{background:var(--primary-light)}.notif-icon.ni-venc{background:var(--warning-light)}.notif-icon.ni-troca{background:var(--info-light)}.notif-body .notif-title{font-size:0.82rem;font-weight:700}.notif-body .notif-time{font-size:0.68rem;color:var(--g400);margin-top:2px}.notif-new{background:var(--primary);width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
         .config-item{background:white;border-radius:var(--r-lg);padding:16px 18px;margin-bottom:10px;box-shadow:var(--sh-md);display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.2s}.config-item:hover{box-shadow:var(--sh-lg);transform:translateX(3px)}.config-item-left{display:flex;align-items:center;gap:12px}.config-item-left .ci-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}.config-item-left .ci-text .ci-title{font-size:0.85rem;font-weight:700}.config-item-left .ci-text .ci-sub{font-size:0.7rem;color:var(--g500)}
-        .empty-state{text-align:center;padding:40px 20px;color:var(--g400)}.empty-state .es-icon{font-size:3rem;margin-bottom:10px}.back-btn{background:none;border:none;font-size:1.2rem;cursor:pointer;padding:4px 8px;margin-right:8px;color:var(--g600)}.ean-hint{font-size:0.62rem;color:var(--g400);margin-top:2px}
+        .empty-state{text-align:center;padding:40px 20px;color:var(--g400)}.empty-state .es-icon{font-size:3rem;margin-bottom:10px}.ean-hint{font-size:0.62rem;color:var(--g400);margin-top:2px}
+        .img-zoom-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:600;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(6px)}.img-zoom-overlay.show{display:flex}.img-zoom-overlay img{max-width:92%;max-height:85vh;object-fit:contain;border-radius:var(--r-lg);box-shadow:0 0 40px rgba(0,0,0,0.5)}.img-zoom-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
         @media(max-width:480px){.form-row{grid-template-columns:1fr}}
     </style>
 </head>
@@ -47,23 +47,17 @@
 
 <div id="screen-home" class="screen active"><div class="stats-row" id="stats-row"></div><div class="alerts-panel"><div class="alerts-header"><div class="alerts-header-left"><span>🔔 Alertas</span><span class="alerts-count" id="alerts-count">0</span></div><div class="alerts-nav"><button onclick="scrollAlerts(-1)">◀</button><button onclick="scrollAlerts(1)">▶</button></div></div><div class="alerts-track" id="alerts-track"></div></div></div>
 
-<div id="screen-cadastros" class="screen"><div class="list-header"><h2><button class="back-btn" onclick="goScreen('home')">←</button>📦 Cadastrados</h2><span class="list-count" id="cad-list-count">0</span></div><div class="filter-row"><input type="text" id="filtro-cad" placeholder="🔎 Buscar..." oninput="renderCadastros()"></div><div id="lista-cadastros"></div></div>
+<div id="screen-cadastros" class="screen"><div class="list-header"><h2>📦 Cadastrados</h2><span class="list-count" id="cad-list-count">0</span></div><div class="filter-row"><input type="text" id="filtro-cad" placeholder="🔎 Buscar..." oninput="renderCadastros()"></div><div id="lista-cadastros"></div></div>
 
-<div id="screen-faltas" class="screen"><div class="list-header"><h2><button class="back-btn" onclick="goScreen('home')">←</button>🚫 Faltas</h2><span class="list-count" id="falta-list-count">0</span></div>
-<div class="filter-row"><input type="text" id="filtro-falta-marca" placeholder="🔎 Marca..." oninput="renderFaltas()"><input type="text" id="filtro-falta-forn" placeholder="🔎 Fornecedor..." oninput="renderFaltas()"><input type="date" id="filtro-falta-de" onchange="renderFaltas()"><input type="date" id="filtro-falta-ate" onchange="renderFaltas()"></div>
-<div id="lista-faltas"></div><div id="faltas-share" style="display:none;margin-top:10px;gap:8px;flex-wrap:wrap;"><button class="btn btn-success btn-sm" onclick="gerarPDF('faltas')">📄 PDF</button><button class="btn btn-success btn-sm" onclick="compartilharWA('faltas')">💬 WhatsApp</button></div></div>
+<div id="screen-faltas" class="screen"><div class="list-header"><h2>🚫 Faltas</h2><span class="list-count" id="falta-list-count">0</span></div><div class="filter-row"><input type="text" id="filtro-falta-marca" placeholder="🔎 Marca..." oninput="renderFaltas()"><input type="text" id="filtro-falta-forn" placeholder="🔎 Fornecedor..." oninput="renderFaltas()"><input type="date" id="filtro-falta-de" onchange="renderFaltas()"><input type="date" id="filtro-falta-ate" onchange="renderFaltas()"></div><div id="lista-faltas"></div><div id="faltas-share" style="display:none;margin-top:10px;gap:8px;flex-wrap:wrap;"><button class="btn btn-success btn-sm" onclick="gerarPDF('faltas')">📄 PDF</button><button class="btn btn-success btn-sm" onclick="compartilharWA('faltas')">💬 WhatsApp</button></div></div>
 
-<div id="screen-vencimentos" class="screen"><div class="list-header"><h2><button class="back-btn" onclick="goScreen('home')">←</button>📅 Vencimentos</h2><span class="list-count" id="venc-list-count">0</span></div>
-<div class="filter-row"><select id="filtro-venc-status" onchange="renderVencimentos()"><option value="">Todos</option><option value="vencido">Vencidos</option><option value="critico">≤3d</option><option value="proximo">≤7d</option><option value="ok">OK</option><option value="feito">✅ Feito</option></select><input type="text" id="filtro-venc-marca" placeholder="🔎 Marca..." oninput="renderVencimentos()"><input type="text" id="filtro-venc-forn" placeholder="🔎 Fornecedor..." oninput="renderVencimentos()"></div>
-<div id="lista-vencimentos"></div><div id="venc-share" style="display:none;margin-top:10px;gap:8px;flex-wrap:wrap;"><button class="btn btn-success btn-sm" onclick="gerarPDF('vencimentos')">📄 PDF</button><button class="btn btn-success btn-sm" onclick="compartilharWA('vencimentos')">💬 WhatsApp</button></div></div>
+<div id="screen-vencimentos" class="screen"><div class="list-header"><h2>📅 Vencimentos</h2><span class="list-count" id="venc-list-count">0</span></div><div class="filter-row"><select id="filtro-venc-status" onchange="renderVencimentos()"><option value="">Todos</option><option value="vencido">Vencidos</option><option value="critico">≤3d</option><option value="proximo">≤7d</option><option value="ok">OK</option><option value="feito">✅ Feito</option></select><input type="text" id="filtro-venc-marca" placeholder="🔎 Marca..." oninput="renderVencimentos()"><input type="text" id="filtro-venc-forn" placeholder="🔎 Fornecedor..." oninput="renderVencimentos()"></div><div id="lista-vencimentos"></div><div id="venc-share" style="display:none;margin-top:10px;gap:8px;flex-wrap:wrap;"><button class="btn btn-success btn-sm" onclick="gerarPDF('vencimentos')">📄 PDF</button><button class="btn btn-success btn-sm" onclick="compartilharWA('vencimentos')">💬 WhatsApp</button></div></div>
 
-<div id="screen-trocas" class="screen"><div class="list-header"><h2><button class="back-btn" onclick="goScreen('home')">←</button>🔄 Trocas</h2><span class="list-count" id="troca-list-count">0</span></div>
-<div class="filter-row"><select id="filtro-troca-motivo" onchange="renderTrocas()"><option value="">Todos</option><option>Vencido</option><option>Avariado</option><option>Defeito</option><option>Recall</option><option>Outros</option></select><input type="text" id="filtro-troca-forn" placeholder="🔎 Fornecedor..." oninput="renderTrocas()"><input type="date" id="filtro-troca-de" onchange="renderTrocas()"><input type="date" id="filtro-troca-ate" onchange="renderTrocas()"></div>
-<div id="lista-trocas"></div><div id="trocas-share" style="display:none;margin-top:10px;gap:8px;flex-wrap:wrap;"><button class="btn btn-success btn-sm" onclick="gerarPDF('trocas')">📄 PDF</button><button class="btn btn-success btn-sm" onclick="compartilharWA('trocas')">💬 WhatsApp</button></div></div>
+<div id="screen-trocas" class="screen"><div class="list-header"><h2>🔄 Trocas</h2><span class="list-count" id="troca-list-count">0</span></div><div class="filter-row"><select id="filtro-troca-motivo" onchange="renderTrocas()"><option value="">Todos</option><option>Vencido</option><option>Avariado</option><option>Defeito</option><option>Recall</option><option>Outros</option></select><input type="text" id="filtro-troca-forn" placeholder="🔎 Fornecedor..." oninput="renderTrocas()"><input type="date" id="filtro-troca-de" onchange="renderTrocas()"><input type="date" id="filtro-troca-ate" onchange="renderTrocas()"></div><div id="lista-trocas"></div><div id="trocas-share" style="display:none;margin-top:10px;gap:8px;flex-wrap:wrap;"><button class="btn btn-success btn-sm" onclick="gerarPDF('trocas')">📄 PDF</button><button class="btn btn-success btn-sm" onclick="compartilharWA('trocas')">💬 WhatsApp</button></div></div>
 
-<div id="screen-pick-falta" class="screen"><div class="list-header"><h2><button class="back-btn" onclick="goScreen('home')">←</button>🚫 Selecionar para Falta</h2></div><div class="pick-search"><span class="psi">🔎</span><input type="text" id="pick-falta-filtro" placeholder="Buscar por nome ou código..." oninput="renderPickFalta()"><button class="pscan" onclick="abrirScanner('pick-falta')">📷 Scan</button></div><div id="pick-falta-lista"></div></div>
-<div id="screen-pick-venc" class="screen"><div class="list-header"><h2><button class="back-btn" onclick="goScreen('home')">←</button>📅 Selecionar para Vencimento</h2></div><div class="pick-search"><span class="psi">🔎</span><input type="text" id="pick-venc-filtro" placeholder="Buscar por nome ou código..." oninput="renderPickVenc()"><button class="pscan" onclick="abrirScanner('pick-venc')">📷 Scan</button></div><div id="pick-venc-lista"></div></div>
-<div id="screen-pick-troca" class="screen"><div class="list-header"><h2><button class="back-btn" onclick="goScreen('home')">←</button>🔄 Selecionar para Troca</h2></div><div class="pick-search"><span class="psi">🔎</span><input type="text" id="pick-troca-filtro" placeholder="Buscar por nome ou código..." oninput="renderPickTroca()"><button class="pscan" onclick="abrirScanner('pick-troca')">📷 Scan</button></div><div id="pick-troca-lista"></div></div>
+<div id="screen-pick-falta" class="screen"><div class="list-header"><h2>🚫 Selecionar para Falta</h2></div><div class="pick-search"><span class="psi">🔎</span><input type="text" id="pick-falta-filtro" placeholder="Buscar por nome ou código..." oninput="renderPickFalta()"><button class="pscan" onclick="abrirScanner('pick-falta')">📷 Scan</button></div><div id="pick-falta-lista"></div></div>
+<div id="screen-pick-venc" class="screen"><div class="list-header"><h2>📅 Selecionar para Vencimento</h2></div><div class="pick-search"><span class="psi">🔎</span><input type="text" id="pick-venc-filtro" placeholder="Buscar por nome ou código..." oninput="renderPickVenc()"><button class="pscan" onclick="abrirScanner('pick-venc')">📷 Scan</button></div><div id="pick-venc-lista"></div></div>
+<div id="screen-pick-troca" class="screen"><div class="list-header"><h2>🔄 Selecionar para Troca</h2></div><div class="pick-search"><span class="psi">🔎</span><input type="text" id="pick-troca-filtro" placeholder="Buscar por nome ou código..." oninput="renderPickTroca()"><button class="pscan" onclick="abrirScanner('pick-troca')">📷 Scan</button></div><div id="pick-troca-lista"></div></div>
 
 <div id="screen-notificacoes" class="screen"><div class="list-header"><h2>🔔 Notificações</h2><button class="btn btn-outline btn-sm" onclick="limparNotifs()">Limpar</button></div><div id="lista-notifs"></div></div>
 
@@ -74,7 +68,6 @@
 <div class="fab-backdrop" id="fab-backdrop" onclick="toggleFab()"></div>
 <div class="fab-wrap"><div class="fab-menu" id="fab-menu"><div class="fab-opt" onclick="abrirFormCadastro()"><span class="fab-opt-label">Cadastrar Produto</span><button class="fab-opt-icon foi-purple">📦</button></div><div class="fab-opt" onclick="abrirPickScreen('falta')"><span class="fab-opt-label">Registrar Falta</span><button class="fab-opt-icon foi-blue">🚫</button></div><div class="fab-opt" onclick="abrirPickScreen('venc')"><span class="fab-opt-label">Registrar Vencimento</span><button class="fab-opt-icon foi-orange">📅</button></div><div class="fab-opt" onclick="abrirPickScreen('troca')"><span class="fab-opt-label">Registrar Troca</span><button class="fab-opt-icon foi-cyan">🔄</button></div></div><button class="fab-btn" id="fab-btn" onclick="toggleFab()">+</button></div>
 
-<!-- MODAL CADASTRO com fornecedor -->
 <div class="modal-overlay" id="modal-cadastro"><div class="modal-sheet"><div class="modal-handle"></div><div class="modal-head"><h3 id="modal-cad-title">📦 Cadastrar Produto</h3><button class="modal-close-btn" onclick="fecharModal('modal-cadastro')">✕</button></div><div class="modal-body-pad">
     <div class="online-search-bar"><span class="si">🔎</span><input type="text" id="cad-busca" placeholder="Buscar online por nome ou EAN..." oninput="buscarParaCadastro()" autocomplete="off"><button class="scan-btn" onclick="abrirScanner('cadastro')">📷</button></div>
     <div class="online-results" id="cad-online-results"></div>
@@ -90,7 +83,11 @@
 
 <div class="scanner-overlay" id="scanner-overlay"><p>📷 Aponte para o código</p><video id="scanner-video" autoplay playsinline></video><div class="scanner-manual-row"><input type="text" id="scanner-manual" placeholder="Ou digite o código..."><button class="btn btn-success btn-sm" onclick="usarCodigoManual()">OK</button></div><button class="scanner-close" onclick="fecharScanner()">✕ Fechar</button></div>
 
+<div class="img-zoom-overlay" id="img-zoom" onclick="fecharZoom()"><button class="img-zoom-close" onclick="fecharZoom()">✕</button><img id="img-zoom-src" src="" alt="Produto"></div>
+
 <div class="toast-wrap" id="toast-wrap"></div>
+
+
 
 
 <script>
@@ -99,7 +96,7 @@
     // ============================================
     const FB={apiKey:"AIzaSyAFYDsRg1jgr2mP6UvEQofwoWH0Mi2iTps",authDomain:"controle-faltas-d6709.firebaseapp.com",databaseURL:"https://controle-faltas-d6709-default-rtdb.firebaseio.com",projectId:"controle-faltas-d6709",storageBucket:"controle-faltas-d6709.firebasestorage.app",messagingSenderId:"1063821814181",appId:"1:1063821814181:web:4aa8451fd799590d93e04c"};
     let db=null,fbOn=false;
-    try{firebase.initializeApp(FB);db=firebase.database();firebase.database().ref('.info/connected').on('value',s=>{fbOn=!!s.val();updSync(fbOn);})}catch(e){console.warn('FB:',e)}
+    try{firebase.initializeApp(FB);db=firebase.database();firebase.database().ref('.info/connected').on('value',s=>{fbOn=!!s.val();updSync(fbOn)})}catch(e){console.warn('FB:',e)}
 
     // ============================================
     // DADOS
@@ -130,14 +127,10 @@
     // ============================================
     const REFS={produtos:'produtos',faltas:'faltas',vencimentos:'vencimentos',trocas:'trocas'};
 
-    function enviarNotif(tipo,msg){
-        if(!db||!fbOn)return;
-        db.ref('notificacoes/'+Date.now()).set({id:Date.now(),tipo,msg,device:deviceId,data:new Date().toISOString(),lido:false});
-    }
+    function enviarNotif(tipo,msg){if(!db||!fbOn)return;db.ref('notificacoes/'+Date.now()).set({id:Date.now(),tipo,msg,device:deviceId,data:new Date().toISOString(),lido:false})}
 
     function salvarESync(){
-        salvarLocal();
-        if(!db||!fbOn)return;
+        salvarLocal();if(!db||!fbOn)return;
         const pO={};produtos.forEach(i=>{pO[String(i.id)]=i});
         const fO={};faltas.forEach(i=>{fO[String(i.id)]=i});
         const vO={};vencimentos.forEach(i=>{vO[String(i.id)]=i});
@@ -148,22 +141,14 @@
         db.ref(REFS.trocas).set(tO).catch(e=>console.warn('st:',e));
     }
 
-    async function sincronizarAgora(){
-        if(!db||!fbOn){toast('Sem conexão!','err');return}
-        toast('🔄 Sincronizando...','info');
-        try{salvarESync();updSync(true);updFbStatus('✅ Sincronizado — '+new Date().toLocaleTimeString('pt-BR'));toast('Sincronizado!')}
-        catch(e){updFbStatus('❌ '+e.message);toast('Erro!','err')}
-    }
+    async function sincronizarAgora(){if(!db||!fbOn){toast('Sem conexão!','err');return}toast('🔄 Sincronizando...','info');try{salvarESync();updSync(true);updFbStatus('✅ Sincronizado — '+new Date().toLocaleTimeString('pt-BR'));toast('Sincronizado!')}catch(e){updFbStatus('❌ '+e.message);toast('Erro!','err')}}
 
     async function carregarFb(){
         if(!db||!fbOn){updSync(false);updFbStatus('⚠️ Offline');return}
-        try{
-            const get=async(ref)=>{const s=await db.ref(ref).get();return s.exists()?Object.values(s.val()):[]};
-            const[pF,fF,vF,tF]=await Promise.all([get(REFS.produtos),get(REFS.faltas),get(REFS.vencimentos),get(REFS.trocas)]);
-            if(pF!==null)produtos=pF;if(fF!==null)faltas=fF;
-            if(vF!==null)vencimentos=vF;if(tF!==null)trocas=tF;
-            salvarLocal();updSync(true);updFbStatus('✅ Conectado');safeRender();
-        }catch(e){updSync(false);updFbStatus('⚠️ '+e.message)}
+        try{const get=async(ref)=>{const s=await db.ref(ref).get();return s.exists()?Object.values(s.val()):[]};
+        const[pF,fF,vF,tF]=await Promise.all([get(REFS.produtos),get(REFS.faltas),get(REFS.vencimentos),get(REFS.trocas)]);
+        if(pF!==null)produtos=pF;if(fF!==null)faltas=fF;if(vF!==null)vencimentos=vF;if(tF!==null)trocas=tF;
+        salvarLocal();updSync(true);updFbStatus('✅ Conectado');safeRender()}catch(e){updSync(false);updFbStatus('⚠️ '+e.message)}
     }
 
     function iniciarListeners(){
@@ -172,12 +157,7 @@
         db.ref(REFS.faltas).on('value',s=>{faltas=s.exists()?Object.values(s.val()):[];salvarLocal();safeRender()});
         db.ref(REFS.vencimentos).on('value',s=>{vencimentos=s.exists()?Object.values(s.val()):[];salvarLocal();safeRender()});
         db.ref(REFS.trocas).on('value',s=>{trocas=s.exists()?Object.values(s.val()):[];salvarLocal();safeRender()});
-        db.ref('notificacoes').orderByChild('data').limitToLast(50).on('child_added',s=>{
-            const n=s.val();if(!n||!n.id||n.device===deviceId)return;
-            if(notificacoes.some(x=>x.id===n.id))return;
-            notificacoes.unshift(n);if(notificacoes.length>100)notificacoes=notificacoes.slice(0,100);
-            salvarLocal();renderNotifs();updNotifBadge();toast('🔔 '+n.msg,'notif');
-        });
+        db.ref('notificacoes').orderByChild('data').limitToLast(50).on('child_added',s=>{const n=s.val();if(!n||!n.id||n.device===deviceId)return;if(notificacoes.some(x=>x.id===n.id))return;notificacoes.unshift(n);if(notificacoes.length>100)notificacoes=notificacoes.slice(0,100);salvarLocal();renderNotifs();updNotifBadge();toast('🔔 '+n.msg,'notif')});
     }
 
     function safeRender(){if(_rendering)return;_rendering=true;requestAnimationFrame(()=>{renderAll();_rendering=false})}
@@ -185,11 +165,32 @@
     function updFbStatus(msg){const el=document.getElementById('config-firebase');if(el)el.innerHTML=msg}
 
     // ============================================
-    // TOAST + NAV + FAB
+    // TOAST
     // ============================================
     function toast(msg,type=''){const t=document.createElement('div');t.className='toast-item '+type;t.textContent=msg;document.getElementById('toast-wrap').appendChild(t);setTimeout(()=>t.remove(),3200)}
 
+    // ============================================
+    // ZOOM IMAGEM
+    // ============================================
+    function abrirZoom(imgUrl){if(!imgUrl)return;document.getElementById('img-zoom-src').src=imgUrl;document.getElementById('img-zoom').classList.add('show')}
+    function fecharZoom(){document.getElementById('img-zoom').classList.remove('show');document.getElementById('img-zoom-src').src=''}
+
+    // ============================================
+    // NAVEGAÇÃO COM HISTORY API (voltar pelo celular)
+    // ============================================
+    let screenHistory=['home'];
+
     function goScreen(name){
+        if(screenHistory[screenHistory.length-1]!==name){screenHistory.push(name);history.pushState({screen:name},'')}
+        _doNav(name);
+    }
+
+    function goList(type){
+        screenHistory.push(type);history.pushState({screen:type},'');
+        _doNavList(type);
+    }
+
+    function _doNav(name){
         document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
         document.getElementById('screen-'+name).classList.add('active');
@@ -199,15 +200,38 @@
         renderAll();window.scrollTo({top:0,behavior:'smooth'});
     }
 
-    function goList(type){
+    function _doNavList(type){
         document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
         document.getElementById('screen-'+type).classList.add('active');
         renderAll();window.scrollTo({top:0,behavior:'smooth'});
     }
 
+    window.addEventListener('popstate',function(e){
+        screenHistory.pop();
+        const prev=screenHistory[screenHistory.length-1]||'home';
+        document.querySelectorAll('.modal-overlay.show').forEach(m=>m.classList.remove('show'));
+        fecharZoom();
+        if(document.getElementById('scanner-overlay').classList.contains('show'))fecharScanner();
+        if(fabAberto)toggleFab();
+        const screenEl=document.getElementById('screen-'+prev);
+        document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+        if(screenEl){
+            screenEl.classList.add('active');
+            if(prev==='home')document.getElementById('nav-home').classList.add('active');
+            else if(prev==='notificacoes')document.getElementById('nav-notificacoes').classList.add('active');
+            else if(prev==='config')document.getElementById('nav-config').classList.add('active');
+        }else{document.getElementById('screen-home').classList.add('active');document.getElementById('nav-home').classList.add('active')}
+        renderAll();
+    });
+    history.replaceState({screen:'home'},'');
+
     function renderAll(){renderHome();renderCadastros();renderFaltas();renderVencimentos();renderTrocas();renderNotifs();renderPickFalta();renderPickVenc();renderPickTroca()}
 
+    // ============================================
+    // FAB
+    // ============================================
     function toggleFab(){fabAberto=!fabAberto;document.getElementById('fab-btn').classList.toggle('open',fabAberto);document.getElementById('fab-menu').classList.toggle('show',fabAberto);document.getElementById('fab-backdrop').classList.toggle('show',fabAberto)}
     function abrirFormCadastro(){toggleFab();limparFormCad();document.getElementById('modal-cadastro').classList.add('show')}
     function abrirPickScreen(tipo){toggleFab();goList('pick-'+tipo)}
@@ -218,333 +242,112 @@
     // BUSCA ONLINE MELHORADA
     // ============================================
     async function buscarOnline(query){
-        if(query.length<3)return[];
-        if(onlineCache[query])return onlineCache[query];
-        let r=[];
+        if(query.length<3)return[];if(onlineCache[query])return onlineCache[query];let r=[];
         try{
             if(/^\d{8,14}$/.test(query)){
-                const resp=await fetch(`https://world.openfoodfacts.org/api/v0/product/${query}.json`,{signal:AbortSignal.timeout(5000)});
-                const data=await resp.json();
+                const resp=await fetch(`https://world.openfoodfacts.org/api/v0/product/${query}.json`,{signal:AbortSignal.timeout(5000)});const data=await resp.json();
                 if(data.status===1&&data.product)r.push({nome:data.product.product_name||data.product.product_name_pt||data.product.product_name_en||'Produto',ean:query,marca:data.product.brands||'',imagem:data.product.image_small_url||data.product.image_url||'',peso:data.product.quantity||'',source:'online'});
             }else{
-                const resp=await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=15&lc=pt`,{signal:AbortSignal.timeout(5000)});
-                const data=await resp.json();
+                const resp=await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=15&lc=pt`,{signal:AbortSignal.timeout(5000)});const data=await resp.json();
                 if(data.products)r=data.products.filter(p=>p.product_name||p.product_name_pt).map(p=>({nome:p.product_name||p.product_name_pt||p.product_name_en||'Produto',ean:p.code||'',marca:p.brands||'',imagem:p.image_small_url||p.image_url||'',peso:p.quantity||'',source:'online'}));
             }
-            if(r.length===0&&/^\d{8,14}$/.test(query)){
-                try{const resp2=await fetch(`https://world.openbeautyfacts.org/api/v0/product/${query}.json`,{signal:AbortSignal.timeout(4000)});const data2=await resp2.json();if(data2.status===1&&data2.product)r.push({nome:data2.product.product_name||'Produto',ean:query,marca:data2.product.brands||'',imagem:data2.product.image_small_url||'',peso:data2.product.quantity||'',source:'online'})}catch(e2){}
-            }
-            if(r.length===0&&/^\d{8,14}$/.test(query)){
-                try{const resp3=await fetch(`https://world.openpetfoodfacts.org/api/v0/product/${query}.json`,{signal:AbortSignal.timeout(4000)});const data3=await resp3.json();if(data3.status===1&&data3.product)r.push({nome:data3.product.product_name||'Produto',ean:query,marca:data3.product.brands||'',imagem:data3.product.image_small_url||'',peso:data3.product.quantity||'',source:'online'})}catch(e3){}
-            }
-            if(r.length<3&&!/^\d{8,14}$/.test(query)){
-                try{const resp4=await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=10&lc=en`,{signal:AbortSignal.timeout(4000)});const data4=await resp4.json();if(data4.products){const novos=data4.products.filter(p=>(p.product_name||p.product_name_en)&&!r.some(x=>x.ean===p.code)).map(p=>({nome:p.product_name||p.product_name_en||'Produto',ean:p.code||'',marca:p.brands||'',imagem:p.image_small_url||p.image_url||'',peso:p.quantity||'',source:'online'}));r=r.concat(novos)}}catch(e4){}
-            }
+            if(r.length===0&&/^\d{8,14}$/.test(query)){try{const r2=await fetch(`https://world.openbeautyfacts.org/api/v0/product/${query}.json`,{signal:AbortSignal.timeout(4000)});const d2=await r2.json();if(d2.status===1&&d2.product)r.push({nome:d2.product.product_name||'Produto',ean:query,marca:d2.product.brands||'',imagem:d2.product.image_small_url||'',peso:d2.product.quantity||'',source:'online'})}catch(e2){}}
+            if(r.length===0&&/^\d{8,14}$/.test(query)){try{const r3=await fetch(`https://world.openpetfoodfacts.org/api/v0/product/${query}.json`,{signal:AbortSignal.timeout(4000)});const d3=await r3.json();if(d3.status===1&&d3.product)r.push({nome:d3.product.product_name||'Produto',ean:query,marca:d3.product.brands||'',imagem:d3.product.image_small_url||'',peso:d3.product.quantity||'',source:'online'})}catch(e3){}}
+            if(r.length<3&&!/^\d{8,14}$/.test(query)){try{const r4=await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=10&lc=en`,{signal:AbortSignal.timeout(4000)});const d4=await r4.json();if(d4.products){const novos=d4.products.filter(p=>(p.product_name||p.product_name_en)&&!r.some(x=>x.ean===p.code)).map(p=>({nome:p.product_name||p.product_name_en||'Produto',ean:p.code||'',marca:p.brands||'',imagem:p.image_small_url||p.image_url||'',peso:p.quantity||'',source:'online'}));r=r.concat(novos)}}catch(e4){}}
         }catch(e){console.log('busca err:',e)}
         onlineCache[query]=r;return r;
     }
 
     async function buscarParaCadastro(){
         const input=document.getElementById('cad-busca'),dd=document.getElementById('cad-online-results'),q=input.value.trim();
-        if(q.length<3){dd.classList.remove('show');return}
-        clearTimeout(searchTimeout);
-        searchTimeout=setTimeout(async()=>{
-            dd.innerHTML='<div class="or-item"><div class="or-info"><div class="or-name">⏳ Buscando em várias fontes...</div></div></div>';dd.classList.add('show');
-            const results=await buscarOnline(q);window.__cadOnline=results;
-            if(!results.length){dd.innerHTML='<div class="or-item"><div class="or-info"><div class="or-name">Nenhum resultado</div><div class="or-ean">Preencha manualmente</div></div></div>';return}
-            dd.innerHTML=results.map((p,i)=>`<div class="or-item" onclick="selecionarCad(${i})">${p.imagem?'<img src="'+p.imagem+'" onerror="this.outerHTML=\'<div class=or-icon>📦</div>\'">':'<div class="or-icon">📦</div>'}<div class="or-info"><div class="or-name">${p.marca?p.marca+' - ':''}${p.nome}</div><div class="or-ean">EAN: ${p.ean||'N/A'}${p.peso?' | '+p.peso:''}</div></div><span class="or-badge online">ONLINE</span></div>`).join('');
-        },400);
+        if(q.length<3){dd.classList.remove('show');return}clearTimeout(searchTimeout);
+        searchTimeout=setTimeout(async()=>{dd.innerHTML='<div class="or-item"><div class="or-info"><div class="or-name">⏳ Buscando...</div></div></div>';dd.classList.add('show');
+        const results=await buscarOnline(q);window.__cadOnline=results;
+        if(!results.length){dd.innerHTML='<div class="or-item"><div class="or-info"><div class="or-name">Nenhum resultado</div><div class="or-ean">Preencha manualmente</div></div></div>';return}
+        dd.innerHTML=results.map((p,i)=>`<div class="or-item" onclick="selecionarCad(${i})">${p.imagem?'<img src="'+p.imagem+'" onerror="this.outerHTML=\'<div class=or-icon>📦</div>\'">':'<div class="or-icon">📦</div>'}<div class="or-info"><div class="or-name">${p.marca?p.marca+' - ':''}${p.nome}</div><div class="or-ean">EAN: ${p.ean||'N/A'}${p.peso?' | '+p.peso:''}</div></div><span class="or-badge online">ONLINE</span></div>`).join('')},400);
     }
 
-    function selecionarCad(idx){
-        const p=window.__cadOnline?.[idx];if(!p)return;
-        const eanField=document.getElementById('cad-ean');
-        const current=eanField.value.trim();
-        if(p.ean){if(current&&!current.split(',').map(e=>e.trim()).includes(p.ean))eanField.value=current+', '+p.ean;else if(!current)eanField.value=p.ean}
-        document.getElementById('cad-nome').value=p.nome||'';
-        document.getElementById('cad-marca').value=p.marca||'';
-        document.getElementById('cad-peso').value=p.peso||'';
-        document.getElementById('cad-imagem').value=p.imagem||'';
-        document.getElementById('cad-online-results').classList.remove('show');
-        document.getElementById('cad-busca').value='';
-        toast('Preenchido!','info');
-    }
+    function selecionarCad(idx){const p=window.__cadOnline?.[idx];if(!p)return;const ef=document.getElementById('cad-ean');const cur=ef.value.trim();if(p.ean){if(cur&&!cur.split(',').map(e=>e.trim()).includes(p.ean))ef.value=cur+', '+p.ean;else if(!cur)ef.value=p.ean}document.getElementById('cad-nome').value=p.nome||'';document.getElementById('cad-marca').value=p.marca||'';document.getElementById('cad-peso').value=p.peso||'';document.getElementById('cad-imagem').value=p.imagem||'';document.getElementById('cad-online-results').classList.remove('show');document.getElementById('cad-busca').value='';toast('Preenchido!','info')}
 
     // ============================================
-    // AUTOCOMPLETE (Marca + Fornecedor)
+    // AUTOCOMPLETE
     // ============================================
     function getMarcas(){const m=new Set();produtos.forEach(p=>{if(p.marca)m.add(p.marca)});return[...m]}
     function getFornecedores(){const f=new Set();produtos.forEach(p=>{if(p.fornecedor)f.add(p.fornecedor)});return[...f]}
-
-    function autocompleteMarca(input,dropId){
-        const dd=document.getElementById(dropId),v=input.value.trim().toLowerCase();
-        if(v.length<1){dd.classList.remove('show');return}
-        const list=getMarcas().filter(m=>m.toLowerCase().includes(v));
-        if(!list.length){dd.classList.remove('show');return}
-        dd.innerHTML=list.slice(0,5).map(m=>`<div class="ac-opt" onclick="this.parentElement.previousElementSibling.value='${m}';this.parentElement.classList.remove('show');">${m}</div>`).join('');
-        dd.classList.add('show');
-    }
-
-    function autocompleteFornecedor(input,dropId){
-        const dd=document.getElementById(dropId),v=input.value.trim().toLowerCase();
-        if(v.length<1){dd.classList.remove('show');return}
-        const list=getFornecedores().filter(f=>f.toLowerCase().includes(v));
-        if(!list.length){dd.classList.remove('show');return}
-        dd.innerHTML=list.slice(0,5).map(f=>`<div class="ac-opt" onclick="this.parentElement.previousElementSibling.value='${f}';this.parentElement.classList.remove('show');">${f}</div>`).join('');
-        dd.classList.add('show');
-    }
-
-    document.addEventListener('click',function(e){
-        if(!e.target.closest('.form-group'))document.querySelectorAll('.autocomplete-dropdown').forEach(d=>d.classList.remove('show'));
-        if(!e.target.closest('.online-search-bar')&&!e.target.closest('.online-results'))document.querySelectorAll('.online-results').forEach(d=>d.classList.remove('show'));
-    });
+    function autocompleteMarca(input,dropId){const dd=document.getElementById(dropId),v=input.value.trim().toLowerCase();if(v.length<1){dd.classList.remove('show');return}const list=getMarcas().filter(m=>m.toLowerCase().includes(v));if(!list.length){dd.classList.remove('show');return}dd.innerHTML=list.slice(0,5).map(m=>`<div class="ac-opt" onclick="this.parentElement.previousElementSibling.value='${m}';this.parentElement.classList.remove('show');">${m}</div>`).join('');dd.classList.add('show')}
+    function autocompleteFornecedor(input,dropId){const dd=document.getElementById(dropId),v=input.value.trim().toLowerCase();if(v.length<1){dd.classList.remove('show');return}const list=getFornecedores().filter(f=>f.toLowerCase().includes(v));if(!list.length){dd.classList.remove('show');return}dd.innerHTML=list.slice(0,5).map(f=>`<div class="ac-opt" onclick="this.parentElement.previousElementSibling.value='${f}';this.parentElement.classList.remove('show');">${f}</div>`).join('');dd.classList.add('show')}
+    document.addEventListener('click',function(e){if(!e.target.closest('.form-group'))document.querySelectorAll('.autocomplete-dropdown').forEach(d=>d.classList.remove('show'));if(!e.target.closest('.online-search-bar')&&!e.target.closest('.online-results'))document.querySelectorAll('.online-results').forEach(d=>d.classList.remove('show'))});
 
     // ============================================
     // SCANNER
     // ============================================
-    async function abrirScanner(target){
-        scannerTarget=target;document.getElementById('scanner-manual').value='';
-        document.getElementById('scanner-overlay').classList.add('show');
-        try{scannerStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280}}});document.getElementById('scanner-video').srcObject=scannerStream;
-            if('BarcodeDetector' in window){const det=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e','code_128']});const sc=setInterval(async()=>{try{const c=await det.detect(document.getElementById('scanner-video'));if(c.length>0){clearInterval(sc);processarCodigo(c[0].rawValue)}}catch(e){}},400);window.__scan=sc}
-        }catch(e){toast('Câmera: '+e.message,'err');fecharScanner()}
-    }
+    async function abrirScanner(target){scannerTarget=target;document.getElementById('scanner-manual').value='';document.getElementById('scanner-overlay').classList.add('show');try{scannerStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280}}});document.getElementById('scanner-video').srcObject=scannerStream;if('BarcodeDetector' in window){const det=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e','code_128']});const sc=setInterval(async()=>{try{const c=await det.detect(document.getElementById('scanner-video'));if(c.length>0){clearInterval(sc);processarCodigo(c[0].rawValue)}}catch(e){}},400);window.__scan=sc}}catch(e){toast('Câmera: '+e.message,'err');fecharScanner()}}
     function fecharScanner(){document.getElementById('scanner-overlay').classList.remove('show');if(scannerStream){scannerStream.getTracks().forEach(t=>t.stop());scannerStream=null}if(window.__scan)clearInterval(window.__scan)}
     function usarCodigoManual(){const c=document.getElementById('scanner-manual').value.trim();if(!c)return;processarCodigo(c)}
-
-    function processarCodigo(code){
-        fecharScanner();toast('📷 '+code);
-        if(scannerTarget==='cadastro'){
-            const eanField=document.getElementById('cad-ean');
-            const current=eanField.value.trim();
-            if(current&&!current.split(',').map(e=>e.trim()).includes(code))eanField.value=current+', '+code;
-            else if(!current)eanField.value=code;
-            document.getElementById('cad-busca').value=code;buscarParaCadastro();
-        }else if(scannerTarget==='pick-falta'){document.getElementById('pick-falta-filtro').value=code;renderPickFalta()}
-        else if(scannerTarget==='pick-venc'){document.getElementById('pick-venc-filtro').value=code;renderPickVenc()}
-        else if(scannerTarget==='pick-troca'){document.getElementById('pick-troca-filtro').value=code;renderPickTroca()}
-    }
+    function processarCodigo(code){fecharScanner();toast('📷 '+code);if(scannerTarget==='cadastro'){const ef=document.getElementById('cad-ean');const cur=ef.value.trim();if(cur&&!cur.split(',').map(e=>e.trim()).includes(code))ef.value=cur+', '+code;else if(!cur)ef.value=code;document.getElementById('cad-busca').value=code;buscarParaCadastro()}else if(scannerTarget==='pick-falta'){document.getElementById('pick-falta-filtro').value=code;renderPickFalta()}else if(scannerTarget==='pick-venc'){document.getElementById('pick-venc-filtro').value=code;renderPickVenc()}else if(scannerTarget==='pick-troca'){document.getElementById('pick-troca-filtro').value=code;renderPickTroca()}}
 
     // ============================================
     // NOME COMPLETO + HELPERS
     // ============================================
     function nomeProdutoCompleto(p){return[p.nome,p.marca,p.peso,p.tipo].filter(v=>v&&v.trim()!=='').join(' ').trim()}
     function produtoTemEan(p,ean){if(!p.ean||!ean)return false;return p.ean.split(',').map(e=>e.trim()).includes(ean.trim())}
-    function filtrarProdutos(lista,filtro){
-        if(!filtro)return lista;const q=filtro.toLowerCase();
-        return lista.filter(p=>{
-            const texto=`${p.nome} ${p.ean} ${p.marca} ${p.peso} ${p.tipo} ${p.fornecedor||''}`.toLowerCase();
-            if(texto.includes(q))return true;
-            if(p.ean){const eans=p.ean.split(',').map(e=>e.trim());if(eans.some(e=>e.includes(q)))return true}
-            return false;
-        });
-    }
+    function filtrarProdutos(lista,filtro){if(!filtro)return lista;const q=filtro.toLowerCase();return lista.filter(p=>{const texto=`${p.nome} ${p.ean} ${p.marca} ${p.peso} ${p.tipo} ${p.fornecedor||''}`.toLowerCase();if(texto.includes(q))return true;if(p.ean){const eans=p.ean.split(',').map(e=>e.trim());if(eans.some(e=>e.includes(q)))return true}return false})}
 
     // ============================================
-    // CADASTRO (com fornecedor)
+    // CADASTRO
     // ============================================
-    function salvarProduto(){
-        const nome=document.getElementById('cad-nome').value.trim();
-        if(!nome){toast('Nome obrigatório!','err');return}
-        const editId=document.getElementById('cad-edit-id').value;
-        const prod={id:editId?parseInt(editId):Date.now(),ean:document.getElementById('cad-ean').value.trim(),nome,marca:document.getElementById('cad-marca').value.trim(),peso:document.getElementById('cad-peso').value.trim(),tipo:document.getElementById('cad-tipo').value.trim(),fornecedor:document.getElementById('cad-fornecedor').value.trim(),imagem:document.getElementById('cad-imagem').value.trim(),criadoEm:new Date().toISOString()};
-        const nc=nomeProdutoCompleto(prod);
-        if(editId){
-            const idx=produtos.findIndex(p=>p.id===parseInt(editId));
-            if(idx!==-1){prod.criadoEm=produtos[idx].criadoEm;produtos[idx]=prod}
-            toast('Atualizado!');enviarNotif('cadastro','✏️ Editado: '+nc);
-        }else{
-            if(prod.ean){const novasEans=prod.ean.split(',').map(e=>e.trim()).filter(e=>e);const dup=produtos.find(p=>novasEans.some(ne=>produtoTemEan(p,ne)));if(dup){if(!confirm('EAN já existe em "'+nomeProdutoCompleto(dup)+'". Continuar?'))return}}
-            produtos.unshift(prod);toast('Cadastrado!');enviarNotif('cadastro','📦 Novo: '+nc);
-        }
-        salvarESync();renderAll();limparFormCad();fecharModal('modal-cadastro');
-    }
+    function salvarProduto(){const nome=document.getElementById('cad-nome').value.trim();if(!nome){toast('Nome obrigatório!','err');return}const editId=document.getElementById('cad-edit-id').value;const prod={id:editId?parseInt(editId):Date.now(),ean:document.getElementById('cad-ean').value.trim(),nome,marca:document.getElementById('cad-marca').value.trim(),peso:document.getElementById('cad-peso').value.trim(),tipo:document.getElementById('cad-tipo').value.trim(),fornecedor:document.getElementById('cad-fornecedor').value.trim(),imagem:document.getElementById('cad-imagem').value.trim(),criadoEm:new Date().toISOString()};const nc=nomeProdutoCompleto(prod);if(editId){const idx=produtos.findIndex(p=>p.id===parseInt(editId));if(idx!==-1){prod.criadoEm=produtos[idx].criadoEm;produtos[idx]=prod}toast('Atualizado!');enviarNotif('cadastro','✏️ Editado: '+nc)}else{if(prod.ean){const novasEans=prod.ean.split(',').map(e=>e.trim()).filter(e=>e);const dup=produtos.find(p=>novasEans.some(ne=>produtoTemEan(p,ne)));if(dup){if(!confirm('EAN já existe em "'+nomeProdutoCompleto(dup)+'". Continuar?'))return}}produtos.unshift(prod);toast('Cadastrado!');enviarNotif('cadastro','📦 Novo: '+nc)}salvarESync();renderAll();limparFormCad();fecharModal('modal-cadastro')}
 
-    function limparFormCad(){
-        ['cad-ean','cad-nome','cad-marca','cad-peso','cad-tipo','cad-fornecedor','cad-imagem','cad-busca'].forEach(id=>document.getElementById(id).value='');
-        document.getElementById('cad-edit-id').value='';document.getElementById('cad-online-results').classList.remove('show');
-        document.getElementById('modal-cad-title').textContent='📦 Cadastrar Produto';
-    }
+    function limparFormCad(){['cad-ean','cad-nome','cad-marca','cad-peso','cad-tipo','cad-fornecedor','cad-imagem','cad-busca'].forEach(id=>document.getElementById(id).value='');document.getElementById('cad-edit-id').value='';document.getElementById('cad-online-results').classList.remove('show');document.getElementById('modal-cad-title').textContent='📦 Cadastrar Produto'}
 
-    function editarProduto(id){
-        const p=produtos.find(x=>x.id===id);if(!p)return;
-        document.getElementById('cad-edit-id').value=p.id;
-        document.getElementById('cad-ean').value=p.ean||'';document.getElementById('cad-nome').value=p.nome||'';
-        document.getElementById('cad-marca').value=p.marca||'';document.getElementById('cad-peso').value=p.peso||'';
-        document.getElementById('cad-tipo').value=p.tipo||'';document.getElementById('cad-fornecedor').value=p.fornecedor||'';
-        document.getElementById('cad-imagem').value=p.imagem||'';
-        document.getElementById('modal-cad-title').textContent='✏️ Editar Produto';document.getElementById('modal-cadastro').classList.add('show');
-    }
+    function editarProduto(id){const p=produtos.find(x=>x.id===id);if(!p)return;document.getElementById('cad-edit-id').value=p.id;document.getElementById('cad-ean').value=p.ean||'';document.getElementById('cad-nome').value=p.nome||'';document.getElementById('cad-marca').value=p.marca||'';document.getElementById('cad-peso').value=p.peso||'';document.getElementById('cad-tipo').value=p.tipo||'';document.getElementById('cad-fornecedor').value=p.fornecedor||'';document.getElementById('cad-imagem').value=p.imagem||'';document.getElementById('modal-cad-title').textContent='✏️ Editar Produto';document.getElementById('modal-cadastro').classList.add('show')}
 
-    function removerProduto(id){
-        if(!confirm('Remover?'))return;const p=produtos.find(x=>x.id===id);
-        produtos=produtos.filter(x=>x.id!==id);salvarESync();renderAll();toast('Removido.');
-        if(p)enviarNotif('cadastro','🗑️ Removido: '+nomeProdutoCompleto(p));
-    }
+    function removerProduto(id){if(!confirm('Remover?'))return;const p=produtos.find(x=>x.id===id);produtos=produtos.filter(x=>x.id!==id);salvarESync();renderAll();toast('Removido.');if(p)enviarNotif('cadastro','🗑️ Removido: '+nomeProdutoCompleto(p))}
 
     // ============================================
-    // HELPERS VISUAIS
+    // HELPERS VISUAIS (imagem clicável + zoom)
     // ============================================
-    function getImgProduto(nome, ean) {
-        // 1. Prioridade: busca por EAN exato
-        if (ean) {
-            const porEan = produtos.find(x => produtoTemEan(x, ean));
-            if (porEan && porEan.imagem) return porEan.imagem;
-        }
-        // 2. Fallback: busca por nome completo exato
-        if (nome) {
-            const porNomeExato = produtos.find(x => nomeProdutoCompleto(x) === nome);
-            if (porNomeExato && porNomeExato.imagem) return porNomeExato.imagem;
-        }
-        // 3. Último recurso: busca por campo nome exato
-        if (nome) {
-            const porNomeCampo = produtos.find(x => x.nome && x.nome === nome);
-            if (porNomeCampo && porNomeCampo.imagem) return porNomeCampo.imagem;
-        }
-        return '';
+    function getImgProduto(nome,ean){
+        if(ean){const porEan=produtos.find(x=>produtoTemEan(x,ean));if(porEan&&porEan.imagem)return porEan.imagem}
+        if(nome){const porNome=produtos.find(x=>nomeProdutoCompleto(x)===nome);if(porNome&&porNome.imagem)return porNome.imagem}
+        if(nome){const porCampo=produtos.find(x=>x.nome&&x.nome===nome);if(porCampo&&porCampo.imagem)return porCampo.imagem}
+        return'';
     }
-    function imgHTML(nome,ean){const img=getImgProduto(nome,ean);if(img)return`<img src="${img}" onerror="this.outerHTML='📦'">`;return'📦'}
+
+    function imgHTML(nome,ean){const img=getImgProduto(nome,ean);if(img)return`<img src="${img}" onclick="event.stopPropagation();abrirZoom('${img}')" style="cursor:pointer;" onerror="this.outerHTML='📦'">`;return'📦'}
 
     function prodCardTop(p){
-        const nc=nomeProdutoCompleto(p);
-        const firstEan=p.ean?p.ean.split(',')[0].trim():'';
-        const moreEans=p.ean&&p.ean.includes(',')?'(+)':'';
-        return`<div class="pc-top">
-            <div class="pc-img">${p.imagem?'<img src="'+p.imagem+'" onerror="this.parentElement.innerHTML=\'📦\'">':'📦'}</div>
-            <div class="pc-info">
-                <div class="pc-name">${nc}</div>
-                ${firstEan?'<span class="pc-ean-code">Cód: '+firstEan+' '+moreEans+'</span>':''}
-                ${p.fornecedor?'<div style="font-size:0.62rem;color:var(--g500);margin-top:2px;">🏭 '+p.fornecedor+'</div>':''}
-            </div>
-        </div>`;
+        const nc=nomeProdutoCompleto(p);const firstEan=p.ean?p.ean.split(',')[0].trim():'';const moreEans=p.ean&&p.ean.includes(',')?'(+)':'';
+        const imgClick=p.imagem?` onclick="event.stopPropagation();abrirZoom('${p.imagem}')" style="cursor:pointer;"`:'';
+        return`<div class="pc-top"><div class="pc-img"${imgClick}>${p.imagem?'<img src="'+p.imagem+'" onerror="this.parentElement.innerHTML=\'📦\'">':'📦'}</div><div class="pc-info"><div class="pc-name">${nc}</div>${firstEan?'<span class="pc-ean-code">Cód: '+firstEan+' '+moreEans+'</span>':''}${p.fornecedor?'<div style="font-size:0.62rem;color:var(--g500);margin-top:2px;">🏭 '+p.fornecedor+'</div>':''}</div></div>`;
     }
 
     function unidadeSelectHTML(name){return`<select name="${name}" style="width:72px;flex:none;padding:8px 6px;border:1.5px solid var(--g200);border-radius:var(--r);font-size:0.8rem;">${UNIDADES.map(u=>`<option${u==='un'?' selected':''}>${u}</option>`).join('')}</select>`}
 
-    function jaInserido(tipo,prodId,ean){
-        const set=tipo==='falta'?_jaFalta:tipo==='venc'?_jaVenc:_jaTroca;
-        if(set.has(prodId))return true;
-        if(ean){const arr=tipo==='falta'?faltas:tipo==='venc'?vencimentos:trocas;const hoje=new Date().toDateString();const eans=ean.split(',').map(e=>e.trim());return arr.some(x=>eans.some(e=>x.ean===e)&&new Date(x.data).toDateString()===hoje)}
-        return false;
-    }
-
+    function jaInserido(tipo,prodId,ean){const set=tipo==='falta'?_jaFalta:tipo==='venc'?_jaVenc:_jaTroca;if(set.has(prodId))return true;if(ean){const arr=tipo==='falta'?faltas:tipo==='venc'?vencimentos:trocas;const hoje=new Date().toDateString();const eans=ean.split(',').map(e=>e.trim());return arr.some(x=>eans.some(e=>x.ean===e)&&new Date(x.data).toDateString()===hoje)}return false}
     function marcarBotao(prefix,id,texto){const btn=document.getElementById(prefix+'-btn-'+id);if(btn){btn.className='ef-toggle ef-toggle-done';btn.textContent=texto;btn.disabled=true;btn.onclick=null}const exp=document.getElementById(prefix+'-expand-'+id);if(exp)exp.classList.remove('show')}
     function toggleExp(prefix,id){const el=document.getElementById(prefix+'-expand-'+id);if(el)el.classList.toggle('show')}
 
     // ============================================
-    // PICK FALTA (com fornecedor)
+    // PICK FALTA
     // ============================================
-    function renderPickFalta(){
-        const filtro=(document.getElementById('pick-falta-filtro')?.value||'').trim();
-        let lista=filtrarProdutos(produtos,filtro);
-        const div=document.getElementById('pick-falta-lista');
-        if(!lista.length){div.innerHTML='<div class="empty-state"><div class="es-icon">📦</div><p>'+(filtro?'Nenhum produto com esse código/nome':'Nenhum produto')+'</p></div>';return}
-        div.innerHTML=lista.map(p=>{
-            const done=jaInserido('falta',p.id,p.ean);
-            return`<div class="product-card">${prodCardTop(p)}
-                <div class="pc-actions"><button class="ef-toggle ${done?'ef-toggle-done':'ef-toggle-falta'}" id="pf-btn-${p.id}" ${done?'disabled':`onclick="toggleExp('pf',${p.id})"`}>${done?'✓ Já inserido na Falta':'🚫 Inserir na Falta ▾'}</button></div>
-                <div class="expand-form" id="pf-expand-${p.id}">
-                    <div class="ef-row"><label>Estoque:</label><div class="unit-group"><input type="number" id="pf-eq-${p.id}" placeholder="Qtd" min="0">${unidadeSelectHTML('pf-eu-'+p.id)}</div><button class="btn-action btn-undone" style="min-width:auto;padding:6px 10px;font-size:0.7rem;flex:none;" onclick="document.getElementById('pf-eq-${p.id}').value=''">N/I</button></div>
-                    <div class="ef-row"><label>Pedido:</label><div class="unit-group"><input type="number" id="pf-sq-${p.id}" placeholder="Qtd" min="0">${unidadeSelectHTML('pf-su-'+p.id)}</div><button class="btn-action btn-undone" style="min-width:auto;padding:6px 10px;font-size:0.7rem;flex:none;" onclick="document.getElementById('pf-sq-${p.id}').value=''">N/I</button></div>
-                    <div class="ef-row"><label>Obs:</label><input type="text" id="pf-obs-${p.id}" placeholder="Opcional" style="flex:1;"></div>
-                    <div class="ef-actions"><button class="ef-btn ef-btn-cancel" onclick="toggleExp('pf',${p.id})">Cancelar</button><button class="ef-btn ef-btn-primary" onclick="cfmFalta(${p.id})">✅ Confirmar</button></div>
-                </div></div>`;
-        }).join('');
-    }
+    function renderPickFalta(){const filtro=(document.getElementById('pick-falta-filtro')?.value||'').trim();let lista=filtrarProdutos(produtos,filtro);const div=document.getElementById('pick-falta-lista');if(!lista.length){div.innerHTML='<div class="empty-state"><div class="es-icon">📦</div><p>'+(filtro?'Nenhum produto com esse código/nome':'Nenhum produto')+'</p></div>';return}div.innerHTML=lista.map(p=>{const done=jaInserido('falta',p.id,p.ean);return`<div class="product-card">${prodCardTop(p)}<div class="pc-actions"><button class="ef-toggle ${done?'ef-toggle-done':'ef-toggle-falta'}" id="pf-btn-${p.id}" ${done?'disabled':`onclick="toggleExp('pf',${p.id})"`}>${done?'✓ Já inserido na Falta':'🚫 Inserir na Falta ▾'}</button></div><div class="expand-form" id="pf-expand-${p.id}"><div class="ef-row"><label>Estoque:</label><div class="unit-group"><input type="number" id="pf-eq-${p.id}" placeholder="Qtd" min="0">${unidadeSelectHTML('pf-eu-'+p.id)}</div><button class="btn-action btn-undone" style="min-width:auto;padding:6px 10px;font-size:0.7rem;flex:none;" onclick="document.getElementById('pf-eq-${p.id}').value=''">N/I</button></div><div class="ef-row"><label>Pedido:</label><div class="unit-group"><input type="number" id="pf-sq-${p.id}" placeholder="Qtd" min="0">${unidadeSelectHTML('pf-su-'+p.id)}</div><button class="btn-action btn-undone" style="min-width:auto;padding:6px 10px;font-size:0.7rem;flex:none;" onclick="document.getElementById('pf-sq-${p.id}').value=''">N/I</button></div><div class="ef-row"><label>Obs:</label><input type="text" id="pf-obs-${p.id}" placeholder="Opcional" style="flex:1;"></div><div class="ef-actions"><button class="ef-btn ef-btn-cancel" onclick="toggleExp('pf',${p.id})">Cancelar</button><button class="ef-btn ef-btn-primary" onclick="cfmFalta(${p.id})">✅ Confirmar</button></div></div></div>`}).join('')}
 
-    function cfmFalta(id){
-        const p=produtos.find(x=>x.id===id);if(!p)return;
-        const nc=nomeProdutoCompleto(p);
-        const firstEan=p.ean?p.ean.split(',')[0].trim():'';
-        if(firstEan&&faltas.some(x=>x.ean===firstEan&&new Date(x.data).toDateString()===new Date().toDateString())){toast('⚠️ '+nc+' já inserido nas Faltas hoje!','warn');return}
-        const eq=document.getElementById('pf-eq-'+id)?.value||'',eu=document.querySelector(`[name="pf-eu-${id}"]`)?.value||'un';
-        const sq=document.getElementById('pf-sq-'+id)?.value||'',su=document.querySelector(`[name="pf-su-${id}"]`)?.value||'un';
-        const obs=document.getElementById('pf-obs-'+id)?.value.trim()||'';
-        faltas.unshift({id:Date.now(),produto:nc,ean:firstEan,marca:p.marca||'',fornecedor:p.fornecedor||'',estoque:eq?eq+' '+eu:'Não informado',sugestao:sq?sq+' '+su:'Não informado',obs,data:new Date().toISOString()});
-        salvarESync();toast('🚫 Falta: '+nc);enviarNotif('falta','🚫 Falta: '+nc);
-        _jaFalta.add(id);marcarBotao('pf',id,'✓ Já inserido na Falta');
-        renderHome();renderFaltas();renderNotifs();
-    }
+    function cfmFalta(id){const p=produtos.find(x=>x.id===id);if(!p)return;const nc=nomeProdutoCompleto(p);const firstEan=p.ean?p.ean.split(',')[0].trim():'';if(firstEan&&faltas.some(x=>x.ean===firstEan&&new Date(x.data).toDateString()===new Date().toDateString())){toast('⚠️ '+nc+' já inserido nas Faltas hoje!','warn');return}const eq=document.getElementById('pf-eq-'+id)?.value||'',eu=document.querySelector(`[name="pf-eu-${id}"]`)?.value||'un';const sq=document.getElementById('pf-sq-'+id)?.value||'',su=document.querySelector(`[name="pf-su-${id}"]`)?.value||'un';const obs=document.getElementById('pf-obs-'+id)?.value.trim()||'';faltas.unshift({id:Date.now(),produto:nc,ean:firstEan,marca:p.marca||'',fornecedor:p.fornecedor||'',estoque:eq?eq+' '+eu:'Não informado',sugestao:sq?sq+' '+su:'Não informado',obs,pedido:false,data:new Date().toISOString()});salvarESync();toast('🚫 Falta: '+nc);enviarNotif('falta','🚫 Falta: '+nc);_jaFalta.add(id);marcarBotao('pf',id,'✓ Já inserido na Falta');renderHome();renderFaltas();renderNotifs()}
 
     // ============================================
-    // PICK VENCIMENTO (com fornecedor)
+    // PICK VENCIMENTO
     // ============================================
-    function renderPickVenc(){
-        const filtro=(document.getElementById('pick-venc-filtro')?.value||'').trim();
-        let lista=filtrarProdutos(produtos,filtro);
-        const div=document.getElementById('pick-venc-lista');
-        if(!lista.length){div.innerHTML='<div class="empty-state"><div class="es-icon">📦</div><p>'+(filtro?'Nenhum produto com esse código/nome':'Nenhum produto')+'</p></div>';return}
-        div.innerHTML=lista.map(p=>{
-            const done=jaInserido('venc',p.id,p.ean);
-            return`<div class="product-card">${prodCardTop(p)}
-                <div class="pc-actions"><button class="ef-toggle ${done?'ef-toggle-done':'ef-toggle-venc'}" id="pv-btn-${p.id}" ${done?'disabled':`onclick="toggleExp('pv',${p.id})"`}>${done?'✓ Já inserido no Vencimento':'📅 Inserir Vencimento ▾'}</button></div>
-                <div class="expand-form" id="pv-expand-${p.id}">
-                    <div class="ef-row"><label>Qtd:</label><div class="unit-group"><input type="number" id="pv-q-${p.id}" placeholder="Qtd" min="1" value="1">${unidadeSelectHTML('pv-u-'+p.id)}</div></div>
-                    <div class="ef-row"><label>Validade:</label><input type="date" id="pv-d-${p.id}" style="flex:1;"></div>
-                    <div class="ef-row"><label>Local:</label><input type="text" id="pv-l-${p.id}" placeholder="Gôndola..." style="flex:1;"></div>
-                    <div class="ef-actions"><button class="ef-btn ef-btn-cancel" onclick="toggleExp('pv',${p.id})">Cancelar</button><button class="ef-btn ef-btn-warning" onclick="cfmVenc(${p.id})">✅ Confirmar</button></div>
-                </div></div>`;
-        }).join('');
-    }
+    function renderPickVenc(){const filtro=(document.getElementById('pick-venc-filtro')?.value||'').trim();let lista=filtrarProdutos(produtos,filtro);const div=document.getElementById('pick-venc-lista');if(!lista.length){div.innerHTML='<div class="empty-state"><div class="es-icon">📦</div><p>'+(filtro?'Nenhum produto com esse código/nome':'Nenhum produto')+'</p></div>';return}div.innerHTML=lista.map(p=>{const done=jaInserido('venc',p.id,p.ean);return`<div class="product-card">${prodCardTop(p)}<div class="pc-actions"><button class="ef-toggle ${done?'ef-toggle-done':'ef-toggle-venc'}" id="pv-btn-${p.id}" ${done?'disabled':`onclick="toggleExp('pv',${p.id})"`}>${done?'✓ Já inserido no Vencimento':'📅 Inserir Vencimento ▾'}</button></div><div class="expand-form" id="pv-expand-${p.id}"><div class="ef-row"><label>Qtd:</label><div class="unit-group"><input type="number" id="pv-q-${p.id}" placeholder="Qtd" min="1" value="1">${unidadeSelectHTML('pv-u-'+p.id)}</div></div><div class="ef-row"><label>Validade:</label><input type="date" id="pv-d-${p.id}" style="flex:1;"></div><div class="ef-row"><label>Local:</label><input type="text" id="pv-l-${p.id}" placeholder="Gôndola..." style="flex:1;"></div><div class="ef-actions"><button class="ef-btn ef-btn-cancel" onclick="toggleExp('pv',${p.id})">Cancelar</button><button class="ef-btn ef-btn-warning" onclick="cfmVenc(${p.id})">✅ Confirmar</button></div></div></div>`}).join('')}
 
-    function cfmVenc(id){
-        const p=produtos.find(x=>x.id===id);if(!p)return;
-        const nc=nomeProdutoCompleto(p);
-        const firstEan=p.ean?p.ean.split(',')[0].trim():'';
-        const data=document.getElementById('pv-d-'+id)?.value||'';
-        if(!data){toast('Informe a validade!','err');return}
-        if(firstEan&&vencimentos.some(x=>x.ean===firstEan&&x.data===data)){toast('⚠️ '+nc+' já tem esse vencimento!','warn');return}
-        const qtd=parseInt(document.getElementById('pv-q-'+id)?.value)||1,un=document.querySelector(`[name="pv-u-${id}"]`)?.value||'un';
-        const local=document.getElementById('pv-l-'+id)?.value.trim()||'';
-        vencimentos.unshift({id:Date.now(),produto:nc,ean:firstEan,marca:p.marca||'',fornecedor:p.fornecedor||'',qtd,unidade:un,data,local,acaoFeita:false,criadoEm:new Date().toISOString()});
-        salvarESync();toast('📅 Vencimento: '+nc);enviarNotif('vencimento','📅 Novo: '+nc+' ('+fmtDS(data)+')');
-        _jaVenc.add(id);marcarBotao('pv',id,'✓ Já inserido no Vencimento');
-        renderHome();renderVencimentos();renderNotifs();
-    }
+    function cfmVenc(id){const p=produtos.find(x=>x.id===id);if(!p)return;const nc=nomeProdutoCompleto(p);const firstEan=p.ean?p.ean.split(',')[0].trim():'';const data=document.getElementById('pv-d-'+id)?.value||'';if(!data){toast('Informe a validade!','err');return}if(firstEan&&vencimentos.some(x=>x.ean===firstEan&&x.data===data)){toast('⚠️ '+nc+' já tem esse vencimento!','warn');return}const qtd=parseInt(document.getElementById('pv-q-'+id)?.value)||1,un=document.querySelector(`[name="pv-u-${id}"]`)?.value||'un';const local=document.getElementById('pv-l-'+id)?.value.trim()||'';vencimentos.unshift({id:Date.now(),produto:nc,ean:firstEan,marca:p.marca||'',fornecedor:p.fornecedor||'',qtd,unidade:un,data,local,acaoFeita:false,criadoEm:new Date().toISOString()});salvarESync();toast('📅 Vencimento: '+nc);enviarNotif('vencimento','📅 Novo: '+nc+' ('+fmtDS(data)+')');_jaVenc.add(id);marcarBotao('pv',id,'✓ Já inserido no Vencimento');renderHome();renderVencimentos();renderNotifs()}
 
     // ============================================
-    // PICK TROCA (com fornecedor)
+    // PICK TROCA
     // ============================================
-    function renderPickTroca(){
-        const filtro=(document.getElementById('pick-troca-filtro')?.value||'').trim();
-        let lista=filtrarProdutos(produtos,filtro);
-        const div=document.getElementById('pick-troca-lista');
-        if(!lista.length){div.innerHTML='<div class="empty-state"><div class="es-icon">📦</div><p>'+(filtro?'Nenhum produto com esse código/nome':'Nenhum produto')+'</p></div>';return}
-        div.innerHTML=lista.map(p=>{
-            const done=jaInserido('troca',p.id,p.ean);
-            return`<div class="product-card">${prodCardTop(p)}
-                <div class="pc-actions"><button class="ef-toggle ${done?'ef-toggle-done':'ef-toggle-troca'}" id="pt-btn-${p.id}" ${done?'disabled':`onclick="toggleExp('pt',${p.id})"`}>${done?'✓ Já inserido na Troca':'🔄 Inserir Troca ▾'}</button></div>
-                <div class="expand-form" id="pt-expand-${p.id}">
-                    <div class="ef-row"><label>Qtd:</label><div class="unit-group"><input type="number" id="pt-q-${p.id}" placeholder="Qtd" min="1" value="1">${unidadeSelectHTML('pt-u-'+p.id)}</div></div>
-                    <div class="ef-row"><label>Motivo:</label><select id="pt-m-${p.id}" style="flex:1;padding:8px;border:1.5px solid var(--g200);border-radius:var(--r);font-size:0.82rem;"><option value="">Selecione</option><option>Vencido</option><option>Avariado</option><option>Defeito</option><option>Recall</option><option>Outros</option></select></div>
-                    <div class="ef-row"><label>Local:</label><input type="text" id="pt-l-${p.id}" placeholder="Depósito..." style="flex:1;"></div>
-                    <div class="ef-row"><label>Obs:</label><input type="text" id="pt-o-${p.id}" placeholder="Opcional" style="flex:1;"></div>
-                    <div class="ef-actions"><button class="ef-btn ef-btn-cancel" onclick="toggleExp('pt',${p.id})">Cancelar</button><button class="ef-btn ef-btn-info" onclick="cfmTroca(${p.id})">✅ Confirmar</button></div>
-                </div></div>`;
-        }).join('');
-    }
+    function renderPickTroca(){const filtro=(document.getElementById('pick-troca-filtro')?.value||'').trim();let lista=filtrarProdutos(produtos,filtro);const div=document.getElementById('pick-troca-lista');if(!lista.length){div.innerHTML='<div class="empty-state"><div class="es-icon">📦</div><p>'+(filtro?'Nenhum produto com esse código/nome':'Nenhum produto')+'</p></div>';return}div.innerHTML=lista.map(p=>{const done=jaInserido('troca',p.id,p.ean);return`<div class="product-card">${prodCardTop(p)}<div class="pc-actions"><button class="ef-toggle ${done?'ef-toggle-done':'ef-toggle-troca'}" id="pt-btn-${p.id}" ${done?'disabled':`onclick="toggleExp('pt',${p.id})"`}>${done?'✓ Já inserido na Troca':'🔄 Inserir Troca ▾'}</button></div><div class="expand-form" id="pt-expand-${p.id}"><div class="ef-row"><label>Qtd:</label><div class="unit-group"><input type="number" id="pt-q-${p.id}" placeholder="Qtd" min="1" value="1">${unidadeSelectHTML('pt-u-'+p.id)}</div></div><div class="ef-row"><label>Motivo:</label><select id="pt-m-${p.id}" style="flex:1;padding:8px;border:1.5px solid var(--g200);border-radius:var(--r);font-size:0.82rem;"><option value="">Selecione</option><option>Vencido</option><option>Avariado</option><option>Defeito</option><option>Recall</option><option>Outros</option></select></div><div class="ef-row"><label>Local:</label><input type="text" id="pt-l-${p.id}" placeholder="Depósito..." style="flex:1;"></div><div class="ef-row"><label>Obs:</label><input type="text" id="pt-o-${p.id}" placeholder="Opcional" style="flex:1;"></div><div class="ef-actions"><button class="ef-btn ef-btn-cancel" onclick="toggleExp('pt',${p.id})">Cancelar</button><button class="ef-btn ef-btn-info" onclick="cfmTroca(${p.id})">✅ Confirmar</button></div></div></div>`}).join('')}
 
-    function cfmTroca(id){
-        const p=produtos.find(x=>x.id===id);if(!p)return;
-        const nc=nomeProdutoCompleto(p);
-        const firstEan=p.ean?p.ean.split(',')[0].trim():'';
-        if(firstEan&&trocas.some(x=>x.ean===firstEan&&new Date(x.data).toDateString()===new Date().toDateString())){toast('⚠️ '+nc+' já inserido nas Trocas hoje!','warn');return}
-        const qtd=parseInt(document.getElementById('pt-q-'+id)?.value)||1,un=document.querySelector(`[name="pt-u-${id}"]`)?.value||'un';
-        const motivo=document.getElementById('pt-m-'+id)?.value||'',local=document.getElementById('pt-l-'+id)?.value.trim()||'';
-        const obs=document.getElementById('pt-o-'+id)?.value.trim()||'';
-        trocas.unshift({id:Date.now(),produto:nc,ean:firstEan,marca:p.marca||'',fornecedor:p.fornecedor||'',qtd,unidade:un,motivo,local,obs,data:new Date().toISOString()});
-        salvarESync();toast('🔄 Troca: '+nc);enviarNotif('troca','🔄 Troca: '+nc+' x'+qtd);
-        _jaTroca.add(id);marcarBotao('pt',id,'✓ Já inserido na Troca');
-        renderHome();renderTrocas();renderNotifs();
-    }
-
-
-
-
-
-
-
-
+    function cfmTroca(id){const p=produtos.find(x=>x.id===id);if(!p)return;const nc=nomeProdutoCompleto(p);const firstEan=p.ean?p.ean.split(',')[0].trim():'';if(firstEan&&trocas.some(x=>x.ean===firstEan&&new Date(x.data).toDateString()===new Date().toDateString())){toast('⚠️ '+nc+' já inserido nas Trocas hoje!','warn');return}const qtd=parseInt(document.getElementById('pt-q-'+id)?.value)||1,un=document.querySelector(`[name="pt-u-${id}"]`)?.value||'un';const motivo=document.getElementById('pt-m-'+id)?.value||'',local=document.getElementById('pt-l-'+id)?.value.trim()||'';const obs=document.getElementById('pt-o-'+id)?.value.trim()||'';trocas.unshift({id:Date.now(),produto:nc,ean:firstEan,marca:p.marca||'',fornecedor:p.fornecedor||'',qtd,unidade:un,motivo,local,obs,realizada:false,data:new Date().toISOString()});salvarESync();toast('🔄 Troca: '+nc);enviarNotif('troca','🔄 Troca: '+nc+' x'+qtd);_jaTroca.add(id);marcarBotao('pt',id,'✓ Já inserido na Troca');renderHome();renderTrocas();renderNotifs()}
 
 
 
@@ -558,19 +361,11 @@
         document.getElementById('cad-list-count').textContent=produtos.length;
         const div=document.getElementById('lista-cadastros');
         if(!lista.length){div.innerHTML='<div class="empty-state"><div class="es-icon">📦</div><p>Nenhum produto cadastrado</p></div>';return}
-        div.innerHTML=lista.map(p=>`
-            <div class="product-card">
-                ${prodCardTop(p)}
-                <div class="pc-actions">
-                    <button class="btn-action btn-edit" onclick="editarProduto(${p.id})">✏️ Editar</button>
-                    <button class="btn-action btn-delete" onclick="removerProduto(${p.id})">🗑️ Excluir</button>
-                </div>
-            </div>
-        `).join('');
+        div.innerHTML=lista.map(p=>`<div class="product-card">${prodCardTop(p)}<div class="pc-actions"><button class="btn-action btn-edit" onclick="editarProduto(${p.id})">✏️ Editar</button><button class="btn-action btn-delete" onclick="removerProduto(${p.id})">🗑️ Excluir</button></div></div>`).join('');
     }
 
     // ============================================
-    // RENDER FALTAS (com filtro fornecedor)
+    // RENDER FALTAS (com Marcar como Pedido)
     // ============================================
     function getFaltasFiltradas(){
         const marca=(document.getElementById('filtro-falta-marca')?.value||'').toLowerCase();
@@ -588,14 +383,15 @@
     function renderFaltas(){
         const lista=getFaltasFiltradas();
         document.getElementById('falta-list-count').textContent=faltas.length;
-        const sh=document.getElementById('faltas-share');
-        if(sh)sh.style.display=lista.length>0?'flex':'none';
+        const sh=document.getElementById('faltas-share');if(sh)sh.style.display=lista.length>0?'flex':'none';
         const div=document.getElementById('lista-faltas');
         if(!lista.length){div.innerHTML='<div class="empty-state"><div class="es-icon">✅</div><p>Nenhuma falta</p></div>';return}
-        div.innerHTML=lista.map(f=>`
-            <div class="product-card">
+        div.innerHTML=lista.map(f=>{
+            const pedido=f.pedido;
+            const fImg=getImgProduto(f.produto,f.ean);
+            return`<div class="product-card">
                 <div class="pc-top">
-                    <div class="pc-img">${imgHTML(f.produto,f.ean)}</div>
+                    <div class="pc-img"${fImg?` onclick="event.stopPropagation();abrirZoom('${fImg}')" style="cursor:pointer;"`:''} >${imgHTML(f.produto,f.ean)}</div>
                     <div class="pc-info">
                         <div class="pc-name">${f.produto}</div>
                         ${f.ean?'<span class="pc-ean-code">Cód: '+f.ean+'</span>':''}
@@ -604,50 +400,49 @@
                             <span class="badge badge-gray">Est: ${f.estoque||'N/I'}</span>
                             <span class="badge badge-gray">Sug: ${f.sugestao||'N/I'}</span>
                             ${f.obs?'<span class="badge badge-info">📝 '+f.obs+'</span>':''}
+                            ${pedido?'<span class="badge badge-success">✅ Pedido</span>':''}
                         </div>
                         <div style="font-size:0.6rem;color:var(--g400);margin-top:4px;">${fmtD(f.data)}</div>
                     </div>
                 </div>
                 <div class="pc-actions">
-                    <button class="btn-action btn-edit" onclick="editarFalta(${f.id})">✏️ Editar</button>
-                    <button class="btn-action btn-delete" onclick="removerFalta(${f.id})">🗑️ Excluir</button>
+                    <button class="btn-action ${pedido?'btn-pedido-done':'btn-pedido'}" ${pedido?'disabled':`onclick="marcarPedido(${f.id})"`}>${pedido?'✅ Produto Pedido':'📦 Marcar como Pedido'}</button>
+                    <button class="btn-action btn-edit" onclick="editarFalta(${f.id})">✏️</button>
+                    <button class="btn-action btn-delete" onclick="removerFalta(${f.id})">🗑️</button>
                 </div>
-            </div>
-        `).join('');
+            </div>`;
+        }).join('');
+    }
+
+    function marcarPedido(id){
+        const f=faltas.find(x=>x.id===id);if(!f)return;
+        if(!confirm('Marcar "'+f.produto+'" como pedido?'))return;
+        if(!confirm('Confirma que o pedido foi realizado?'))return;
+        f.pedido=true;
+        salvarESync();renderFaltas();
+        toast('📦 Produto marcado como pedido!');
+        enviarNotif('falta','📦 Pedido realizado: '+f.produto);
     }
 
     function editarFalta(id){
         const f=faltas.find(x=>x.id===id);if(!f)return;
         const p=produtos.find(x=>(x.ean&&produtoTemEan(x,f.ean))||nomeProdutoCompleto(x)===f.produto);
-        if(p){
-            faltas=faltas.filter(x=>x.id!==id);salvarLocal();_jaFalta.delete(p.id);
-            goList('pick-falta');
-            setTimeout(()=>{
-                toggleExp('pf',p.id);
-                const pe=(f.estoque||'').split(' ');
-                if(pe.length>=1&&pe[0]!=='Não'){const el=document.getElementById('pf-eq-'+p.id);if(el)el.value=pe[0]}
-                const ps=(f.sugestao||'').split(' ');
-                if(ps.length>=1&&ps[0]!=='Não'){const el=document.getElementById('pf-sq-'+p.id);if(el)el.value=ps[0]}
+        if(p){faltas=faltas.filter(x=>x.id!==id);salvarLocal();_jaFalta.delete(p.id);goList('pick-falta');
+            setTimeout(()=>{toggleExp('pf',p.id);
+                const pe=(f.estoque||'').split(' ');if(pe.length>=1&&pe[0]!=='Não'){const el=document.getElementById('pf-eq-'+p.id);if(el)el.value=pe[0]}
+                const ps=(f.sugestao||'').split(' ');if(ps.length>=1&&ps[0]!=='Não'){const el=document.getElementById('pf-sq-'+p.id);if(el)el.value=ps[0]}
                 const ob=document.getElementById('pf-obs-'+p.id);if(ob)ob.value=f.obs||'';
             },300);
         }else{toast('Produto não encontrado no cadastro','warn')}
     }
 
-    function removerFalta(id){
-        if(!confirm('Remover falta?'))return;
-        const f=faltas.find(x=>x.id===id);
-        faltas=faltas.filter(x=>x.id!==id);
-        salvarESync();renderAll();toast('Removido.');
-        if(f)enviarNotif('falta','🗑️ Falta removida: '+f.produto);
-    }
+    function removerFalta(id){if(!confirm('Remover falta?'))return;const f=faltas.find(x=>x.id===id);faltas=faltas.filter(x=>x.id!==id);salvarESync();renderAll();toast('Removido.');if(f)enviarNotif('falta','🗑️ Falta removida: '+f.produto)}
 
     // ============================================
-    // RENDER VENCIMENTOS (com filtro fornecedor)
+    // RENDER VENCIMENTOS
     // ============================================
     function getStatusVenc(dataStr){
-        const hoje=new Date();hoje.setHours(0,0,0,0);
-        const d=new Date(dataStr+'T00:00:00');
-        const diff=Math.ceil((d-hoje)/86400000);
+        const hoje=new Date();hoje.setHours(0,0,0,0);const d=new Date(dataStr+'T00:00:00');const diff=Math.ceil((d-hoje)/86400000);
         if(diff<0)return{label:'Vencido ('+Math.abs(diff)+'d)',badge:'badge-danger',key:'vencido'};
         if(diff===0)return{label:'HOJE!',badge:'badge-danger',key:'critico'};
         if(diff<=3)return{label:diff+'d',badge:'badge-danger',key:'critico'};
@@ -665,23 +460,20 @@
         if(fF)l=l.filter(v=>(v.fornecedor||'').toLowerCase().includes(fF));
         if(fS==='feito')l=l.filter(v=>v.acaoFeita);
         else if(fS)l=l.filter(v=>!v.acaoFeita&&getStatusVenc(v.data).key===fS);
-        l.sort((a,b)=>new Date(a.data)-new Date(b.data));
-        return l;
+        l.sort((a,b)=>new Date(a.data)-new Date(b.data));return l;
     }
 
     function renderVencimentos(){
         const lista=getVencFiltrados();
         document.getElementById('venc-list-count').textContent=vencimentos.length;
-        const sh=document.getElementById('venc-share');
-        if(sh)sh.style.display=lista.length>0?'flex':'none';
+        const sh=document.getElementById('venc-share');if(sh)sh.style.display=lista.length>0?'flex':'none';
         const div=document.getElementById('lista-vencimentos');
         if(!lista.length){div.innerHTML='<div class="empty-state"><div class="es-icon">📭</div><p>Nenhum vencimento</p></div>';return}
         div.innerHTML=lista.map(v=>{
-            const s=getStatusVenc(v.data);const done=v.acaoFeita;
-            return`
-            <div class="product-card ${done?'pc-done':''}">
+            const s=getStatusVenc(v.data);const done=v.acaoFeita;const vImg=getImgProduto(v.produto,v.ean);
+            return`<div class="product-card ${done?'pc-done':''}">
                 <div class="pc-top">
-                    <div class="pc-img">${imgHTML(v.produto,v.ean)}</div>
+                    <div class="pc-img"${vImg?` onclick="event.stopPropagation();abrirZoom('${vImg}')" style="cursor:pointer;"`:''} >${imgHTML(v.produto,v.ean)}</div>
                     <div class="pc-info">
                         <div class="pc-name">${v.produto}</div>
                         ${v.ean?'<span class="pc-ean-code">Cód: '+v.ean+'</span>':''}
@@ -704,64 +496,18 @@
         }).join('');
     }
 
-    function toggleAcaoVenc(id){
-        const v=vencimentos.find(x=>x.id===id);if(!v)return;
-        v.acaoFeita=!v.acaoFeita;
-        salvarESync();renderAll();
-        toast(v.acaoFeita?'✅ Feito!':'↩️ Desmarcado.','info');
-        enviarNotif('vencimento',(v.acaoFeita?'✅':'↩️')+' '+v.produto);
-    }
+    function toggleAcaoVenc(id){const v=vencimentos.find(x=>x.id===id);if(!v)return;v.acaoFeita=!v.acaoFeita;salvarESync();renderAll();toast(v.acaoFeita?'✅ Feito!':'↩️ Desmarcado.','info');enviarNotif('vencimento',(v.acaoFeita?'✅':'↩️')+' '+v.produto)}
 
-    function editarVenc(id){
-        const v=vencimentos.find(x=>x.id===id);if(!v)return;
-        const p=produtos.find(x=>(x.ean&&produtoTemEan(x,v.ean))||nomeProdutoCompleto(x)===v.produto);
-        if(p){
-            vencimentos=vencimentos.filter(x=>x.id!==id);salvarLocal();_jaVenc.delete(p.id);
-            goList('pick-venc');
-            setTimeout(()=>{
-                toggleExp('pv',p.id);
-                const qe=document.getElementById('pv-q-'+p.id);if(qe)qe.value=v.qtd||1;
-                const de=document.getElementById('pv-d-'+p.id);if(de)de.value=v.data||'';
-                const le=document.getElementById('pv-l-'+p.id);if(le)le.value=v.local||'';
-            },300);
-        }else{toast('Produto não encontrado','warn')}
-    }
+    function editarVenc(id){const v=vencimentos.find(x=>x.id===id);if(!v)return;const p=produtos.find(x=>(x.ean&&produtoTemEan(x,v.ean))||nomeProdutoCompleto(x)===v.produto);if(p){vencimentos=vencimentos.filter(x=>x.id!==id);salvarLocal();_jaVenc.delete(p.id);goList('pick-venc');setTimeout(()=>{toggleExp('pv',p.id);const qe=document.getElementById('pv-q-'+p.id);if(qe)qe.value=v.qtd||1;const de=document.getElementById('pv-d-'+p.id);if(de)de.value=v.data||'';const le=document.getElementById('pv-l-'+p.id);if(le)le.value=v.local||''},300)}else{toast('Produto não encontrado','warn')}}
 
-    function removerVenc(id){
-        if(!confirm('Remover?'))return;
-        const v=vencimentos.find(x=>x.id===id);
-        vencimentos=vencimentos.filter(x=>x.id!==id);
-        salvarESync();renderAll();toast('Removido.');
-        if(v)enviarNotif('vencimento','🗑️ Removido: '+v.produto);
-    }
+    function removerVenc(id){if(!confirm('Remover?'))return;const v=vencimentos.find(x=>x.id===id);vencimentos=vencimentos.filter(x=>x.id!==id);salvarESync();renderAll();toast('Removido.');if(v)enviarNotif('vencimento','🗑️ Removido: '+v.produto)}
 
-    function abrirEnviarTroca(id){
-        const v=vencimentos.find(x=>x.id===id);if(!v)return;
-        document.getElementById('modal-et-info').innerHTML=`<strong>${v.produto}</strong><br>Qtd: <strong>${v.qtd||1}${v.unidade?' '+v.unidade:''}</strong> | Val: <strong>${fmtDS(v.data)}</strong>${v.local?' | 📍 '+v.local:''}${v.fornecedor?' | 🏭 '+v.fornecedor:''}`;
-        document.getElementById('et-qtd').value=v.qtd||1;
-        document.getElementById('et-qtd').max=v.qtd||1;
-        document.getElementById('et-local').value=v.local||'';
-        document.getElementById('et-venc-id').value=id;
-        document.getElementById('modal-enviar-troca').classList.add('show');
-    }
+    function abrirEnviarTroca(id){const v=vencimentos.find(x=>x.id===id);if(!v)return;document.getElementById('modal-et-info').innerHTML=`<strong>${v.produto}</strong><br>Qtd: <strong>${v.qtd||1}${v.unidade?' '+v.unidade:''}</strong> | Val: <strong>${fmtDS(v.data)}</strong>${v.local?' | 📍 '+v.local:''}${v.fornecedor?' | 🏭 '+v.fornecedor:''}`;document.getElementById('et-qtd').value=v.qtd||1;document.getElementById('et-qtd').max=v.qtd||1;document.getElementById('et-local').value=v.local||'';document.getElementById('et-venc-id').value=id;document.getElementById('modal-enviar-troca').classList.add('show')}
 
-    function confirmarEnviarTroca(){
-        const vId=parseInt(document.getElementById('et-venc-id').value);
-        const qtd=parseInt(document.getElementById('et-qtd').value)||0;
-        const local=document.getElementById('et-local').value.trim();
-        if(qtd<=0){toast('Qtd inválida!','err');return}
-        const v=vencimentos.find(x=>x.id===vId);if(!v)return;
-        if(qtd>(v.qtd||1)){toast('Qtd maior!','err');return}
-        trocas.unshift({id:Date.now(),produto:v.produto,ean:v.ean||'',marca:v.marca||'',fornecedor:v.fornecedor||'',qtd,unidade:v.unidade||'',motivo:'Vencido',local:local||v.local||'',obs:'Via vencimento (Val: '+fmtDS(v.data)+')',data:new Date().toISOString()});
-        if(qtd>=(v.qtd||1))vencimentos=vencimentos.filter(x=>x.id!==vId);
-        else{v.qtd=(v.qtd||1)-qtd;v.acaoFeita=true}
-        salvarESync();fecharModal('modal-enviar-troca');renderAll();
-        toast('✅ '+qtd+'x → Troca!');
-        enviarNotif('troca','🔄 '+qtd+'x '+v.produto+' → Troca');
-    }
+    function confirmarEnviarTroca(){const vId=parseInt(document.getElementById('et-venc-id').value);const qtd=parseInt(document.getElementById('et-qtd').value)||0;const local=document.getElementById('et-local').value.trim();if(qtd<=0){toast('Qtd inválida!','err');return}const v=vencimentos.find(x=>x.id===vId);if(!v)return;if(qtd>(v.qtd||1)){toast('Qtd maior!','err');return}trocas.unshift({id:Date.now(),produto:v.produto,ean:v.ean||'',marca:v.marca||'',fornecedor:v.fornecedor||'',qtd,unidade:v.unidade||'',motivo:'Vencido',local:local||v.local||'',obs:'Via vencimento (Val: '+fmtDS(v.data)+')',realizada:false,data:new Date().toISOString()});if(qtd>=(v.qtd||1))vencimentos=vencimentos.filter(x=>x.id!==vId);else{v.qtd=(v.qtd||1)-qtd;v.acaoFeita=true}salvarESync();fecharModal('modal-enviar-troca');renderAll();toast('✅ '+qtd+'x → Troca!');enviarNotif('troca','🔄 '+qtd+'x '+v.produto+' → Troca')}
 
     // ============================================
-    // RENDER TROCAS (com filtro fornecedor)
+    // RENDER TROCAS (com Troca Realizada)
     // ============================================
     function getTrocasFiltradas(){
         const mot=document.getElementById('filtro-troca-motivo')?.value||'';
@@ -779,15 +525,15 @@
     function renderTrocas(){
         const lista=getTrocasFiltradas();
         document.getElementById('troca-list-count').textContent=trocas.length;
-        const sh=document.getElementById('trocas-share');
-        if(sh)sh.style.display=lista.length>0?'flex':'none';
+        const sh=document.getElementById('trocas-share');if(sh)sh.style.display=lista.length>0?'flex':'none';
         const div=document.getElementById('lista-trocas');
         if(!lista.length){div.innerHTML='<div class="empty-state"><div class="es-icon">📭</div><p>Nenhuma troca</p></div>';return}
         const mB={Vencido:'badge-danger',Avariado:'badge-warning',Defeito:'badge-info',Recall:'badge-purple',Outros:'badge-gray'};
-        div.innerHTML=lista.map(t=>`
-            <div class="product-card">
+        div.innerHTML=lista.map(t=>{
+            const realizada=t.realizada;const tImg=getImgProduto(t.produto,t.ean);
+            return`<div class="product-card">
                 <div class="pc-top">
-                    <div class="pc-img">${imgHTML(t.produto,t.ean)}</div>
+                    <div class="pc-img"${tImg?` onclick="event.stopPropagation();abrirZoom('${tImg}')" style="cursor:pointer;"`:''} >${imgHTML(t.produto,t.ean)}</div>
                     <div class="pc-info">
                         <div class="pc-name">${t.produto}</div>
                         ${t.ean?'<span class="pc-ean-code">Cód: '+t.ean+'</span>':''}
@@ -797,41 +543,33 @@
                             <span class="badge badge-gray">x${t.qtd||1}${t.unidade?' '+t.unidade:''}</span>
                             ${t.local?'<span class="location-tag">📍 '+t.local+'</span>':''}
                             ${t.obs?'<span class="badge badge-info">📝</span>':''}
+                            ${realizada?'<span class="badge badge-success">✅ Realizada</span>':''}
                         </div>
                         <div style="font-size:0.6rem;color:var(--g400);margin-top:4px;">${fmtD(t.data)}</div>
                     </div>
                 </div>
                 <div class="pc-actions">
-                    <button class="btn-action btn-edit" onclick="editarTroca(${t.id})">✏️ Editar</button>
-                    <button class="btn-action btn-delete" onclick="removerTroca(${t.id})">🗑️ Excluir</button>
+                    <button class="btn-action ${realizada?'btn-troca-done':'btn-done'}" ${realizada?'disabled':`onclick="marcarTrocaRealizada(${t.id})"`}>${realizada?'✅ Troca Realizada':'🔄 Marcar Troca Realizada'}</button>
+                    <button class="btn-action btn-edit" onclick="editarTroca(${t.id})">✏️</button>
+                    <button class="btn-action btn-delete" onclick="removerTroca(${t.id})">🗑️</button>
                 </div>
-            </div>
-        `).join('');
+            </div>`;
+        }).join('');
     }
 
-    function editarTroca(id){
+    function marcarTrocaRealizada(id){
         const t=trocas.find(x=>x.id===id);if(!t)return;
-        const p=produtos.find(x=>(x.ean&&produtoTemEan(x,t.ean))||nomeProdutoCompleto(x)===t.produto);
-        if(p){
-            trocas=trocas.filter(x=>x.id!==id);salvarLocal();_jaTroca.delete(p.id);
-            goList('pick-troca');
-            setTimeout(()=>{
-                toggleExp('pt',p.id);
-                const qe=document.getElementById('pt-q-'+p.id);if(qe)qe.value=t.qtd||1;
-                const me=document.getElementById('pt-m-'+p.id);if(me)me.value=t.motivo||'';
-                const le=document.getElementById('pt-l-'+p.id);if(le)le.value=t.local||'';
-                const oe=document.getElementById('pt-o-'+p.id);if(oe)oe.value=t.obs||'';
-            },300);
-        }else{toast('Produto não encontrado','warn')}
+        if(!confirm('Marcar troca de "'+t.produto+'" como realizada?'))return;
+        if(!confirm('Confirma que a troca foi realizada?'))return;
+        t.realizada=true;
+        salvarESync();renderTrocas();
+        toast('🔄 Troca marcada como realizada!');
+        enviarNotif('troca','✅ Troca realizada: '+t.produto);
     }
 
-    function removerTroca(id){
-        if(!confirm('Remover?'))return;
-        const t=trocas.find(x=>x.id===id);
-        trocas=trocas.filter(x=>x.id!==id);
-        salvarESync();renderAll();toast('Removido.');
-        if(t)enviarNotif('troca','🗑️ Removido: '+t.produto);
-    }
+    function editarTroca(id){const t=trocas.find(x=>x.id===id);if(!t)return;const p=produtos.find(x=>(x.ean&&produtoTemEan(x,t.ean))||nomeProdutoCompleto(x)===t.produto);if(p){trocas=trocas.filter(x=>x.id!==id);salvarLocal();_jaTroca.delete(p.id);goList('pick-troca');setTimeout(()=>{toggleExp('pt',p.id);const qe=document.getElementById('pt-q-'+p.id);if(qe)qe.value=t.qtd||1;const me=document.getElementById('pt-m-'+p.id);if(me)me.value=t.motivo||'';const le=document.getElementById('pt-l-'+p.id);if(le)le.value=t.local||'';const oe=document.getElementById('pt-o-'+p.id);if(oe)oe.value=t.obs||''},300)}else{toast('Produto não encontrado','warn')}}
+
+    function removerTroca(id){if(!confirm('Remover?'))return;const t=trocas.find(x=>x.id===id);trocas=trocas.filter(x=>x.id!==id);salvarESync();renderAll();toast('Removido.');if(t)enviarNotif('troca','🗑️ Removido: '+t.produto)}
 
     // ============================================
     // HOME
@@ -851,17 +589,13 @@
         vencimentos.filter(v=>!v.acaoFeita&&getStatusVenc(v.data).key==='vencido').forEach(v=>{items.push({tipo:'vencido',label:'⚠️ VENCIDO',nome:v.produto,ean:v.ean,det:fmtDS(v.data)+' • x'+(v.qtd||1),status:getStatusVenc(v.data).label,act:()=>goList('vencimentos')})});
         vencimentos.filter(v=>!v.acaoFeita&&getStatusVenc(v.data).key==='critico').forEach(v=>{items.push({tipo:'critico',label:'🔥 CRÍTICO',nome:v.produto,ean:v.ean,det:fmtDS(v.data)+' • x'+(v.qtd||1),status:getStatusVenc(v.data).label,act:()=>goList('vencimentos')})});
         vencimentos.filter(v=>!v.acaoFeita&&getStatusVenc(v.data).key==='proximo').forEach(v=>{items.push({tipo:'proximo',label:'📅 PRÓXIMO',nome:v.produto,ean:v.ean,det:fmtDS(v.data)+' • x'+(v.qtd||1),status:getStatusVenc(v.data).label,act:()=>goList('vencimentos')})});
-        faltas.slice(0,5).forEach(f=>{items.push({tipo:'falta',label:'🚫 FALTA',nome:f.produto,ean:f.ean,det:'Est: '+(f.estoque||'N/I'),status:'Falta',act:()=>goList('faltas')})});
-        trocas.slice(0,3).forEach(t=>{items.push({tipo:'troca',label:'🔄 TROCA',nome:t.produto,ean:t.ean,det:(t.motivo||'')+' • x'+(t.qtd||1),status:t.motivo||'Troca',act:()=>goList('trocas')})});
+        faltas.slice(0,5).forEach(f=>{items.push({tipo:'falta',label:'🚫 FALTA',nome:f.produto,ean:f.ean,det:'Est: '+(f.estoque||'N/I'),status:f.pedido?'Pedido':'Falta',act:()=>goList('faltas')})});
+        trocas.slice(0,3).forEach(t=>{items.push({tipo:'troca',label:'🔄 TROCA',nome:t.produto,ean:t.ean,det:(t.motivo||'')+' • x'+(t.qtd||1),status:t.realizada?'Realizada':t.motivo||'Troca',act:()=>goList('trocas')})});
 
         document.getElementById('alerts-count').textContent=items.length;
         if(!items.length){track.innerHTML='<div class="alerts-empty">✅ Tudo em dia!</div>';return}
         window.__aItems=items;
-        track.innerHTML=items.map((it,i)=>{
-            const pi=getImgProduto(it.nome,it.ean);
-            const imgB=pi?`<div class="alert-card-img"><img src="${pi}" onerror="this.parentElement.innerHTML='<div class=no-img>${iMap[it.tipo]}</div>'"></div>`:`<div class="alert-card-img"><div class="no-img">${iMap[it.tipo]}</div></div>`;
-            return`<div class="alert-card ac-${it.tipo}" onclick="window.__aItems[${i}].act()">${imgB}<div class="alert-card-info"><div class="ac-type">${it.label}</div><div class="ac-name">${it.nome}</div><div class="ac-footer"><span class="ac-detail">${it.det}</span><span class="ac-pill">${it.status}</span></div></div></div>`;
-        }).join('');
+        track.innerHTML=items.map((it,i)=>{const pi=getImgProduto(it.nome,it.ean);const imgB=pi?`<div class="alert-card-img"><img src="${pi}" onerror="this.parentElement.innerHTML='<div class=no-img>${iMap[it.tipo]}</div>'"></div>`:`<div class="alert-card-img"><div class="no-img">${iMap[it.tipo]}</div></div>`;return`<div class="alert-card ac-${it.tipo}" onclick="window.__aItems[${i}].act()">${imgB}<div class="alert-card-info"><div class="ac-type">${it.label}</div><div class="ac-name">${it.nome}</div><div class="ac-footer"><span class="ac-detail">${it.det}</span><span class="ac-pill">${it.status}</span></div></div></div>`}).join('');
         startAS();
     }
 
@@ -871,119 +605,76 @@
     // ============================================
     // NOTIFICAÇÕES
     // ============================================
-    function renderNotifs(){
-        const div=document.getElementById('lista-notifs');
-        if(!notificacoes.length){div.innerHTML='<div class="empty-state"><div class="es-icon">🔔</div><p>Nenhuma notificação</p></div>';return}
-        const iMap={cadastro:'ni-cad',falta:'ni-falta',vencimento:'ni-venc',troca:'ni-troca'};
-        const eMap={cadastro:'📦',falta:'🚫',vencimento:'📅',troca:'🔄'};
-        div.innerHTML=notificacoes.slice(0,50).map(n=>`<div class="notif-item"><div class="notif-icon ${iMap[n.tipo]||'ni-cad'}">${eMap[n.tipo]||'🔔'}</div><div class="notif-body" style="flex:1;"><div class="notif-title">${n.msg}</div><div class="notif-time">${fmtD(n.data)}</div></div>${!n.lido?'<div class="notif-new"></div>':''}</div>`).join('');
-    }
+    function renderNotifs(){const div=document.getElementById('lista-notifs');if(!notificacoes.length){div.innerHTML='<div class="empty-state"><div class="es-icon">🔔</div><p>Nenhuma notificação</p></div>';return}const iMap={cadastro:'ni-cad',falta:'ni-falta',vencimento:'ni-venc',troca:'ni-troca'};const eMap={cadastro:'📦',falta:'🚫',vencimento:'📅',troca:'🔄'};div.innerHTML=notificacoes.slice(0,50).map(n=>`<div class="notif-item"><div class="notif-icon ${iMap[n.tipo]||'ni-cad'}">${eMap[n.tipo]||'🔔'}</div><div class="notif-body" style="flex:1;"><div class="notif-title">${n.msg}</div><div class="notif-time">${fmtD(n.data)}</div></div>${!n.lido?'<div class="notif-new"></div>':''}</div>`).join('')}
     function marcarNotifsLidas(){notificacoes.forEach(n=>n.lido=true);salvarLocal();updNotifBadge()}
     function updNotifBadge(){const n=notificacoes.filter(x=>!x.lido).length;const b=document.getElementById('notif-badge');if(n>0){b.style.display='flex';b.textContent=n>99?'99+':n}else b.style.display='none'}
-    function limparNotifs(){
-        if(!confirm('Limpar notificações?'))return;
-        notificacoes=[];salvarLocal();
-        if(db&&fbOn){db.ref('notificacoes').remove().catch(e=>console.warn('limpar:',e))}
-        renderNotifs();updNotifBadge();toast('Notificações limpas.');
-    }
+    function limparNotifs(){if(!confirm('Limpar notificações?'))return;notificacoes=[];salvarLocal();if(db&&fbOn){db.ref('notificacoes').remove().catch(e=>console.warn('limpar:',e))}renderNotifs();updNotifBadge();toast('Notificações limpas.')}
 
     // ============================================
-    // PDF COM FORNECEDOR
+    // PDF COM EAN + STATUS
     // ============================================
     function gerarPDF(tipo){
         let titulo,headers,rows;
         if(tipo==='faltas'){
-            titulo='Relatório de Faltas';headers=['#','Produto','Fornecedor','Estoque','Sugestão','Obs','Data'];
+            titulo='Relatório de Faltas';headers=['#','Produto','EAN','Fornecedor','Estoque','Sugestão','Status','Data'];
             const l=getFaltasFiltradas();if(!l.length){toast('Sem dados!','warn');return}
-            rows=l.map((f,i)=>[i+1,f.produto,f.fornecedor||'-',f.estoque||'N/I',f.sugestao||'N/I',f.obs||'-',fmtD(f.data)]);
+            rows=l.map((f,i)=>[i+1,f.produto,f.ean||'-',f.fornecedor||'-',f.estoque||'N/I',f.sugestao||'N/I',f.pedido?'✅ Pedido':'Pendente',fmtD(f.data)]);
         }else if(tipo==='vencimentos'){
-            titulo='Relatório de Vencimentos';headers=['#','Produto','Fornecedor','Qtd','Validade','Status','Local'];
+            titulo='Relatório de Vencimentos';headers=['#','Produto','EAN','Fornecedor','Qtd','Validade','Status','Local'];
             const l=getVencFiltrados();if(!l.length){toast('Sem dados!','warn');return}
-            rows=l.map((v,i)=>{const s=getStatusVenc(v.data);return[i+1,v.produto,v.fornecedor||'-',(v.qtd||1)+(v.unidade?' '+v.unidade:''),fmtDS(v.data),v.acaoFeita?'Feito':s.label,v.local||'-']});
+            rows=l.map((v,i)=>{const s=getStatusVenc(v.data);return[i+1,v.produto,v.ean||'-',v.fornecedor||'-',(v.qtd||1)+(v.unidade?' '+v.unidade:''),fmtDS(v.data),v.acaoFeita?'Feito':s.label,v.local||'-']});
         }else if(tipo==='trocas'){
-            titulo='Relatório de Trocas';headers=['#','Produto','Fornecedor','Qtd','Motivo','Local','Data'];
+            titulo='Relatório de Trocas';headers=['#','Produto','EAN','Fornecedor','Qtd','Motivo','Status','Data'];
             const l=getTrocasFiltradas();if(!l.length){toast('Sem dados!','warn');return}
-            rows=l.map((t,i)=>[i+1,t.produto,t.fornecedor||'-',(t.qtd||1)+(t.unidade?' '+t.unidade:''),t.motivo||'-',t.local||'-',fmtD(t.data)]);
+            rows=l.map((t,i)=>[i+1,t.produto,t.ean||'-',t.fornecedor||'-',(t.qtd||1)+(t.unidade?' '+t.unidade:''),t.motivo||'-',t.realizada?'✅ Realizada':'Pendente',fmtD(t.data)]);
         }
         if(!rows||!rows.length){toast('Sem dados!','warn');return}
 
         const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${titulo}</title>
-<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:30px;color:#1f2937;font-size:12px}
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:30px;color:#1f2937;font-size:11px}
 .hdr{text-align:center;margin-bottom:24px;padding-bottom:14px;border-bottom:3px solid #1e3a8a}
-.hdr h1{font-size:18px;color:#1e3a8a;margin-bottom:4px}.hdr h2{font-size:14px;color:#374151;margin-bottom:6px}.hdr p{font-size:11px;color:#6b7280}
+.hdr h1{font-size:18px;color:#1e3a8a;margin-bottom:4px}.hdr h2{font-size:14px;color:#374151;margin-bottom:6px}.hdr p{font-size:10px;color:#6b7280}
 table{width:100%;border-collapse:collapse;margin-bottom:20px}
-thead tr{background:#1f2937}thead th{color:white;padding:8px;text-align:left;font-size:11px;border:1px solid #374151}
-tbody tr:nth-child(even){background:#f9fafb}tbody td{padding:7px 8px;border:1px solid #e5e7eb;font-size:11px}
-.ft{text-align:center;font-size:10px;color:#9ca3af;margin-top:20px;padding-top:10px;border-top:1px solid #e5e7eb}
-.tot{font-weight:700;margin-bottom:10px;font-size:12px}</style></head>
+thead tr{background:#1f2937}thead th{color:white;padding:7px 6px;text-align:left;font-size:10px;border:1px solid #374151}
+tbody tr:nth-child(even){background:#f9fafb}tbody td{padding:6px;border:1px solid #e5e7eb;font-size:10px}
+.ft{text-align:center;font-size:9px;color:#9ca3af;margin-top:20px;padding-top:10px;border-top:1px solid #e5e7eb}
+.tot{font-weight:700;margin-bottom:10px;font-size:11px}</style></head>
 <body><div class="hdr"><h1>📋 Controle de Estoque</h1><h2>${titulo}</h2><p>Gerado: ${new Date().toLocaleString('pt-BR')}</p></div>
 <p class="tot">Total: ${rows.length} itens</p>
 <table><thead><tr>${headers.map(h=>'<th>'+h+'</th>').join('')}</tr></thead>
 <tbody>${rows.map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')}</tbody></table>
-<div class="ft">Controle de Estoque v2.5</div></body></html>`;
+<div class="ft">Controle de Estoque v2.6</div></body></html>`;
 
-        try{
-            const blob=new Blob([html],{type:'text/html;charset=utf-8'});
-            const url=URL.createObjectURL(blob);
-            const a=document.createElement('a');a.href=url;
-            a.download=tipo+'-'+new Date().toISOString().split('T')[0]+'.html';
-            document.body.appendChild(a);a.click();document.body.removeChild(a);
-            URL.revokeObjectURL(url);toast('📄 Relatório baixado!','info');
-        }catch(e){toast('Erro: '+e.message,'err')}
+        try{const blob=new Blob([html],{type:'text/html;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=tipo+'-'+new Date().toISOString().split('T')[0]+'.html';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);toast('📄 Relatório baixado!','info')}catch(e){toast('Erro: '+e.message,'err')}
     }
 
     // ============================================
-    // WHATSAPP COM FORNECEDOR
+    // WHATSAPP COM EAN + STATUS
     // ============================================
     function compartilharWA(tipo){
         let titulo,linhas;
         if(tipo==='faltas'){
-            titulo='🚫 *RELATÓRIO DE FALTAS*';
-            const l=getFaltasFiltradas();if(!l.length){toast('Sem dados!','warn');return}
-            linhas=l.map((f,i)=>`${i+1}. *${f.produto}*${f.fornecedor?' | 🏭 '+f.fornecedor:''}\n   Est: ${f.estoque||'N/I'} | Sug: ${f.sugestao||'N/I'}${f.obs?' | '+f.obs:''}`);
+            titulo='🚫 *RELATÓRIO DE FALTAS*';const l=getFaltasFiltradas();if(!l.length){toast('Sem dados!','warn');return}
+            linhas=l.map((f,i)=>`${i+1}. *${f.produto}*${f.ean?'\n   Cód: '+f.ean:''}${f.fornecedor?' | 🏭 '+f.fornecedor:''}\n   Est: ${f.estoque||'N/I'} | Sug: ${f.sugestao||'N/I'}${f.pedido?' | ✅ Pedido':''}${f.obs?' | '+f.obs:''}`);
         }else if(tipo==='vencimentos'){
-            titulo='📅 *RELATÓRIO DE VENCIMENTOS*';
-            const l=getVencFiltrados();if(!l.length){toast('Sem dados!','warn');return}
-            linhas=l.map((v,i)=>{const s=getStatusVenc(v.data);return`${i+1}. *${v.produto}*${v.fornecedor?' | 🏭 '+v.fornecedor:''}\n   x${v.qtd||1}${v.unidade?' '+v.unidade:''} | Val: ${fmtDS(v.data)} | ${v.acaoFeita?'✅':s.label}${v.local?' | 📍 '+v.local:''}`});
+            titulo='📅 *RELATÓRIO DE VENCIMENTOS*';const l=getVencFiltrados();if(!l.length){toast('Sem dados!','warn');return}
+            linhas=l.map((v,i)=>{const s=getStatusVenc(v.data);return`${i+1}. *${v.produto}*${v.ean?'\n   Cód: '+v.ean:''}${v.fornecedor?' | 🏭 '+v.fornecedor:''}\n   x${v.qtd||1}${v.unidade?' '+v.unidade:''} | Val: ${fmtDS(v.data)} | ${v.acaoFeita?'✅':s.label}${v.local?' | 📍 '+v.local:''}`});
         }else if(tipo==='trocas'){
-            titulo='🔄 *RELATÓRIO DE TROCAS*';
-            const l=getTrocasFiltradas();if(!l.length){toast('Sem dados!','warn');return}
-            linhas=l.map((t,i)=>`${i+1}. *${t.produto}*${t.fornecedor?' | 🏭 '+t.fornecedor:''} x${t.qtd||1}${t.unidade?' '+t.unidade:''}\n   ${t.motivo||'-'}${t.local?' | 📍 '+t.local:''}${t.obs?' | '+t.obs:''}`);
+            titulo='🔄 *RELATÓRIO DE TROCAS*';const l=getTrocasFiltradas();if(!l.length){toast('Sem dados!','warn');return}
+            linhas=l.map((t,i)=>`${i+1}. *${t.produto}*${t.ean?'\n   Cód: '+t.ean:''}${t.fornecedor?' | 🏭 '+t.fornecedor:''} x${t.qtd||1}${t.unidade?' '+t.unidade:''}\n   ${t.motivo||'-'}${t.realizada?' | ✅ Realizada':''}${t.local?' | 📍 '+t.local:''}${t.obs?' | '+t.obs:''}`);
         }
-        const msg=`${titulo}\n📆 ${new Date().toLocaleDateString('pt-BR')} | Total: ${linhas.length}\n${'─'.repeat(28)}\n\n${linhas.join('\n\n')}\n\n${'─'.repeat(28)}\n_Controle v2.5_`;
+        const msg=`${titulo}\n📆 ${new Date().toLocaleDateString('pt-BR')} | Total: ${linhas.length}\n${'─'.repeat(28)}\n\n${linhas.join('\n\n')}\n\n${'─'.repeat(28)}\n_Controle v2.6_`;
         window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
     }
 
     // ============================================
     // CONFIG
     // ============================================
-    function exportarDados(){
-        const d={produtos,faltas,vencimentos,trocas,exportadoEm:new Date().toISOString(),versao:'2.5'};
-        const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));
-        a.download='backup-'+new Date().toISOString().split('T')[0]+'.json';a.click();toast('Exportado!');
-    }
+    function exportarDados(){const d={produtos,faltas,vencimentos,trocas,exportadoEm:new Date().toISOString(),versao:'2.6'};const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));a.download='backup-'+new Date().toISOString().split('T')[0]+'.json';a.click();toast('Exportado!')}
 
-    function importarDados(event){
-        const file=event.target.files[0];if(!file)return;
-        const reader=new FileReader();
-        reader.onload=function(e){
-            try{const d=JSON.parse(e.target.result);
-                if(d.produtos)produtos=d.produtos;if(d.faltas)faltas=d.faltas;
-                if(d.vencimentos)vencimentos=d.vencimentos;if(d.trocas)trocas=d.trocas;
-                salvarESync();renderAll();toast('Importado!');
-            }catch(err){toast('Erro!','err')}
-        };
-        reader.readAsText(file);event.target.value='';
-    }
+    function importarDados(event){const file=event.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=function(e){try{const d=JSON.parse(e.target.result);if(d.produtos)produtos=d.produtos;if(d.faltas)faltas=d.faltas;if(d.vencimentos)vencimentos=d.vencimentos;if(d.trocas)trocas=d.trocas;salvarESync();renderAll();toast('Importado!')}catch(err){toast('Erro!','err')}};reader.readAsText(file);event.target.value=''}
 
-    function limparTudo(){
-        if(!confirm('⚠️ APAGAR TUDO?'))return;
-        if(!confirm('CERTEZA ABSOLUTA?'))return;
-        produtos=[];faltas=[];vencimentos=[];trocas=[];notificacoes=[];
-        salvarESync();
-        if(db&&fbOn)db.ref('notificacoes').remove().catch(e=>{});
-        renderAll();toast('Tudo apagado.','warn');
-    }
+    function limparTudo(){if(!confirm('⚠️ APAGAR TUDO?'))return;if(!confirm('CERTEZA ABSOLUTA?'))return;produtos=[];faltas=[];vencimentos=[];trocas=[];notificacoes=[];salvarESync();if(db&&fbOn)db.ref('notificacoes').remove().catch(e=>{});renderAll();toast('Tudo apagado.','warn')}
 
     // ============================================
     // UTILS
@@ -994,12 +685,7 @@ tbody tr:nth-child(even){background:#f9fafb}tbody td{padding:7px 8px;border:1px 
     // ============================================
     // INIT
     // ============================================
-    async function init(){
-        renderAll();updNotifBadge();
-        setTimeout(async()=>{await carregarFb();iniciarListeners();renderAll()},1500);
-        setInterval(()=>{if(db&&fbOn)salvarESync()},300000);
-    }
-
+    async function init(){renderAll();updNotifBadge();setTimeout(async()=>{await carregarFb();iniciarListeners();renderAll()},1500);setInterval(()=>{if(db&&fbOn)salvarESync()},300000)}
     init();
 </script>
 </body>
