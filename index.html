@@ -385,7 +385,24 @@
     // ============================================
     // HELPERS VISUAIS
     // ============================================
-    function getImgProduto(nome,ean){const p=produtos.find(x=>{if(ean&&produtoTemEan(x,ean))return true;if(x.nome&&nome&&nome.toLowerCase().includes(x.nome.toLowerCase()))return true;return false});return p?.imagem||''}
+    function getImgProduto(nome, ean) {
+        // 1. Prioridade: busca por EAN exato
+        if (ean) {
+            const porEan = produtos.find(x => produtoTemEan(x, ean));
+            if (porEan && porEan.imagem) return porEan.imagem;
+        }
+        // 2. Fallback: busca por nome completo exato
+        if (nome) {
+            const porNomeExato = produtos.find(x => nomeProdutoCompleto(x) === nome);
+            if (porNomeExato && porNomeExato.imagem) return porNomeExato.imagem;
+        }
+        // 3. Último recurso: busca por campo nome exato
+        if (nome) {
+            const porNomeCampo = produtos.find(x => x.nome && x.nome === nome);
+            if (porNomeCampo && porNomeCampo.imagem) return porNomeCampo.imagem;
+        }
+        return '';
+    }
     function imgHTML(nome,ean){const img=getImgProduto(nome,ean);if(img)return`<img src="${img}" onerror="this.outerHTML='📦'">`;return'📦'}
 
     function prodCardTop(p){
