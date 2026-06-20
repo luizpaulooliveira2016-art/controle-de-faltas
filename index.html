@@ -330,7 +330,7 @@
             pFaltas.style.display='block';document.getElementById('ac-faltas').textContent=faltasPend.length;
             window.__aFaltas=faltasPend.map(f=>({tipo:'falta',label:'🚫 FALTA',nome:f.produto,ean:f.ean,det:'Est: '+(f.estoque||'N/I'),status:'Pendente',act:()=>goList('faltas')}));
             tFaltas.innerHTML=window.__aFaltas.map((it,i)=>mkAlertCard(it,i,'__aFaltas')).join('');
-            startAutoScrollTrack('track-faltas');
+            
         }else{pFaltas.style.display='none'}
 
         // VENCIMENTOS por ordem de vencimento (mais urgente primeiro)
@@ -341,7 +341,7 @@
             pVenc.style.display='block';document.getElementById('ac-venc').textContent=vencPend.length;
             window.__aVenc=vencPend.map(v=>{const s=getStatusVenc(v.data);return{tipo:s.key==='vencido'?'vencido':s.key==='critico'?'critico':'proximo',label:s.key==='vencido'?'⚠️ VENCIDO':s.key==='critico'?'🔥 CRÍTICO':'📅 '+s.label,nome:v.produto,ean:v.ean,det:fmtDS(v.data)+' • x'+(v.qtd||1),status:s.label,act:()=>goList('vencimentos')}});
             tVenc.innerHTML=window.__aVenc.map((it,i)=>mkAlertCard(it,i,'__aVenc')).join('');
-            startAutoScrollTrack('track-venc');
+            
         }else{pVenc.style.display='none'}
 
         // TROCAS pendentes
@@ -352,7 +352,7 @@
             pTrocas.style.display='block';document.getElementById('ac-trocas').textContent=trocasPend.length;
             window.__aTrocas=trocasPend.map(t=>({tipo:'troca',label:'🔄 TROCA',nome:t.produto,ean:t.ean,det:(t.motivo||'')+' • x'+(t.qtd||1),status:'Pendente',act:()=>goList('trocas')}));
             tTrocas.innerHTML=window.__aTrocas.map((it,i)=>mkAlertCard(it,i,'__aTrocas')).join('');
-            startAutoScrollTrack('track-trocas');
+            
         }else{pTrocas.style.display='none'}
 
         // Mensagem vazia
@@ -361,10 +361,7 @@
     }
 
     function startAutoScrollTrack(trackId){
-        const t=document.getElementById(trackId);if(!t||t.children.length<=1)return;
-        const timer=setInterval(()=>{const mx=t.scrollWidth-t.clientWidth;if(t.scrollLeft>=mx-10)t.scrollTo({left:0,behavior:'smooth'});else t.scrollBy({left:212,behavior:'smooth'})},4000);
-        t.onmouseenter=()=>clearInterval(timer);t.ontouchstart=()=>clearInterval(timer);
-        t.onmouseleave=()=>startAutoScrollTrack(trackId);t.ontouchend=()=>setTimeout(()=>startAutoScrollTrack(trackId),2000);
+    // Sem auto-scroll — rolagem apenas manual pelo toque
     }
 
     // ============================================
