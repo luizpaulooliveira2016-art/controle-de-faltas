@@ -98,7 +98,16 @@
     </div>
 </div>
 
-<div id="screen-config" class="screen"><div class="list-header"><h2>⚙️ Configurações</h2></div><div id="config-firebase" style="padding:12px 16px;border-radius:var(--r-lg);font-size:0.8rem;background:white;margin-bottom:12px;box-shadow:var(--sh-md);"></div><div class="config-item" onclick="sincronizarAgora()"><div class="config-item-left"><div class="ci-icon" style="background:#dbeafe;">🔄</div><div class="ci-text"><div class="ci-title">Sincronizar</div><div class="ci-sub">Forçar sync</div></div></div><div>›</div></div><div class="config-item" onclick="exportarDados()"><div class="config-item-left"><div class="ci-icon" style="background:#dcfce7;">📤</div><div class="ci-text"><div class="ci-title">Exportar</div><div class="ci-sub">Backup JSON</div></div></div><div>›</div></div><div class="config-item" onclick="document.getElementById('import-file').click()"><div class="config-item-left"><div class="ci-icon" style="background:#cffafe;">📥</div><div class="ci-text"><div class="ci-title">Importar</div><div class="ci-sub">Restaurar</div></div></div><div>›</div></div><input type="file" id="import-file" accept=".json" style="display:none" onchange="importarDados(event)"><div class="config-item" onclick="limparTudo()"><div class="config-item-left"><div class="ci-icon" style="background:#fee2e2;">🗑️</div><div class="ci-text"><div class="ci-title">Limpar TUDO</div><div class="ci-sub">Apaga tudo</div></div></div><div>›</div></div></div>
+<div id="screen-config" class="screen"><div class="list-header"><h2>⚙️ Configurações</h2></div><div id="config-firebase" style="padding:12px 16px;border-radius:var(--r-lg);font-size:0.8rem;background:white;margin-bottom:12px;box-shadow:var(--sh-md);"></div><div class="config-item" onclick="sincronizarAgora()"><div class="config-item-left"><div class="ci-icon" style="background:#dbeafe;">🔄</div><div class="ci-text"><div class="ci-title">Sincronizar</div><div class="ci-sub">Forçar sync</div></div></div><div>›</div></div><div class="config-item" onclick="exportarDados()"><div class="config-item-left"><div class="ci-icon" style="background:#dcfce7;">📤</div><div class="ci-text"><div class="ci-title">Exportar</div><div class="ci-sub">Backup JSON</div></div></div><div>›</div></div><div class="config-item" onclick="document.getElementById('import-file').click()"><div class="config-item-left"><div class="ci-icon" style="background:#cffafe;">📥</div><div class="ci-text"><div class="ci-title">Importar</div><div class="ci-sub">Restaurar</div></div></div><div>›</div></div>
+
+<input type="file" id="import-file" accept=".json" style="display:none" onchange="importarDados(event)">
+
+<div class="config-item" onclick="exportarProdutos()"><div class="config-item-left"><div class="ci-icon" style="background:var(--purple-light);">📦</div><div class="ci-text"><div class="ci-title">Exportar Produtos</div><div class="ci-sub">Só cadastrados (editável)</div></div></div><div>›</div></div>
+<div class="config-item" onclick="document.getElementById('import-prod-file').click()"><div class="config-item-left"><div class="ci-icon" style="background:var(--purple-light);">📥</div><div class="ci-text"><div class="ci-title">Importar Produtos</div><div class="ci-sub">Mescla sem duplicar</div></div></div><div>›</div></div>
+<input type="file" id="import-prod-file" accept=".json" style="display:none" onchange="importarProdutos(event)">
+
+
+<div class="config-item" onclick="limparTudo()"><div class="config-item-left"><div class="ci-icon" style="background:#fee2e2;">🗑️</div><div class="ci-text"><div class="ci-title">Limpar TUDO</div><div class="ci-sub">Apaga tudo</div></div></div><div>›</div></div></div>
 
 <!-- BOTTOM NAV com Ajuda -->
 <nav class="bottom-nav">
@@ -389,6 +398,129 @@
     function exportarDados(){const d={produtos,faltas,vencimentos,trocas,exportadoEm:new Date().toISOString(),versao:'3.0'};const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));a.download='backup-'+new Date().toISOString().split('T')[0]+'.json';a.click();toast('Exportado!')}
     function importarDados(event){const file=event.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=function(e){try{const d=JSON.parse(e.target.result);if(d.produtos)produtos=d.produtos;if(d.faltas)faltas=d.faltas;if(d.vencimentos)vencimentos=d.vencimentos;if(d.trocas)trocas=d.trocas;salvarESync();renderAll();toast('Importado!')}catch(err){toast('Erro!','err')}};reader.readAsText(file);event.target.value=''}
     async function limparTudo(){const r1=await meuConfirm('⚠️ Apagar','Apagar TODOS os dados?','⚠️','danger');if(!r1)return;const r2=await meuConfirm('Certeza?','Não pode desfazer!','🚨','danger');if(!r2)return;produtos=[];faltas=[];vencimentos=[];trocas=[];notificacoes=[];salvarESync();if(db&&fbOn)db.ref('notificacoes').remove().catch(e=>{});renderAll();toast('Apagado.','warn')}
+    
+    
+
+
+
+
+        // ============================================
+    // EXPORTAR / IMPORTAR SOMENTE PRODUTOS
+    // ============================================
+    function exportarProdutos() {
+        if (!produtos.length) { toast('Nenhum produto!', 'warn'); return; }
+        const lista = sortAlfabetico(produtos);
+        const d = {
+            tipo: 'produtos',
+            versao: '3.0',
+            total: lista.length,
+            exportadoEm: new Date().toISOString(),
+            produtos: lista
+        };
+        const blob = new Blob([JSON.stringify(d, null, 2)], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'produtos-' + new Date().toISOString().split('T')[0] + '.json';
+        a.click();
+        URL.revokeObjectURL(a.href);
+        toast('📦 Produtos exportados! (' + lista.length + ')', 'info');
+    }
+
+    async function importarProdutos(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+            try {
+                const d = JSON.parse(e.target.result);
+                let lista = [];
+
+                // Aceita formato {produtos:[...]} ou array direto [...]
+                if (d.produtos && Array.isArray(d.produtos)) {
+                    lista = d.produtos;
+                } else if (Array.isArray(d)) {
+                    lista = d;
+                } else {
+                    toast('Formato inválido!', 'err');
+                    return;
+                }
+
+                let novos = 0, atualizados = 0, ignorados = 0;
+
+                lista.forEach(prod => {
+                    if (!prod.nome) return; // ignora sem nome
+
+                    // Gera ID se não tem
+                    if (!prod.id) prod.id = Date.now() + Math.random() * 1000 | 0;
+                    if (!prod.criadoEm) prod.criadoEm = new Date().toISOString();
+
+                    // Verifica se já existe por EAN
+                    if (prod.ean) {
+                        const eans = prod.ean.split(',').map(e => e.trim()).filter(e => e);
+                        const existente = produtos.find(p => eans.some(ne => produtoTemEan(p, ne)));
+
+                        if (existente) {
+                            // Atualiza dados do existente (mantém ID e EAN original)
+                            existente.nome = prod.nome || existente.nome;
+                            existente.marca = prod.marca || existente.marca;
+                            existente.peso = prod.peso || existente.peso;
+                            existente.tipo = prod.tipo || existente.tipo;
+                            existente.fornecedor = prod.fornecedor || existente.fornecedor;
+                            existente.imagem = prod.imagem || existente.imagem;
+                            // Adiciona EAN novo se não tem
+                            eans.forEach(ne => {
+                                if (!produtoTemEan(existente, ne)) {
+                                    existente.ean = existente.ean ? existente.ean + ', ' + ne : ne;
+                                }
+                            });
+                            atualizados++;
+                            return;
+                        }
+                    }
+
+                    // Verifica por nome exato
+                    const porNome = produtos.find(p => nomeProdutoCompleto(p) === nomeProdutoCompleto(prod));
+                    if (porNome) {
+                        // Atualiza
+                        porNome.marca = prod.marca || porNome.marca;
+                        porNome.peso = prod.peso || porNome.peso;
+                        porNome.tipo = prod.tipo || porNome.tipo;
+                        porNome.fornecedor = prod.fornecedor || porNome.fornecedor;
+                        porNome.imagem = prod.imagem || porNome.imagem;
+                        if (prod.ean && !porNome.ean) porNome.ean = prod.ean;
+                        atualizados++;
+                        return;
+                    }
+
+                    // Produto novo
+                    prod.id = Date.now() + Math.random() * 10000 | 0;
+                    produtos.push(prod);
+                    novos++;
+                });
+
+                salvarESync();
+                renderAll();
+
+                const msg = `✅ Importação concluída!\n${novos} novos | ${atualizados} atualizados`;
+                toast(msg, 'info');
+                enviarNotif('cadastro', '📥 Importados: ' + novos + ' novos, ' + atualizados + ' atualizados');
+
+            } catch (err) {
+                toast('Erro ao importar: ' + err.message, 'err');
+            }
+        };
+        reader.readAsText(file);
+        event.target.value = '';
+    }
+
+
+
+
+
+
+
+
+
 
     function fmtD(iso){if(!iso)return'-';try{const d=new Date(iso);return isNaN(d)?iso:d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}catch(e){return iso}}
     function fmtDS(str){if(!str)return'-';const p=str.split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:str}
