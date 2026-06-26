@@ -190,13 +190,35 @@
         if(set.has(prodId))return true;
         const arr=tipo==='falta'?faltas:tipo==='venc'?vencimentos:trocas;
         // Verifica por EAN
-        if(ean){const eans=ean.split(',').map(e=>e.trim());if(arr.some(x=>eans.some(e=>x.ean===e)))return true}
-        // Verifica por nome do produto (caso não tenha EAN)
+        if(ean){
+            const eans=ean.split(',').map(e=>e.trim()).filter(e=>e);
+            if(eans.length&&arr.some(x=>x.ean&&eans.some(e=>x.ean===e))){
+                set.add(prodId);return true;
+            }
+        }
+        // Verifica por nome do produto
         const prod=produtos.find(x=>x.id===prodId);
-        if(prod){const nc=nomeProdutoCompleto(prod);if(arr.some(x=>x.produto===nc))return true}
+        if(prod){
+            const nc=nomeProdutoCompleto(prod);
+            if(nc&&arr.some(x=>x.produto===nc)){
+                set.add(prodId);return true;
+            }
+        }
+        // Verifica por código de variações
+        if(prod&&prod.variacoes&&prod.variacoes.length){
+            const codVars=prod.variacoes.map(v=>gvc(v)).filter(c=>c);
+            if(codVars.length){
+                for(const item of arr){
+                    if(item.variacoes&&item.variacoes.length){
+                        if(item.variacoes.some(iv=>codVars.includes(gvc(iv)))){
+                            set.add(prodId);return true;
+                        }
+                    }
+                }
+            }
+        }
         return false;
     }
-
     // CADASTRO
     function salvarProduto(){const nome=document.getElementById('cad-nome').value.trim();if(!nome){toast('Nome!','err');return}const editId=document.getElementById('cad-edit-id').value;const prod={id:editId?parseInt(editId):Date.now(),ean:document.getElementById('cad-ean').value.trim(),nome,marca:document.getElementById('cad-marca').value.trim(),peso:document.getElementById('cad-peso').value.trim(),tipo:document.getElementById('cad-tipo').value.trim(),fornecedor:document.getElementById('cad-fornecedor').value.trim(),variacoes:cadVariacoes.length?[...cadVariacoes]:[],imagem:document.getElementById('cad-imagem').value.trim(),criadoEm:new Date().toISOString()};const nc=nomeProdutoCompleto(prod);if(editId){const idx=produtos.findIndex(p=>p.id===parseInt(editId));if(idx!==-1){prod.criadoEm=produtos[idx].criadoEm;produtos[idx]=prod}toast('OK!')}else{if(prod.ean){const ne=prod.ean.split(',').map(e=>e.trim()).filter(e=>e);const dup=produtos.find(p=>ne.some(n=>produtoTemEan(p,n)));if(dup){if(!confirm('⚠️ EAN existe. Continuar?'))return}}produtos.unshift(prod);toast('Cadastrado!')}salvarESync();renderAll();limparFormCad();fecharModal('modal-cadastro')}
     function limparFormCad(){cadVariacoes=[];renderVarList();['cad-ean','cad-nome','cad-marca','cad-peso','cad-tipo','cad-fornecedor','cad-imagem','cad-busca'].forEach(id=>document.getElementById(id).value='');const ci=document.getElementById('cad-var-cod-input');if(ci)ci.value='';document.getElementById('cad-edit-id').value='';document.getElementById('cad-online-results').classList.remove('show');document.getElementById('modal-cad-title').textContent='📦 Cadastrar'}
