@@ -142,17 +142,26 @@
     function goScreen(n){if(screenHistory[screenHistory.length-1]!==n){screenHistory.push(n);history.pushState({screen:n},'')}doNav(n)}
     function goList(t){screenHistory.push(t);history.pushState({screen:t},'');doNavList(t)}
     function doNav(n){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));document.getElementById('screen-'+n).classList.add('active');if(n==='home')document.getElementById('nav-home').classList.add('active');else if(n==='notificacoes'){document.getElementById('nav-notificacoes').classList.add('active');marcarNotifsLidas()}else if(n==='config')document.getElementById('nav-config').classList.add('active');else if(n==='ajuda')document.getElementById('nav-ajuda').classList.add('active');renderAll();window.scrollTo({top:0,behavior:'smooth'})}
-    function doNavList(t){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));document.getElementById('screen-'+t).classList.add('active');renderAll();window.scrollTo({top:0,behavior:'smooth'})}
+    
+    function doNavList(t){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));document.getElementById('screen-'+t).classList.add('active');renderAll();
+    if(t==='pick-falta')renderPickFalta();
+    if(t==='pick-venc')renderPickVenc();
+    if(t==='pick-troca')renderPickTroca();
+    window.scrollTo({top:0,behavior:'smooth'})}
+    
     window.addEventListener('popstate',function(){screenHistory.pop();const p=screenHistory[screenHistory.length-1]||'home';document.querySelectorAll('.modal-overlay.show').forEach(m=>m.classList.remove('show'));fecharZoom();document.getElementById('confirm-overlay').classList.remove('show');if(document.getElementById('scanner-overlay').classList.contains('show'))fecharScanner();if(fabAberto)toggleFab();document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));const el=document.getElementById('screen-'+p);if(el){el.classList.add('active');if(p==='home')document.getElementById('nav-home').classList.add('active');else if(p==='notificacoes')document.getElementById('nav-notificacoes').classList.add('active');else if(p==='config')document.getElementById('nav-config').classList.add('active');else if(p==='ajuda')document.getElementById('nav-ajuda').classList.add('active')}else{document.getElementById('screen-home').classList.add('active');document.getElementById('nav-home').classList.add('active')}renderAll()});
     history.replaceState({screen:'home'},'');
 
     // CORRIGIDO: renderAll NÃO reconstrói picks se estão ativos
-    function renderAll(){
-        renderHome();renderCadastros();renderFaltas();renderVencimentos();renderTrocas();renderNotifs();
-        if(document.getElementById('screen-pick-falta').classList.contains('active'))renderPickFalta();
-        if(document.getElementById('screen-pick-venc').classList.contains('active'))renderPickVenc();
-        if(document.getElementById('screen-pick-troca').classList.contains('active'))renderPickTroca();
-    }
+    function renderAll(){renderHome();renderCadastros();renderFaltas();renderVencimentos();renderTrocas();renderNotifs()}
+
+
+
+
+
+
+
+
 
     function toggleFab(){fabAberto=!fabAberto;document.getElementById('fab-btn').classList.toggle('open',fabAberto);document.getElementById('fab-menu').classList.toggle('show',fabAberto);document.getElementById('fab-backdrop').classList.toggle('show',fabAberto)}
     function abrirFormCadastro(){toggleFab();limparFormCad();document.getElementById('modal-cadastro').classList.add('show')}
