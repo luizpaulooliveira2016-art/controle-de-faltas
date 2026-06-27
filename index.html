@@ -1,538 +1,548 @@
+
+<!--PARTE 1 INICIO-->
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Controle de Estoque Pro</title>
-    <!-- Firebase Legacy SDKs -->
+    <title>Controle de Estoque</title>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-    <!-- Scanner Robusto -->
-    <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
         :root{--primary:#2563eb;--primary-dark:#1d4ed8;--primary-light:#dbeafe;--success:#16a34a;--success-light:#dcfce7;--warning:#f59e0b;--warning-light:#fef3c7;--danger:#dc2626;--danger-light:#fee2e2;--info:#0891b2;--info-light:#cffafe;--purple:#7c3aed;--purple-light:#ede9fe;--orange:#ea580c;--g50:#f9fafb;--g100:#f3f4f6;--g200:#e5e7eb;--g300:#d1d5db;--g400:#9ca3af;--g500:#6b7280;--g600:#4b5563;--g700:#374151;--g800:#1f2937;--g900:#111827;--sh:0 1px 3px rgba(0,0,0,0.1);--sh-md:0 4px 12px rgba(0,0,0,0.08);--sh-lg:0 10px 30px rgba(0,0,0,0.12);--sh-xl:0 20px 50px rgba(0,0,0,0.18);--r:10px;--r-lg:16px;--r-xl:24px;--nav-h:68px}
-        
         body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#f0f2f7;color:var(--g800);min-height:100vh;padding-bottom:var(--nav-h);overflow-x:hidden}
-        
-        /* DARK MODE AUTOMÁTICO */
-        @media (prefers-color-scheme: dark) {
-            :root { --g50: #0f172a; --g100: #1e293b; --g200: #334155; --g800: #f1f5f9; --g900: #ffffff; }
-            body { background: #020617; color: #e2e8f0; }
-            .product-card, .stat-btn, .bottom-nav, .modal-sheet, .config-item, .alerts-panel { background: #1e293b; border-color: #334155; }
-            .pc-actions, .expand-form { background: #0f172a; }
-            .filter-row input, .filter-row select, .form-group input, .form-group select { background: #0f172a; color: white; border-color: #334155; }
+        .top-header{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 50%,#2563eb 100%);padding:16px 20px 14px;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(37,99,235,0.35)}.top-header-inner{display:flex;justify-content:space-between;align-items:center}.app-brand{display:flex;align-items:center;gap:10px}.app-brand .logo{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:1.2rem}.app-brand .brand-text{color:white}.app-brand .brand-text h1{font-size:1rem;font-weight:800}.app-brand .brand-text p{font-size:0.65rem;opacity:0.65;margin-top:1px}
+        .sync-pill{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:0.65rem;font-weight:700;border:1px solid rgba(255,255,255,0.15)}.sync-pill.online{background:rgba(34,197,94,0.15);color:#86efac}.sync-pill.offline{background:rgba(239,68,68,0.15);color:#fca5a5}.sync-pill .dot{width:7px;height:7px;border-radius:50%;animation:pdot 2s infinite}.sync-pill.online .dot{background:#4ade80}.sync-pill.offline .dot{background:#f87171;animation:none}@keyframes pdot{0%,100%{opacity:1}50%{opacity:0.4}}
+        .bottom-nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);background:white;border-top:1px solid var(--g200);display:flex;align-items:center;justify-content:space-around;z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,0.08)}.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 12px;border-radius:12px;cursor:pointer;border:none;background:none;flex:1;position:relative;transition:all 0.25s}.nav-item .nav-icon{font-size:1.3rem;transition:transform 0.25s}.nav-item .nav-label{font-size:0.55rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.5px}.nav-item.active{background:var(--primary-light)}.nav-item.active .nav-icon{transform:scale(1.15)}.nav-item.active .nav-label{color:var(--primary)}.nav-notif-badge{position:absolute;top:2px;right:8px;background:var(--danger);color:white;border-radius:50%;width:16px;height:16px;font-size:0.55rem;display:flex;align-items:center;justify-content:center;font-weight:800;animation:bounce 1s infinite}@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+        .screen{display:none;padding:16px;max-width:600px;margin:0 auto}.screen.active{display:block;animation:fadeUp .3s ease}@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+        .stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}.stat-btn{background:white;border-radius:var(--r-lg);padding:18px 16px;text-align:left;box-shadow:var(--sh-md);cursor:pointer;transition:all 0.25s;border:none;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:4px}.stat-btn::after{content:'';position:absolute;bottom:0;left:0;height:3px;width:100%;border-radius:0 0 var(--r-lg) var(--r-lg)}.stat-btn.sb-purple::after{background:var(--purple)}.stat-btn.sb-blue::after{background:var(--primary)}.stat-btn.sb-orange::after{background:var(--warning)}.stat-btn.sb-cyan::after{background:var(--info)}.stat-btn:hover{transform:translateY(-3px);box-shadow:var(--sh-lg)}.stat-btn:active{transform:scale(0.97)}.stat-btn .sb-icon{font-size:1.6rem;margin-bottom:4px}.stat-btn .sb-num{font-size:2rem;font-weight:900;line-height:1}.stat-btn .sb-label{font-size:0.68rem;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:0.5px}.stat-btn .sb-arrow{position:absolute;top:16px;right:16px;font-size:1rem;color:var(--g300)}
+        .alerts-panel{border-radius:var(--r-lg);margin-bottom:12px;overflow:hidden;box-shadow:var(--sh-lg);background:linear-gradient(135deg,#312e81,#4c1d95,#5b21b6);border:1px solid rgba(255,255,255,0.08)}.alerts-header{padding:12px 16px;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.15);border-bottom:1px solid rgba(255,255,255,0.08)}.alerts-header-left{display:flex;align-items:center;gap:8px}.alerts-header-left span{color:white;font-size:0.78rem;font-weight:700}.alerts-count{background:rgba(255,255,255,0.15);color:white;padding:2px 8px;border-radius:20px;font-size:0.62rem;font-weight:700}.alerts-nav{display:flex;gap:6px}.alerts-nav button{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:white;width:26px;height:26px;border-radius:8px;cursor:pointer;font-size:0.7rem;display:flex;align-items:center;justify-content:center}.alerts-track{display:flex;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none;padding:12px 10px;gap:10px;scroll-snap-type:x mandatory}.alerts-track::-webkit-scrollbar{display:none}
+        .alert-card{min-width:200px;max-width:200px;flex-shrink:0;border-radius:var(--r-lg);overflow:hidden;cursor:pointer;transition:all 0.25s;scroll-snap-align:start;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12)}.alert-card:hover{transform:translateY(-3px);background:rgba(255,255,255,0.15)}.alert-card-img{width:100%;height:80px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.1)}.alert-card-img img{width:100%;height:100%;object-fit:contain;padding:6px}.alert-card-img .no-img{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:2rem}.ac-falta .no-img{background:linear-gradient(135deg,rgba(37,99,235,0.4),rgba(29,78,216,0.4))}.ac-troca .no-img{background:linear-gradient(135deg,rgba(8,145,178,0.4),rgba(14,116,144,0.4))}.ac-vencido .no-img{background:linear-gradient(135deg,rgba(220,38,38,0.4),rgba(153,27,27,0.4))}.ac-critico .no-img{background:linear-gradient(135deg,rgba(234,88,12,0.4),rgba(194,65,12,0.4))}.ac-proximo .no-img{background:linear-gradient(135deg,rgba(245,158,11,0.4),rgba(217,119,6,0.4))}.alert-card-info{padding:8px 10px}.ac-type{font-size:0.55rem;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:2px}.ac-falta .ac-type{color:#93c5fd}.ac-troca .ac-type{color:#67e8f9}.ac-vencido .ac-type{color:#fca5a5}.ac-critico .ac-type{color:#fdba74}.ac-proximo .ac-type{color:#fde68a}.ac-name{color:white;font-size:0.76rem;font-weight:700;line-height:1.3;white-space:normal;word-break:break-word;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.ac-footer{display:flex;justify-content:space-between;align-items:center}.ac-detail{color:rgba(255,255,255,0.5);font-size:0.6rem}.ac-pill{padding:2px 7px;border-radius:20px;font-size:0.55rem;font-weight:700}.ac-falta .ac-pill{background:rgba(37,99,235,0.25);color:#93c5fd}.ac-troca .ac-pill{background:rgba(8,145,178,0.25);color:#67e8f9}.ac-vencido .ac-pill{background:rgba(220,38,38,0.25);color:#fca5a5}.ac-critico .ac-pill{background:rgba(234,88,12,0.25);color:#fdba74}.ac-proximo .ac-pill{background:rgba(245,158,11,0.25);color:#fde68a}
+        .list-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.list-header h2{font-size:1rem;font-weight:800}.list-header .list-count{font-size:0.72rem;color:var(--g500);background:var(--g100);padding:3px 10px;border-radius:20px;font-weight:600}.filter-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}.filter-row input,.filter-row select{padding:8px 12px;border:1.5px solid var(--g200);border-radius:var(--r);font-size:0.78rem;background:white;flex:1;min-width:80px}.filter-row input:focus,.filter-row select:focus{border-color:var(--primary);outline:none}
+        .pick-search{position:relative;margin-bottom:14px}.pick-search input{width:100%;padding:12px 50px 12px 42px;border:2px solid var(--g200);border-radius:var(--r-xl);font-size:0.88rem;background:var(--g50)}.pick-search input:focus{border-color:var(--primary);background:white;outline:none}.pick-search .psi{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1rem;color:var(--g400)}.pick-search .pscan{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:var(--primary);color:white;border:none;border-radius:var(--r-xl);padding:7px 14px;font-size:0.72rem;cursor:pointer;font-weight:700}
+        .product-card{background:white;border-radius:var(--r-lg);margin-bottom:12px;box-shadow:var(--sh-md);overflow:hidden;transition:all 0.2s}.product-card:hover{box-shadow:var(--sh-lg);transform:translateY(-1px)}.product-card.pc-done{opacity:0.5}.product-card.pc-red{border-left:4px solid var(--danger);opacity:0.7}
+        .pc-top{display:flex}.pc-img{width:85px;min-height:85px;max-height:110px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--g100);overflow:hidden;font-size:2rem;color:var(--g400);cursor:pointer}.pc-img img{width:85px;height:85px;object-fit:contain;background:white;padding:4px}.pc-info{flex:1;padding:12px 14px;min-width:0}.pc-name{font-weight:800;font-size:0.88rem;line-height:1.3;word-break:break-word;white-space:normal}.pc-ean-code{display:block;font-size:0.6rem;color:var(--g400);margin-top:2px;font-family:monospace;letter-spacing:0.5px}.pc-badges{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+        .pc-actions{display:flex;gap:6px;padding:10px 14px;border-top:1px solid var(--g100);flex-wrap:wrap;background:var(--g50)}.pc-actions .btn-action{flex:1;padding:7px 10px;border:none;border-radius:var(--r);font-size:0.72rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all 0.2s;min-width:60px}.btn-edit{background:var(--warning-light);color:#92400e}.btn-edit:hover{background:var(--warning);color:white}.btn-delete{background:var(--danger-light);color:var(--danger)}.btn-delete:hover{background:var(--danger);color:white}.btn-done{background:var(--success-light);color:var(--success)}.btn-done:hover{background:var(--success);color:white}.btn-troca{background:var(--info-light);color:var(--info)}.btn-troca:hover{background:var(--info);color:white}.btn-undone{background:var(--g200);color:var(--g600)}
+        .btn-pedido{background:var(--purple-light);color:var(--purple)}.btn-pedido:hover{background:var(--purple);color:white}.btn-pedido-done{background:#fee2e2!important;color:#dc2626!important;cursor:default;opacity:0.85;border:1.5px solid #fca5a5}.btn-troca-done{background:#fee2e2!important;color:#dc2626!important;cursor:default;opacity:0.85;border:1.5px solid #fca5a5}
+        .expand-form{display:none;padding:12px 14px;background:var(--g50);border-top:1px solid var(--g200);animation:fadeUp .25s ease}.expand-form.show{display:block}.expand-form .ef-row{display:flex;gap:8px;margin-bottom:8px;align-items:center;flex-wrap:wrap}.expand-form .ef-row label{font-size:0.72rem;font-weight:700;color:var(--g600);min-width:70px}.expand-form .ef-row input,.expand-form .ef-row select{padding:8px 10px;border:1.5px solid var(--g200);border-radius:var(--r);font-size:0.82rem;flex:1;min-width:60px;background:white}.expand-form .ef-actions{display:flex;gap:8px;margin-top:8px}.ef-btn{padding:8px 16px;border:none;border-radius:var(--r);font-size:0.78rem;font-weight:700;cursor:pointer;flex:1;display:flex;align-items:center;justify-content:center;gap:5px}.ef-btn-primary{background:var(--primary);color:white}.ef-btn-warning{background:var(--warning);color:white}.ef-btn-info{background:var(--info);color:white}.ef-btn-cancel{background:var(--g200);color:var(--g600)}.ef-toggle{padding:8px 14px;border:none;border-radius:var(--r);font-size:0.75rem;font-weight:700;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:5px;transition:all 0.2s}.ef-toggle-falta{background:var(--primary-light);color:var(--primary)}.ef-toggle-venc{background:var(--warning-light);color:#92400e}.ef-toggle-troca{background:var(--info-light);color:var(--info)}.ef-toggle-done{background:#fee2e2!important;color:#dc2626!important;cursor:not-allowed!important;opacity:0.85;border:1.5px solid #fca5a5}.unit-group{display:flex;gap:4px;flex:1}.unit-group input{flex:1;min-width:50px}.unit-group select{width:72px;flex:none}
+        .section-divider{display:flex;align-items:center;gap:10px;margin:18px 0 12px;font-size:0.72rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.5px}.section-divider::after{content:'';flex:1;height:1px;background:var(--g200)}
+        .fab-wrap{position:fixed;bottom:calc(var(--nav-h) + 16px);right:20px;z-index:150}.fab-btn{width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border:none;font-size:1.6rem;cursor:pointer;box-shadow:0 4px 20px rgba(37,99,235,0.45);transition:all 0.3s;display:flex;align-items:center;justify-content:center}.fab-btn:hover{transform:scale(1.08)}.fab-btn.open{transform:rotate(45deg);background:linear-gradient(135deg,var(--danger),#b91c1c)}.fab-menu{position:absolute;bottom:70px;right:0;display:flex;flex-direction:column;gap:10px;opacity:0;pointer-events:none;transform:translateY(15px);transition:all 0.3s}.fab-menu.show{opacity:1;pointer-events:all;transform:translateY(0)}.fab-opt{display:flex;align-items:center;gap:10px;justify-content:flex-end;cursor:pointer;white-space:nowrap}.fab-opt-label{background:var(--g900);color:white;padding:7px 14px;border-radius:8px;font-size:0.78rem;font-weight:600;box-shadow:var(--sh-md)}.fab-opt-icon{width:46px;height:46px;border-radius:50%;border:none;color:white;font-size:1.1rem;cursor:pointer;box-shadow:var(--sh-md);display:flex;align-items:center;justify-content:center}.foi-purple{background:var(--purple)}.foi-blue{background:var(--primary)}.foi-orange{background:var(--warning)}.foi-cyan{background:var(--info)}.fab-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.25);z-index:149}.fab-backdrop.show{display:block}
+        .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}.modal-overlay.show{display:flex}.modal-sheet{background:white;border-radius:var(--r-xl) var(--r-xl) 0 0;width:100%;max-width:600px;max-height:92vh;overflow-y:auto;box-shadow:var(--sh-xl);animation:sheetUp .35s cubic-bezier(0.34,1.56,0.64,1)}@keyframes sheetUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}.modal-handle{width:40px;height:4px;background:var(--g300);border-radius:2px;margin:12px auto 0}.modal-head{padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--g100)}.modal-head h3{font-size:1rem;font-weight:800}.modal-close-btn{background:var(--g100);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;color:var(--g500)}.modal-body-pad{padding:20px}.modal-footer-pad{padding:14px 20px;border-top:1px solid var(--g100);display:flex;gap:8px;justify-content:flex-end}
+        .form-group{margin-bottom:14px;position:relative}.form-group label{display:block;font-size:0.78rem;font-weight:700;color:var(--g700);margin-bottom:5px}.form-group input,.form-group select{width:100%;padding:12px 14px;border:2px solid var(--g200);border-radius:var(--r);font-size:0.88rem;background:white}.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 4px rgba(37,99,235,0.1)}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        .autocomplete-dropdown{display:none;position:absolute;top:100%;left:0;right:0;background:white;border:2px solid var(--primary);border-top:none;border-radius:0 0 var(--r) var(--r);max-height:160px;overflow-y:auto;z-index:60;box-shadow:var(--sh-lg)}.autocomplete-dropdown.show{display:block}.ac-opt{padding:10px 14px;cursor:pointer;font-size:0.85rem;border-bottom:1px solid var(--g100)}.ac-opt:hover{background:var(--primary-light)}
+        .online-search-bar{position:relative;margin-bottom:14px}.online-search-bar input{width:100%;padding:13px 50px 13px 46px;border:2px solid var(--g200);border-radius:var(--r-xl);font-size:0.88rem;background:var(--g50)}.online-search-bar input:focus{border-color:var(--primary);background:white;outline:none}.online-search-bar .si{position:absolute;left:15px;top:50%;transform:translateY(-50%);font-size:1.1rem;color:var(--g400)}.online-search-bar .scan-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:var(--primary);color:white;border:none;border-radius:var(--r-xl);padding:7px 14px;font-size:0.72rem;cursor:pointer;font-weight:700}
+        .online-results{background:white;border:2px solid var(--primary);border-radius:var(--r);max-height:260px;overflow-y:auto;margin-bottom:14px;box-shadow:var(--sh-lg);display:none}.online-results.show{display:block}.or-section{padding:8px 14px;font-size:0.68rem;font-weight:800;color:var(--g500);background:var(--g50);text-transform:uppercase;border-bottom:1px solid var(--g100);position:sticky;top:0}.or-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--g100);cursor:pointer;transition:background .15s}.or-item:hover{background:var(--primary-light)}.or-item img{width:42px;height:42px;object-fit:contain;background:white;border-radius:var(--r);padding:3px;border:1px solid var(--g200)}.or-item .or-icon{width:42px;height:42px;border-radius:var(--r);background:var(--g100);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}.or-item .or-info .or-name{font-weight:700;font-size:0.82rem}.or-item .or-info .or-ean{font-size:0.68rem;color:var(--g500)}.or-badge{font-size:0.6rem;padding:2px 8px;border-radius:4px;font-weight:700;margin-left:auto;flex-shrink:0}.or-badge.local{background:var(--success-light);color:var(--success)}.or-badge.online{background:var(--info-light);color:var(--info)}
+        .badge{padding:3px 9px;border-radius:20px;font-size:0.65rem;font-weight:700;white-space:nowrap}.badge-danger{background:var(--danger-light);color:var(--danger)}.badge-warning{background:var(--warning-light);color:#92400e}.badge-success{background:var(--success-light);color:var(--success)}.badge-info{background:var(--info-light);color:var(--info)}.badge-gray{background:var(--g200);color:var(--g600)}.badge-purple{background:var(--purple-light);color:var(--purple)}.location-tag{display:inline-flex;align-items:center;gap:3px;background:var(--info-light);color:var(--info);padding:2px 8px;border-radius:4px;font-size:0.68rem;font-weight:600}
+        .btn{padding:11px 20px;border:none;border-radius:var(--r);font-size:0.84rem;font-weight:700;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;gap:7px}.btn-primary{background:var(--primary);color:white}.btn-success{background:var(--success);color:white}.btn-warning{background:var(--warning);color:white}.btn-danger{background:var(--danger);color:white}.btn-info{background:var(--info);color:white}.btn-purple{background:var(--purple);color:white}.btn-outline{background:white;border:2px solid var(--g200);color:var(--g700)}.btn-sm{padding:7px 14px;font-size:0.74rem}
+        .toast-wrap{position:fixed;top:80px;right:14px;z-index:400;display:flex;flex-direction:column;gap:8px;pointer-events:none}.toast-item{background:white;padding:12px 16px;border-radius:var(--r-lg);box-shadow:var(--sh-xl);font-size:0.82rem;font-weight:600;border-left:4px solid var(--success);max-width:320px;animation:toastIn .35s ease,toastOut .4s ease 2.6s forwards;pointer-events:auto}.toast-item.err{border-left-color:var(--danger)}.toast-item.warn{border-left-color:var(--warning)}.toast-item.info{border-left-color:var(--info)}.toast-item.notif{border-left-color:var(--purple);border-left-width:6px}@keyframes toastIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}@keyframes toastOut{from{opacity:1}to{opacity:0;transform:translateX(110%)}}
+        .scanner-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:500;flex-direction:column;align-items:center;justify-content:center}.scanner-overlay.show{display:flex}.scanner-overlay video{width:90%;max-width:480px;border-radius:var(--r-lg);border:3px solid var(--primary)}.scanner-overlay p{color:white;margin-bottom:16px;font-size:0.9rem;font-weight:600}.scanner-manual-row{margin-top:14px;display:flex;gap:8px;width:90%;max-width:480px}.scanner-manual-row input{flex:1;padding:12px 16px;border:none;border-radius:var(--r-xl);font-size:0.9rem}.scanner-close{margin-top:14px;padding:12px 32px;background:var(--danger);color:white;border:none;border-radius:var(--r-xl);font-size:0.9rem;cursor:pointer;font-weight:700}
+        .img-zoom-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:600;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(6px)}.img-zoom-overlay.show{display:flex}.img-zoom-overlay img{max-width:92%;max-height:85vh;object-fit:contain;border-radius:var(--r-lg);box-shadow:0 0 40px rgba(0,0,0,0.5)}.img-zoom-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+        .confirm-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:700;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}.confirm-overlay.show{display:flex}.confirm-box{background:white;border-radius:var(--r-xl);width:100%;max-width:360px;overflow:hidden;box-shadow:var(--sh-xl);animation:sheetUp .3s ease}.confirm-icon{text-align:center;padding:24px 20px 10px;font-size:3rem}.confirm-title{text-align:center;font-size:1rem;font-weight:800;color:var(--g800);padding:0 20px}.confirm-msg{text-align:center;font-size:0.85rem;color:var(--g500);padding:8px 24px 20px;line-height:1.5}.confirm-actions{display:flex;border-top:1px solid var(--g100)}.confirm-actions button{flex:1;padding:14px;border:none;font-size:0.88rem;font-weight:700;cursor:pointer;transition:background 0.2s}.confirm-actions .confirm-cancel{background:var(--g50);color:var(--g600);border-right:1px solid var(--g100)}.confirm-actions .confirm-cancel:hover{background:var(--g200)}.confirm-actions .confirm-ok{background:white;color:var(--primary)}.confirm-actions .confirm-ok.danger{color:var(--danger)}.confirm-actions .confirm-ok.success{color:var(--success)}.confirm-actions .confirm-ok.purple{color:var(--purple)}.confirm-actions .confirm-ok:hover{background:var(--g50)}
+        /* TOUR / AJUDA */
+        .tour-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:800;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px)}.tour-overlay.show{display:flex}.tour-box{background:white;border-radius:var(--r-xl);width:100%;max-width:400px;max-height:85vh;overflow-y:auto;box-shadow:var(--sh-xl);animation:sheetUp .3s ease}.tour-header{padding:20px 20px 12px;text-align:center}.tour-header .tour-emoji{font-size:2.5rem;margin-bottom:8px}.tour-header h3{font-size:1.1rem;font-weight:800;color:var(--g800)}.tour-header p{font-size:0.78rem;color:var(--g500);margin-top:4px}.tour-items{padding:0 20px 20px}.tour-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--g100)}.tour-item:last-child{border-bottom:none}.tour-item-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}.tour-item-text h4{font-size:0.82rem;font-weight:700;color:var(--g800);margin-bottom:2px}.tour-item-text p{font-size:0.72rem;color:var(--g500);line-height:1.4}.tour-close{display:block;width:calc(100% - 40px);margin:0 20px 20px;padding:12px;border:none;border-radius:var(--r);background:var(--primary);color:white;font-size:0.88rem;font-weight:700;cursor:pointer;text-align:center}
+        .notif-item{background:white;border-radius:var(--r-lg);padding:14px 16px;margin-bottom:10px;box-shadow:var(--sh-md);display:flex;gap:12px;align-items:flex-start}.notif-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}.notif-icon.ni-cad{background:var(--purple-light)}.notif-icon.ni-falta{background:var(--primary-light)}.notif-icon.ni-venc{background:var(--warning-light)}.notif-icon.ni-troca{background:var(--info-light)}.notif-body .notif-title{font-size:0.82rem;font-weight:700}.notif-body .notif-time{font-size:0.68rem;color:var(--g400);margin-top:2px}.notif-new{background:var(--primary);width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+        .config-item{background:white;border-radius:var(--r-lg);padding:16px 18px;margin-bottom:10px;box-shadow:var(--sh-md);display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:all 0.2s}.config-item:hover{box-shadow:var(--sh-lg);transform:translateX(3px)}.config-item-left{display:flex;align-items:center;gap:12px}.config-item-left .ci-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem}.config-item-left .ci-text .ci-title{font-size:0.85rem;font-weight:700}.config-item-left .ci-text .ci-sub{font-size:0.7rem;color:var(--g500)}
+        .empty-state{text-align:center;padding:40px 20px;color:var(--g400)}.empty-state .es-icon{font-size:3rem;margin-bottom:10px}.ean-hint{font-size:0.62rem;color:var(--g400);margin-top:2px}
+                /* ═══ RESPONSIVO ═══ */
+        @media(max-width:480px){
+            .form-row{grid-template-columns:1fr}
         }
 
-        .top-header{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 50%,#2563eb 100%);padding:16px 20px 14px;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(37,99,235,0.35)}.top-header-inner{display:flex;justify-content:space-between;align-items:center}.app-brand{display:flex;align-items:center;gap:10px}.app-brand .logo{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:1.2rem}.app-brand .brand-text{color:white}.app-brand .brand-text h1{font-size:1rem;font-weight:800}.app-brand .brand-text p{font-size:0.65rem;opacity:0.65;margin-top:1px}
-        
-        .sync-pill{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:0.65rem;font-weight:700;border:1px solid rgba(255,255,255,0.15)}.sync-pill.online{background:rgba(34,197,94,0.15);color:#86efac}.sync-pill.offline{background:rgba(239,68,68,0.15);color:#fca5a5}.sync-pill .dot{width:7px;height:7px;border-radius:50%;animation:pdot 2s infinite}.sync-pill.online .dot{background:#4ade80}.sync-pill.offline .dot{background:#f87171;animation:none}@keyframes pdot{0%,100%{opacity:1}50%{opacity:0.4}}
-        
-        .bottom-nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);background:white;border-top:1px solid var(--g200);display:flex;align-items:center;justify-content:space-around;z-index:100;box-shadow:0 -4px 20px rgba(0,0,0,0.08)}.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 12px;border-radius:12px;cursor:pointer;border:none;background:none;flex:1;position:relative;transition:all 0.25s}.nav-item .nav-icon{font-size:1.3rem;transition:transform 0.25s}.nav-item .nav-label{font-size:0.55rem;font-weight:700;color:var(--g400);text-transform:uppercase;letter-spacing:0.5px}.nav-item.active{background:var(--primary-light)}.nav-item.active .nav-icon{transform:scale(1.15)}.nav-item.active .nav-label{color:var(--primary)}.nav-notif-badge{position:absolute;top:2px;right:8px;background:var(--danger);color:white;border-radius:50%;width:16px;height:16px;font-size:0.55rem;display:flex;align-items:center;justify-content:center;font-weight:800;animation:bounce 1s infinite}@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
-        
-        .screen{display:none;padding:16px;max-width:600px;margin:0 auto}.screen.active{display:block;animation:fadeUp .3s ease}@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-        
-        .stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}.stat-btn{background:white;border-radius:var(--r-lg);padding:18px 16px;text-align:left;box-shadow:var(--sh-md);cursor:pointer;transition:all 0.25s;border:none;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:4px}.stat-btn::after{content:'';position:absolute;bottom:0;left:0;height:3px;width:100%;border-radius:0 0 var(--r-lg) var(--r-lg)}.stat-btn.sb-purple::after{background:var(--purple)}.stat-btn.sb-blue::after{background:var(--primary)}.stat-btn.sb-orange::after{background:var(--warning)}.stat-btn.sb-cyan::after{background:var(--info)}.stat-btn:hover{transform:translateY(-3px);box-shadow:var(--sh-lg)}.stat-btn .sb-num{font-size:2rem;font-weight:900;line-height:1}.stat-btn .sb-label{font-size:0.68rem;font-weight:700;color:var(--g500);text-transform:uppercase}
-        
-        .alerts-panel{border-radius:var(--r-lg);margin-bottom:12px;overflow:hidden;box-shadow:var(--sh-lg);background:linear-gradient(135deg,#312e81,#4c1d95,#5b21b6);border:1px solid rgba(255,255,255,0.08)}.alerts-header{padding:12px 16px;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.15)}.alerts-track{display:flex;overflow-x:auto;padding:12px 10px;gap:10px;scroll-snap-type:x mandatory}.alert-card{min-width:200px;flex-shrink:0;border-radius:var(--r-lg);background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);padding:10px;color:white}
-        
-        .filter-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}.filter-row input,.filter-row select{padding:10px 12px;border:1.5px solid var(--g200);border-radius:var(--r);font-size:0.82rem;background:white;flex:1;min-width:120px}
-        
-        .product-card{background:white;border-radius:var(--r-lg);margin-bottom:12px;box-shadow:var(--sh-md);overflow:hidden}.pc-top{display:flex}.pc-img{width:85px;min-height:85px;display:flex;align-items:center;justify-content:center;background:var(--g100);overflow:hidden}.pc-img img{width:100%;height:100%;object-fit:contain}.pc-info{flex:1;padding:12px 14px}.pc-name{font-weight:800;font-size:0.88rem}.pc-actions{display:flex;gap:6px;padding:10px 14px;border-top:1px solid var(--g100);background:var(--g50)}.btn-action{flex:1;padding:8px;border:none;border-radius:var(--r);font-size:0.72rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px}
-        
-        .fab-wrap{position:fixed;bottom:calc(var(--nav-h) + 16px);right:20px;z-index:150}.fab-btn{width:58px;height:58px;border-radius:50%;background:var(--primary);color:white;border:none;font-size:1.6rem;box-shadow:var(--sh-xl)}
-        .fab-menu{position:absolute;bottom:70px;right:0;display:flex;flex-direction:column;gap:10px;display:none}.fab-menu.show{display:flex}.fab-opt{display:flex;align-items:center;gap:10px;justify-content:flex-end;cursor:pointer}.fab-opt-label{background:var(--g900);color:white;padding:5px 12px;border-radius:8px;font-size:0.75rem}.fab-opt-icon{width:46px;height:46px;border-radius:50%;border:none;color:white;font-size:1.1rem}
+        /* TABLET */
+        @media(min-width:601px){
+            .stats-row{grid-template-columns:repeat(4,1fr)}
+            .product-card{max-width:100%}
+            .pc-img{width:100px;min-height:100px}
+            .pc-img img{width:100px;height:100px}
+            .pc-name{font-size:0.95rem}
+            .alerts-track{padding:14px 16px}
+            .alert-card{min-width:220px;max-width:220px}
+            .filter-row{flex-wrap:nowrap}
+            .pick-search input{font-size:0.92rem;padding:14px 55px 14px 46px}
+            .modal-sheet{max-width:520px;margin:0 auto}
+            .confirm-box{max-width:400px}
+        }
 
-        .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:flex-end;justify-content:center}.modal-overlay.show{display:flex}.modal-sheet{background:white;border-radius:var(--r-xl) var(--r-xl) 0 0;width:100%;max-width:600px;max-height:90vh;overflow-y:auto}
-        
-        /* SCANNER MODAL */
-        #reader { width: 100% !important; border: none !important; }
-        #reader__dashboard { background: white !important; }
-        
-        .badge{padding:3px 8px;border-radius:20px;font-size:0.65rem;font-weight:700}
-        .badge-danger{background:var(--danger-light);color:var(--danger)}
-        .badge-success{background:var(--success-light);color:var(--success)}
-        .badge-warning{background:var(--warning-light);color:#92400e}
-        .badge-info{background:var(--info-light);color:var(--info)}
-        
-        .toast-wrap{position:fixed;top:20px;right:20px;z-index:999}
-        .toast{background:white;padding:12px 20px;border-radius:var(--r);box-shadow:var(--sh-xl);margin-bottom:10px;border-left:5px solid var(--primary);animation:slideIn 0.3s ease}
-        @keyframes slideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
+        /* DESKTOP */
+        @media(min-width:900px){
+            body{background:#e8ecf3}
+
+            .top-header{padding:14px 40px}
+            .top-header-inner{max-width:1200px;margin:0 auto}
+
+            .screen{max-width:800px;padding:20px 30px}
+
+            /* BOTTOM NAV → SIDEBAR NO DESKTOP */
+            .bottom-nav{
+                position:fixed;left:0;top:0;bottom:0;right:auto;
+                width:80px;height:100vh;
+                flex-direction:column;justify-content:flex-start;
+                padding:80px 0 20px;gap:8px;
+                border-top:none;border-right:1px solid var(--g200);
+                box-shadow:4px 0 20px rgba(0,0,0,0.06);
+            }
+            .nav-item{padding:12px 8px;flex:none}
+            .nav-item .nav-icon{font-size:1.3rem}
+            .nav-item .nav-label{font-size:0.52rem}
+            .nav-notif-badge{top:6px;right:12px}
+
+            body{padding-bottom:0;padding-left:80px}
+
+            .fab-wrap{bottom:30px;right:40px}
+            .fab-btn{width:64px;height:64px;font-size:1.8rem}
+
+            /* STATS em grade */
+            .stats-row{grid-template-columns:repeat(4,1fr);gap:16px}
+            .stat-btn{padding:24px 20px}
+            .stat-btn .sb-num{font-size:2.4rem}
+            .stat-btn .sb-label{font-size:0.72rem}
+
+            /* ALERTAS mais largos */
+            .alerts-panel{border-radius:var(--r-xl)}
+            .alerts-track{padding:16px 20px;gap:14px}
+            .alert-card{min-width:240px;max-width:240px}
+            .alert-card-img{height:100px}
+
+            /* CARDS maiores */
+            .product-card{border-radius:var(--r-xl)}
+            .pc-img{width:110px;min-height:110px;max-height:130px}
+            .pc-img img{width:110px;height:110px}
+            .pc-name{font-size:1rem}
+            .pc-ean-code{font-size:0.65rem}
+            .pc-badges{gap:6px}
+
+            /* MODAL mais centrado */
+            .modal-overlay{align-items:center}
+            .modal-sheet{border-radius:var(--r-xl);max-width:560px;max-height:85vh}
+
+            /* ZOOM maior */
+            .img-zoom-overlay img{max-width:70%;max-height:80vh}
+
+            /* CONFIRM mais elegante */
+            .confirm-box{max-width:420px}
+            .confirm-icon{font-size:3.5rem}
+            .confirm-title{font-size:1.1rem}
+
+            /* SCANNER centralizado */
+            .scanner-overlay video{max-width:400px}
+
+            /* TOAST */
+            .toast-wrap{right:30px;top:90px}
+            .toast-item{max-width:380px;font-size:0.88rem}
+
+            /* CONFIG items */
+            .config-item{padding:18px 24px}
+
+            /* FORM mais espaçoso */
+            .form-group input,.form-group select{padding:14px 16px;font-size:0.92rem}
+            .form-group label{font-size:0.82rem}
+            .form-row{gap:16px}
+
+            /* LISTAS com grid em telas grandes */
+            .filter-row{gap:12px}
+            .filter-row input,.filter-row select{padding:10px 14px;font-size:0.82rem}
+
+            .list-header h2{font-size:1.15rem}
+
+            /* NOTIF items */
+            .notif-item{padding:16px 20px}
+
+            /* TOUR/AJUDA */
+            .tour-item{padding:14px 0}
+            .tour-item-icon{width:48px;height:48px}
+        }
+
+        /* DESKTOP GRANDE */
+        @media(min-width:1200px){
+            .screen{max-width:960px}
+
+            .bottom-nav{width:100px;padding:90px 0 20px}
+            .nav-item{padding:14px 10px}
+            .nav-item .nav-icon{font-size:1.4rem}
+            .nav-item .nav-label{font-size:0.58rem}
+            body{padding-left:100px}
+
+            .stats-row{gap:20px}
+            .stat-btn{padding:28px 24px}
+            .stat-btn .sb-num{font-size:2.8rem}
+
+            .alerts-track{gap:16px}
+            .alert-card{min-width:260px;max-width:260px}
+
+            .pc-img{width:120px;min-height:120px}
+            .pc-img img{width:120px;height:120px}
+            .pc-name{font-size:1.05rem}
+
+            .modal-sheet{max-width:620px}
+        }
+
+        /* LANDSCAPE MOBILE */
+        @media(max-height:500px) and (orientation:landscape){
+            .top-header{padding:8px 20px}
+            .app-brand .brand-text h1{font-size:0.85rem}
+            .app-brand .brand-text p{display:none}
+            .stats-row{grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+            .stat-btn{padding:12px 10px}
+            .stat-btn .sb-num{font-size:1.4rem}
+            .stat-btn .sb-icon{font-size:1.2rem;margin-bottom:2px}
+            .alerts-panel{margin-bottom:8px}
+            .alert-card{min-width:180px;max-width:180px}
+            .alert-card-img{height:60px}
+            .modal-sheet{max-height:95vh}
+        }
     </style>
 </head>
 <body>
+<div class="top-header"><div class="top-header-inner"><div class="app-brand"><div class="logo">📋</div><div class="brand-text"><h1>Controle</h1><p>Estoque & Validades</p></div></div><div class="sync-pill offline" id="sync-pill"><div class="dot"></div><span id="sync-text">Conectando...</span></div></div></div>
 
-<div class="top-header">
-    <div class="top-header-inner">
-        <div class="app-brand"><div class="logo">📋</div><div class="brand-text"><h1>Controle</h1><p>Estoque & Validades</p></div></div>
-        <div class="sync-pill offline" id="sync-pill"><div class="dot"></div><span id="sync-text">Offline</span></div>
-    </div>
-</div>
-
-<!-- HOME -->
+<!-- HOME com alertas separados -->
 <div id="screen-home" class="screen active">
     <div class="stats-row" id="stats-row"></div>
     <div id="alerts-section">
-        <div class="alerts-panel" id="panel-venc"><div class="alerts-header"><span style="color:white;font-weight:700">📅 Vencimentos Próximos</span></div><div class="alerts-track" id="track-venc"></div></div>
+        <div class="alerts-panel" id="panel-faltas" style="display:none"><div class="alerts-header"><div class="alerts-header-left"><span>🚫 Faltas</span><span class="alerts-count" id="ac-faltas">0</span></div><div class="alerts-nav"><button onclick="scrollAlertsId('track-faltas',-1)">◀</button><button onclick="scrollAlertsId('track-faltas',1)">▶</button></div></div><div class="alerts-track" id="track-faltas"></div></div>
+        <div class="alerts-panel" id="panel-venc" style="display:none"><div class="alerts-header"><div class="alerts-header-left"><span>📅 Vencimentos</span><span class="alerts-count" id="ac-venc">0</span></div><div class="alerts-nav"><button onclick="scrollAlertsId('track-venc',-1)">◀</button><button onclick="scrollAlertsId('track-venc',1)">▶</button></div></div><div class="alerts-track" id="track-venc"></div></div>
+        <div class="alerts-panel" id="panel-trocas" style="display:none"><div class="alerts-header"><div class="alerts-header-left"><span>🔄 Trocas</span><span class="alerts-count" id="ac-trocas">0</span></div><div class="alerts-nav"><button onclick="scrollAlertsId('track-trocas',-1)">◀</button><button onclick="scrollAlertsId('track-trocas',1)">▶</button></div></div><div class="alerts-track" id="track-trocas"></div></div>
+        <div id="alerts-empty-msg" style="display:none"><div class="empty-state" style="padding:20px;"><div class="es-icon">✅</div><p>Tudo em dia!</p></div></div>
     </div>
 </div>
 
-<!-- TELA FALTAS -->
-<div id="screen-faltas" class="screen">
-    <div class="list-header" style="display:flex;justify-content:space-between;margin-bottom:15px"><h2>🚫 Faltas</h2><span id="count-faltas" class="badge badge-info">0</span></div>
-    <div class="filter-row">
-        <input type="text" id="search-falta" placeholder="Pesquisar produto..." oninput="renderFaltas()">
-        <select id="sort-falta" onchange="renderFaltas()">
-            <option value="recente">Mais Recentes</option>
-            <option value="antigo">Mais Antigos</option>
-            <option value="nome">Nome A-Z</option>
-        </select>
-    </div>
-    <div id="lista-faltas"></div>
-</div>
+<!-- CADASTROS com scanner -->
+<div id="screen-cadastros" class="screen"><div class="list-header"><h2>📦 Cadastrados</h2><span class="list-count" id="cad-list-count">0</span></div><div class="pick-search"><span class="psi">🔎</span><input type="text" id="filtro-cad" placeholder="Buscar por nome ou código..." oninput="renderCadastros()"><button class="pscan" onclick="abrirScanner('busca-cad')">📷 Scan</button></div><div id="lista-cadastros"></div></div>
 
-<!-- TELA VENCIMENTOS -->
-<div id="screen-vencimentos" class="screen">
-    <div class="list-header" style="display:flex;justify-content:space-between;margin-bottom:15px"><h2>📅 Vencimentos</h2><span id="count-venc" class="badge badge-warning">0</span></div>
-    <div class="filter-row">
-        <input type="text" id="search-venc" placeholder="Pesquisar produto..." oninput="renderVencimentos()">
-        <select id="sort-venc" onchange="renderVencimentos()">
-            <option value="data">Data de Validade</option>
-            <option value="recente">Data de Cadastro</option>
-            <option value="nome">Nome A-Z</option>
-        </select>
-    </div>
-    <div id="lista-vencimentos"></div>
-</div>
+<div id="screen-faltas" class="screen"><div class="list-header"><h2>🚫 Faltas</h2><span class="list-count" id="falta-list-count">0</span></div><div class="filter-row"><input type="text" id="filtro-falta-marca" placeholder="🔎 Marca..." oninput="renderFaltas()"><input type="text" id="filtro-falta-forn" placeholder="🔎 Fornecedor..." oninput="renderFaltas()"><input type="date" id="filtro-falta-de" onchange="renderFaltas()"><input type="date" id="filtro-falta-ate" onchange="renderFaltas()"></div><div id="lista-faltas"></div><div id="faltas-share" style="display:none;margin-top:10px;gap:8px;flex-wrap:wrap;"><button class="btn btn-success btn-sm" onclick="gerarPDF('faltas')">📄 PDF</button><button class="btn btn-success btn-sm" onclick="compartilharWA('faltas')">💬 WhatsApp</button></div></div>
 
-<!-- TELA TROCAS -->
-<div id="screen-trocas" class="screen">
-    <div class="list-header" style="display:flex;justify-content:space-between;margin-bottom:15px"><h2>🔄 Trocas</h2><span id="count-trocas" class="badge badge-danger">0</span></div>
-    <div class="filter-row">
-        <input type="text" id="search-troca" placeholder="Pesquisar produto..." oninput="renderTrocas()">
-        <select id="sort-troca" onchange="renderTrocas()">
-            <option value="recente">Mais Recentes</option>
-            <option value="nome">Nome A-Z</option>
-        </select>
-    </div>
-    <div id="lista-trocas"></div>
-</div>
+<div id="screen-vencimentos" class="screen"><div class="list-header"><h2>📅 Vencimentos</h2><span class="list-count" id="venc-list-count">0</span></div><div class="filter-row"><select id="filtro-venc-status" onchange="renderVencimentos()"><option value="">Todos</option><option value="vencido">Vencidos</option><option value="critico">≤3d</option><option value="proximo">≤7d</option><option value="ok">OK</option><option value="feito">✅ Feito</option></select><input type="text" id="filtro-venc-marca" placeholder="🔎 Marca..." oninput="renderVencimentos()"><input type="text" id="filtro-venc-forn" placeholder="🔎 Fornecedor..." oninput="renderVencimentos()"></div><div id="lista-vencimentos"></div><div id="venc-share" style="display:none;margin-top:10px;gap:8px;flex-wrap:wrap;"><button class="btn btn-success btn-sm" onclick="gerarPDF('vencimentos')">📄 PDF</button><button class="btn btn-success btn-sm" onclick="compartilharWA('vencimentos')">💬 WhatsApp</button></div></div>
 
-<!-- TELAS DE SELEÇÃO (PICK) -->
-<div id="screen-pick-falta" class="screen"><h2>Selecionar para Falta</h2><input type="text" class="filter-row" style="width:100%" placeholder="🔎 Buscar..." oninput="renderPick('falta', this.value)"><div id="pick-falta-lista"></div></div>
-<div id="screen-pick-venc" class="screen"><h2>Selecionar para Vencimento</h2><input type="text" class="filter-row" style="width:100%" placeholder="🔎 Buscar..." oninput="renderPick('venc', this.value)"><div id="pick-venc-lista"></div></div>
-<div id="screen-pick-troca" class="screen"><h2>Selecionar para Troca</h2><input type="text" class="filter-row" style="width:100%" placeholder="🔎 Buscar..." oninput="renderPick('troca', this.value)"><div id="pick-troca-lista"></div></div>
+<div id="screen-trocas" class="screen"><div class="list-header"><h2>🔄 Trocas</h2><span class="list-count" id="troca-list-count">0</span></div><div class="filter-row"><select id="filtro-troca-motivo" onchange="renderTrocas()"><option value="">Todos</option><option>Vencido</option><option>Avariado</option><option>Defeito</option><option>Recall</option><option>Outros</option></select><input type="text" id="filtro-troca-forn" placeholder="🔎 Fornecedor..." oninput="renderTrocas()"><input type="date" id="filtro-troca-de" onchange="renderTrocas()"><input type="date" id="filtro-troca-ate" onchange="renderTrocas()"></div><div id="lista-trocas"></div><div id="trocas-share" style="display:none;margin-top:10px;gap:8px;flex-wrap:wrap;"><button class="btn btn-success btn-sm" onclick="gerarPDF('trocas')">📄 PDF</button><button class="btn btn-success btn-sm" onclick="compartilharWA('trocas')">💬 WhatsApp</button></div></div>
 
-<!-- CONFIG / OUTROS -->
-<div id="screen-config" class="screen">
-    <h2>⚙️ Configurações</h2>
-    <div class="config-item" style="background:white;padding:15px;border-radius:10px;margin-top:10px" onclick="exportarDados()">📤 Exportar JSON</div>
-    <div class="config-item" style="background:white;padding:15px;border-radius:10px;margin-top:10px;color:red" onclick="limparTudo()">🗑️ Limpar Tudo</div>
-</div>
+<div id="screen-pick-falta" class="screen"><div class="list-header"><h2>🚫 Selecionar para Falta</h2></div><div class="pick-search"><span class="psi">🔎</span><input type="text" id="pick-falta-filtro" placeholder="Buscar por nome ou código..." oninput="renderPickFalta()"><button class="pscan" onclick="abrirScanner('pick-falta')">📷</button></div><div id="pick-falta-lista"></div></div>
+<div id="screen-pick-venc" class="screen"><div class="list-header"><h2>📅 Selecionar para Vencimento</h2></div><div class="pick-search"><span class="psi">🔎</span><input type="text" id="pick-venc-filtro" placeholder="Buscar por nome ou código..." oninput="renderPickVenc()"><button class="pscan" onclick="abrirScanner('pick-venc')">📷</button></div><div id="pick-venc-lista"></div></div>
+<div id="screen-pick-troca" class="screen"><div class="list-header"><h2>🔄 Selecionar para Troca</h2></div><div class="pick-search"><span class="psi">🔎</span><input type="text" id="pick-troca-filtro" placeholder="Buscar por nome ou código..." oninput="renderPickTroca()"><button class="pscan" onclick="abrirScanner('pick-troca')">📷</button></div><div id="pick-troca-lista"></div></div>
 
-<nav class="bottom-nav">
-    <button class="nav-item active" onclick="goScreen('home')"><span class="nav-icon">🏠</span><span class="nav-label">Início</span></button>
-    <button class="nav-item" onclick="goScreen('faltas')"><span class="nav-icon">🚫</span><span class="nav-label">Faltas</span></button>
-    <button class="nav-item" onclick="goScreen('vencimentos')"><span class="nav-icon">📅</span><span class="nav-label">Venc.</span></button>
-    <button class="nav-item" onclick="goScreen('trocas')"><span class="nav-icon">🔄</span><span class="nav-label">Trocas</span></button>
-    <button class="nav-item" onclick="goScreen('config')"><span class="nav-icon">⚙️</span><span class="nav-label">Config</span></button>
-</nav>
+<div id="screen-notificacoes" class="screen"><div class="list-header"><h2>🔔 Notificações</h2><button class="btn btn-outline btn-sm" onclick="limparNotifs()">Limpar</button></div><div id="lista-notifs"></div></div>
 
-<div class="fab-wrap">
-    <div class="fab-menu" id="fab-menu">
-        <div class="fab-opt" onclick="abrirModalCad()"><span class="fab-opt-label">Cadastrar Produto</span><button class="fab-opt-icon" style="background:var(--purple)">📦</button></div>
-        <div class="fab-opt" onclick="goScreen('pick-falta')"><span class="fab-opt-label">Registrar Falta</span><button class="fab-opt-icon" style="background:var(--primary)">🚫</button></div>
-        <div class="fab-opt" onclick="goScreen('pick-venc')"><span class="fab-opt-label">Registrar Vencimento</span><button class="fab-opt-icon" style="background:var(--warning)">📅</button></div>
-        <div class="fab-opt" onclick="goScreen('pick-troca')"><span class="fab-opt-label">Registrar Troca</span><button class="fab-opt-icon" style="background:var(--info)">🔄</button></div>
-    </div>
-    <button class="fab-btn" onclick="toggleFab()">+</button>
-</div>
-
-<!-- MODAL CADASTRO -->
-<div class="modal-overlay" id="modal-cadastro">
-    <div class="modal-sheet">
-        <div style="padding:20px">
-            <h3 id="modal-cad-title">Cadastrar Produto</h3>
-            <div class="form-group" style="margin-top:15px">
-                <label>Código de Barras</label>
-                <div style="display:flex;gap:5px">
-                    <input type="text" id="cad-ean" style="flex:1;padding:10px;border:1px solid #ddd;border-radius:8px">
-                    <button onclick="abrirScanner('cad-ean')" style="padding:10px;background:var(--primary);color:white;border:none;border-radius:8px">📷</button>
-                </div>
-            </div>
-            <div class="form-group" style="margin-top:10px"><label>Nome *</label><input type="text" id="cad-nome" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px"></div>
-            <div class="form-group" style="margin-top:10px"><label>Marca</label><input type="text" id="cad-marca" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px"></div>
-            <div class="form-group" style="margin-top:10px"><label>Fornecedor</label><input type="text" id="cad-fornecedor" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px"></div>
-            <div class="form-group" style="margin-top:10px"><label>Imagem URL</label><input type="text" id="cad-imagem" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px"></div>
-            <input type="hidden" id="cad-id">
-            <div style="display:flex;gap:10px;margin-top:20px">
-                <button class="btn-action" style="background:#eee" onclick="fecharModal('modal-cadastro')">Cancelar</button>
-                <button class="btn-action" style="background:var(--success);color:white" onclick="salvarProduto()">Salvar</button>
-            </div>
+<!-- AJUDA -->
+<div id="screen-ajuda" class="screen">
+    <div class="list-header"><h2>❓ Como usar</h2></div>
+    <div style="background:white;border-radius:var(--r-lg);padding:20px;box-shadow:var(--sh-md);">
+        <div style="text-align:center;margin-bottom:16px;"><span style="font-size:2.5rem;">📋</span><h3 style="margin-top:8px;font-size:1rem;">Guia Rápido</h3><p style="font-size:0.78rem;color:var(--g500);margin-top:4px;">Aprenda a usar cada função</p></div>
+        <div class="tour-items" style="padding:0;">
+            <div class="tour-item"><div class="tour-item-icon" style="background:var(--primary-light);">➕</div><div class="tour-item-text"><h4>Botão + (Flutuante)</h4><p>Toque no botão azul "+" no canto inferior direito para cadastrar produtos, registrar faltas, vencimentos ou trocas.</p></div></div>
+            <div class="tour-item"><div class="tour-item-icon" style="background:var(--purple-light);">📦</div><div class="tour-item-text"><h4>Cadastrar Produto</h4><p>Busque online pelo nome ou código de barras. Preencha nome, marca, peso, tipo, fornecedor e imagem.</p></div></div>
+            <div class="tour-item"><div class="tour-item-icon" style="background:var(--primary-light);">🚫</div><div class="tour-item-text"><h4>Registrar Falta</h4><p>Selecione um produto cadastrado e informe estoque atual e sugestão de pedido. Use o scanner para encontrar rápido.</p></div></div>
+            <div class="tour-item"><div class="tour-item-icon" style="background:var(--warning-light);">📅</div><div class="tour-item-text"><h4>Registrar Vencimento</h4><p>Selecione o produto, informe quantidade, data de validade e localização na loja.</p></div></div>
+            <div class="tour-item"><div class="tour-item-icon" style="background:var(--info-light);">🔄</div><div class="tour-item-text"><h4>Registrar Troca</h4><p>Selecione o produto, informe quantidade, motivo da troca e localização.</p></div></div>
+            <div class="tour-item"><div class="tour-item-icon" style="background:var(--success-light);">📷</div><div class="tour-item-text"><h4>Scanner</h4><p>Use a câmera para ler códigos de barras. Disponível no cadastro, faltas, vencimentos e trocas.</p></div></div>
+            <div class="tour-item"><div class="tour-item-icon" style="background:var(--danger-light);">📦</div><div class="tour-item-text"><h4>Marcar como Pedido</h4><p>Na lista de faltas, marque produtos que já foram pedidos. O botão fica vermelho após confirmação.</p></div></div>
+            <div class="tour-item"><div class="tour-item-icon" style="background:var(--info-light);">✅</div><div class="tour-item-text"><h4>Troca Realizada</h4><p>Na lista de trocas, confirme quando a troca foi realizada. O card fica vermelho.</p></div></div>
+            <div class="tour-item"><div class="tour-item-icon" style="background:var(--success-light);">📄</div><div class="tour-item-text"><h4>Relatórios</h4><p>Gere PDFs ou compartilhe via WhatsApp. Use filtros por marca, fornecedor ou data.</p></div></div>
+            <div class="tour-item"><div class="tour-item-icon" style="background:var(--purple-light);">🔔</div><div class="tour-item-text"><h4>Notificações</h4><p>Receba alertas em tempo real quando outro aparelho fizer alguma ação no sistema.</p></div></div>
+            <div class="tour-item"><div class="tour-item-icon" style="background:var(--g100);">🔄</div><div class="tour-item-text"><h4>Sincronização</h4><p>Os dados são sincronizados automaticamente entre todos os aparelhos conectados.</p></div></div>
         </div>
     </div>
 </div>
 
-<!-- MODAL SCANNER -->
-<div class="modal-overlay" id="modal-scanner">
-    <div class="modal-sheet" style="height:100vh;max-height:100vh">
-        <div id="reader"></div>
-        <button class="btn-action" style="margin:20px;background:var(--danger);color:white" onclick="fecharScanner()">Fechar Scanner</button>
-    </div>
-</div>
+<div id="screen-config" class="screen"><div class="list-header"><h2>⚙️ Configurações</h2></div><div id="config-firebase" style="padding:12px 16px;border-radius:var(--r-lg);font-size:0.8rem;background:white;margin-bottom:12px;box-shadow:var(--sh-md);"></div><div class="config-item" onclick="sincronizarAgora()"><div class="config-item-left"><div class="ci-icon" style="background:#dbeafe;">🔄</div><div class="ci-text"><div class="ci-title">Sincronizar</div><div class="ci-sub">Forçar sync</div></div></div><div>›</div></div><div class="config-item" onclick="exportarDados()"><div class="config-item-left"><div class="ci-icon" style="background:#dcfce7;">📤</div><div class="ci-text"><div class="ci-title">Exportar</div><div class="ci-sub">Backup JSON</div></div></div><div>›</div></div><div class="config-item" onclick="document.getElementById('import-file').click()"><div class="config-item-left"><div class="ci-icon" style="background:#cffafe;">📥</div><div class="ci-text"><div class="ci-title">Importar</div><div class="ci-sub">Restaurar</div></div></div><div>›</div></div>
+
+<input type="file" id="import-file" accept=".json" style="display:none" onchange="importarDados(event)"><div class="config-item" onclick="limparTudo()"><div class="config-item-left"><div class="ci-icon" style="background:#fee2e2;">🗑️</div><div class="ci-text"><div class="ci-title">Limpar TUDO</div><div class="ci-sub">Apaga tudo</div></div></div><div>›</div></div></div>
+
+<!-- BOTTOM NAV com Ajuda -->
+<nav class="bottom-nav">
+    <button class="nav-item active" id="nav-home" onclick="goScreen('home')"><span class="nav-icon">🏠</span><span class="nav-label">Início</span></button>
+    <button class="nav-item" id="nav-notificacoes" onclick="goScreen('notificacoes')"><span class="nav-icon">🔔</span><span class="nav-label">Alertas</span><span class="nav-notif-badge" id="notif-badge" style="display:none;">0</span></button>
+    <button class="nav-item" id="nav-ajuda" onclick="goScreen('ajuda')"><span class="nav-icon">❓</span><span class="nav-label">Ajuda</span></button>
+    <button class="nav-item" id="nav-config" onclick="goScreen('config')"><span class="nav-icon">⚙️</span><span class="nav-label">Config</span></button>
+</nav>
+
+<div class="fab-backdrop" id="fab-backdrop" onclick="toggleFab()"></div>
+<div class="fab-wrap"><div class="fab-menu" id="fab-menu"><div class="fab-opt" onclick="abrirFormCadastro()"><span class="fab-opt-label">Cadastrar Produto</span><button class="fab-opt-icon foi-purple">📦</button></div><div class="fab-opt" onclick="abrirPickScreen('falta')"><span class="fab-opt-label">Registrar Falta</span><button class="fab-opt-icon foi-blue">🚫</button></div><div class="fab-opt" onclick="abrirPickScreen('venc')"><span class="fab-opt-label">Registrar Vencimento</span><button class="fab-opt-icon foi-orange">📅</button></div><div class="fab-opt" onclick="abrirPickScreen('troca')"><span class="fab-opt-label">Registrar Troca</span><button class="fab-opt-icon foi-cyan">🔄</button></div></div><button class="fab-btn" id="fab-btn" onclick="toggleFab()">+</button></div>
+
+<div class="modal-overlay" id="modal-cadastro"><div class="modal-sheet"><div class="modal-handle"></div><div class="modal-head"><h3 id="modal-cad-title">📦 Cadastrar Produto</h3><button class="modal-close-btn" onclick="fecharModal('modal-cadastro')">✕</button></div><div class="modal-body-pad"><div class="online-search-bar"><span class="si">🔎</span><input type="text" id="cad-busca" placeholder="Buscar online por nome ou EAN..." oninput="buscarParaCadastro()" autocomplete="off"><button class="scan-btn" onclick="abrirScanner('cadastro')">📷</button></div><div class="online-results" id="cad-online-results"></div><input type="hidden" id="cad-edit-id" value=""><div class="form-group"><label>Códigos de Barras (EAN)</label><input type="text" id="cad-ean" placeholder="Ex: 7891234567890, 7891234567891"><div class="ean-hint">💡 Separe múltiplos códigos por vírgula</div></div><div class="form-group"><label>Nome *</label><input type="text" id="cad-nome" placeholder="Nome do produto"></div><div class="form-row"><div class="form-group"><label>Marca</label><input type="text" id="cad-marca" placeholder="Marca" oninput="autocompleteMarca(this,'cad-ac-marca')" autocomplete="off"><div class="autocomplete-dropdown" id="cad-ac-marca"></div></div><div class="form-group"><label>Peso / ML</label><input type="text" id="cad-peso" placeholder="500g, 1L..."></div></div><div class="form-row"><div class="form-group"><label>Tipo / Variação</label><input type="text" id="cad-tipo" placeholder="Integral, Zero..."></div><div class="form-group"><label>Fornecedor</label><input type="text" id="cad-fornecedor" placeholder="Fornecedor" oninput="autocompleteFornecedor(this,'cad-ac-forn')" autocomplete="off"><div class="autocomplete-dropdown" id="cad-ac-forn"></div></div></div><div class="form-group"><label>Imagem (URL)</label><input type="text" id="cad-imagem" placeholder="https://..."></div></div><div class="modal-footer-pad"><button class="btn btn-outline btn-sm" onclick="fecharModal('modal-cadastro')">Cancelar</button><button class="btn btn-purple" onclick="salvarProduto()">💾 Salvar</button></div></div></div>
+
+<div class="modal-overlay" id="modal-enviar-troca"><div class="modal-sheet"><div class="modal-handle"></div><div class="modal-head"><h3>🔄 Enviar para Troca</h3><button class="modal-close-btn" onclick="fecharModal('modal-enviar-troca')">✕</button></div><div class="modal-body-pad"><div id="modal-et-info" style="padding:12px;background:var(--g50);border-radius:var(--r);margin-bottom:14px;font-size:0.85rem;"></div><div class="form-group"><label>Quantidade</label><input type="number" id="et-qtd" min="1"></div><div class="form-group"><label>Localização</label><input type="text" id="et-local" placeholder="Depósito..."></div><input type="hidden" id="et-venc-id"></div><div class="modal-footer-pad"><button class="btn btn-outline btn-sm" onclick="fecharModal('modal-enviar-troca')">Cancelar</button><button class="btn btn-info" onclick="confirmarEnviarTroca()">✅ Confirmar</button></div></div></div>
+
+<div class="scanner-overlay" id="scanner-overlay"><p>📷 Aponte para o código</p><video id="scanner-video" autoplay playsinline></video><div class="scanner-manual-row"><input type="text" id="scanner-manual" placeholder="Ou digite o código..."><button class="btn btn-success btn-sm" onclick="usarCodigoManual()">OK</button></div><button class="scanner-close" onclick="fecharScanner()">✕ Fechar</button></div>
+
+<div class="img-zoom-overlay" id="img-zoom" onclick="fecharZoom()"><button class="img-zoom-close" onclick="fecharZoom()">✕</button><img id="img-zoom-src" src="" alt="Produto"></div>
+
+<div class="confirm-overlay" id="confirm-overlay"><div class="confirm-box"><div class="confirm-icon" id="confirm-icon">⚠️</div><div class="confirm-title" id="confirm-title">Confirmar</div><div class="confirm-msg" id="confirm-msg">Deseja continuar?</div><div class="confirm-actions"><button class="confirm-cancel" onclick="resolveConfirm(false)">Cancelar</button><button class="confirm-ok" id="confirm-ok-btn" onclick="resolveConfirm(true)">Confirmar</button></div></div></div>
 
 <div class="toast-wrap" id="toast-wrap"></div>
 
+
+
+<!--PARTE 1 FIM-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--PARTE 2 INICIO-->
+
+
 <script>
-    // CONFIGURAÇÃO FIREBASE
-    const FB_CONFIG = {
-        apiKey: "AIzaSyAFYDsRg1jgr2mP6UvEQofwoWH0Mi2iTps",
-        authDomain: "controle-faltas-d6709.firebaseapp.com",
-        databaseURL: "https://controle-faltas-d6709-default-rtdb.firebaseio.com",
-        projectId: "controle-faltas-d6709",
-        storageBucket: "controle-faltas-d6709.firebasestorage.app",
-        messagingSenderId: "1063821814181",
-        appId: "1:1063821814181:web:4aa8451fd799590d93e04c"
-    };
-    
-    firebase.initializeApp(FB_CONFIG);
-    const db = firebase.database();
-    
-    // ESTADO GLOBAL
-    let produtos = [], faltas = [], vencimentos = [], trocas = [];
-    let html5QrCode = null;
-    let targetInputScan = null;
+    const FB={apiKey:"AIzaSyAFYDsRg1jgr2mP6UvEQofwoWH0Mi2iTps",authDomain:"controle-faltas-d6709.firebaseapp.com",databaseURL:"https://controle-faltas-d6709-default-rtdb.firebaseio.com",projectId:"controle-faltas-d6709",storageBucket:"controle-faltas-d6709.firebasestorage.app",messagingSenderId:"1063821814181",appId:"1:1063821814181:web:4aa8451fd799590d93e04c"};
+    let db=null,fbOn=false;
+    try{firebase.initializeApp(FB);db=firebase.database();firebase.database().ref('.info/connected').on('value',s=>{fbOn=!!s.val();updSync(fbOn)})}catch(e){console.warn('FB:',e)}
 
-    // --- SINCRONIZAÇÃO ATÔMICA ---
-    function syncItem(path, item, isDelete = false) {
-        if (!item.id) return;
-        const ref = db.ref(`${path}/${item.id}`);
-        if (isDelete) ref.remove();
-        else ref.update(item);
+    let produtos=JSON.parse(localStorage.getItem('produtos')||'[]');
+    let faltas=JSON.parse(localStorage.getItem('faltas')||'[]');
+    let vencimentos=JSON.parse(localStorage.getItem('vencimentos')||'[]');
+    let trocas=JSON.parse(localStorage.getItem('trocas')||'[]');
+    let notificacoes=JSON.parse(localStorage.getItem('notificacoes')||'[]');
+    let scannerTarget='',scannerStream=null,searchTimeout=null,onlineCache={},fabAberto=false,_rendering=false;
+    const deviceId=localStorage.getItem('deviceId')||(()=>{const id='dev_'+Date.now();localStorage.setItem('deviceId',id);return id})();
+    const UNIDADES=['un','cx','pct','kg','g','L','ml','dz','fd'];
+    const _jaFalta=new Set(),_jaVenc=new Set(),_jaTroca=new Set();
+
+    function salvarLocal(){localStorage.setItem('produtos',JSON.stringify(produtos));localStorage.setItem('faltas',JSON.stringify(faltas));localStorage.setItem('vencimentos',JSON.stringify(vencimentos));localStorage.setItem('trocas',JSON.stringify(trocas));localStorage.setItem('notificacoes',JSON.stringify(notificacoes))}
+
+    const REFS={produtos:'produtos',faltas:'faltas',vencimentos:'vencimentos',trocas:'trocas'};
+    function enviarNotif(tipo,msg){if(!db||!fbOn)return;db.ref('notificacoes/'+Date.now()).set({id:Date.now(),tipo,msg,device:deviceId,data:new Date().toISOString(),lido:false})}
+    function salvarESync(){salvarLocal();if(!db||!fbOn)return;const pO={};produtos.forEach(i=>{pO[String(i.id)]=i});const fO={};faltas.forEach(i=>{fO[String(i.id)]=i});const vO={};vencimentos.forEach(i=>{vO[String(i.id)]=i});const tO={};trocas.forEach(i=>{tO[String(i.id)]=i});db.ref(REFS.produtos).set(pO).catch(e=>console.warn('sp:',e));db.ref(REFS.faltas).set(fO).catch(e=>console.warn('sf:',e));db.ref(REFS.vencimentos).set(vO).catch(e=>console.warn('sv:',e));db.ref(REFS.trocas).set(tO).catch(e=>console.warn('st:',e))}
+    async function sincronizarAgora(){if(!db||!fbOn){toast('Sem conexão!','err');return}toast('🔄 Sincronizando...','info');try{salvarESync();updSync(true);updFbStatus('✅ Sincronizado — '+new Date().toLocaleTimeString('pt-BR'));toast('Sincronizado!')}catch(e){updFbStatus('❌ '+e.message);toast('Erro!','err')}}
+    async function carregarFb(){if(!db||!fbOn){updSync(false);updFbStatus('⚠️ Offline');return}try{const get=async(ref)=>{const s=await db.ref(ref).get();return s.exists()?Object.values(s.val()):[]};const[pF,fF,vF,tF]=await Promise.all([get(REFS.produtos),get(REFS.faltas),get(REFS.vencimentos),get(REFS.trocas)]);if(pF!==null)produtos=pF;if(fF!==null)faltas=fF;if(vF!==null)vencimentos=vF;if(tF!==null)trocas=tF;salvarLocal();updSync(true);updFbStatus('✅ Conectado');safeRender()}catch(e){updSync(false);updFbStatus('⚠️ '+e.message)}}
+    function iniciarListeners(){if(!db||!fbOn)return;db.ref(REFS.produtos).on('value',s=>{produtos=s.exists()?Object.values(s.val()):[];salvarLocal();safeRender()});db.ref(REFS.faltas).on('value',s=>{faltas=s.exists()?Object.values(s.val()):[];salvarLocal();safeRender()});db.ref(REFS.vencimentos).on('value',s=>{vencimentos=s.exists()?Object.values(s.val()):[];salvarLocal();safeRender()});db.ref(REFS.trocas).on('value',s=>{trocas=s.exists()?Object.values(s.val()):[];salvarLocal();safeRender()});db.ref('notificacoes').orderByChild('data').limitToLast(50).on('child_added',s=>{const n=s.val();if(!n||!n.id||n.device===deviceId)return;if(notificacoes.some(x=>x.id===n.id))return;notificacoes.unshift(n);if(notificacoes.length>100)notificacoes=notificacoes.slice(0,100);salvarLocal();renderNotifs();updNotifBadge();toast('🔔 '+n.msg,'notif')})}
+    function safeRender(){if(_rendering)return;_rendering=true;requestAnimationFrame(()=>{renderAll();_rendering=false})}
+    function updSync(on){const p=document.getElementById('sync-pill');p.className='sync-pill '+(on?'online':'offline');document.getElementById('sync-text').textContent=on?'Online':'Offline'}
+    function updFbStatus(msg){const el=document.getElementById('config-firebase');if(el)el.innerHTML=msg}
+
+    let _confirmResolve=null;
+    function meuConfirm(titulo,msg,icon,corBtn){return new Promise(resolve=>{_confirmResolve=resolve;document.getElementById('confirm-icon').textContent=icon||'⚠️';document.getElementById('confirm-title').textContent=titulo||'Confirmar';document.getElementById('confirm-msg').textContent=msg||'Deseja continuar?';document.getElementById('confirm-ok-btn').className='confirm-ok '+(corBtn||'');document.getElementById('confirm-overlay').classList.add('show')})}
+    function resolveConfirm(val){document.getElementById('confirm-overlay').classList.remove('show');if(_confirmResolve){_confirmResolve(val);_confirmResolve=null}}
+
+    function toast(msg,type=''){const t=document.createElement('div');t.className='toast-item '+type;t.textContent=msg;document.getElementById('toast-wrap').appendChild(t);setTimeout(()=>t.remove(),3200)}
+    function abrirZoom(imgUrl){if(!imgUrl)return;document.getElementById('img-zoom-src').src=imgUrl;document.getElementById('img-zoom').classList.add('show')}
+    function fecharZoom(){document.getElementById('img-zoom').classList.remove('show');document.getElementById('img-zoom-src').src=''}
+
+    let screenHistory=['home'];
+    function goScreen(name){if(screenHistory[screenHistory.length-1]!==name){screenHistory.push(name);history.pushState({screen:name},'')}doNav(name)}
+    function goList(type){screenHistory.push(type);history.pushState({screen:type},'');doNavList(type)}
+    function doNav(name){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));document.getElementById('screen-'+name).classList.add('active');if(name==='home')document.getElementById('nav-home').classList.add('active');else if(name==='notificacoes'){document.getElementById('nav-notificacoes').classList.add('active');marcarNotifsLidas()}else if(name==='config')document.getElementById('nav-config').classList.add('active');else if(name==='ajuda')document.getElementById('nav-ajuda').classList.add('active');renderAll();window.scrollTo({top:0,behavior:'smooth'})}
+    function doNavList(type){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));document.getElementById('screen-'+type).classList.add('active');renderAll();window.scrollTo({top:0,behavior:'smooth'})}
+    window.addEventListener('popstate',function(){screenHistory.pop();const prev=screenHistory[screenHistory.length-1]||'home';document.querySelectorAll('.modal-overlay.show').forEach(m=>m.classList.remove('show'));fecharZoom();document.getElementById('confirm-overlay').classList.remove('show');if(document.getElementById('scanner-overlay').classList.contains('show'))fecharScanner();if(fabAberto)toggleFab();document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));const el=document.getElementById('screen-'+prev);if(el){el.classList.add('active');if(prev==='home')document.getElementById('nav-home').classList.add('active');else if(prev==='notificacoes')document.getElementById('nav-notificacoes').classList.add('active');else if(prev==='config')document.getElementById('nav-config').classList.add('active');else if(prev==='ajuda')document.getElementById('nav-ajuda').classList.add('active')}else{document.getElementById('screen-home').classList.add('active');document.getElementById('nav-home').classList.add('active')}renderAll()});
+    history.replaceState({screen:'home'},'');
+    function renderAll(){renderHome();renderCadastros();renderFaltas();renderVencimentos();renderTrocas();renderNotifs();renderPickFalta();renderPickVenc();renderPickTroca()}
+
+    function toggleFab(){fabAberto=!fabAberto;document.getElementById('fab-btn').classList.toggle('open',fabAberto);document.getElementById('fab-menu').classList.toggle('show',fabAberto);document.getElementById('fab-backdrop').classList.toggle('show',fabAberto)}
+    function abrirFormCadastro(){toggleFab();limparFormCad();document.getElementById('modal-cadastro').classList.add('show')}
+    function abrirPickScreen(tipo){toggleFab();goList('pick-'+tipo)}
+    function fecharModal(id){document.getElementById(id).classList.remove('show')}
+    document.querySelectorAll('.modal-overlay').forEach(o=>{o.addEventListener('click',function(e){if(e.target===this)this.classList.remove('show')})});
+
+    // BUSCA ONLINE (igual v2.9)
+    async function buscarOnline(query){if(query.length<3)return[];if(onlineCache[query])return onlineCache[query];let r=[];try{if(/^\d{8,14}$/.test(query)){const resp=await fetch(`https://world.openfoodfacts.org/api/v0/product/${query}.json`,{signal:AbortSignal.timeout(5000)});const data=await resp.json();if(data.status===1&&data.product)r.push({nome:data.product.product_name||data.product.product_name_pt||data.product.product_name_en||'Produto',ean:query,marca:data.product.brands||'',imagem:data.product.image_small_url||data.product.image_url||'',peso:data.product.quantity||'',source:'online'})}else{const resp=await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=15&lc=pt`,{signal:AbortSignal.timeout(5000)});const data=await resp.json();if(data.products)r=data.products.filter(p=>p.product_name||p.product_name_pt).map(p=>({nome:p.product_name||p.product_name_pt||p.product_name_en||'Produto',ean:p.code||'',marca:p.brands||'',imagem:p.image_small_url||p.image_url||'',peso:p.quantity||'',source:'online'}))}if(r.length===0&&/^\d{8,14}$/.test(query)){try{const r2=await fetch(`https://world.openbeautyfacts.org/api/v0/product/${query}.json`,{signal:AbortSignal.timeout(4000)});const d2=await r2.json();if(d2.status===1&&d2.product)r.push({nome:d2.product.product_name||'Produto',ean:query,marca:d2.product.brands||'',imagem:d2.product.image_small_url||'',peso:d2.product.quantity||'',source:'online'})}catch(e2){}}if(r.length===0&&/^\d{8,14}$/.test(query)){try{const r3=await fetch(`https://world.openpetfoodfacts.org/api/v0/product/${query}.json`,{signal:AbortSignal.timeout(4000)});const d3=await r3.json();if(d3.status===1&&d3.product)r.push({nome:d3.product.product_name||'Produto',ean:query,marca:d3.product.brands||'',imagem:d3.product.image_small_url||'',peso:d3.product.quantity||'',source:'online'})}catch(e3){}}if(r.length<3&&!/^\d{8,14}$/.test(query)){try{const r4=await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&search_simple=1&action=process&json=1&page_size=10&lc=en`,{signal:AbortSignal.timeout(4000)});const d4=await r4.json();if(d4.products){const novos=d4.products.filter(p=>(p.product_name||p.product_name_en)&&!r.some(x=>x.ean===p.code)).map(p=>({nome:p.product_name||p.product_name_en||'Produto',ean:p.code||'',marca:p.brands||'',imagem:p.image_small_url||p.image_url||'',peso:p.quantity||'',source:'online'}));r=r.concat(novos)}}catch(e4){}}}catch(e){console.log('busca err:',e)}onlineCache[query]=r;return r}
+    async function buscarParaCadastro(){const input=document.getElementById('cad-busca'),dd=document.getElementById('cad-online-results'),q=input.value.trim();if(q.length<3){dd.classList.remove('show');return}clearTimeout(searchTimeout);searchTimeout=setTimeout(async()=>{dd.innerHTML='<div class="or-item"><div class="or-info"><div class="or-name">⏳ Buscando...</div></div></div>';dd.classList.add('show');const results=await buscarOnline(q);window.__cadOnline=results;if(!results.length){dd.innerHTML='<div class="or-item"><div class="or-info"><div class="or-name">Nenhum resultado</div></div></div>';return}dd.innerHTML=results.map((p,i)=>`<div class="or-item" onclick="selecionarCad(${i})">${p.imagem?'<img src="'+p.imagem+'" onerror="this.outerHTML=\'<div class=or-icon>📦</div>\'">':'<div class="or-icon">📦</div>'}<div class="or-info"><div class="or-name">${p.marca?p.marca+' - ':''}${p.nome}</div><div class="or-ean">EAN: ${p.ean||'N/A'}${p.peso?' | '+p.peso:''}</div></div><span class="or-badge online">ONLINE</span></div>`).join('')},400)}
+    function selecionarCad(idx){const p=window.__cadOnline?.[idx];if(!p)return;const ef=document.getElementById('cad-ean');const cur=ef.value.trim();if(p.ean){if(cur&&!cur.split(',').map(e=>e.trim()).includes(p.ean))ef.value=cur+', '+p.ean;else if(!cur)ef.value=p.ean;verificarEanCadastro(p.ean)}document.getElementById('cad-nome').value=p.nome||'';document.getElementById('cad-marca').value=p.marca||'';document.getElementById('cad-peso').value=p.peso||'';document.getElementById('cad-imagem').value=p.imagem||'';document.getElementById('cad-online-results').classList.remove('show');document.getElementById('cad-busca').value='';toast('Preenchido!','info')}
+    function verificarEanCadastro(ean){if(!ean)return;const editId=document.getElementById('cad-edit-id').value;const dup=produtos.find(p=>{if(editId&&p.id===parseInt(editId))return false;return produtoTemEan(p,ean)});if(dup)toast('⚠️ Código '+ean+' já em: '+nomeProdutoCompleto(dup),'warn')}
+
+    function getMarcas(){const m=new Set();produtos.forEach(p=>{if(p.marca)m.add(p.marca)});return[...m]}
+    function getFornecedores(){const f=new Set();produtos.forEach(p=>{if(p.fornecedor)f.add(p.fornecedor)});return[...f]}
+    function autocompleteMarca(input,dropId){const dd=document.getElementById(dropId),v=input.value.trim().toLowerCase();if(v.length<1){dd.classList.remove('show');return}const list=getMarcas().filter(m=>m.toLowerCase().includes(v));if(!list.length){dd.classList.remove('show');return}dd.innerHTML=list.slice(0,5).map(m=>`<div class="ac-opt" onclick="this.parentElement.previousElementSibling.value='${m}';this.parentElement.classList.remove('show');">${m}</div>`).join('');dd.classList.add('show')}
+    function autocompleteFornecedor(input,dropId){const dd=document.getElementById(dropId),v=input.value.trim().toLowerCase();if(v.length<1){dd.classList.remove('show');return}const list=getFornecedores().filter(f=>f.toLowerCase().includes(v));if(!list.length){dd.classList.remove('show');return}dd.innerHTML=list.slice(0,5).map(f=>`<div class="ac-opt" onclick="this.parentElement.previousElementSibling.value='${f}';this.parentElement.classList.remove('show');">${f}</div>`).join('');dd.classList.add('show')}
+    document.addEventListener('click',function(e){if(!e.target.closest('.form-group'))document.querySelectorAll('.autocomplete-dropdown').forEach(d=>d.classList.remove('show'));if(!e.target.closest('.online-search-bar')&&!e.target.closest('.online-results'))document.querySelectorAll('.online-results').forEach(d=>d.classList.remove('show'))});
+
+    async function abrirScanner(target){scannerTarget=target;document.getElementById('scanner-manual').value='';document.getElementById('scanner-overlay').classList.add('show');try{scannerStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280}}});document.getElementById('scanner-video').srcObject=scannerStream;if('BarcodeDetector' in window){const det=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e','code_128']});const sc=setInterval(async()=>{try{const c=await det.detect(document.getElementById('scanner-video'));if(c.length>0){clearInterval(sc);processarCodigo(c[0].rawValue)}}catch(e){}},400);window.__scan=sc}}catch(e){toast('Câmera: '+e.message,'err');fecharScanner()}}
+    function fecharScanner(){document.getElementById('scanner-overlay').classList.remove('show');if(scannerStream){scannerStream.getTracks().forEach(t=>t.stop());scannerStream=null}if(window.__scan)clearInterval(window.__scan)}
+    function usarCodigoManual(){const c=document.getElementById('scanner-manual').value.trim();if(!c)return;processarCodigo(c)}
+    function processarCodigo(code){fecharScanner();toast('📷 '+code);if(scannerTarget==='cadastro'){const ef=document.getElementById('cad-ean');const cur=ef.value.trim();if(cur&&!cur.split(',').map(e=>e.trim()).includes(code))ef.value=cur+', '+code;else if(!cur)ef.value=code;verificarEanCadastro(code);document.getElementById('cad-busca').value=code;buscarParaCadastro()}else if(scannerTarget==='busca-cad'){document.getElementById('filtro-cad').value=code;renderCadastros()}else if(scannerTarget==='pick-falta'){document.getElementById('pick-falta-filtro').value=code;renderPickFalta()}else if(scannerTarget==='pick-venc'){document.getElementById('pick-venc-filtro').value=code;renderPickVenc()}else if(scannerTarget==='pick-troca'){document.getElementById('pick-troca-filtro').value=code;renderPickTroca()}}
+
+    // HELPERS
+    function nomeProdutoCompleto(p){return[p.nome,p.marca,p.peso,p.tipo].filter(v=>v&&v.trim()!=='').join(' ').trim()}
+    function produtoTemEan(p,ean){if(!p.ean||!ean)return false;return p.ean.split(',').map(e=>e.trim()).includes(ean.trim())}
+    function filtrarProdutos(lista,filtro){if(!filtro)return lista;const q=filtro.toLowerCase();return lista.filter(p=>{const texto=`${p.nome} ${p.ean} ${p.marca} ${p.peso} ${p.tipo} ${p.fornecedor||''}`.toLowerCase();if(texto.includes(q))return true;if(p.ean){const eans=p.ean.split(',').map(e=>e.trim());if(eans.some(e=>e.includes(q)))return true}return false})}
+    function sortAlfabetico(lista){return[...lista].sort((a,b)=>(a.produto||a.nome||'').localeCompare(b.produto||b.nome||'','pt'))}
+    function getStatusVenc(dataStr){const hoje=new Date();hoje.setHours(0,0,0,0);const d=new Date(dataStr+'T00:00:00');const diff=Math.ceil((d-hoje)/86400000);if(diff<0)return{label:'Vencido ('+Math.abs(diff)+'d)',badge:'badge-danger',key:'vencido'};if(diff===0)return{label:'HOJE!',badge:'badge-danger',key:'critico'};if(diff<=3)return{label:diff+'d',badge:'badge-danger',key:'critico'};if(diff<=7)return{label:diff+'d',badge:'badge-warning',key:'proximo'};if(diff<=30)return{label:diff+'d',badge:'badge-success',key:'ok'};return{label:diff+'d',badge:'badge-gray',key:'ok'}}
+
+    // CADASTRO + DUPLICAR
+    function salvarProduto(){const nome=document.getElementById('cad-nome').value.trim();if(!nome){toast('Nome obrigatório!','err');return}const editId=document.getElementById('cad-edit-id').value;const prod={id:editId?parseInt(editId):Date.now(),ean:document.getElementById('cad-ean').value.trim(),nome,marca:document.getElementById('cad-marca').value.trim(),peso:document.getElementById('cad-peso').value.trim(),tipo:document.getElementById('cad-tipo').value.trim(),fornecedor:document.getElementById('cad-fornecedor').value.trim(),imagem:document.getElementById('cad-imagem').value.trim(),criadoEm:new Date().toISOString()};const nc=nomeProdutoCompleto(prod);if(editId){const idx=produtos.findIndex(p=>p.id===parseInt(editId));if(idx!==-1){prod.criadoEm=produtos[idx].criadoEm;produtos[idx]=prod}toast('Atualizado!');enviarNotif('cadastro','✏️ '+nc)}else{if(prod.ean){const novasEans=prod.ean.split(',').map(e=>e.trim()).filter(e=>e);const dup=produtos.find(p=>novasEans.some(ne=>produtoTemEan(p,ne)));if(dup){if(!confirm('⚠️ Código já em "'+nomeProdutoCompleto(dup)+'". Continuar?'))return}}produtos.unshift(prod);toast('Cadastrado!');enviarNotif('cadastro','📦 '+nc)}salvarESync();renderAll();limparFormCad();fecharModal('modal-cadastro')}
+    function limparFormCad(){['cad-ean','cad-nome','cad-marca','cad-peso','cad-tipo','cad-fornecedor','cad-imagem','cad-busca'].forEach(id=>document.getElementById(id).value='');document.getElementById('cad-edit-id').value='';document.getElementById('cad-online-results').classList.remove('show');document.getElementById('modal-cad-title').textContent='📦 Cadastrar Produto'}
+    function editarProduto(id){const p=produtos.find(x=>x.id===id);if(!p)return;document.getElementById('cad-edit-id').value=p.id;document.getElementById('cad-ean').value=p.ean||'';document.getElementById('cad-nome').value=p.nome||'';document.getElementById('cad-marca').value=p.marca||'';document.getElementById('cad-peso').value=p.peso||'';document.getElementById('cad-tipo').value=p.tipo||'';document.getElementById('cad-fornecedor').value=p.fornecedor||'';document.getElementById('cad-imagem').value=p.imagem||'';document.getElementById('modal-cad-title').textContent='✏️ Editar';document.getElementById('modal-cadastro').classList.add('show')}
+    async function removerProduto(id){const p=produtos.find(x=>x.id===id);if(!p)return;const r=await meuConfirm('Remover','Remover "'+nomeProdutoCompleto(p)+'"?','🗑️','danger');if(!r)return;produtos=produtos.filter(x=>x.id!==id);salvarESync();renderAll();toast('Removido.');enviarNotif('cadastro','🗑️ '+nomeProdutoCompleto(p))}
+    function duplicarProduto(id){const p=produtos.find(x=>x.id===id);if(!p)return;limparFormCad();document.getElementById('cad-nome').value=p.nome||'';document.getElementById('cad-marca').value=p.marca||'';document.getElementById('cad-peso').value=p.peso||'';document.getElementById('cad-tipo').value=p.tipo||'';document.getElementById('cad-fornecedor').value=p.fornecedor||'';document.getElementById('cad-imagem').value=p.imagem||'';document.getElementById('cad-ean').value='';document.getElementById('modal-cad-title').textContent='📋 Duplicar Produto';document.getElementById('modal-cadastro').classList.add('show');toast('Dados copiados! Altere o que precisar.','info')}
+
+    // VISUAIS
+    function getImgProduto(nome,ean){if(ean){const porEan=produtos.find(x=>produtoTemEan(x,ean));if(porEan&&porEan.imagem)return porEan.imagem}if(nome){const porNome=produtos.find(x=>nomeProdutoCompleto(x)===nome);if(porNome&&porNome.imagem)return porNome.imagem}if(nome){const porCampo=produtos.find(x=>x.nome&&x.nome===nome);if(porCampo&&porCampo.imagem)return porCampo.imagem}return''}
+    function imgHTML(nome,ean){const img=getImgProduto(nome,ean);if(img)return`<img src="${img}" onclick="event.stopPropagation();abrirZoom('${img}')" style="cursor:pointer;" onerror="this.outerHTML='📦'">`;return'📦'}
+    function prodCardTop(p){const nc=nomeProdutoCompleto(p);const firstEan=p.ean?p.ean.split(',')[0].trim():'';const more=p.ean&&p.ean.includes(',')?'(+)':'';const imgClick=p.imagem?` onclick="event.stopPropagation();abrirZoom('${p.imagem}')" style="cursor:pointer;"`:'';return`<div class="pc-top"><div class="pc-img"${imgClick}>${p.imagem?'<img src="'+p.imagem+'" onerror="this.parentElement.innerHTML=\'📦\'">':'📦'}</div><div class="pc-info"><div class="pc-name">${nc}</div>${firstEan?'<span class="pc-ean-code">Cód: '+firstEan+' '+more+'</span>':''}${p.fornecedor?'<div style="font-size:0.62rem;color:var(--g500);margin-top:2px;">🏭 '+p.fornecedor+'</div>':''}</div></div>`}
+    function unidadeSelectHTML(name){return`<select name="${name}" style="width:72px;flex:none;padding:8px 6px;border:1.5px solid var(--g200);border-radius:var(--r);font-size:0.8rem;">${UNIDADES.map(u=>`<option${u==='un'?' selected':''}>${u}</option>`).join('')}</select>`}
+    function jaInserido(tipo,prodId,ean){const set=tipo==='falta'?_jaFalta:tipo==='venc'?_jaVenc:_jaTroca;if(set.has(prodId))return true;if(ean){const arr=tipo==='falta'?faltas:tipo==='venc'?vencimentos:trocas;const eans=ean.split(',').map(e=>e.trim());return arr.some(x=>eans.some(e=>x.ean===e))}return false}
+    function marcarBotao(prefix,id,texto){const btn=document.getElementById(prefix+'-btn-'+id);if(btn){btn.className='ef-toggle ef-toggle-done';btn.textContent=texto;btn.disabled=true;btn.onclick=null}const exp=document.getElementById(prefix+'-expand-'+id);if(exp)exp.classList.remove('show')}
+    function toggleExp(prefix,id){const el=document.getElementById(prefix+'-expand-'+id);if(el)el.classList.toggle('show')}
+    function scrollAlertsId(trackId,dir){const t=document.getElementById(trackId);if(t)t.scrollBy({left:dir*212,behavior:'smooth'})}
+    function startAutoScrollTrack(){}
+    function mkAlertCard(it,i,arrName){const pi=getImgProduto(it.nome,it.ean);const iMap={vencido:'⚠️',critico:'🔥',proximo:'📅',falta:'🚫',troca:'🔄'};const imgB=pi?`<div class="alert-card-img"><img src="${pi}" onerror="this.parentElement.innerHTML='<div class=no-img>${iMap[it.tipo]||'📦'}</div>'"></div>`:`<div class="alert-card-img"><div class="no-img">${iMap[it.tipo]||'📦'}</div></div>`;return`<div class="alert-card ac-${it.tipo}" onclick="window.${arrName}[${i}].act()">${imgB}<div class="alert-card-info"><div class="ac-type">${it.label}</div><div class="ac-name">${it.nome}</div><div class="ac-footer"><span class="ac-detail">${it.det}</span><span class="ac-pill">${it.status}</span></div></div></div>`}
+
+    // PICKS (com data inserção salvando)
+    function renderPickFalta(){const filtro=(document.getElementById('pick-falta-filtro')?.value||'').trim();let lista=filtrarProdutos(produtos,filtro);lista=sortAlfabetico(lista);const div=document.getElementById('pick-falta-lista');if(!lista.length){div.innerHTML='<div class="empty-state"><div class="es-icon">📦</div><p>Nenhum produto</p></div>';return}div.innerHTML=lista.map(p=>{const done=jaInserido('falta',p.id,p.ean);return`<div class="product-card">${prodCardTop(p)}<div class="pc-actions"><button class="ef-toggle ${done?'ef-toggle-done':'ef-toggle-falta'}" id="pf-btn-${p.id}" ${done?'disabled':`onclick="toggleExp('pf',${p.id})"`}>${done?'✓ Já inserido':'🚫 Inserir na Falta ▾'}</button></div><div class="expand-form" id="pf-expand-${p.id}"><div class="ef-row"><label>Estoque:</label><div class="unit-group"><input type="number" id="pf-eq-${p.id}" placeholder="Qtd" min="0">${unidadeSelectHTML('pf-eu-'+p.id)}</div><button class="btn-action btn-undone" style="min-width:auto;padding:6px 10px;font-size:0.7rem;flex:none;" onclick="document.getElementById('pf-eq-${p.id}').value=''">N/I</button></div><div class="ef-row"><label>Pedido:</label><div class="unit-group"><input type="number" id="pf-sq-${p.id}" placeholder="Qtd" min="0">${unidadeSelectHTML('pf-su-'+p.id)}</div><button class="btn-action btn-undone" style="min-width:auto;padding:6px 10px;font-size:0.7rem;flex:none;" onclick="document.getElementById('pf-sq-${p.id}').value=''">N/I</button></div><div class="ef-row"><label>Obs:</label><input type="text" id="pf-obs-${p.id}" placeholder="Opcional" style="flex:1;"></div><div class="ef-actions"><button class="ef-btn ef-btn-cancel" onclick="toggleExp('pf',${p.id})">Cancelar</button><button class="ef-btn ef-btn-primary" onclick="cfmFalta(${p.id})">✅ Confirmar</button></div></div></div>`}).join('')}
+    function cfmFalta(id){const p=produtos.find(x=>x.id===id);if(!p)return;const nc=nomeProdutoCompleto(p);const firstEan=p.ean?p.ean.split(',')[0].trim():'';if(firstEan&&faltas.some(x=>x.ean===firstEan&&new Date(x.data).toDateString()===new Date().toDateString())){toast('⚠️ Já inserido!','warn');return}const eq=document.getElementById('pf-eq-'+id)?.value||'',eu=document.querySelector(`[name="pf-eu-${id}"]`)?.value||'un';const sq=document.getElementById('pf-sq-'+id)?.value||'',su=document.querySelector(`[name="pf-su-${id}"]`)?.value||'un';const obs=document.getElementById('pf-obs-'+id)?.value.trim()||'';faltas.unshift({id:Date.now(),produto:nc,ean:firstEan,marca:p.marca||'',fornecedor:p.fornecedor||'',estoque:eq?eq+' '+eu:'Não informado',sugestao:sq?sq+' '+su:'Não informado',obs,pedido:false,dataPedido:null,data:new Date().toISOString()});salvarESync();toast('🚫 '+nc);enviarNotif('falta','🚫 '+nc);_jaFalta.add(id);marcarBotao('pf',id,'✓ Já inserido');renderHome();renderFaltas();renderNotifs()}
+
+    function renderPickVenc(){const filtro=(document.getElementById('pick-venc-filtro')?.value||'').trim();let lista=filtrarProdutos(produtos,filtro);lista=sortAlfabetico(lista);const div=document.getElementById('pick-venc-lista');if(!lista.length){div.innerHTML='<div class="empty-state"><div class="es-icon">📦</div><p>Nenhum produto</p></div>';return}div.innerHTML=lista.map(p=>{const done=jaInserido('venc',p.id,p.ean);return`<div class="product-card">${prodCardTop(p)}<div class="pc-actions"><button class="ef-toggle ${done?'ef-toggle-done':'ef-toggle-venc'}" id="pv-btn-${p.id}" ${done?'disabled':`onclick="toggleExp('pv',${p.id})"`}>${done?'✓ Já inserido':'📅 Inserir Vencimento ▾'}</button></div><div class="expand-form" id="pv-expand-${p.id}"><div class="ef-row"><label>Qtd:</label><div class="unit-group"><input type="number" id="pv-q-${p.id}" placeholder="Qtd" min="1" value="1">${unidadeSelectHTML('pv-u-'+p.id)}</div></div><div class="ef-row"><label>Validade:</label><input type="date" id="pv-d-${p.id}" style="flex:1;"></div><div class="ef-row"><label>Local:</label><input type="text" id="pv-l-${p.id}" placeholder="Gôndola..." style="flex:1;"></div><div class="ef-actions"><button class="ef-btn ef-btn-cancel" onclick="toggleExp('pv',${p.id})">Cancelar</button><button class="ef-btn ef-btn-warning" onclick="cfmVenc(${p.id})">✅ Confirmar</button></div></div></div>`}).join('')}
+    function cfmVenc(id){const p=produtos.find(x=>x.id===id);if(!p)return;const nc=nomeProdutoCompleto(p);const firstEan=p.ean?p.ean.split(',')[0].trim():'';const data=document.getElementById('pv-d-'+id)?.value||'';if(!data){toast('Validade!','err');return}if(firstEan&&vencimentos.some(x=>x.ean===firstEan)){toast('⚠️ Já tem!','warn');return}const qtd=parseInt(document.getElementById('pv-q-'+id)?.value)||1,un=document.querySelector(`[name="pv-u-${id}"]`)?.value||'un';const local=document.getElementById('pv-l-'+id)?.value.trim()||'';vencimentos.unshift({id:Date.now(),produto:nc,ean:firstEan,marca:p.marca||'',fornecedor:p.fornecedor||'',qtd,unidade:un,data,local,acaoFeita:false,dataAcao:null,criadoEm:new Date().toISOString()});salvarESync();toast('📅 '+nc);enviarNotif('vencimento','📅 '+nc+' ('+fmtDS(data)+')');_jaVenc.add(id);marcarBotao('pv',id,'✓ Já inserido');renderHome();renderVencimentos();renderNotifs()}
+
+    function renderPickTroca(){const filtro=(document.getElementById('pick-troca-filtro')?.value||'').trim();let lista=filtrarProdutos(produtos,filtro);lista=sortAlfabetico(lista);const div=document.getElementById('pick-troca-lista');if(!lista.length){div.innerHTML='<div class="empty-state"><div class="es-icon">📦</div><p>Nenhum produto</p></div>';return}div.innerHTML=lista.map(p=>{const done=jaInserido('troca',p.id,p.ean);return`<div class="product-card">${prodCardTop(p)}<div class="pc-actions"><button class="ef-toggle ${done?'ef-toggle-done':'ef-toggle-troca'}" id="pt-btn-${p.id}" ${done?'disabled':`onclick="toggleExp('pt',${p.id})"`}>${done?'✓ Já inserido':'🔄 Inserir Troca ▾'}</button></div><div class="expand-form" id="pt-expand-${p.id}"><div class="ef-row"><label>Qtd:</label><div class="unit-group"><input type="number" id="pt-q-${p.id}" placeholder="Qtd" min="1" value="1">${unidadeSelectHTML('pt-u-'+p.id)}</div></div><div class="ef-row"><label>Motivo:</label><select id="pt-m-${p.id}" style="flex:1;padding:8px;border:1.5px solid var(--g200);border-radius:var(--r);font-size:0.82rem;"><option value="">Selecione</option><option>Vencido</option><option>Avariado</option><option>Defeito</option><option>Recall</option><option>Outros</option></select></div><div class="ef-row"><label>Local:</label><input type="text" id="pt-l-${p.id}" placeholder="Depósito..." style="flex:1;"></div><div class="ef-row"><label>Obs:</label><input type="text" id="pt-o-${p.id}" placeholder="Opcional" style="flex:1;"></div><div class="ef-actions"><button class="ef-btn ef-btn-cancel" onclick="toggleExp('pt',${p.id})">Cancelar</button><button class="ef-btn ef-btn-info" onclick="cfmTroca(${p.id})">✅ Confirmar</button></div></div></div>`}).join('')}
+    function cfmTroca(id){const p=produtos.find(x=>x.id===id);if(!p)return;const nc=nomeProdutoCompleto(p);const firstEan=p.ean?p.ean.split(',')[0].trim():'';if(firstEan&&trocas.some(x=>x.ean===firstEan&&new Date(x.data).toDateString()===new Date().toDateString())){toast('⚠️ Já inserido!','warn');return}const qtd=parseInt(document.getElementById('pt-q-'+id)?.value)||1,un=document.querySelector(`[name="pt-u-${id}"]`)?.value||'un';const motivo=document.getElementById('pt-m-'+id)?.value||'',local=document.getElementById('pt-l-'+id)?.value.trim()||'';const obs=document.getElementById('pt-o-'+id)?.value.trim()||'';trocas.unshift({id:Date.now(),produto:nc,ean:firstEan,marca:p.marca||'',fornecedor:p.fornecedor||'',qtd,unidade:un,motivo,local,obs,realizada:false,dataRealizada:null,data:new Date().toISOString()});salvarESync();toast('🔄 '+nc);enviarNotif('troca','🔄 '+nc+' x'+qtd);_jaTroca.add(id);marcarBotao('pt',id,'✓ Já inserido');renderHome();renderTrocas();renderNotifs()}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // ============================================
+    // RENDER CADASTROS (alfabético + duplicar)
+    // ============================================
+    function renderCadastros(){const filtro=(document.getElementById('filtro-cad')?.value||'').trim();let lista=filtrarProdutos(produtos,filtro);lista=sortAlfabetico(lista);document.getElementById('cad-list-count').textContent=produtos.length;const div=document.getElementById('lista-cadastros');if(!lista.length){div.innerHTML='<div class="empty-state"><div class="es-icon">📦</div><p>Nenhum produto</p></div>';return}div.innerHTML=lista.map(p=>`<div class="product-card">${prodCardTop(p)}<div class="pc-actions"><button class="btn-action btn-edit" onclick="editarProduto(${p.id})">✏️ Editar</button><button class="btn-action" style="background:var(--info-light);color:var(--info);" onclick="duplicarProduto(${p.id})">📋 Duplicar</button><button class="btn-action btn-delete" onclick="removerProduto(${p.id})">🗑️</button></div></div>`).join('')}
+
+    // ============================================
+    // RENDER FALTAS (com data inserção + data pedido)
+    // ============================================
+    function getFaltasFiltradas(){const marca=(document.getElementById('filtro-falta-marca')?.value||'').toLowerCase();const forn=(document.getElementById('filtro-falta-forn')?.value||'').toLowerCase();const de=document.getElementById('filtro-falta-de')?.value||'';const ate=document.getElementById('filtro-falta-ate')?.value||'';let l=[...faltas];if(marca)l=l.filter(f=>(f.marca||'').toLowerCase().includes(marca)||(f.produto||'').toLowerCase().includes(marca));if(forn)l=l.filter(f=>(f.fornecedor||'').toLowerCase().includes(forn));if(de)l=l.filter(f=>f.data>=de);if(ate)l=l.filter(f=>f.data<=ate+'T23:59:59');return l}
+
+    function renderCardFalta(f){
+        const pedido=f.pedido;const fImg=getImgProduto(f.produto,f.ean);
+        return`<div class="product-card ${pedido?'pc-red':''}"><div class="pc-top"><div class="pc-img"${fImg?` onclick="event.stopPropagation();abrirZoom('${fImg}')" style="cursor:pointer;"`:''} >${imgHTML(f.produto,f.ean)}</div><div class="pc-info"><div class="pc-name">${f.produto}</div>${f.ean?'<span class="pc-ean-code">Cód: '+f.ean+'</span>':''}${f.fornecedor?'<div style="font-size:0.62rem;color:var(--g500);margin-top:2px;">🏭 '+f.fornecedor+'</div>':''}<div class="pc-badges"><span class="badge badge-gray">Est: ${f.estoque||'N/I'}</span><span class="badge badge-gray">Sug: ${f.sugestao||'N/I'}</span>${f.obs?'<span class="badge badge-info">📝 '+f.obs+'</span>':''}${pedido?'<span class="badge badge-danger">✅ Pedido</span>':''}</div><div style="font-size:0.58rem;color:var(--g400);margin-top:4px;">📥 Inserido: ${fmtD(f.data)}${f.dataPedido?'<br>📦 Pedido em: '+fmtD(f.dataPedido):''}</div></div></div><div class="pc-actions"><button class="btn-action ${pedido?'btn-pedido-done':'btn-pedido'}" ${pedido?'disabled':`onclick="marcarPedido(${f.id})"`}>${pedido?'✅ Produto Pedido':'📦 Marcar como Pedido'}</button><button class="btn-action btn-edit" onclick="editarFalta(${f.id})">✏️</button><button class="btn-action btn-delete" onclick="removerFalta(${f.id})">🗑️</button></div></div>`;
     }
 
-    // --- LISTENERS EM TEMPO REAL ---
-    function initListeners() {
-        const refs = { 'produtos': produtos, 'faltas': faltas, 'vencimentos': vencimentos, 'trocas': trocas };
-        Object.keys(refs).forEach(key => {
-            db.ref(key).on('value', snapshot => {
-                const data = snapshot.val();
-                const list = data ? Object.values(data) : [];
-                if (key === 'produtos') produtos = list;
-                if (key === 'faltas') faltas = list;
-                if (key === 'vencimentos') vencimentos = list;
-                if (key === 'trocas') trocas = list;
-                renderAll();
-                updateSyncStatus(true);
-            });
-        });
-        
-        firebase.database().ref('.info/connected').on('value', s => updateSyncStatus(s.val()));
+    function renderFaltas(){const lista=getFaltasFiltradas();document.getElementById('falta-list-count').textContent=faltas.length;const sh=document.getElementById('faltas-share');if(sh)sh.style.display=lista.length>0?'flex':'none';const div=document.getElementById('lista-faltas');if(!lista.length){div.innerHTML='<div class="empty-state"><div class="es-icon">✅</div><p>Nenhuma falta</p></div>';return}const pendentes=sortAlfabetico(lista.filter(f=>!f.pedido));const pedidos=sortAlfabetico(lista.filter(f=>f.pedido));let html='';if(pendentes.length){html+=`<div class="section-divider">🚫 Pendentes (${pendentes.length})</div>`;html+=pendentes.map(f=>renderCardFalta(f)).join('')}if(pedidos.length){html+=`<div class="section-divider">✅ Pedidos (${pedidos.length})</div>`;html+=pedidos.map(f=>renderCardFalta(f)).join('')}div.innerHTML=html}
+
+    async function marcarPedido(id){const f=faltas.find(x=>x.id===id);if(!f)return;const r1=await meuConfirm('Marcar como Pedido','Marcar "'+f.produto+'" como pedido?','📦','purple');if(!r1)return;const r2=await meuConfirm('Confirmar','Confirma o pedido?','✅','success');if(!r2)return;f.pedido=true;f.dataPedido=new Date().toISOString();salvarESync();renderFaltas();renderHome();toast('📦 Pedido!');enviarNotif('falta','📦 '+f.produto)}
+    function editarFalta(id){const f=faltas.find(x=>x.id===id);if(!f)return;const p=produtos.find(x=>(x.ean&&produtoTemEan(x,f.ean))||nomeProdutoCompleto(x)===f.produto);if(p){faltas=faltas.filter(x=>x.id!==id);salvarLocal();_jaFalta.delete(p.id);goList('pick-falta');setTimeout(()=>{toggleExp('pf',p.id);const pe=(f.estoque||'').split(' ');if(pe.length>=1&&pe[0]!=='Não'){const el=document.getElementById('pf-eq-'+p.id);if(el)el.value=pe[0]}const ps=(f.sugestao||'').split(' ');if(ps.length>=1&&ps[0]!=='Não'){const el=document.getElementById('pf-sq-'+p.id);if(el)el.value=ps[0]}const ob=document.getElementById('pf-obs-'+p.id);if(ob)ob.value=f.obs||''},300)}else{toast('Não encontrado','warn')}}
+    async function removerFalta(id){const f=faltas.find(x=>x.id===id);if(!f)return;const r=await meuConfirm('Remover','Remover "'+f.produto+'"?','🗑️','danger');if(!r)return;faltas=faltas.filter(x=>x.id!==id);salvarESync();renderAll();toast('Removido.');enviarNotif('falta','🗑️ '+f.produto)}
+
+    // ============================================
+    // RENDER VENCIMENTOS (com separação + data ação + botão renomeado)
+    // ============================================
+    function getVencFiltrados(){const fS=document.getElementById('filtro-venc-status')?.value||'';const fM=(document.getElementById('filtro-venc-marca')?.value||'').toLowerCase();const fF=(document.getElementById('filtro-venc-forn')?.value||'').toLowerCase();let l=[...vencimentos];if(fM)l=l.filter(v=>(v.marca||'').toLowerCase().includes(fM)||(v.produto||'').toLowerCase().includes(fM));if(fF)l=l.filter(v=>(v.fornecedor||'').toLowerCase().includes(fF));if(fS==='feito')l=l.filter(v=>v.acaoFeita);else if(fS)l=l.filter(v=>!v.acaoFeita&&getStatusVenc(v.data).key===fS);l.sort((a,b)=>new Date(a.data)-new Date(b.data));return l}
+
+    function renderCardVenc(v){
+        const s=getStatusVenc(v.data);const done=v.acaoFeita;const vImg=getImgProduto(v.produto,v.ean);
+        return`<div class="product-card ${done?'pc-red':''}"><div class="pc-top"><div class="pc-img"${vImg?` onclick="event.stopPropagation();abrirZoom('${vImg}')" style="cursor:pointer;"`:''} >${imgHTML(v.produto,v.ean)}</div><div class="pc-info"><div class="pc-name">${v.produto}</div>${v.ean?'<span class="pc-ean-code">Cód: '+v.ean+'</span>':''}${v.fornecedor?'<div style="font-size:0.62rem;color:var(--g500);margin-top:2px;">🏭 '+v.fornecedor+'</div>':''}<div class="pc-badges"><span class="badge ${done?'badge-danger':s.badge}">${done?'✅ Ação Realizada':s.label}</span><span class="badge badge-gray">x${v.qtd||1}${v.unidade?' '+v.unidade:''}</span><span class="badge badge-info">${fmtDS(v.data)}</span>${v.local?'<span class="location-tag">📍 '+v.local+'</span>':''}</div><div style="font-size:0.58rem;color:var(--g400);margin-top:4px;">📥 Inserido: ${fmtD(v.criadoEm||v.data)}${v.dataAcao?'<br>🏷️ Ação em: '+fmtD(v.dataAcao):''}</div></div></div><div class="pc-actions"><button class="btn-action ${done?'btn-pedido-done':'btn-pedido'}" ${done?'disabled':`onclick="marcarAcaoVenda(${v.id})"`}>${done?'✅ Ação de Venda Realizada':'🏷️ Ação de Venda Realizada'}</button><button class="btn-action btn-edit" onclick="editarVenc(${v.id})">✏️</button><button class="btn-action btn-troca" onclick="abrirEnviarTroca(${v.id})">🔄</button><button class="btn-action btn-delete" onclick="removerVenc(${v.id})">🗑️</button></div></div>`;
     }
 
-    function updateSyncStatus(on) {
-        const p = document.getElementById('sync-pill');
-        p.className = 'sync-pill ' + (on ? 'online' : 'offline');
-        document.getElementById('sync-text').textContent = on ? 'Conectado' : 'Offline';
+    function renderVencimentos(){
+        const lista=getVencFiltrados();document.getElementById('venc-list-count').textContent=vencimentos.length;
+        const sh=document.getElementById('venc-share');if(sh)sh.style.display=lista.length>0?'flex':'none';
+        const div=document.getElementById('lista-vencimentos');
+        if(!lista.length){div.innerHTML='<div class="empty-state"><div class="es-icon">📭</div><p>Nenhum vencimento</p></div>';return}
+
+        const pendentes=lista.filter(v=>!v.acaoFeita);
+        const realizados=lista.filter(v=>v.acaoFeita);
+
+        let html='';
+        if(pendentes.length){html+=`<div class="section-divider">📅 Pendentes (${pendentes.length})</div>`;html+=pendentes.map(v=>renderCardVenc(v)).join('')}
+        if(realizados.length){html+=`<div class="section-divider">✅ Ação Realizada (${realizados.length})</div>`;html+=realizados.map(v=>renderCardVenc(v)).join('')}
+        div.innerHTML=html;
     }
 
-    // --- NAVEGAÇÃO ---
-    function goScreen(id) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById('screen-' + id).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        // Feedback visual no nav
-        renderAll();
-        window.scrollTo(0,0);
+    async function marcarAcaoVenda(id){
+        const v=vencimentos.find(x=>x.id===id);if(!v)return;
+        const r1=await meuConfirm('Ação de Venda','Marcar "'+v.produto+'" como ação de venda realizada?','🏷️','purple');if(!r1)return;
+        const r2=await meuConfirm('Confirmar','Confirma que a ação de venda foi realizada?','✅','success');if(!r2)return;
+        v.acaoFeita=true;v.dataAcao=new Date().toISOString();
+        salvarESync();renderVencimentos();renderHome();toast('🏷️ Ação realizada!');enviarNotif('vencimento','🏷️ Ação: '+v.produto);
     }
 
-    function toggleFab() {
-        const menu = document.getElementById('fab-menu');
-        menu.classList.toggle('show');
+    function editarVenc(id){const v=vencimentos.find(x=>x.id===id);if(!v)return;const p=produtos.find(x=>(x.ean&&produtoTemEan(x,v.ean))||nomeProdutoCompleto(x)===v.produto);if(p){vencimentos=vencimentos.filter(x=>x.id!==id);salvarLocal();_jaVenc.delete(p.id);goList('pick-venc');setTimeout(()=>{toggleExp('pv',p.id);const qe=document.getElementById('pv-q-'+p.id);if(qe)qe.value=v.qtd||1;const de=document.getElementById('pv-d-'+p.id);if(de)de.value=v.data||'';const le=document.getElementById('pv-l-'+p.id);if(le)le.value=v.local||''},300)}else{toast('Não encontrado','warn')}}
+    async function removerVenc(id){const v=vencimentos.find(x=>x.id===id);if(!v)return;const r=await meuConfirm('Remover','Remover "'+v.produto+'"?','🗑️','danger');if(!r)return;vencimentos=vencimentos.filter(x=>x.id!==id);salvarESync();renderAll();toast('Removido.');enviarNotif('vencimento','🗑️ '+v.produto)}
+    function abrirEnviarTroca(id){const v=vencimentos.find(x=>x.id===id);if(!v)return;document.getElementById('modal-et-info').innerHTML=`<strong>${v.produto}</strong><br>Qtd: <strong>${v.qtd||1}${v.unidade?' '+v.unidade:''}</strong> | Val: <strong>${fmtDS(v.data)}</strong>${v.local?' | 📍 '+v.local:''}`;document.getElementById('et-qtd').value=v.qtd||1;document.getElementById('et-qtd').max=v.qtd||1;document.getElementById('et-local').value=v.local||'';document.getElementById('et-venc-id').value=id;document.getElementById('modal-enviar-troca').classList.add('show')}
+    function confirmarEnviarTroca(){const vId=parseInt(document.getElementById('et-venc-id').value);const qtd=parseInt(document.getElementById('et-qtd').value)||0;const local=document.getElementById('et-local').value.trim();if(qtd<=0){toast('Qtd!','err');return}const v=vencimentos.find(x=>x.id===vId);if(!v)return;if(qtd>(v.qtd||1)){toast('Qtd maior!','err');return}trocas.unshift({id:Date.now(),produto:v.produto,ean:v.ean||'',marca:v.marca||'',fornecedor:v.fornecedor||'',qtd,unidade:v.unidade||'',motivo:'Vencido',local:local||v.local||'',obs:'Via vencimento',realizada:false,dataRealizada:null,data:new Date().toISOString()});if(qtd>=(v.qtd||1))vencimentos=vencimentos.filter(x=>x.id!==vId);else{v.qtd=(v.qtd||1)-qtd;v.acaoFeita=true;v.dataAcao=new Date().toISOString()}salvarESync();fecharModal('modal-enviar-troca');renderAll();toast('✅ → Troca!');enviarNotif('troca','🔄 '+v.produto)}
+
+    // ============================================
+    // RENDER TROCAS (com data inserção + data realizada)
+    // ============================================
+    function getTrocasFiltradas(){const mot=document.getElementById('filtro-troca-motivo')?.value||'';const forn=(document.getElementById('filtro-troca-forn')?.value||'').toLowerCase();const de=document.getElementById('filtro-troca-de')?.value||'';const ate=document.getElementById('filtro-troca-ate')?.value||'';let l=[...trocas];if(mot)l=l.filter(t=>t.motivo===mot);if(forn)l=l.filter(t=>(t.fornecedor||'').toLowerCase().includes(forn));if(de)l=l.filter(t=>t.data>=de);if(ate)l=l.filter(t=>t.data<=ate+'T23:59:59');return l}
+
+    function renderCardTroca(t){
+        const realizada=t.realizada;const tImg=getImgProduto(t.produto,t.ean);const mB={Vencido:'badge-danger',Avariado:'badge-warning',Defeito:'badge-info',Recall:'badge-purple',Outros:'badge-gray'};
+        return`<div class="product-card ${realizada?'pc-red':''}"><div class="pc-top"><div class="pc-img"${tImg?` onclick="event.stopPropagation();abrirZoom('${tImg}')" style="cursor:pointer;"`:''} >${imgHTML(t.produto,t.ean)}</div><div class="pc-info"><div class="pc-name">${t.produto}</div>${t.ean?'<span class="pc-ean-code">Cód: '+t.ean+'</span>':''}${t.fornecedor?'<div style="font-size:0.62rem;color:var(--g500);margin-top:2px;">🏭 '+t.fornecedor+'</div>':''}<div class="pc-badges"><span class="badge ${mB[t.motivo]||'badge-gray'}">${t.motivo||'-'}</span><span class="badge badge-gray">x${t.qtd||1}${t.unidade?' '+t.unidade:''}</span>${t.local?'<span class="location-tag">📍 '+t.local+'</span>':''}${t.obs?'<span class="badge badge-info">📝</span>':''}${realizada?'<span class="badge badge-danger">✅ Realizada</span>':''}</div><div style="font-size:0.58rem;color:var(--g400);margin-top:4px;">📥 Inserido: ${fmtD(t.data)}${t.dataRealizada?'<br>🔄 Troca em: '+fmtD(t.dataRealizada):''}</div></div></div><div class="pc-actions"><button class="btn-action ${realizada?'btn-troca-done':'btn-done'}" ${realizada?'disabled':`onclick="marcarTrocaRealizada(${t.id})"`}>${realizada?'✅ Troca Realizada':'🔄 Realizar Troca'}</button><button class="btn-action btn-edit" onclick="editarTroca(${t.id})">✏️</button><button class="btn-action btn-delete" onclick="removerTroca(${t.id})">🗑️</button></div></div>`;
     }
 
-    // --- SCANNER ROBUSTO (HTML5-QRCode) ---
-    async function abrirScanner(inputId) {
-        targetInputScan = inputId;
-        document.getElementById('modal-scanner').classList.add('show');
-        
-        if(!html5QrCode) {
-            html5QrCode = new Html5Qrcode("reader");
-        }
-        
-        const config = { fps: 10, qrbox: { width: 250, height: 150 } };
-        
-        html5QrCode.start({ facingMode: "environment" }, config, (text) => {
-            document.getElementById(targetInputScan).value = text;
-            toast("Código lido: " + text);
-            fecharScanner();
-        });
-    }
+    function renderTrocas(){const lista=getTrocasFiltradas();document.getElementById('troca-list-count').textContent=trocas.length;const sh=document.getElementById('trocas-share');if(sh)sh.style.display=lista.length>0?'flex':'none';const div=document.getElementById('lista-trocas');if(!lista.length){div.innerHTML='<div class="empty-state"><div class="es-icon">📭</div><p>Nenhuma troca</p></div>';return}const pendentes=sortAlfabetico(lista.filter(t=>!t.realizada));const realizadas=sortAlfabetico(lista.filter(t=>t.realizada));let html='';if(pendentes.length){html+=`<div class="section-divider">🔄 Pendentes (${pendentes.length})</div>`;html+=pendentes.map(t=>renderCardTroca(t)).join('')}if(realizadas.length){html+=`<div class="section-divider">✅ Realizadas (${realizadas.length})</div>`;html+=realizadas.map(t=>renderCardTroca(t)).join('')}div.innerHTML=html}
 
-    function fecharScanner() {
-        if (html5QrCode) {
-            html5QrCode.stop().then(() => {
-                document.getElementById('modal-scanner').classList.remove('show');
-            });
-        } else {
-            document.getElementById('modal-scanner').classList.remove('show');
-        }
-    }
+    async function marcarTrocaRealizada(id){const t=trocas.find(x=>x.id===id);if(!t)return;const r1=await meuConfirm('Troca Realizada','Marcar "'+t.produto+'" como troca realizada?','🔄','success');if(!r1)return;const r2=await meuConfirm('Confirmar','Confirma que a troca foi realizada?','✅','success');if(!r2)return;t.realizada=true;t.dataRealizada=new Date().toISOString();salvarESync();renderTrocas();renderHome();toast('✅ Troca realizada!');enviarNotif('troca','✅ '+t.produto)}
+    function editarTroca(id){const t=trocas.find(x=>x.id===id);if(!t)return;const p=produtos.find(x=>(x.ean&&produtoTemEan(x,t.ean))||nomeProdutoCompleto(x)===t.produto);if(p){trocas=trocas.filter(x=>x.id!==id);salvarLocal();_jaTroca.delete(p.id);goList('pick-troca');setTimeout(()=>{toggleExp('pt',p.id);const qe=document.getElementById('pt-q-'+p.id);if(qe)qe.value=t.qtd||1;const me=document.getElementById('pt-m-'+p.id);if(me)me.value=t.motivo||'';const le=document.getElementById('pt-l-'+p.id);if(le)le.value=t.local||'';const oe=document.getElementById('pt-o-'+p.id);if(oe)oe.value=t.obs||''},300)}else{toast('Não encontrado','warn')}}
+    async function removerTroca(id){const t=trocas.find(x=>x.id===id);if(!t)return;const r=await meuConfirm('Remover','Remover "'+t.produto+'"?','🗑️','danger');if(!r)return;trocas=trocas.filter(x=>x.id!==id);salvarESync();renderAll();toast('Removido.');enviarNotif('troca','🗑️ '+t.produto)}
 
-    // --- CADASTRO PRODUTO ---
-    function abrirModalCad() {
-        limparForm();
-        document.getElementById('modal-cadastro').classList.add('show');
-        toggleFab();
-    }
+    // ============================================
+    // HOME + ALERTAS SEPARADOS
+    // ============================================
+    function renderHome(){document.getElementById('stats-row').innerHTML=`<button class="stat-btn sb-purple" onclick="goList('cadastros')"><div class="sb-icon">📦</div><div class="sb-num">${produtos.length}</div><div class="sb-label">Cadastrados</div><div class="sb-arrow">›</div></button><button class="stat-btn sb-blue" onclick="goList('faltas')"><div class="sb-icon">🚫</div><div class="sb-num">${faltas.length}</div><div class="sb-label">Faltas</div><div class="sb-arrow">›</div></button><button class="stat-btn sb-orange" onclick="goList('vencimentos')"><div class="sb-icon">📅</div><div class="sb-num">${vencimentos.length}</div><div class="sb-label">Vencimentos</div><div class="sb-arrow">›</div></button><button class="stat-btn sb-cyan" onclick="goList('trocas')"><div class="sb-icon">🔄</div><div class="sb-num">${trocas.length}</div><div class="sb-label">Trocas</div><div class="sb-arrow">›</div></button>`;renderAlertsSeparados()}
 
-    function salvarProduto() {
-        const nome = document.getElementById('cad-nome').value;
-        if (!nome) return toast("Nome é obrigatório", "danger");
+    function renderAlertsSeparados(){const faltasPend=faltas.filter(f=>!f.pedido);const pF=document.getElementById('panel-faltas'),tF=document.getElementById('track-faltas');if(faltasPend.length){pF.style.display='block';document.getElementById('ac-faltas').textContent=faltasPend.length;window.__aFaltas=faltasPend.map(f=>({tipo:'falta',label:'🚫 FALTA',nome:f.produto,ean:f.ean,det:'Est: '+(f.estoque||'N/I'),status:'Pendente',act:()=>goList('faltas')}));tF.innerHTML=window.__aFaltas.map((it,i)=>mkAlertCard(it,i,'__aFaltas')).join('')}else{pF.style.display='none'}const vencPend=vencimentos.filter(v=>!v.acaoFeita).sort((a,b)=>new Date(a.data)-new Date(b.data));const pV=document.getElementById('panel-venc'),tV=document.getElementById('track-venc');if(vencPend.length){pV.style.display='block';document.getElementById('ac-venc').textContent=vencPend.length;window.__aVenc=vencPend.map(v=>{const s=getStatusVenc(v.data);return{tipo:s.key==='vencido'?'vencido':s.key==='critico'?'critico':'proximo',label:s.key==='vencido'?'⚠️ VENCIDO':s.key==='critico'?'🔥 CRÍTICO':'📅 '+s.label,nome:v.produto,ean:v.ean,det:fmtDS(v.data)+' • x'+(v.qtd||1),status:s.label,act:()=>goList('vencimentos')}});tV.innerHTML=window.__aVenc.map((it,i)=>mkAlertCard(it,i,'__aVenc')).join('')}else{pV.style.display='none'}const trocasPend=trocas.filter(t=>!t.realizada);const pT=document.getElementById('panel-trocas'),tT=document.getElementById('track-trocas');if(trocasPend.length){pT.style.display='block';document.getElementById('ac-trocas').textContent=trocasPend.length;window.__aTrocas=trocasPend.map(t=>({tipo:'troca',label:'🔄 TROCA',nome:t.produto,ean:t.ean,det:(t.motivo||'')+' • x'+(t.qtd||1),status:'Pendente',act:()=>goList('trocas')}));tT.innerHTML=window.__aTrocas.map((it,i)=>mkAlertCard(it,i,'__aTrocas')).join('')}else{pT.style.display='none'}document.getElementById('alerts-empty-msg').style.display=(!faltasPend.length&&!vencPend.length&&!trocasPend.length)?'block':'none'}
 
-        const item = {
-            id: document.getElementById('cad-id').value || Date.now(),
-            ean: document.getElementById('cad-ean').value,
-            nome: nome,
-            marca: document.getElementById('cad-marca').value,
-            fornecedor: document.getElementById('cad-fornecedor').value,
-            imagem: document.getElementById('cad-imagem').value,
-            dataAlteracao: Date.now()
-        };
+    // ============================================
+    // NOTIFICAÇÕES
+    // ============================================
+    function renderNotifs(){const div=document.getElementById('lista-notifs');if(!notificacoes.length){div.innerHTML='<div class="empty-state"><div class="es-icon">🔔</div><p>Nenhuma notificação</p></div>';return}const iMap={cadastro:'ni-cad',falta:'ni-falta',vencimento:'ni-venc',troca:'ni-troca'};const eMap={cadastro:'📦',falta:'🚫',vencimento:'📅',troca:'🔄'};div.innerHTML=notificacoes.slice(0,50).map(n=>`<div class="notif-item"><div class="notif-icon ${iMap[n.tipo]||'ni-cad'}">${eMap[n.tipo]||'🔔'}</div><div class="notif-body" style="flex:1;"><div class="notif-title">${n.msg}</div><div class="notif-time">${fmtD(n.data)}</div></div>${!n.lido?'<div class="notif-new"></div>':''}</div>`).join('')}
+    function marcarNotifsLidas(){notificacoes.forEach(n=>n.lido=true);salvarLocal();updNotifBadge()}
+    function updNotifBadge(){const n=notificacoes.filter(x=>!x.lido).length;const b=document.getElementById('notif-badge');if(n>0){b.style.display='flex';b.textContent=n>99?'99+':n}else b.style.display='none'}
+    async function limparNotifs(){const r=await meuConfirm('Limpar','Limpar notificações?','🔔','danger');if(!r)return;notificacoes=[];salvarLocal();if(db&&fbOn)db.ref('notificacoes').remove().catch(e=>{});renderNotifs();updNotifBadge();toast('Limpas.')}
 
-        syncItem('produtos', item);
-        fecharModal('modal-cadastro');
-        toast("Produto salvo!");
-    }
+    // ============================================
+    // PDF (faltas/trocas alfabético, vencimentos por data)
+    // ============================================
+    function gerarPDF(tipo){let titulo,headers,rows;if(tipo==='faltas'){titulo='Relatório de Faltas';headers=['#','Produto','EAN','Fornecedor','Estoque','Sugestão','Status','Inserido','Pedido em'];const l=sortAlfabetico(getFaltasFiltradas());if(!l.length){toast('Sem dados!','warn');return}rows=l.map((f,i)=>[i+1,f.produto,f.ean||'-',f.fornecedor||'-',f.estoque||'N/I',f.sugestao||'N/I',f.pedido?'✅ Pedido':'Pendente',fmtD(f.data),f.dataPedido?fmtD(f.dataPedido):'-'])}else if(tipo==='vencimentos'){titulo='Relatório de Vencimentos';headers=['#','Produto','EAN','Fornecedor','Qtd','Validade','Status','Local','Ação em'];const l=getVencFiltrados();if(!l.length){toast('Sem dados!','warn');return}rows=l.map((v,i)=>{const s=getStatusVenc(v.data);return[i+1,v.produto,v.ean||'-',v.fornecedor||'-',(v.qtd||1)+(v.unidade?' '+v.unidade:''),fmtDS(v.data),v.acaoFeita?'✅ Ação':s.label,v.local||'-',v.dataAcao?fmtD(v.dataAcao):'-']})}else if(tipo==='trocas'){titulo='Relatório de Trocas';headers=['#','Produto','EAN','Fornecedor','Qtd','Motivo','Status','Inserido','Troca em'];const l=sortAlfabetico(getTrocasFiltradas());if(!l.length){toast('Sem dados!','warn');return}rows=l.map((t,i)=>[i+1,t.produto,t.ean||'-',t.fornecedor||'-',(t.qtd||1)+(t.unidade?' '+t.unidade:''),t.motivo||'-',t.realizada?'✅ Realizada':'Pendente',fmtD(t.data),t.dataRealizada?fmtD(t.dataRealizada):'-'])}if(!rows||!rows.length){toast('Sem dados!','warn');return}const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${titulo}</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:25px;color:#1f2937;font-size:10px}.hdr{text-align:center;margin-bottom:20px;padding-bottom:12px;border-bottom:3px solid #1e3a8a}.hdr h1{font-size:16px;color:#1e3a8a;margin-bottom:4px}.hdr h2{font-size:13px;color:#374151;margin-bottom:4px}.hdr p{font-size:9px;color:#6b7280}table{width:100%;border-collapse:collapse}thead tr{background:#1f2937}thead th{color:white;padding:6px 5px;text-align:left;font-size:9px;border:1px solid #374151}tbody tr:nth-child(even){background:#f9fafb}tbody td{padding:5px;border:1px solid #e5e7eb;font-size:9px}.ft{text-align:center;font-size:8px;color:#9ca3af;margin-top:16px;padding-top:8px;border-top:1px solid #e5e7eb}.tot{font-weight:700;margin-bottom:8px;font-size:10px}</style></head><body><div class="hdr"><h1>📋 Controle de Estoque</h1><h2>${titulo}</h2><p>Gerado: ${new Date().toLocaleString('pt-BR')}</p></div><p class="tot">Total: ${rows.length}</p><table><thead><tr>${headers.map(h=>'<th>'+h+'</th>').join('')}</tr></thead><tbody>${rows.map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')}</tbody></table><div class="ft">v3.0</div></body></html>`;try{const blob=new Blob([html],{type:'text/html;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=tipo+'-'+new Date().toISOString().split('T')[0]+'.html';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);toast('📄 Baixado!','info')}catch(e){toast('Erro!','err')}}
 
-    // --- LÓGICA DE FILTROS E BUSCA ---
-    function filtrarEOrdenar(lista, termo, campoBusca, ordenacao) {
-        let resultado = [...lista];
-        
-        // Busca
-        if (termo) {
-            const q = termo.toLowerCase();
-            resultado = resultado.filter(i => 
-                (i.nome || "").toLowerCase().includes(q) || 
-                (i.ean || "").toLowerCase().includes(q) ||
-                (i.marca || "").toLowerCase().includes(q)
-            );
-        }
+    // WHATSAPP (com datas)
+    function compartilharWA(tipo){let titulo,linhas;if(tipo==='faltas'){titulo='🚫 *FALTAS*';const l=sortAlfabetico(getFaltasFiltradas());if(!l.length){toast('Sem dados!','warn');return}linhas=l.map((f,i)=>`${i+1}. *${f.produto}*${f.ean?'\n   Cód: '+f.ean:''}${f.fornecedor?' | 🏭 '+f.fornecedor:''}\n   Est: ${f.estoque||'N/I'} | Sug: ${f.sugestao||'N/I'}${f.pedido?' | ✅ Pedido ('+fmtD(f.dataPedido)+')':''}`)}else if(tipo==='vencimentos'){titulo='📅 *VENCIMENTOS*';const l=getVencFiltrados();if(!l.length){toast('Sem dados!','warn');return}linhas=l.map((v,i)=>{const s=getStatusVenc(v.data);return`${i+1}. *${v.produto}*${v.ean?'\n   Cód: '+v.ean:''}${v.fornecedor?' | 🏭 '+v.fornecedor:''}\n   x${v.qtd||1}${v.unidade?' '+v.unidade:''} | ${fmtDS(v.data)} | ${v.acaoFeita?'✅ Ação ('+fmtD(v.dataAcao)+')':s.label}${v.local?' | 📍 '+v.local:''}`})}else if(tipo==='trocas'){titulo='🔄 *TROCAS*';const l=sortAlfabetico(getTrocasFiltradas());if(!l.length){toast('Sem dados!','warn');return}linhas=l.map((t,i)=>`${i+1}. *${t.produto}*${t.ean?'\n   Cód: '+t.ean:''}${t.fornecedor?' | 🏭 '+t.fornecedor:''} x${t.qtd||1}\n   ${t.motivo||'-'}${t.realizada?' | ✅ Troca ('+fmtD(t.dataRealizada)+')':''}`)}const msg=`${titulo}\n📆 ${new Date().toLocaleDateString('pt-BR')} | ${linhas.length} itens\n${'─'.repeat(28)}\n\n${linhas.join('\n\n')}\n\n${'─'.repeat(28)}\n_v3.0_`;window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank')}
 
-        // Ordenação
-        resultado.sort((a, b) => {
-            if (ordenacao === 'nome') return a.nome.localeCompare(b.nome);
-            if (ordenacao === 'recente') return b.id - a.id;
-            if (ordenacao === 'antigo') return a.id - b.id;
-            if (ordenacao === 'data') return new Date(a.data) - new Date(b.data);
-            return 0;
-        });
+    // CONFIG
+    function exportarDados(){const d={produtos,faltas,vencimentos,trocas,exportadoEm:new Date().toISOString(),versao:'3.0'};const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));a.download='backup-'+new Date().toISOString().split('T')[0]+'.json';a.click();toast('Exportado!')}
+    function importarDados(event){const file=event.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=function(e){try{const d=JSON.parse(e.target.result);if(d.produtos)produtos=d.produtos;if(d.faltas)faltas=d.faltas;if(d.vencimentos)vencimentos=d.vencimentos;if(d.trocas)trocas=d.trocas;salvarESync();renderAll();toast('Importado!')}catch(err){toast('Erro!','err')}};reader.readAsText(file);event.target.value=''}
+    async function limparTudo(){const r1=await meuConfirm('⚠️ Apagar','Apagar TODOS os dados?','⚠️','danger');if(!r1)return;const r2=await meuConfirm('Certeza?','Não pode desfazer!','🚨','danger');if(!r2)return;produtos=[];faltas=[];vencimentos=[];trocas=[];notificacoes=[];salvarESync();if(db&&fbOn)db.ref('notificacoes').remove().catch(e=>{});renderAll();toast('Apagado.','warn')}
 
-        return resultado;
-    }
+    function fmtD(iso){if(!iso)return'-';try{const d=new Date(iso);return isNaN(d)?iso:d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}catch(e){return iso}}
+    function fmtDS(str){if(!str)return'-';const p=str.split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:str}
 
-    // --- RENDERIZAÇÃO DAS TELAS ---
-    function renderFaltas() {
-        const busca = document.getElementById('search-falta').value;
-        const ordem = document.getElementById('sort-falta').value;
-        const lista = filtrarEOrdenar(faltas, busca, 'nome', ordem);
-        
-        document.getElementById('count-faltas').textContent = lista.length;
-        const container = document.getElementById('lista-faltas');
-        container.innerHTML = lista.map(f => `
-            <div class="product-card">
-                <div class="pc-top">
-                    <div class="pc-img">${f.imagem ? `<img src="${f.imagem}">` : '📦'}</div>
-                    <div class="pc-info">
-                        <div class="pc-name">${f.nome}</div>
-                        <div style="font-size:0.7rem;color:gray">EAN: ${f.ean || '-'}</div>
-                        <div style="margin-top:5px">
-                            <span class="badge badge-info">Estoque: ${f.estoque || '0'}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="pc-actions">
-                    <button class="btn-action" style="background:var(--danger-light);color:var(--danger)" onclick="deleteItem('faltas', ${f.id})">Remover</button>
-                    <button class="btn-action" style="background:var(--success);color:white" onclick="marcarPedido(${f.id})">Pedido OK</button>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    function renderVencimentos() {
-        const busca = document.getElementById('search-venc').value;
-        const ordem = document.getElementById('sort-venc').value;
-        const lista = filtrarEOrdenar(vencimentos, busca, 'nome', ordem);
-        
-        document.getElementById('count-venc').textContent = lista.length;
-        const container = document.getElementById('lista-vencimentos');
-        container.innerHTML = lista.map(v => {
-            const status = getStatusVenc(v.data);
-            return `
-            <div class="product-card">
-                <div class="pc-top">
-                    <div class="pc-img">${v.imagem ? `<img src="${v.imagem}">` : '📅'}</div>
-                    <div class="pc-info">
-                        <div class="pc-name">${v.nome}</div>
-                        <div class="badge ${status.classe}">${v.data} (${status.texto})</div>
-                        <div style="font-size:0.7rem;margin-top:4px">📍 ${v.local || 'Não informado'}</div>
-                    </div>
-                </div>
-                <div class="pc-actions">
-                    <button class="btn-action" style="background:var(--info-light);color:var(--info)" onclick="enviarParaTroca(${v.id})">Mandar p/ Troca</button>
-                    <button class="btn-action" style="background:var(--danger-light);color:var(--danger)" onclick="deleteItem('vencimentos', ${v.id})">Remover</button>
-                </div>
-            </div>
-        `}).join('');
-    }
-
-    function renderTrocas() {
-        const busca = document.getElementById('search-troca').value;
-        const ordem = document.getElementById('sort-troca').value;
-        const lista = filtrarEOrdenar(trocas, busca, 'nome', ordem);
-        
-        document.getElementById('count-trocas').textContent = lista.length;
-        const container = document.getElementById('lista-trocas');
-        container.innerHTML = lista.map(t => `
-            <div class="product-card">
-                <div class="pc-top">
-                    <div class="pc-img">${t.imagem ? `<img src="${t.imagem}">` : '🔄'}</div>
-                    <div class="pc-info">
-                        <div class="pc-name">${t.nome}</div>
-                        <div class="badge badge-danger">Motivo: ${t.motivo || 'Vencido'}</div>
-                        <div style="font-size:0.7rem;margin-top:4px">Qtd: ${t.qtd} | 🏭 ${t.fornecedor || '-'}</div>
-                    </div>
-                </div>
-                <div class="pc-actions">
-                    <button class="btn-action" style="background:var(--success-light);color:var(--success)" onclick="deleteItem('trocas', ${t.id})">Concluído</button>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    // --- AUXILIARES ---
-    function getStatusVenc(dataStr) {
-        const hoje = new Date();
-        const venc = new Date(dataStr);
-        const diff = Math.ceil((venc - hoje) / (1000 * 60 * 60 * 24));
-        if (diff < 0) return { texto: "Vencido", classe: "badge-danger" };
-        if (diff <= 7) return { texto: diff + " dias", classe: "badge-warning" };
-        return { texto: diff + " dias", classe: "badge-success" };
-    }
-
-    function deleteItem(path, id) {
-        if(confirm("Deseja excluir permanentemente?")) {
-            db.ref(`${path}/${id}`).remove();
-            toast("Excluído com sucesso");
-        }
-    }
-
-    function renderPick(tipo, busca) {
-        const lista = filtrarEOrdenar(produtos, busca, 'nome', 'nome');
-        const container = document.getElementById(`pick-${tipo}-lista`);
-        container.innerHTML = lista.map(p => `
-            <div class="product-card" onclick="selecionarPara('${tipo}', ${p.id})">
-                <div class="pc-top">
-                    <div class="pc-img">${p.imagem ? `<img src="${p.imagem}">` : '📦'}</div>
-                    <div class="pc-info"><strong>${p.nome}</strong><br><small>${p.marca}</small></div>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    function selecionarPara(tipo, id) {
-        const p = produtos.find(x => x.id == id);
-        if (tipo === 'falta') {
-            const qtd = prompt("Estoque atual:", "0");
-            if (qtd !== null) syncItem('faltas', { ...p, id: Date.now(), estoque: qtd });
-        }
-        if (tipo === 'venc') {
-            const data = prompt("Data de validade (AAAA-MM-DD):");
-            const local = prompt("Localização (Ex: Gôndola A):");
-            if (data) syncItem('vencimentos', { ...p, id: Date.now(), data, local });
-        }
-        if (tipo === 'troca') {
-            const qtd = prompt("Quantidade para troca:", "1");
-            const motivo = prompt("Motivo:", "Vencido/Avariado");
-            if (qtd) syncItem('trocas', { ...p, id: Date.now(), qtd, motivo });
-        }
-        toast("Registrado!");
-        goScreen(tipo + 's');
-    }
-
-    function renderHome() {
-        document.getElementById('stats-row').innerHTML = `
-            <div class="stat-btn sb-purple">
-                <span class="sb-num">${produtos.length}</span>
-                <span class="sb-label">Produtos</span>
-            </div>
-            <div class="stat-btn sb-blue">
-                <span class="sb-num">${faltas.length}</span>
-                <span class="sb-label">Faltas</span>
-            </div>
-            <div class="stat-btn sb-orange">
-                <span class="sb-num">${vencimentos.length}</span>
-                <span class="sb-label">Vencendo</span>
-            </div>
-            <div class="stat-btn sb-cyan">
-                <span class="sb-num">${trocas.length}</span>
-                <span class="sb-label">Trocas</span>
-            </div>
-        `;
-        
-        // Alertas de vencimento curto (7 dias)
-        const proximos = vencimentos.filter(v => {
-            const diff = (new Date(v.data) - new Date()) / (1000*60*60*24);
-            return diff <= 7;
-        });
-        
-        const track = document.getElementById('track-venc');
-        if(proximos.length > 0) {
-            track.innerHTML = proximos.map(v => `
-                <div class="alert-card">
-                    <div style="font-size:0.8rem;font-weight:800">${v.nome}</div>
-                    <div style="font-size:0.7rem;opacity:0.8">Vence em: ${v.data}</div>
-                </div>
-            `).join('');
-        } else {
-            track.innerHTML = '<div style="color:white;padding:10px">Tudo em dia! ✅</div>';
-        }
-    }
-
-    function renderAll() {
-        renderHome();
-        renderFaltas();
-        renderVencimentos();
-        renderTrocas();
-    }
-
-    function toast(msg, type = "primary") {
-        const t = document.createElement('div');
-        t.className = 'toast';
-        t.style.borderLeftColor = `var(--${type})`;
-        t.textContent = msg;
-        document.getElementById('toast-wrap').appendChild(t);
-        setTimeout(() => t.remove(), 3000);
-    }
-
-    function fecharModal(id) { document.getElementById(id).classList.remove('show'); }
-    function limparForm() {
-        document.querySelectorAll('#modal-cadastro input').forEach(i => i.value = '');
-    }
-
-    function exportarDados() {
-        const data = { produtos, faltas, vencimentos, trocas };
-        const blob = new Blob([JSON.stringify(data)], {type: 'application/json'});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'backup_estoque.json';
-        a.click();
-    }
-
-    // INICIALIZAÇÃO
-    initListeners();
+    async function init(){renderAll();updNotifBadge();setTimeout(async()=>{await carregarFb();iniciarListeners();renderAll()},1500);setInterval(()=>{if(db&&fbOn)salvarESync()},300000)}
+    init();
 </script>
-
 </body>
 </html>
