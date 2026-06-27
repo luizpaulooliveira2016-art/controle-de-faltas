@@ -103,7 +103,24 @@
             .alerts-panel{border-radius:var(--r-xl)}
             .alerts-track{padding:16px 20px;gap:14px}
             .alert-card{min-width:240px;max-width:240px}
-            .alert-card-img{height:100px}
+            .alert-card-img{
+                width:100%;
+                height:85px;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                overflow:hidden;
+                background:#fff;
+                border-radius:12px 12px 0 0;
+            }
+
+            .alert-card-img img{
+                width:100%;
+                height:100%;
+                object-fit:contain;
+                padding:6px;
+                background:#fff;
+            }
 
             /* CARDS maiores */
             .product-card{border-radius:var(--r-xl)}
